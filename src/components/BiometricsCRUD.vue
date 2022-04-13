@@ -18,7 +18,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import MyDateTimePicker from './MyDateTimePicker.vue'
+    import MyDateTimePicker from './reusing/MyDateTimePicker.vue'
     export default {
         components: {
             MyDateTimePicker,

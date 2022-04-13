@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import {logout} from '../functions.js'
+    import {logout} from '../../functions.js'
     export default {
         name: 'btnLogOut',
         methods: {

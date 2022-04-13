@@ -16,8 +16,8 @@
 
 <script>
     var languages=[
-                    { text: "Español", value: "es", icon: require("../assets/es.svg")}, //Got from https://github.com/hampusborgos/country-flags
-                    { text: "English", value: "en", icon: require("../assets/us.svg")},
+                    { text: "Español", value: "es", icon: require("../../assets/es.svg")}, //Got from https://github.com/hampusborgos/country-flags
+                    { text: "English", value: "en", icon: require("../../assets/us.svg")},
                   ];
 
     export default {

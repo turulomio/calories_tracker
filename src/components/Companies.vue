@@ -45,7 +45,7 @@
 <script>
     import axios from 'axios'
     import { empty_companies } from '../empty_objects.js'
-    import MyMenuInline from './MyMenuInline.vue'
+    import MyMenuInline from './reusing/MyMenuInline.vue'
     import CompaniesCRUD from './CompaniesCRUD.vue'
     export default {
         components: {

@@ -67,8 +67,8 @@
 <script>
     import axios from 'axios'
     import {empty_biometrics} from '../empty_objects.js'
-    import DisplayValues from './DisplayValues.vue'
-    import MyMenuInline from './MyMenuInline.vue'
+    import DisplayValues from './reusing/DisplayValues.vue'
+    import MyMenuInline from './reusing/MyMenuInline.vue'
     import BiometricsCRUD from './BiometricsCRUD.vue'
     import ChartHeight from './ChartHeight.vue'
     import ChartWeight from './ChartHeight.vue'
