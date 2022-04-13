@@ -13,7 +13,16 @@
 
                     <v-divider></v-divider>
 
-
+<!--                     HOME -->
+                    <v-list-item link router :to="{ name: 'home'}">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-home</v-icon></v-list-item-icon>
+                        <v-list-item-title>Home</v-list-item-title>
+                    </v-list-item>
+<!--                    BIOMETRICS -->
+                    <v-list-item link router :to="{ name: 'biometrics'}">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-human-male-height</v-icon></v-list-item-icon>
+                        <v-list-item-title>{{ $t("Biometrics")}}</v-list-item-title>
+                    </v-list-item>
 <!--                     HELP -->
                     <v-list-group :value="false" prepend-icon="mdi-lifebuoy">
                         <template v-slot:activator>
