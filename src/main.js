@@ -5,7 +5,7 @@ import i18n from './i18n'
 import VueRouter from 'vue-router';
 import {store} from './store.js'
 
-// import * as echarts
+import "echarts";
 import ECharts from 'vue-echarts'
 Vue.component('v-chart', ECharts)
 
