@@ -1,10 +1,12 @@
-// Styles
-import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify/styles'
+import Vue from 'vue';
+import Vuetify from 'vuetify/lib/framework';
+import es from 'vuetify/src/locale/es.ts'
+import en from 'vuetify/src/locale/en.ts'
+Vue.use(Vuetify);
 
-// Vuetify
-import { createVuetify } from 'vuetify'
-
-export default createVuetify(
-  // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
-)
+export default new Vuetify({
+    lang: {
+        locales: {es, en },
+        current: 'en'
+    },
+});

@@ -1,33 +1,44 @@
 {
   "name": "calories_tracker",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "build": "vite build",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-    "dev": "vite",
-    "preview": "vite preview --port 5050"
+    "serve": "vue-cli-service serve --port 8012 --mode development",
+    "build": "vue-cli-service build --mode production",
+    "lint": "vue-cli-service lint",
+    "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\" --output npm_i18n_report.json"
   },
   "dependencies": {
-    "@mdi/font": "5.9.55",
-    "@vue/cli": "^5.0.1",
-    "pinia": "^2.0.11",
-    "roboto-fontface": "*",
-    "vue": "^3.2.31",
-    "vue-router": "^4.0.12",
-    "vuetify": "npm:@vuetify/nightly@next",
-    "webfontloader": "^1.0.0"
+    "@intlify/vue-i18n-loader": "^1.1.0",
+    "axios": "^0.26.1",
+    "core-js": "^3.21.1",
+    "echarts": "^5.3.2",
+    "moment": "^2.29.2",
+    "moment-timezone": "^0.5.34",
+    "vue": "^2.6.14",
+    "vue-cli-plugin-vuetify": "^2.4.8",
+    "vue-echarts": "^6.0.2",
+    "vue-i18n": "^8.27.1",
+    "vue-router": "^3.5.3",
+    "vuetify": "^2.6.4",
+    "vuetify-loader": "^1.7.3",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
-    "@rushstack/eslint-patch": "^1.1.0",
-    "@vitejs/plugin-vue": "^2.2.2",
-    "@vue/eslint-config-prettier": "^7.0.0",
-    "eslint": "^8.5.0",
-    "eslint-plugin-vue": "^8.2.0",
-    "prettier": "^2.5.1",
-    "sass": "^1.38.0",
-    "sass-loader": "^10.0.0",
-    "vite": "^2.8.4",
-    "vue-cli-plugin-vuetify": "~2.4.6",
-    "vuetify-loader": "^2.0.0-alpha.0"
-  }
+    "@vue/cli-plugin-eslint": "~5.0.4",
+    "@vue/cli-service": "~5.0.4",
+    "@vue/composition-api": "^1.4.9",
+    "eslint": "^8.12.0",
+    "eslint-plugin-vue": "^8.6.0",
+    "npm-check-updates": "^12.5.8",
+    "sass": "^1.50.0",
+    "sass-loader": "^10.2.0",
+    "vue-cli-plugin-i18n": "~2.3.1",
+    "vue-template-compiler": "^2.6.14"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }

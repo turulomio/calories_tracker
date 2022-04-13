@@ -1,18 +1,122 @@
 <template>
-  <v-app>
-    <v-main>
-      <router-view/>
-    </v-main>
-  </v-app>
+    <v-app>    
+        <v-navigation-drawer v-model="drawer" absolute temporary app class="blue-grey lighten-5 " style="position:fixed; top:0; left:0" width="350">
+            <v-card class="mx-auto" >
+                <v-list>
+                
+                    <v-list-item>
+                        <v-list-item-content>
+                            <v-list-item-title class="title">Calories Tracker</v-list-item-title>
+                            <v-list-item-subtitle>{{ $store.state.version }} ({{ $store.state.versiondate.toISOString().slice(0,10)}})</v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
+
+                    <v-divider></v-divider>
+
+
+<!--                     HELP -->
+                    <v-list-group :value="false" prepend-icon="mdi-lifebuoy">
+                        <template v-slot:activator>
+                            <v-list-item-title>{{ $t("Help") }}</v-list-item-title>
+                        </template>
+                      
+                        <v-list-item link router :to="{ name: 'about'}">
+                            <v-list-item-title>{{ $t("About")}}</v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item link router :to="{ name: 'statistics'}" v-if="$store.state.logged">
+                            <v-list-item-title>{{ $t("Statistics")}}</v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item  href="https://github.com/turulomio/calories_tracker/" target="_blank">
+                            <v-list-item-title>{{ $t('Calories Tracker Github') }}</v-list-item-title>
+                        </v-list-item>
+                        
+                        <v-list-item href="https://github.com/turulomio/django_calories_tracker/" target="_blank">
+                            <v-list-item-title>{{ $t('Django Calories Tracker Github') }}</v-list-item-title>
+                        </v-list-item>
+                    </v-list-group>
+                </v-list>
+            </v-card>
+        </v-navigation-drawer>
+        
+        <v-app-bar color="primary" dark  fixed fill-height app >
+            <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+            <v-btn color="primary" :to="{ name: 'home'}"><v-icon dark>mdi-home</v-icon></v-btn>
+            <v-btn color="primary" :to="{ name: 'settings'}" v-if="$store.state.logged"><v-icon dark>mdi-wrench</v-icon></v-btn>
+            <v-btn color="primary" :to="{ name: 'assetsreport'}" v-if="$store.state.logged"><v-icon dark>mdi-book</v-icon></v-btn>
+            <v-spacer />
+            <h1 class="font-weight-black text-no-wrap text-truncate" >{{ $t("Calories Tracker. Another way to manage your finances") }}</h1>
+            <v-spacer />
+            <SwitchLanguages />
+            <btnLogIn v-show="!this.$store.state.logged"/>
+            <btnLogOut v-show="this.$store.state.logged"/>
+
+        </v-app-bar>
+        <v-main>   
+            <router-view></router-view>
+        </v-main>
+    </v-app>
 </template>
 
 <script>
-
+import btnLogIn from './components/btnLogIn';
+import btnLogOut from './components/btnLogOut';
+import SwitchLanguages from './components/SwitchLanguages.vue';
 export default {
-  name: 'App',
-
-  data: () => ({
-    //
-  }),
-}
+    name: 'App',
+    components: {
+        btnLogIn,
+        btnLogOut,
+        SwitchLanguages,
+    },
+    data () {
+        return {
+            logged:false,
+            drawer: false,
+            height:22,
+            width:22,
+        }
+    },
+};
 </script>
+<style >
+h1   {
+    text-align: center;
+    font-weight: bold;
+    padding-top: 6px;
+}
+
+.v-card__title {
+    margin-top: 0px;
+    padding: 0px 0px 10px 0px;
+}
+
+span.vuered{
+    color:red;
+}
+
+
+.boldred{
+    color: red;
+    font-weight: 900;
+}
+.boldgreen{
+    color: Green;
+    font-weight: 900;
+}
+.v-application .inform {
+    margin-bottom: 1px;
+    background-color: white !important;
+}
+
+
+/*SLIM MONTHPICKER*/
+.v-date-picker-table--month td {
+    height: unset;
+}
+
+.v-date-picker-table {
+    height: unset;
+}
+</style>
