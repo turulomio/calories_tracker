@@ -17,6 +17,7 @@ import Home from './components/Home'
 import Settings from './components/Settings'
 import Statistics from './components/Statistics'
 import Biometrics from './components/Biometrics.vue'
+import Companies from './components/Companies.vue'
 
 
 
@@ -27,6 +28,7 @@ const router = new VueRouter({
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/`, redirect: `${process.env.VUE_APP_PUBLIC_PATH}/home/` }, 
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/about/`, name: 'about', component: About },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/biometrics/`, name: 'biometrics', component: Biometrics },
+    { path: `${process.env.VUE_APP_PUBLIC_PATH}/companies/`, name: 'companies', component: Companies },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/home/`, name: 'home', component: Home },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/settings/`, name: 'settings', component: Settings },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/statistics/`, name: 'statistics', component: Statistics },

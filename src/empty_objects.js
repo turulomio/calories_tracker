@@ -9,3 +9,13 @@ export function empty_biometrics(){
         activities:null,
     }
 }
+
+export function empty_companies(){
+    return {
+        url:null,
+        name: null,
+        last: new Date().toISOString(),
+        obsolete: false,
+        system_companies: null,
+    }
+}

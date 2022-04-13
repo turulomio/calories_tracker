@@ -23,6 +23,11 @@
                         <v-list-item-icon><v-icon color="#757575;">mdi-human-male-height</v-icon></v-list-item-icon>
                         <v-list-item-title>{{ $t("Biometrics")}}</v-list-item-title>
                     </v-list-item>
+<!--                    COMPANIES -->
+                    <v-list-item link router :to="{ name: 'companies'}">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-domain</v-icon></v-list-item-icon>
+                        <v-list-item-title>{{ $t("Companies")}}</v-list-item-title>
+                    </v-list-item>
 <!--                     HELP -->
                     <v-list-group :value="false" prepend-icon="mdi-lifebuoy">
                         <template v-slot:activator>
