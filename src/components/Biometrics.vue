@@ -4,8 +4,34 @@
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
         </h1>
         <DisplayValues :items="displayvalues()" :key="key" :minimized_items="6"></DisplayValues>
+        <v-data-table dense :headers="biometrics_headers" :items="biometrics" sort-by="datetime" :sort-desc="['datetime']" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="key" :height="400">
+            <template v-slot:[`item.datetime`]="{ item }">
+                {{localtime(item.datetime)}}
+            </template>             
+            <template v-slot:[`item.activities`]="{ item }">
+                <div v-html="$store.getters.getObjectPropertyByUrl('activities',item.activities,'localname')"></div>
+            </template>         
+            <template v-slot:[`item.weight_wishes`]="{ item }">
+                <div v-html="$store.getters.getObjectPropertyByUrl('weight_wishes',item.weight_wishes,'localname')"></div>
+            </template>     
 
-        <BiometricsTable :items="biometrics" :key="keytable"></BiometricsTable>
+
+            <template v-slot:[`item.actions`]="{ item }">
+                <v-icon small class="mr-2" @click="editBiometric(item)">mdi-pencil</v-icon>
+                <v-icon small @click="deleteBiometric(item)">mdi-delete</v-icon>
+            </template>                  
+            <template v-slot:[`body.append`]="{headers}">
+                <tr style="background-color: WhiteSmoke">
+                    <td v-for="(header,i) in headers" :key="i">
+                        <div v-if="header.value == 'localname'">
+                            Total
+                        </div>
+                        <div v-if="header.value == 'balance_user'" align="right" v-html="localcurrency_html(listobjects_sum(accounts_items,'balance_user'))">
+                        </div>
+                    </td>
+                </tr>
+            </template>
+        </v-data-table>
         <!-- DIALOG PERSONCRUD -->
         <v-dialog v-model="dialog_biometrics_crud" width="45%">
             <v-card class="pa-4">
@@ -21,13 +47,11 @@
     import DisplayValues from './DisplayValues.vue'
     import MyMenuInline from './MyMenuInline.vue'
     import BiometricsCRUD from './BiometricsCRUD.vue'
-    import BiometricsTable from './BiometricsTable.vue'
     export default {
         components: {
             MyMenuInline,
             DisplayValues,
             BiometricsCRUD,
-            BiometricsTable
         },
         data(){
             return {
@@ -53,8 +77,16 @@
                     },
                 ],
                 biometrics:[],
+                biometrics_headers: [
+                    { text: this.$t('Date and time'), sortable: true, value: 'datetime'},
+                    { text: this.$t('Height'), value: 'height', align:'right'},
+                    { text: this.$t('Weight'), value: 'weight', align:'right' },
+                    { text: this.$t('Activity'), value: 'activities'},
+                    { text: this.$t('Weight wish'), value: 'weight_wishes'},
+                    { text: this.$t('Actions'), value: 'actions', sortable: false},
+                ],
+                loading:false,
                 key:0,
-                key_table:0,
                 biometric_last:null,
 
                 // Biometrics CRUD
@@ -82,15 +114,31 @@
                 this.update_biometrics()
             },
             update_biometrics(){
+                this.loading=true
                 axios.get(`${this.$store.state.apiroot}/api/biometrics/`, this.myheaders())
                 .then((response) => {
                     this.biometrics=response.data
                     if (this.biometrics.length>0) this.biometric_last=this.biometrics[this.biometrics.length - 1]
+                    this.loading=false
                }, (error) => {
                     this.parseResponseError(error)
                 });
 
-            }
+            },
+            editBiometric(item){
+                this.biometric=item
+                this.biometric_deleting=false
+                this.key=this.key+1
+
+                this.dialog_biometrics_crud=true
+            },
+            deleteBiometric(item){
+                this.biometric=item
+                this.biometric_deleting=true
+                this.key=this.key+1
+
+                this.dialog_biometrics_crud=true
+            },
 
         },
         mounted(){
