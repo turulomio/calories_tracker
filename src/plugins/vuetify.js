@@ -1,10 +1,22 @@
-// Styles
-import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify/styles'
+import Vue from 'vue';
+import Vuetify from 'vuetify/lib/framework';
+import es from 'vuetify/src/locale/es.ts'
+import en from 'vuetify/src/locale/en.ts'
+Vue.use(Vuetify);
 
-// Vuetify
-import { createVuetify } from 'vuetify'
-
-export default createVuetify(
-  // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
-)
+export default new Vuetify({
+    theme: {
+      themes: {
+        light: {
+          primary: '#ef6060',
+          secondary: '#b0bec5',
+          accent: '#8c9eff',
+          error: '#b71c1c',
+        },
+      },
+    },
+    lang: {
+        locales: {es, en },
+        current: 'en'
+    },
+});
