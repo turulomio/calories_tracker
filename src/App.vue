@@ -28,6 +28,11 @@
                         <v-list-item-icon><v-icon color="#757575;">mdi-domain</v-icon></v-list-item-icon>
                         <v-list-item-title>{{ $t("Companies")}}</v-list-item-title>
                     </v-list-item>
+<!--                    PRODUCTS -->
+                    <v-list-item link router :to="{ name: 'products'}">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-food-apple</v-icon></v-list-item-icon>
+                        <v-list-item-title>{{ $t("Products")}}</v-list-item-title>
+                    </v-list-item>
 <!--                     HELP -->
                     <v-list-group :value="false" prepend-icon="mdi-lifebuoy">
                         <template v-slot:activator>

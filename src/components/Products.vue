@@ -1,20 +1,20 @@
 <template>
     <div class="ma-4">
-        <h1>{{ $t(`Companies`) }}
+        <h1>{{ $t(`Products`) }}
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
         </h1>
         <v-tabs  background-color="primary" dark v-model="tab" >
-            <v-tab key="companies">{{ $t('Companies') }}</v-tab>
-            <v-tab key="system_companies">{{ $t('System companies') }}</v-tab>
+            <v-tab key="products">{{ $t('Products') }}</v-tab>
+            <v-tab key="system_products">{{ $t('System products') }}</v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab" class="ma-5">
-            <v-tab-item key="companies" >
-                <v-data-table dense :headers="companies_headers" :items="companies" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
-                    <template v-slot:[`item.last`]="{ item }">
-                        {{localtime(item.last)}}
+            <v-tab-item key="products" >
+                <v-data-table dense :headers="products_headers" :items="products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+                    <template v-slot:[`item.version`]="{ item }">
+                        {{localtime(item.version)}}
                     </template>   
-                    <template v-slot:[`item.system_companies`]="{ item }">
-                        <v-icon small v-if="item.system_companies" >mdi-check-outline</v-icon>
+                    <template v-slot:[`item.system_products`]="{ item }">
+                        <v-icon small v-if="item.system_products" >mdi-check-outline</v-icon>
                     </template>               
                     <template v-slot:[`item.obsolete`]="{ item }">
                             <v-icon small v-if="item.obsolete" >mdi-check-outline</v-icon>           
@@ -25,10 +25,10 @@
                     </template>
                 </v-data-table>
             </v-tab-item>
-            <v-tab-item key="system_companies" >                 
-                <v-data-table dense :headers="system_companies_headers" :items="system_companies" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
-                    <template v-slot:[`item.last`]="{ item }">
-                        {{localtime(item.last)}}
+            <v-tab-item key="system_products" >                 
+                <v-data-table dense :headers="system_products_headers" :items="system_products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+                    <template v-slot:[`item.version`]="{ item }">
+                        {{localtime(item.version)}}
                     </template>             
                     <template v-slot:[`item.obsolete`]="{ item }">
                             <v-icon small v-if="item.obsolete" >mdi-check-outline</v-icon>           
@@ -41,9 +41,9 @@
 
 
         <!-- DIALOG COMPANIES CRUD -->
-        <v-dialog v-model="dialog_companies_crud" width="45%">
+        <v-dialog v-model="dialog_products_crud" width="45%">
             <v-card class="pa-4">
-                <CompaniesCRUD :company="company" :deleting="company_deleting" :key="'B'+key" @cruded="on_CompaniesCRUD_cruded()"></CompaniesCRUD>
+                <ProductsCRUD :product="product" :deleting="product_deleting" :key="'B'+key" @cruded="on_ProductsCRUD_cruded()"></ProductsCRUD>
             </v-card>
         </v-dialog>
     </div>
@@ -51,45 +51,48 @@
 
 <script>
     import axios from 'axios'
-    import { empty_companies } from '../empty_objects.js'
+    import { empty_products } from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
-    import CompaniesCRUD from './CompaniesCRUD.vue'
+    import ProductsCRUD from './ProductsCRUD.vue'
     export default {
         components: {
             MyMenuInline,
-            CompaniesCRUD,
+            ProductsCRUD,
         },
         data(){
             return {
                 menuinline_items: [
                     {
-                        subheader: this.$t("Company options"),
+                        subheader: this.$t("Product options"),
                         children: [
                             {
-                                name: this.$t("Add company"),
+                                name: this.$t("Add product"),
                                 icon: "mdi-plus",
                                 code: function(this_){
-                                    this_.company_deleting=false
-                                    this_.company=this_.empty_companies()
+                                    this_.product_deleting=false
+                                    this_.product=this_.empty_products()
                                     this_.key=this_.key+1
-                                    this_.dialog_companies_crud=true
+                                    this_.dialog_products_crud=true
                                 },
                             },
                         ]
                     },
                 ],
-                companies:[],
-                companies_headers: [
+                products:[],
+                products_headers: [
                     { text: this.$t('Name'), sortable: true, value: 'name'},
-                    { text: this.$t('Last edition'), value: 'last', align:'right', width:"12%"},
-                    { text: this.$t('System companies'), value: 'system_companies',width:"8%"},
+                    { text: this.$t('Company'), sortable: true, value: 'companies'},
+                    { text: this.$t('Version'), value: 'version', align:'right', width:"12%"},
+                    { text: this.$t('System products'), value: 'system_products',width:"8%"},
                     { text: this.$t('Obsolete'), value: 'obsolete' , width:"8%"},
+                    { text: this.$t('Uses'), value: 'uses' , width:"8%"},
                     { text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"},
                 ],
-                system_companies:[],
-                system_companies_headers: [
+                system_products:[],
+                system_products_headers: [
                     { text: this.$t('Name'), sortable: true, value: 'name'},
-                    { text: this.$t('Last edition'), value: 'last', align:'right', width:"12%"},
+                    { text: this.$t('System company'), sortable: true, value: 'system_companies'},
+                    { text: this.$t('Version'), value: 'version', align:'right', width:"12%"},
                     { text: this.$t('Obsolete'), value: 'obsolete' , width:"8%"},
                     { text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"},
                 ],
@@ -98,33 +101,33 @@
                 tab:0,
 
                 //CRUD COMPANY
-                company:null,
-                company_deleting:null,
-                dialog_companies_crud:false,
+                product:null,
+                product_deleting:null,
+                dialog_products_crud:false,
             }
         },        
         methods:{
-            empty_companies,
-            on_CompaniesCRUD_cruded(){
-                this.dialog_companies_crud=false
-                this.update_companies()
+            empty_products,
+            on_ProductsCRUD_cruded(){
+                this.dialog_products_crud=false
+                this.update_products()
             },
-            update_companies(){
+            update_products(){
                 this.loading=true
-                axios.get(`${this.$store.state.apiroot}/api/companies/`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/api/products/`, this.myheaders())
                 .then((response) => {
-                    this.companies=response.data
+                    this.products=response.data
                     this.loading=false
                }, (error) => {
                     this.parseResponseError(error)
                 });
 
             },
-            update_system_companies(){
+            update_system_products(){
                 this.loading=true
-                axios.get(`${this.$store.state.apiroot}/api/system_companies/`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/api/system_products/`, this.myheaders())
                 .then((response) => {
-                    this.system_companies=response.data
+                    this.system_products=response.data
                     this.loading=false
                }, (error) => {
                     this.parseResponseError(error)
@@ -132,23 +135,23 @@
 
             },
             editCompany(item){
-                this.company=item
-                this.company_deleting=false
+                this.product=item
+                this.product_deleting=false
                 this.key=this.key+1
 
-                this.dialog_companies_crud=true
+                this.dialog_products_crud=true
             },
             deleteCompany(item){
-                this.company=item
-                this.company_deleting=true
+                this.product=item
+                this.product_deleting=true
                 this.key=this.key+1
 
-                this.dialog_companies_crud=true
+                this.dialog_products_crud=true
             },
         },
         created(){
-            this.update_companies()
-            this.update_system_companies()
+            this.update_products()
+            this.update_system_products()
         }
     }
 </script>

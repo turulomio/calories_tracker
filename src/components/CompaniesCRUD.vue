@@ -4,7 +4,8 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <v-text-field :readonly="deleting" v-model="newcompany.name" :label="$t('Set company name')" :placeholder="$t('Set company name')" :rules="RulesString(200)" counter="200"/>
-                <v-checkbox v-model="newcompany.obsolete"></v-checkbox>
+                <AutoCompleteApiIdName v-model="newcompany.system_companies" :url="`${this.$store.state.apiroot}/api/system_companies/`" :label="$t('Select a system company')"></AutoCompleteApiIdName>
+                <v-checkbox v-model="newcompany.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -15,7 +16,11 @@
 </template>
 <script>
     import axios from 'axios'
+    import AutoCompleteApiIdName from './AutoCompleteApiIdName.vue'
     export default {
+        components: {
+            AutoCompleteApiIdName,
+        },
         props: {
             // An account object
             company: { // An account transfer object
@@ -46,7 +51,7 @@
             },
             acceptDialog(){             
                 if( this.$refs.form.validate()==false) return   
-
+                console.log(this.mode)
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/companies/`, this.newcompany,  this.myheaders())
                     .then((response) => {
@@ -81,7 +86,7 @@
         },
         created(){
             // Guess crud mode
-            this.newcompany=Object.assign({},this.biometric)
+            this.newcompany=Object.assign({},this.company)
             if ( this.company.url==null){ 
                 this.mode="C"
             } else if (this.company.url!= null && this.deleting ==false) { 

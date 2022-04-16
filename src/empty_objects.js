@@ -1,4 +1,3 @@
-
 export function empty_biometrics(){
     return {
         url:null,
@@ -14,8 +13,40 @@ export function empty_companies(){
     return {
         url:null,
         name: null,
-        last: new Date().toISOString(),
         obsolete: false,
         system_companies: null,
     }
+}
+export function empty_products(){
+    return {
+        url:null,
+        name: null,
+        amount:null,
+        fat:null,
+        protein:null,
+        carbohydrate:null,
+        calories:null,
+        salt:null,
+        cholesterol:null,
+        sodium:null,
+        potassium:null,
+        fiber:null,
+        sugars:null,
+        saturated_fat:null,
+        ferrum:null,
+        magnesium:null,
+        phosphor:null,
+        glutenfree:false,
+        calcium:null,
+        obsolete: false,
+        system_products: null,
+        elaborated_products:null,
+        food_types:null,
+        additives:[],
+        formats:[],
+        companies:null,
+        version_parent:null,
+        version_description:null
+
+    }    
 }
