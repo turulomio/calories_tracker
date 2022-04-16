@@ -1,8 +1,8 @@
 <template>
     <div>    
         <h1>{{ title() }}</h1>           
-        <v-card class="pa-8 mt-2">
-            <v-form ref="form" v-model="form_valid" lazy-validation>
+        <v-card class="pa-6 mt-4" style="overflow-y: scroll" :height="600" >
+            <v-form ref="form" v-model="form_valid" lazy-validation >
                 <v-text-field :readonly="deleting" v-model="newproduct.name" :label="$t('Set product name')" :placeholder="$t('Set product name')" :rules="RulesString(200)" counter="200"/>
                 <AutoCompleteApiIdName v-model="newproduct.system_products" :url="`${this.$store.state.apiroot}/api/system_products/`" :label="$t('Select a system product')"></AutoCompleteApiIdName>
                 <AutoCompleteApiIdName v-model="newproduct.companies" :url="`${this.$store.state.apiroot}/api/companies/`" :label="$t('Select a company')"></AutoCompleteApiIdName>
@@ -35,8 +35,8 @@
 
                 <AutoCompleteApiIdName v-model="newproduct.version_parent" :url="`${this.$store.state.apiroot}/api/products/`" :label="$t('Select parent product')"></AutoCompleteApiIdName>
                 <v-text-field :readonly="deleting" v-model="newproduct.version_description" :label="$t('Set product version description')" :placeholder="$t('Set product version description')" :rules="RulesString(200,false)" counter="200"/>
-                <v-card>
-                    <v-data-table dense :headers="formats_headers" :items="newproduct.formats" sort-by="formats" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="500">
+                <v-card class="mt-4">
+                    <v-data-table dense :headers="formats_headers" :items="newproduct.formats" sort-by="formats" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250">
                         <template v-slot:[`item.actions`]="{ item }">
                             <v-icon small class="mr-2" @click="editFormat(item)">mdi-pencil</v-icon>
                             <v-icon small @click="deleteFormat(item)">mdi-delete</v-icon>
@@ -44,14 +44,16 @@
                     </v-data-table>
                 </v-card>
             </v-form>
+        </v-card>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" @click="addFormat()" >{{ $t("Add a format") }}</v-btn>
-                <v-btn color="primary" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn>
+                <v-btn color="primary" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn> 
+                <v-btn color="error" @click="$emit('cruded')" >{{ $t("Cancel") }}</v-btn>
+
             </v-card-actions>
 
 
-        </v-card>
 
         <!-- DIALOG FORMATS CRUD -->
         <v-dialog v-model="dialog_formats_crud" width="45%">
@@ -90,7 +92,7 @@
                 
                 formats_headers: [
                     { text: this.$t('Format'), sortable: true, value: 'formats'},
-                    { text: this.$t('Amount'), value: 'amount', align:'right', width:"12%"},
+                    { text: this.$t('Amount'), value: 'amount', align:'right'},
                     { text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"},
                 ],
 
@@ -114,8 +116,6 @@
             },
             acceptDialog(){             
                 if( this.$refs.form.validate()==false) return   
-                console.log(this.mode)
-                console.log(this.newproduct)
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/products/`, this.newproduct,  this.myheaders())
                     .then((response) => {

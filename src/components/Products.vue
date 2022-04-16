@@ -41,7 +41,7 @@
 
 
         <!-- DIALOG PRODUCTS CRUD -->
-        <v-dialog v-model="dialog_products_crud" width="45%">
+        <v-dialog v-model="dialog_products_crud" width="45%" persistent>
             <v-card class="pa-4">
                 <ProductsCRUD :product="product" :deleting="product_deleting" :key="'B'+key" @cruded="on_ProductsCRUD_cruded()"></ProductsCRUD>
             </v-card>
