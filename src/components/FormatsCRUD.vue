@@ -14,7 +14,6 @@
     </div>
 </template>
 <script>
-    import axios from 'axios'
     export default {
         props: {
             // An account object
@@ -46,47 +45,18 @@
             },
             acceptDialog(){             
                 if( this.$refs.form.validate()==false) return   
-                console.log(this.mode)
-                if (this.mode=="C"){
-                    axios.post(`${this.$store.state.apiroot}/api/formats/`, this.newformat,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
-                        this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    })
-                }
-                if (this.mode=="U"){
-                    axios.put(this.newformat.url, this.newformat,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
-                        this.$emit("cruded")
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    })
-                }
-                if (this.mode=="D"){             
-                    var r = confirm(this.$t("Do you want to delete this format?"))
-                    if(r == true) {
-                        axios.delete(this.newformat.url, this.myheaders())
-                        .then((response) => {
-                            console.log(response.data)
-                            this.$emit("cruded")
-                        }, (error) => {
-                            this.parseResponseError(error)
-                        })
-                    }
-                }
-            },
+                this.$emit("cruded",this.mode,this.newformat,this.format)
+            }
         },
         created(){
             // Guess crud mode
+            console.log(this.format)
             this.newformat=Object.assign({},this.format)
-            if ( this.format.url==null){ 
+            if ( this.format.formats==null){ 
                 this.mode="C"
-            } else if (this.format.url!= null && this.deleting ==false) { 
+            } else if (this.format.formats!= null && this.deleting ==false) { 
                 this.mode="U"
-            } else if (this.format.url!= null && this.deleting ==true) { 
+            } else if (this.format.formats!= null && this.deleting ==true) { 
                 this.mode="D"
             }
 

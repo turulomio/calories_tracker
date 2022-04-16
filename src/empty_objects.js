@@ -53,8 +53,7 @@ export function empty_products(){
 
 export function empty_formats(){
     return {
-        product:null,
-        format: null,
+        formats: null,
         amount: false,
     }
 }

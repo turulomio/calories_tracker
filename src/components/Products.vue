@@ -20,7 +20,6 @@
                             <v-icon small v-if="item.obsolete" >mdi-check-outline</v-icon>           
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon small class="mr-2" @click="viewFormats(item)">mdi-eye</v-icon>
                         <v-icon v-if="item.is_editable" small class="mr-2" @click="editCompany(item)">mdi-pencil</v-icon>
                         <v-icon v-if="item.is_deletable" small @click="deleteCompany(item)">mdi-delete</v-icon>
                     </template>
@@ -47,12 +46,6 @@
                 <ProductsCRUD :product="product" :deleting="product_deleting" :key="'B'+key" @cruded="on_ProductsCRUD_cruded()"></ProductsCRUD>
             </v-card>
         </v-dialog>
-        <!-- DIALOG FORMATS  -->
-        <v-dialog v-model="dialog_formats" width="45%">
-            <v-card class="pa-4">
-               <Formats :product="product" :key="'F'+key"  ></Formats>
-            </v-card>
-        </v-dialog>
     </div>
 </template>
 
@@ -61,12 +54,10 @@
     import { empty_products } from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import ProductsCRUD from './ProductsCRUD.vue'
-    import Formats from './Formats.vue'
     export default {
         components: {
             MyMenuInline,
             ProductsCRUD,
-            Formats,
         },
         data(){
             return {
@@ -159,10 +150,6 @@
                 this.key=this.key+1
 
                 this.dialog_products_crud=true
-            },
-            viewFormats(item){
-                this.product=item
-                this.dialog_formats=true
             },
         },
         created(){

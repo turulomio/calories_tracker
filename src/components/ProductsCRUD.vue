@@ -35,20 +35,41 @@
 
                 <AutoCompleteApiIdName v-model="newproduct.version_parent" :url="`${this.$store.state.apiroot}/api/products/`" :label="$t('Select parent product')"></AutoCompleteApiIdName>
                 <v-text-field :readonly="deleting" v-model="newproduct.version_description" :label="$t('Set product version description')" :placeholder="$t('Set product version description')" :rules="RulesString(200,false)" counter="200"/>
+                <v-card>
+                    <v-data-table dense :headers="formats_headers" :items="newproduct.formats" sort-by="formats" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="500">
+                        <template v-slot:[`item.actions`]="{ item }">
+                            <v-icon small class="mr-2" @click="editFormat(item)">mdi-pencil</v-icon>
+                            <v-icon small @click="deleteFormat(item)">mdi-delete</v-icon>
+                        </template>
+                    </v-data-table>
+                </v-card>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
+                <v-btn color="primary" @click="addFormat()" >{{ $t("Add a format") }}</v-btn>
                 <v-btn color="primary" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn>
             </v-card-actions>
+
+
         </v-card>
+
+        <!-- DIALOG FORMATS CRUD -->
+        <v-dialog v-model="dialog_formats_crud" width="45%">
+            <v-card class="pa-4">
+                <FormatsCRUD :format="format" :deleting="format_deleting" :key="'B'+key" @cruded="on_FormatsCRUD_cruded"></FormatsCRUD>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 <script>
     import axios from 'axios'
     import AutoCompleteApiIdName from './AutoCompleteApiIdName.vue'
+    import FormatsCRUD from './FormatsCRUD.vue'
+    import { empty_formats } from '../empty_objects.js'
     export default {
         components: {
             AutoCompleteApiIdName,
+            FormatsCRUD,
         },
         props: {
             // An account object
@@ -65,9 +86,22 @@
                 form_valid:false,
                 newproduct: null,
                 mode: "", // CRUD mode
+                key:0,
+                
+                formats_headers: [
+                    { text: this.$t('Format'), sortable: true, value: 'formats'},
+                    { text: this.$t('Amount'), value: 'amount', align:'right', width:"12%"},
+                    { text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"},
+                ],
+
+                //Formats crud
+                format:null,
+                format_deleting:false,
+                dialog_formats_crud:false,
             }
         },
         methods: {
+            empty_formats,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')
@@ -81,6 +115,7 @@
             acceptDialog(){             
                 if( this.$refs.form.validate()==false) return   
                 console.log(this.mode)
+                console.log(this.newproduct)
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/products/`, this.newproduct,  this.myheaders())
                     .then((response) => {
@@ -112,6 +147,42 @@
                     }
                 }
             },
+            addFormat(){
+                this.format=this.empty_formats()
+                this.format_deleting=false
+                this.key=this.key+1
+
+                this.dialog_formats_crud=true
+            },
+            editFormat(item){
+                this.format=item
+                this.format_deleting=false
+                this.key=this.key+1
+
+                this.dialog_formats_crud=true
+            },
+            deleteFormat(item){
+                this.format=item
+                this.format_deleting=true
+                this.key=this.key+1
+
+                this.dialog_formats_crud=true
+            },
+            on_FormatsCRUD_cruded(mode,item,olditem){
+                this.dialog_formats_crud=false  
+                if (mode=="C"){
+                    this.newproduct.formats.push(item)
+                } else if (mode=="U"){
+                    let index = this.newproduct.formats.indexOf(olditem)
+                    this.newproduct.formats[index].formats=item.formats
+                    this.newproduct.formats[index].amount=item.amount
+                    
+                } else if (mode=="D"){
+                    let index = this.newproduct.formats.indexOf(olditem)
+                    delete this.newproduct.formats[index]
+                }
+                this.key=this.key+1
+            }
         },
         created(){
             // Guess crud mode
