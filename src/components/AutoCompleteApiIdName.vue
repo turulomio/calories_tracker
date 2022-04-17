@@ -1,19 +1,35 @@
 <template>
     <div>
-    <v-autocomplete
-        v-model="localValue"
-        :items="entries"
-        :loading="isLoading"
-        :search-input.sync="search"
-        item-text="name"
-        item-value="url"
-        no-data-text="You must select a item"
-        outlined
-        persistent-hint
-        :label="label"
-        placeholder="Start typing to Search"
-        prepend-icon="mdi-database-search"
-    ></v-autocomplete>
+        <v-autocomplete
+            v-if="returnobject==false"
+            v-model="localValue"
+            :items="entries"
+            :loading="isLoading"
+            :search-input.sync="search"
+            item-text="name"
+            item-value="url"
+            no-data-text="You must select a item"
+            outlined
+            persistent-hint
+            :label="label"
+            placeholder="Start typing to Search"
+            prepend-icon="mdi-database-search"
+        ></v-autocomplete>
+        <v-autocomplete
+            v-if="returnobject==true"
+            v-model="localValue"
+            :items="entries"
+            :loading="isLoading"
+            :search-input.sync="search"
+            item-text="name"
+            return-object
+            no-data-text="You must select a item"
+            outlined
+            persistent-hint
+            :label="label"
+            placeholder="Start typing to Search"
+            prepend-icon="mdi-database-search"
+        ></v-autocomplete>
     </div>
 </template>
 <script>
@@ -40,15 +56,20 @@
             minchars:{
                 type: Number,
                 default: 2
+            },
+            returnobject:{
+                type: Boolean,
+                required: false,
+                default: false,
             }
         },
         data(){ 
             return{
-            descriptionLimit: 60,
-            entries: [],
-            isLoading: false,
-            search: null,
-            localValue: null
+                descriptionLimit: 60,
+                entries: [],
+                isLoading: false,
+                search: null,
+                localValue: null
             }
         },
         watch: {
@@ -64,32 +85,35 @@
                 axios.get(`${this.url}?search=${val}`, this.myheaders())
                 .then((response) => {
                     this.entries=response.data
+                    this.isLoading = false
                 }, (error) => {
                     this.parseResponseError(error)
                 })
-                .finally(() => (this.isLoading = false));
             },
             localValue (newValue) {
                 this.$emit('input', newValue)
-                console.log(`LocalValue changed and emited input to ${newValue}`)
             },
             value (newValue) {
                 this.localValue = newValue
-                console.log(`value changed to ${newValue}`)
+                if (this.returnobject){
+                    console.log(newValue)
+                } else {
+                   console.log(`value changed to ${newValue}`)
+                }
             },
         },
         methods: {
             forceValue(force){       
                 if (force!=null){
-                    axios.get(`${this.url}?id=${force}`, this.myheaders())
+                    axios.get(`${this.url}/${force}/`, this.myheaders())
                     .then((response) => {
                         console.log(response.data)
                         this.entries=response.data
                         this.localValue=response.data.id
+                        this.isLoading = false
                     }, (error) => {
                         console.log(error)
                     })
-                    .finally(() => (this.isLoading = false));
                 }
             },
         },

@@ -57,3 +57,13 @@ export function empty_formats(){
         amount: false,
     }
 }
+
+
+export function empty_meals(){
+    return {
+        url: null,
+        datetime: new Date().toISOString(),
+        products: null,
+        amount: 0,
+    }
+}

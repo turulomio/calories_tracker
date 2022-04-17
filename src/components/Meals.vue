@@ -1,0 +1,116 @@
+<template>
+    <div class="ma-4">
+        <h1>{{ $t(`Meals`) }}
+            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+        </h1>
+
+        <v-date-picker v-model="day" @input="on_day_input()"></v-date-picker>
+        <v-data-table dense :headers="meals_headers" :items="meals" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+            <template v-slot:[`item.datetime`]="{ item }">
+                {{localtime(item.datetime)}}
+            </template>   
+            <template v-slot:[`item.actions`]="{ item }">
+                <v-icon small class="mr-2" @click="editMeal(item)">mdi-pencil</v-icon>
+                <v-icon small @click="deleteMeal(item)">mdi-delete</v-icon>
+            </template>
+        </v-data-table>
+
+        <!-- DIALOG PRODUCTS CRUD -->
+        <v-dialog v-model="dialog_meals_crud" width="45%">
+            <v-card class="pa-4">
+                <MealsCRUD :meal="meal" :deleting="meal_deleting" :key="'B'+key" @cruded="on_MealsCRUD_cruded()"></MealsCRUD>
+            </v-card>
+        </v-dialog>
+    </div>
+</template>
+
+<script>
+    import axios from 'axios'
+    import { empty_meals } from '../empty_objects.js'
+    import MyMenuInline from './reusing/MyMenuInline.vue'
+    import MealsCRUD from './MealsCRUD.vue'
+    export default {
+        components: {
+            MyMenuInline,
+            MealsCRUD,
+        },
+        data(){
+            return {
+                menuinline_items: [
+                    {
+                        subheader: this.$t("Meal options"),
+                        children: [
+                            {
+                                name: this.$t("Add meal"),
+                                icon: "mdi-plus",
+                                code: function(this_){
+                                    this_.meal_deleting=false
+                                    this_.meal=this_.empty_meals()
+                                    this_.key=this_.key+1
+                                    this_.dialog_meals_crud=true
+                                },
+                            },
+                        ]
+                    },
+                ],
+                meals:[],
+                meals_headers: [
+                    { text: this.$t('Date and time'), sortable: true, value: 'datetime'},
+                    { text: this.$t('Product'), sortable: true, value: 'products'},
+                    { text: this.$t('Amount'), sortable: true, value: 'amount',align:'right'},
+                    { text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"},
+                ],
+                loading:false,
+                key:0,
+                tab:0,
+                day:new Date().toISOString().substring(0, 10),
+                //CRUD COMPANY
+                meal:null,
+                meal_deleting:null,
+                dialog_meals_crud:false,
+
+                //DIALOG FORMATS
+                dialog_formats:false,
+            }
+        },        
+        methods:{
+            empty_meals,
+            on_MealsCRUD_cruded(){
+                this.dialog_meals_crud=false
+                this.update_meals()
+            },
+            update_meals(){
+                this.loading=true
+                axios.get(`${this.$store.state.apiroot}/api/meals/?day=${this.day}`, this.myheaders())
+                .then((response) => {
+                    console.log(response.data)
+                    this.meals=response.data
+                    this.loading=false
+               }, (error) => {
+                    this.parseResponseError(error)
+                });
+
+            },
+            editMeal(item){
+                this.meal=item
+                this.meal_deleting=false
+                this.key=this.key+1
+
+                this.dialog_meals_crud=true
+            },
+            deleteMeal(item){
+                this.meal=item
+                this.meal_deleting=true
+                this.key=this.key+1
+
+                this.dialog_meals_crud=true
+            },
+            on_day_input(){
+                this.update_meals()
+            }
+        },
+        created(){
+            this.update_meals()
+        }
+    }
+</script>
