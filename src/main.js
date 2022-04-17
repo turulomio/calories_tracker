@@ -18,7 +18,6 @@ import Settings from './components/Settings'
 import Statistics from './components/Statistics'
 import Biometrics from './components/Biometrics.vue'
 import Companies from './components/Companies.vue'
-import ElaboratedProducts from './components/ElaboratedProducts.vue'
 import Meals from './components/Meals.vue'
 import Products from './components/Products.vue'
 
@@ -32,7 +31,6 @@ const router = new VueRouter({
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/about/`, name: 'about', component: About },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/biometrics/`, name: 'biometrics', component: Biometrics },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/companies/`, name: 'companies', component: Companies },
-    { path: `${process.env.VUE_APP_PUBLIC_PATH}/elaborated_products/`, name: 'elaborated_products', component: ElaboratedProducts },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/meals/`, name: 'meals', component: Meals },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/products/`, name: 'products', component: Products },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/home/`, name: 'home', component: Home },

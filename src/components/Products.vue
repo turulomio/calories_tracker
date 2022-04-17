@@ -3,55 +3,86 @@
         <h1>{{ $t(`Products`) }}
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
         </h1>
-          <v-text-field class="ml-10 mr-6" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"></v-text-field>
+          <v-text-field class="ml-10 mr-10 mb-5" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"></v-text-field>
     
         <v-tabs  background-color="primary" dark v-model="tab" >
-            <v-tab key="products">{{ $t('Products') }}</v-tab>
-            <v-tab key="system_products">{{ $t('System products') }}</v-tab>
+            <v-tab key="products"><v-icon left>mdi-apple</v-icon>{{ $t('Products') }}</v-tab>
+            <v-tab key="elaborated_products"><v-icon left>mdi-food-takeout-box</v-icon>{{ $t('Elaborated products') }}</v-tab>
+            <v-tab key="system_products"><v-icon left>mdi-database</v-icon>{{ $t('System products') }}</v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab" class="ma-5">
             <v-tab-item key="products" >
                 <v-data-table dense :headers="products_headers"  :search="search" :items="$store.state.products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
-                    <template v-slot:[`item.fullname`]="{ item }">
-                        <div v-html="item.fullname" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div>
-                    </template>                          
-                    <template v-slot:[`item.version`]="{ item }">
-                        {{localtime(item.version)}}
-                    </template>       
-
-                    <template v-slot:[`item.companies`]="{ item }">
-                        <div v-html="$store.getters.getObjectPropertyByUrl('companies',item.companies,'name')"></div>
-                    </template>   
-                    <template v-slot:[`item.elaborated_products`]="{ item }">
-                        <v-icon small v-if="item.elaborated_products" >mdi-check-outline</v-icon>
-                    </template>  
-                    <template v-slot:[`item.system_products`]="{ item }">
-                        <v-icon small v-if="item.system_products" >mdi-check-outline</v-icon>
-                    </template>               
-                    <template v-slot:[`item.obsolete`]="{ item }">
-                            <v-icon small v-if="item.obsolete" >mdi-check-outline</v-icon>           
-                    </template>      
-                    <template v-slot:[`item.glutenfree`]="{ item }">
-                            <v-icon small v-if="item.glutenfree" >mdi-check-outline</v-icon>           
-                    </template>
+                    <template v-slot:[`item.fullname`]="{ item }"><div v-html="item.fullname" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div></template>
+                    <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
+                    <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
+                    <template v-slot:[`item.protein`]="{ item }"><div v-html="my_round(item.protein,0)"></div></template>  
+                    <template v-slot:[`item.carbohydrate`]="{ item }"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
+                    <template v-slot:[`item.salt`]="{ item }"><div v-html="my_round(item.salt,0)"></div></template>  
+                    <template v-slot:[`item.fiber`]="{ item }"><div v-html="my_round(item.fiber,0)"></div></template>  
+                    <template v-slot:[`item.sugars`]="{ item }"><div v-html="my_round(item.sugars,0)"></div></template>  
+                    <template v-slot:[`item.saturated_fat`]="{ item }"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
+                    <template v-slot:[`item.cholesterol`]="{ item }"><div v-html="my_round(item.cholesterol,0)"></div></template>  
+                    <template v-slot:[`item.sodium`]="{ item }"><div v-html="my_round(item.sodium,0)"></div></template>  
+                    <template v-slot:[`item.potassium`]="{ item }"><div v-html="my_round(item.potassium,0)"></div></template>  
+                    <template v-slot:[`item.ferrum`]="{ item }"><div v-html="my_round(item.ferrum,0)"></div></template>  
+                    <template v-slot:[`item.magnesium`]="{ item }"><div v-html="my_round(item.magnesium,0)"></div></template>  
+                    <template v-slot:[`item.phosphor`]="{ item }"><div v-html="my_round(item.phosphor,0)"></div></template>  
+                    <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon v-if="item.is_editable" small class="mr-2" @click="editCompany(item)">mdi-pencil</v-icon>
-                        <v-icon v-if="item.is_deletable" small @click="deleteCompany(item)">mdi-delete</v-icon>
+                        <v-icon v-if="item.glutenfree" small class="mr-1"  @click="on_icon_glutenfree">mdi-barley-off</v-icon>
+                        <v-icon v-if="item.elaborated_products" small  class="mr-1" @click="on_icon_elaborated_product">mdi-food-takeout-box</v-icon>
+                        <v-icon v-if="item.system_products" small class="mr-1" @click="on_icon_system_product">mdi-database</v-icon>
+                        <v-icon v-if="item.is_editable" small class="mr-1" @click="editProduct(item)">mdi-pencil</v-icon>
+                        <v-icon v-if="item.is_deletable" small @click="deleteProduct(item)">mdi-delete</v-icon>
+                    </template>
+                </v-data-table>
+            </v-tab-item>
+            <v-tab-item key="elaborated_products">
+                <v-data-table dense :headers="elaborated_products_headers" :search="search"  :items="$store.state.elaborated_products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+                    <template v-slot:[`item.name`]="{ item }"><div v-html="item.name" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div></template>
+                    <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
+                    <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
+                    <template v-slot:[`item.protein`]="{ item }"><div v-html="my_round(item.protein,0)"></div></template>  
+                    <template v-slot:[`item.carbohydrate`]="{ item }"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
+                    <template v-slot:[`item.salt`]="{ item }"><div v-html="my_round(item.salt,0)"></div></template>  
+                    <template v-slot:[`item.fiber`]="{ item }"><div v-html="my_round(item.fiber,0)"></div></template>  
+                    <template v-slot:[`item.sugars`]="{ item }"><div v-html="my_round(item.sugars,0)"></div></template>  
+                    <template v-slot:[`item.saturated_fat`]="{ item }"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
+                    <template v-slot:[`item.cholesterol`]="{ item }"><div v-html="my_round(item.cholesterol,0)"></div></template>  
+                    <template v-slot:[`item.sodium`]="{ item }"><div v-html="my_round(item.sodium,0)"></div></template>  
+                    <template v-slot:[`item.potassium`]="{ item }"><div v-html="my_round(item.potassium,0)"></div></template>  
+                    <template v-slot:[`item.ferrum`]="{ item }"><div v-html="my_round(item.ferrum,0)"></div></template>  
+                    <template v-slot:[`item.magnesium`]="{ item }"><div v-html="my_round(item.magnesium,0)"></div></template>  
+                    <template v-slot:[`item.phosphor`]="{ item }"><div v-html="my_round(item.phosphor,0)"></div></template>  
+                    <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
+                    <template v-slot:[`item.actions`]="{ item }">
+                        <v-icon v-if="item.glutenfree" small class="mr-1"  @click="on_icon_glutenfree">mdi-barley-off</v-icon>
+                        <v-icon small class="mr-1" @click="editElaboratedProduct(item)">mdi-pencil</v-icon>
+                        <v-icon small v-if="item.is_deletable" @click="deleteElaboratedProduct(item)">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
             </v-tab-item>
             <v-tab-item key="system_products" >                 
                 <v-data-table dense :headers="system_products_headers"  :search="search" :items="system_products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
-                    <template v-slot:[`item.version`]="{ item }">
-                        {{localtime(item.version)}}
-                    </template>                 
-                     <template v-slot:[`item.name`]="{ item }">
-                        <div v-html="item.name" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div>
-                    </template>      
-                    <template v-slot:[`item.glutenfree`]="{ item }">
-                            <v-icon small v-if="item.glutenfree" >mdi-check-outline</v-icon>           
-                    </template>
+                   <template v-slot:[`item.fullname`]="{ item }"><div v-html="item.fullname" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div></template>
+                    <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
+                    <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
+                    <template v-slot:[`item.protein`]="{ item }"><div v-html="my_round(item.protein,0)"></div></template>  
+                    <template v-slot:[`item.carbohydrate`]="{ item }"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
+                    <template v-slot:[`item.salt`]="{ item }"><div v-html="my_round(item.salt,0)"></div></template>  
+                    <template v-slot:[`item.fiber`]="{ item }"><div v-html="my_round(item.fiber,0)"></div></template>  
+                    <template v-slot:[`item.sugars`]="{ item }"><div v-html="my_round(item.sugars,0)"></div></template>  
+                    <template v-slot:[`item.saturated_fat`]="{ item }"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
+                    <template v-slot:[`item.cholesterol`]="{ item }"><div v-html="my_round(item.cholesterol,0)"></div></template>  
+                    <template v-slot:[`item.sodium`]="{ item }"><div v-html="my_round(item.sodium,0)"></div></template>  
+                    <template v-slot:[`item.potassium`]="{ item }"><div v-html="my_round(item.potassium,0)"></div></template>  
+                    <template v-slot:[`item.ferrum`]="{ item }"><div v-html="my_round(item.ferrum,0)"></div></template>  
+                    <template v-slot:[`item.magnesium`]="{ item }"><div v-html="my_round(item.magnesium,0)"></div></template>  
+                    <template v-slot:[`item.phosphor`]="{ item }"><div v-html="my_round(item.phosphor,0)"></div></template>  
+                    <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
                     <template v-slot:[`item.actions`]="{ item }">
+                        <v-icon v-if="item.glutenfree" small class="mr-1"  @click="on_icon_glutenfree">mdi-barley-off</v-icon>
                         <v-icon small @click="linkProduct(item)">mdi-link-variant</v-icon>
                     </template>
                 </v-data-table>
@@ -60,6 +91,12 @@
 
 
 
+        <!-- DIALOG ELABORATED PRODUCTS CRUD -->
+        <v-dialog v-model="dialog_elaborated_products_crud" width="45%" persistent>
+            <v-card class="pa-4">
+                <ElaboratedProductsCRUD  :ep="elaborated_product" :deleting="elaborated_product_deleting" :key="'B'+key" @cruded="on_ElaboratedProductsCRUD_cruded()"></ElaboratedProductsCRUD>
+            </v-card>
+        </v-dialog>
 
         <!-- DIALOG PRODUCTS CRUD -->
         <v-dialog v-model="dialog_products_crud" width="45%" persistent>
@@ -72,13 +109,15 @@
 
 <script>
     import axios from 'axios'
-    import { empty_products } from '../empty_objects.js'
+    import { empty_products,empty_elaborated_products } from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import ProductsCRUD from './ProductsCRUD.vue'
+    import ElaboratedProductsCRUD from './ElaboratedProductsCRUD.vue'
     export default {
         components: {
             MyMenuInline,
             ProductsCRUD,
+            ElaboratedProductsCRUD,
         },
         data(){
             return {
@@ -98,54 +137,89 @@
                             },
                         ]
                     },
+                    {
+                        subheader: this.$t("ElaboratedProduct options"),
+                        children: [
+                            {
+                                name: this.$t("Add elaborated_product"),
+                                icon: "mdi-plus",
+                                code: function(this_){
+                                    this_.elaborated_product_deleting=false
+                                    this_.elaborated_product=this_.empty_elaborated_products()
+                                    this_.key=this_.key+1
+                                    this_.dialog_elaborated_products_crud=true
+                                },
+                            },
+                        ]
+                    },
                 ],
                 products:[],
                 products_headers: [
-                    { text: this.$t('Name'), sortable: true, value: 'fullname'},
-                    { text: this.$t('Elaborated products'), value: 'elaborated_products'},
-                    { text: this.$t('System products'), value: 'system_products'},
-                    { text: this.$t('Calories'), sortable: true, value: 'calories',align:'right'},
-                    { text: this.$t('Fat'), sortable: true, value: 'fat',align:'right'},
-                    { text: this.$t('Protein'), sortable: true, value: 'protein',align:'right'},
-                    { text: this.$t('Carbohydrate'), sortable: true, value: 'carbohydrate',align:'right'},
-                    { text: this.$t('Salt'), sortable: true, value: 'salt',align:'right'},
-                    { text: this.$t('Cholesterol'), sortable: true, value: 'cholesterol',align:'right'},
-                    { text: this.$t('Sodium'), sortable: true, value: 'sodium',align:'right'},
-                    { text: this.$t('Potassium'), sortable: true, value: 'potassium',align:'right'},
-                    { text: this.$t('Fiber'), sortable: true, value: 'fiber',align:'right'},
-                    { text: this.$t('Sugars'), sortable: true, value: 'sugars',align:'right'},
-                    { text: this.$t('Saturated fat'), sortable: true, value: 'saturated_fat',align:'right'},
-                    { text: this.$t('Ferrum'), sortable: true, value: 'ferrum',align:'right'},
-                    { text: this.$t('Magnesium'), sortable: true, value: 'magnesium',align:'right'},
-                    { text: this.$t('Phosphor'), sortable: true, value: 'phosphor',align:'right'},
-                    { text: this.$t('Calcium'), sortable: true, value: 'calcium',align:'right'},
-                    { text: this.$t('Gluten free'), sortable: true, value: 'glutenfree',align:'right'},
-                    { text: this.$t('Uses'), value: 'uses'},
+                    { text: this.$t('Name'), sortable: true, value: 'fullname',width:"30%"},    
+                    { text: this.$t('Calories (kcal)'), sortable: true, value: 'calories',align:'right'},
+                    { text: this.$t('Fat (g)'), sortable: true, value: 'fat',align:'right'},
+                    { text: this.$t('Protein (g)'), sortable: true, value: 'protein',align:'right'},
+                    { text: this.$t('Carbohydrate (g)'), sortable: true, value: 'carbohydrate',align:'right'},
+                    { text: this.$t('Salt (g)'), sortable: true, value: 'salt',align:'right'},
+                    { text: this.$t('Fiber (g)'), sortable: true, value: 'fiber',align:'right'},
+                    { text: this.$t('Sugars (g)'), sortable: true, value: 'sugars',align:'right'},
+                    { text: this.$t('Saturated fat (g)'), sortable: true, value: 'saturated_fat',align:'right'},
+                    { text: this.$t('Cholesterol (g)'), sortable: true, value: 'cholesterol',align:'right'},
+                    { text: this.$t('Sodium (mg)'), sortable: true, value: 'sodium',align:'right'},
+                    { text: this.$t('Potassium (mg)'), sortable: true, value: 'potassium',align:'right'},
+                    { text: this.$t('Ferrum (mg)'), sortable: true, value: 'ferrum',align:'right'},
+                    { text: this.$t('Magnesium (mg)'), sortable: true, value: 'magnesium',align:'right'},
+                    { text: this.$t('Phosphor (mg)'), sortable: true, value: 'phosphor',align:'right'},
+                    { text: this.$t('Calcium (mg)'), sortable: true, value: 'calcium',align:'right'},
                     { text: this.$t('Actions'), value: 'actions', sortable: false},
                 ],
                 system_products:[],
                 system_products_headers: [
-                    { text: this.$t('Name'), sortable: true, value: 'name'},
-                    { text: this.$t('System company'), sortable: true, value: 'system_company_name'},           
-                    { text: this.$t('Calories'), sortable: true, value: 'calories',align:'right'},
-                    { text: this.$t('Fat'), sortable: true, value: 'fat',align:'right'},
-                    { text: this.$t('Protein'), sortable: true, value: 'protein',align:'right'},
-                    { text: this.$t('Carbohydrate'), sortable: true, value: 'carbohydrate',align:'right'},
-                    { text: this.$t('Salt'), sortable: true, value: 'salt',align:'right'},
-                    { text: this.$t('Cholesterol'), sortable: true, value: 'cholesterol',align:'right'},
-                    { text: this.$t('Sodium'), sortable: true, value: 'sodium',align:'right'},
-                    { text: this.$t('Potassium'), sortable: true, value: 'potassium',align:'right'},
-                    { text: this.$t('Fiber'), sortable: true, value: 'fiber',align:'right'},
-                    { text: this.$t('Sugars'), sortable: true, value: 'sugars',align:'right'},
-                    { text: this.$t('Saturated fat'), sortable: true, value: 'saturated_fat',align:'right'},
-                    { text: this.$t('Ferrum'), sortable: true, value: 'ferrum',align:'right'},
-                    { text: this.$t('Magnesium'), sortable: true, value: 'magnesium',align:'right'},
-                    { text: this.$t('Phosphor'), sortable: true, value: 'phosphor',align:'right'},
-                    { text: this.$t('Calcium'), sortable: true, value: 'calcium',align:'right'},
-                    { text: this.$t('Gluten free'), sortable: true, value: 'glutenfree',align:'right'},
-                    { text: this.$t('Version'), value: 'version', align:'right'},
+                    { text: this.$t('Name'), sortable: true, value: 'fullname',width:"30%"},          
+                    { text: this.$t('Calories (kcal)'), sortable: true, value: 'calories',align:'right'},
+                    { text: this.$t('Fat (g)'), sortable: true, value: 'fat',align:'right'},
+                    { text: this.$t('Protein (g)'), sortable: true, value: 'protein',align:'right'},
+                    { text: this.$t('Carbohydrate (g)'), sortable: true, value: 'carbohydrate',align:'right'},
+                    { text: this.$t('Salt (g)'), sortable: true, value: 'salt',align:'right'},
+                    { text: this.$t('Fiber (g)'), sortable: true, value: 'fiber',align:'right'},
+                    { text: this.$t('Sugars (g)'), sortable: true, value: 'sugars',align:'right'},
+                    { text: this.$t('Saturated fat (g)'), sortable: true, value: 'saturated_fat',align:'right'},
+                    { text: this.$t('Cholesterol (g)'), sortable: true, value: 'cholesterol',align:'right'},
+                    { text: this.$t('Sodium (mg)'), sortable: true, value: 'sodium',align:'right'},
+                    { text: this.$t('Potassium (mg)'), sortable: true, value: 'potassium',align:'right'},
+                    { text: this.$t('Ferrum (mg)'), sortable: true, value: 'ferrum',align:'right'},
+                    { text: this.$t('Magnesium (mg)'), sortable: true, value: 'magnesium',align:'right'},
+                    { text: this.$t('Phosphor (mg)'), sortable: true, value: 'phosphor',align:'right'},
+                    { text: this.$t('Calcium (mg)'), sortable: true, value: 'calcium',align:'right'},
                     { text: this.$t('Actions'), value: 'actions', sortable: false},
                 ],
+
+                elaborated_products:[],
+                elaborated_products_headers: [
+                    { text: this.$t('Name'), sortable: true, value: 'name',width:"30%"},
+                    { text: this.$t('Calories (kcal)'), sortable: true, value: 'calories',align:'right'},
+                    { text: this.$t('Fat (g)'), sortable: true, value: 'fat',align:'right'},
+                    { text: this.$t('Protein (g)'), sortable: true, value: 'protein',align:'right'},
+                    { text: this.$t('Carbohydrate (g)'), sortable: true, value: 'carbohydrate',align:'right'},
+                    { text: this.$t('Salt (g)'), sortable: true, value: 'salt',align:'right'},
+                    { text: this.$t('Fiber (g)'), sortable: true, value: 'fiber',align:'right'},
+                    { text: this.$t('Sugars (g)'), sortable: true, value: 'sugars',align:'right'},
+                    { text: this.$t('Saturated fat (g)'), sortable: true, value: 'saturated_fat',align:'right'},
+                    { text: this.$t('Cholesterol (g)'), sortable: true, value: 'cholesterol',align:'right'},
+                    { text: this.$t('Sodium (mg)'), sortable: true, value: 'sodium',align:'right'},
+                    { text: this.$t('Potassium (mg)'), sortable: true, value: 'potassium',align:'right'},
+                    { text: this.$t('Ferrum (mg)'), sortable: true, value: 'ferrum',align:'right'},
+                    { text: this.$t('Magnesium (mg)'), sortable: true, value: 'magnesium',align:'right'},
+                    { text: this.$t('Phosphor (mg)'), sortable: true, value: 'phosphor',align:'right'},
+                    { text: this.$t('Calcium (mg)'), sortable: true, value: 'calcium',align:'right'},
+                    { text: this.$t('Actions'), value: 'actions', sortable: false},
+                ],
+
+                //CRUD ELABORATED PRODUCTS
+                elaborated_product:null,
+                elaborated_product_deleting:null,
+                dialog_elaborated_products_crud:false,
+
                 loading:false,
                 key:0,
                 tab:0,
@@ -162,6 +236,7 @@
         },        
         methods:{
             empty_products,
+            empty_elaborated_products,
             on_ProductsCRUD_cruded(){
                 this.dialog_products_crud=false
                 this.$store.dispatch("getProducts")
@@ -190,19 +265,48 @@
                 });
 
             },
-            editCompany(item){
+            editProduct(item){
                 this.product=item
                 this.product_deleting=false
                 this.key=this.key+1
 
                 this.dialog_products_crud=true
             },
-            deleteCompany(item){
+            deleteProduct(item){
                 this.product=item
                 this.product_deleting=true
                 this.key=this.key+1
 
                 this.dialog_products_crud=true
+            },
+
+            on_ElaboratedProductsCRUD_cruded(){
+                this.dialog_elaborated_products_crud=false
+                this.$store.dispatch("getElaboratedProducts")
+                this.$store.dispatch("getProducts")
+            },
+            editElaboratedProduct(item){
+                this.elaborated_product=item
+                this.elaborated_product_deleting=false
+                this.key=this.key+1
+
+                this.dialog_elaborated_products_crud=true
+            },
+            deleteElaboratedProduct(item){
+                this.elaborated_product=item
+                this.elaborated_product_deleting=true
+                this.key=this.key+1
+
+                this.dialog_elaborated_products_crud=true
+            },
+            on_icon_glutenfree(){
+                alert(this.$t("This product is gluten free"))
+            },
+            on_icon_elaborated_product(){
+                alert(this.$t("This is an elaborated product"))
+            },
+            on_icon_system_product(){
+                alert(this.$t("This is a system product"))
             },
         },
         created(){
