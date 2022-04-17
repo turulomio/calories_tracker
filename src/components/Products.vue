@@ -3,13 +3,15 @@
         <h1>{{ $t(`Products`) }}
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
         </h1>
+          <v-text-field class="ml-10 mr-6" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"></v-text-field>
+    
         <v-tabs  background-color="primary" dark v-model="tab" >
             <v-tab key="products">{{ $t('Products') }}</v-tab>
             <v-tab key="system_products">{{ $t('System products') }}</v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab" class="ma-5">
             <v-tab-item key="products" >
-                <v-data-table dense :headers="products_headers" :items="$store.state.products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+                <v-data-table dense :headers="products_headers"  :search="search" :items="$store.state.products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
                     <template v-slot:[`item.version`]="{ item }">
                         {{localtime(item.version)}}
                     </template>       
@@ -32,7 +34,7 @@
                 </v-data-table>
             </v-tab-item>
             <v-tab-item key="system_products" >                 
-                <v-data-table dense :headers="system_products_headers" :items="system_products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+                <v-data-table dense :headers="system_products_headers"  :search="search" :items="system_products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
                     <template v-slot:[`item.version`]="{ item }">
                         {{localtime(item.version)}}
                     </template>   
@@ -138,6 +140,7 @@
                 loading:false,
                 key:0,
                 tab:0,
+                search:"",
 
                 //CRUD COMPANY
                 product:null,

@@ -112,8 +112,8 @@ export const store = new Vuex.Store({
             context.dispatch("getCompanies")
             context.dispatch("getFoodTypes")
             context.dispatch("getFormats")
-            context.dispatch("getProducts")
             context.dispatch("getElaboratedProducts")
+            context.dispatch("getProducts")
             context.dispatch("getWeightWishes")
         },
         getActivities(context){
