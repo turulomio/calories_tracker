@@ -3,10 +3,10 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-autocomplete :readonly="deleting" :items="$store.state.products" v-model="newproduct_in.products" item-text="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()"></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="$store.state.products" v-model="newproduct_in.products" item-text="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()"></v-autocomplete>
 
-                <v-autocomplete :readonly="deleting" :items="products_formats" v-model="product_format" :label="$t('Select format')" item-text="name" item-value="amount" :rules="RulesSelection(false)" @input="on_product_format_input()"></v-autocomplete>
-                <v-text-field :readonly="deleting" v-model="newproduct_in.amount" type="number" :label="$t('Set product_in amount (gr)')" :placeholder="$t('Set product_in amount (gr)')" :rules="RulesFloat(10,true)" counter="10"/>
+                <v-autocomplete :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select format')" item-text="name" item-value="amount" :rules="RulesSelection(false)" @input="on_product_format_input()"></v-autocomplete>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct_in.amount" type="number" :label="$t('Set product_in amount (gr)')" :placeholder="$t('Set product_in amount (gr)')" :rules="RulesFloat(10,true)" counter="10"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -22,16 +22,14 @@
             product_in: { // An account transfer object
                 required: true
             },
-            deleting: {
-                required: false,
-                default: false,
+            mode: { // C D U
+                required: true,
             }
         },
         data(){ 
             return{
                 form_valid:false,
                 newproduct_in: null,
-                mode: "", // CRUD mode
 
                 products_formats:[],
                 product_format:null,
@@ -70,15 +68,6 @@
             // Guess crud mode
             console.log(this.product_in)
             this.newproduct_in=Object.assign({},this.product_in)
-            if ( this.product_in.products_in==null){ 
-                this.mode="C"
-            } else if (this.product_in.products_in!= null && this.deleting ==false) { 
-                this.mode="U"
-            } else if (this.product_in.products_in!= null && this.deleting ==true) { 
-                this.mode="D"
-            }
-
-
         }
     }
 </script>

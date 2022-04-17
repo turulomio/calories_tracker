@@ -31,7 +31,7 @@
         <!-- DIALOG PRODUCTS_IN CRUD -->
         <v-dialog v-model="dialog_products_in_crud" width="45%">
             <v-card class="pa-4">
-                <ProductsInCRUD :product_in="product_in" :deleting="product_in_deleting" :key="'B'+key" @cruded="on_ProductsInCRUD_cruded"></ProductsInCRUD>
+                <ProductsInCRUD :product_in="product_in" :mode="product_in_mode" :key="'B'+key" @cruded="on_ProductsInCRUD_cruded"></ProductsInCRUD>
             </v-card>
         </v-dialog>
     </div>
@@ -71,7 +71,7 @@
 
                 key:0,
                 product_in:null,
-                product_in_deleting:null,
+                product_in_mode:null,
                 dialog_products_in_crud:false
             }
         },
@@ -91,7 +91,6 @@
                 if( this.$refs.form.validate()==false) return   
 
                 console.log(this.newep)
-
 
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/elaborated_products/`, this.newep,  this.myheaders())
@@ -126,21 +125,21 @@
             },
             addProductIn(){
                 this.product_in=this.empty_products_in()
-                this.product_in_deleting=false
+                this.product_in_mode='C'
                 this.key=this.key+1
                 this.dialog_products_in_crud=true
 
             },
             editProductIn(item){
                 this.product_in=item
-                this.product_in_deleting=false
+                this.product_in_mode='U'
                 this.key=this.key+1
                 this.dialog_products_in_crud=true
 
             },
             deleteProductIn(item){
                 this.product_in=item
-                this.product_in_deleting=true
+                this.product_in_mode='D'
                 this.key=this.key+1
                 this.dialog_products_in_crud=true
 
@@ -156,7 +155,7 @@
                     
                 } else if (mode=="D"){
                     let index = this.newep.products_in.indexOf(olditem)
-                    delete this.newep.products_in[index]
+                    this.newep.products_in.splice(index,1)
                 }
                 this.key=this.key+1
             }

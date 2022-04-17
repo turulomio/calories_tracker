@@ -9,28 +9,51 @@
         </div>
         <v-data-table dense :headers="meals_headers" :items="meals" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
             <template v-slot:[`item.datetime`]="{ item }">
-                {{localtime(item.datetime)}}
+                {{localtime(item.datetime).slice(10)}}
             </template>          
             <template v-slot:[`item.products`]="{ item }">
                 <div v-html="$store.getters.getObjectPropertyByUrl('products',item.products,'name')"></div>
-            </template>   
+            </template>                       
+            <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
+            <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
+            <template v-slot:[`item.protein`]="{ item }"><div v-html="my_round(item.protein,0)"></div></template>  
+            <template v-slot:[`item.carbohydrate`]="{ item }"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
+            <template v-slot:[`item.salt`]="{ item }"><div v-html="my_round(item.salt,0)"></div></template>  
+            <template v-slot:[`item.fiber`]="{ item }"><div v-html="my_round(item.fiber,0)"></div></template>  
+            <template v-slot:[`item.sugars`]="{ item }"><div v-html="my_round(item.sugars,0)"></div></template>  
+            <template v-slot:[`item.saturated_fat`]="{ item }"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
+            <template v-slot:[`item.cholesterol`]="{ item }"><div v-html="my_round(item.cholesterol,0)"></div></template>  
+            <template v-slot:[`item.sodium`]="{ item }"><div v-html="my_round(item.sodium,0)"></div></template>  
+            <template v-slot:[`item.potassium`]="{ item }"><div v-html="my_round(item.potassium,0)"></div></template>  
+            <template v-slot:[`item.ferrum`]="{ item }"><div v-html="my_round(item.ferrum,0)"></div></template>  
+            <template v-slot:[`item.magnesium`]="{ item }"><div v-html="my_round(item.magnesium,0)"></div></template>  
+            <template v-slot:[`item.phosphor`]="{ item }"><div v-html="my_round(item.phosphor,0)"></div></template>  
+            <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
             <template v-slot:[`item.actions`]="{ item }">
-                <v-icon small class="mr-2" @click="editMeal(item)">mdi-pencil</v-icon>
-                <v-icon small @click="deleteMeal(item)">mdi-delete</v-icon>
+                <v-icon small class="mr-1" @click="editMeal(item)">mdi-pencil</v-icon>
+                <v-icon small class="mr-1" @click="deleteMeal(item)">mdi-delete</v-icon>
+                <v-icon small v-if="item.glutenfree"  @click="on_icon_glutenfree">mdi-barley-off</v-icon>
             </template>            
-            <template v-slot:[`item.glutenfree`]="{ item }">
-                    <v-icon small v-if="item.glutenfree" >mdi-check-outline</v-icon>           
-            </template>
             <template v-slot:[`body.append`]="{headers}">
                 <tr style="background-color: WhiteSmoke">
                     <td v-for="(header,i) in headers" :key="i">
                         <div v-if="header.value == 'products'">{{ $t(`Total (${meals.length} meals):`)}}</div>
-                        <div v-if="header.value == 'amount'" align="right" v-html="my_round(listobjects_sum(meals,'amount'),2)"></div>
-                        <div v-if="header.value == 'calories'" align="right" v-html="my_round(listobjects_sum(meals,'calories'),2)"></div>
-                        <div v-if="header.value == 'fat'" align="right" v-html="my_round(listobjects_sum(meals,'fat'),2)"></div>
-                        <div v-if="header.value == 'protein'" align="right" v-html="my_round(listobjects_sum(meals,'protein'),2)"></div>
-                        <div v-if="header.value == 'carbohydrate'" align="right" v-html="my_round(listobjects_sum(meals,'carbohydrate'),2)"></div>
-                        <div v-if="header.value == 'fiber'" align="right" v-html="my_round(listobjects_sum(meals,'fiber'),2)"></div>
+                        <div v-if="header.value == 'amount'" align="right" v-html="my_round(listobjects_sum(meals,'amount'),0)"></div>
+                        <div v-if="header.value == 'calories'" align="right" v-html="my_round(listobjects_sum(meals,'calories'),0)"></div>
+                        <div v-if="header.value == 'fat'" align="right" v-html="my_round(listobjects_sum(meals,'fat'),0)"></div>
+                        <div v-if="header.value == 'protein'" align="right" v-html="my_round(listobjects_sum(meals,'protein'),0)"></div>
+                        <div v-if="header.value == 'carbohydrate'" align="right" v-html="my_round(listobjects_sum(meals,'carbohydrate'),0)"></div>
+                        <div v-if="header.value == 'fiber'" align="right" v-html="my_round(listobjects_sum(meals,'fiber'),0)"></div>
+                        <div v-if="header.value == 'salt'" align="right" v-html="my_round(listobjects_sum(meals,'salt'),0)"></div>
+                        <div v-if="header.value == 'cholesterol'" align="right" v-html="my_round(listobjects_sum(meals,'cholesterol'),0)"></div>
+                        <div v-if="header.value == 'sodium'" align="right" v-html="my_round(listobjects_sum(meals,'sodium'),0)"></div>
+                        <div v-if="header.value == 'potassium'" align="right" v-html="my_round(listobjects_sum(meals,'potassium'),0)"></div>
+                        <div v-if="header.value == 'ferrum'" align="right" v-html="my_round(listobjects_sum(meals,'ferrum'),0)"></div>
+                        <div v-if="header.value == 'magnesium'" align="right" v-html="my_round(listobjects_sum(meals,'magnesium'),0)"></div>
+                        <div v-if="header.value == 'phosphor'" align="right" v-html="my_round(listobjects_sum(meals,'phosphor'),0)"></div>
+                        <div v-if="header.value == 'calcium'" align="right" v-html="my_round(listobjects_sum(meals,'calcium'),0)"></div>
+                        <div v-if="header.value == 'sugars'" align="right" v-html="my_round(listobjects_sum(meals,'sugars'),0)"></div>
+                        <div v-if="header.value == 'saturated_fat'" align="right" v-html="my_round(listobjects_sum(meals,'saturated_fat'),0)"></div>
                     </td>
                 </tr>
             </template>
@@ -76,26 +99,25 @@
                 ],
                 meals:[],
                 meals_headers: [
-                    { text: this.$t('Date and time'), sortable: true, value: 'datetime'},
-                    { text: this.$t('Product'), sortable: true, value: 'products'},
-                    { text: this.$t('Amount'), sortable: true, value: 'amount',align:'right'},
-                    { text: this.$t('Calories'), sortable: true, value: 'calories',align:'right'},
-                    { text: this.$t('Fat'), sortable: true, value: 'fat',align:'right'},
-                    { text: this.$t('Protein'), sortable: true, value: 'protein',align:'right'},
-                    { text: this.$t('Carbohydrate'), sortable: true, value: 'carbohydrate',align:'right'},
-                    { text: this.$t('Salt'), sortable: true, value: 'salt',align:'right'},
-                    { text: this.$t('Cholesterol'), sortable: true, value: 'cholesterol',align:'right'},
-                    { text: this.$t('Sodium'), sortable: true, value: 'sodium',align:'right'},
-                    { text: this.$t('Potassium'), sortable: true, value: 'potassium',align:'right'},
-                    { text: this.$t('Fiber'), sortable: true, value: 'fiber',align:'right'},
-                    { text: this.$t('Sugars'), sortable: true, value: 'sugars',align:'right'},
-                    { text: this.$t('Saturated fat'), sortable: true, value: 'saturated_fat',align:'right'},
-                    { text: this.$t('Ferrum'), sortable: true, value: 'ferrum',align:'right'},
-                    { text: this.$t('Magnesium'), sortable: true, value: 'magnesium',align:'right'},
-                    { text: this.$t('Phosphor'), sortable: true, value: 'phosphor',align:'right'},
-                    { text: this.$t('Calcium'), sortable: true, value: 'calcium',align:'right'},
-                    { text: this.$t('Gluten free'), sortable: true, value: 'glutenfree',align:'right'},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false},
+                    { text: this.$t('Time'), sortable: true, value: 'datetime'},
+                    { text: this.$t('Product'), sortable: true, value: 'products',width:"30%"},
+                    { text: this.$t('Amount (g)'), sortable: true, value: 'amount',align:'right'},
+                    { text: this.$t('Calories (kcal)'), sortable: true, value: 'calories',align:'right'},
+                    { text: this.$t('Fat (g)'), sortable: true, value: 'fat',align:'right'},
+                    { text: this.$t('Protein (g)'), sortable: true, value: 'protein',align:'right'},
+                    { text: this.$t('Carbohydrate (g)'), sortable: true, value: 'carbohydrate',align:'right'},
+                    { text: this.$t('Salt (g)'), sortable: true, value: 'salt',align:'right'},
+                    { text: this.$t('Fiber (g)'), sortable: true, value: 'fiber',align:'right'},
+                    { text: this.$t('Sugars (g)'), sortable: true, value: 'sugars',align:'right'},
+                    { text: this.$t('Saturated fat (g)'), sortable: true, value: 'saturated_fat',align:'right'},
+                    { text: this.$t('Cholesterol (g)'), sortable: true, value: 'cholesterol',align:'right'},
+                    { text: this.$t('Sodium (mg)'), sortable: true, value: 'sodium',align:'right'},
+                    { text: this.$t('Potassium (mg)'), sortable: true, value: 'potassium',align:'right'},
+                    { text: this.$t('Ferrum (mg)'), sortable: true, value: 'ferrum',align:'right'},
+                    { text: this.$t('Magnesium (mg)'), sortable: true, value: 'magnesium',align:'right'},
+                    { text: this.$t('Phosphor (mg)'), sortable: true, value: 'phosphor',align:'right'},
+                    { text: this.$t('Calcium (mg)'), sortable: true, value: 'calcium',align:'right'},
+                    { text: this.$t('Actions'), value: 'actions', sortable: false,width:"6%"},
 
                 ],
                 loading:false,
@@ -145,7 +167,10 @@
             },
             on_day_input(){
                 this.update_meals()
-            }
+            },
+            on_icon_glutenfree(){
+                alert(this.$t("This meal is gluten free"))
+            },
         },
         created(){
             this.update_meals()
