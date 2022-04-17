@@ -67,3 +67,20 @@ export function empty_meals(){
         amount: 0,
     }
 }
+export function empty_elaborated_products(){
+    return {
+        url: null,
+        final_amount: null,
+        food_types:null,
+        last: new Date().toISOString(),
+        name: null,
+        obsolete: false,
+        products_in: [],
+    }
+}
+export function empty_products_in(){
+    return {
+        products: null,
+        amount: null,
+    }
+}

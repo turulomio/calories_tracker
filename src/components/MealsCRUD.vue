@@ -4,7 +4,7 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <MyDateTimePicker :readonly="deleting" v-model="newmeal.datetime" :label="$t('Set transfer date and time')"></MyDateTimePicker>
-                <AutoCompleteApiIdName returnobject v-model="product" :url="`${this.$store.state.apiroot}/api/products/`" :label="$t('Select a system product')" @input="on_products_input()"></AutoCompleteApiIdName>
+                <v-autocomplete :readonly="deleting" :items="$store.state.products" v-model="newmeal.products" item-text="name" item-value="url" :label="$t('Select a product')" @input="on_products_input()"></v-autocomplete>
                 <v-autocomplete :readonly="deleting" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-text="name" item-value="amount" :rules="RulesSelection(false)"  @input="on_product_format_input()"></v-autocomplete>
                 <v-text-field :readonly="deleting" v-model="newmeal.amount" type="number" :label="$t('Set your amount')" :placeholder="$t('Set your amount')" :rules="RulesInteger(10,true)" counter="10"/>
             </v-form>
@@ -18,11 +18,9 @@
 <script>
     import axios from 'axios'
     import MyDateTimePicker from './reusing/MyDateTimePicker.vue'
-    import AutoCompleteApiIdName from './AutoCompleteApiIdName.vue'
     export default {
         components: {
             MyDateTimePicker,
-            AutoCompleteApiIdName,
         },
         props: {
             // An account object
@@ -59,8 +57,7 @@
                 if (this.mode=="D") return this.$t('Delete this meal register')
             },
             acceptDialog(){             
-                if( this.$refs.form.validate()==false) return   
-                    this.newmeal.products=this.product.url
+                if( this.$refs.form.validate()==false) return
 
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/meals/`, this.newmeal,  this.myheaders())
@@ -94,9 +91,9 @@
                 }
             },
             on_products_input(){
-                if (this.product==null) return
+                if (this.newmeal.products==null) return
                 this.products_formats=[]
-                this.product.formats.forEach(element => {
+                this.newmeal.products.formats.forEach(element => {
                     this.products_formats.push({name: `${this.$store.getters.getObjectPropertyByUrl("formats",element.formats,"name")} (${element.amount} g)`, amount: element.amount})
                     
                 });

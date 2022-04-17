@@ -18,6 +18,8 @@ export const store = new Vuex.Store({
         additives:[],
         food_types:[],
         formats: [],
+        products: [],
+        elaborated_products: [],
         weight_wishes: [],
     },    
     getters:{
@@ -85,6 +87,12 @@ export const store = new Vuex.Store({
         updateFormats: (state, payload) =>{
             state.formats=payload
         },
+        updateProducts: (state, payload) =>{
+            state.products=payload
+        },
+        updateElaboratedProducts: (state, payload) =>{
+            state.elaborated_products=payload
+        },
         updateWeightWishes: (state, payload) =>{
             state.weight_wishes=payload
         },
@@ -99,6 +107,8 @@ export const store = new Vuex.Store({
             context.dispatch("getAdditives")
             context.dispatch("getFoodTypes")
             context.dispatch("getFormats")
+            context.dispatch("getProducts")
+            context.dispatch("getElaboratedProducts")
             context.dispatch("getWeightWishes")
         },
         getActivities(context){
@@ -147,6 +157,26 @@ export const store = new Vuex.Store({
             .then((response) => {
                 context.commit('updateFormats', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} formats in ${new Date()-start} ms`)
+            }, (error) => {
+                store.$app.parseResponseError(error)
+            });
+        },
+        getProducts(context){
+            var start=new Date()
+            axios.get(`${store.state.apiroot}/api/products/`, store.$app.myheaders())
+            .then((response) => {
+                context.commit('updateProducts', sortObjectsArray(response.data, "name"))
+                console.log(`Updated ${response.data.length} products in ${new Date()-start} ms`)
+            }, (error) => {
+                store.$app.parseResponseError(error)
+            });
+        },
+        getElaboratedProducts(context){
+            var start=new Date()
+            axios.get(`${store.state.apiroot}/api/elaborated_products/`, store.$app.myheaders())
+            .then((response) => {
+                context.commit('updateElaboratedProducts', sortObjectsArray(response.data, "name"))
+                console.log(`Updated ${response.data.length} elaborated products in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });

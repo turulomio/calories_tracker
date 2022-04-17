@@ -9,7 +9,7 @@
         </v-tabs>
         <v-tabs-items v-model="tab" class="ma-5">
             <v-tab-item key="products" >
-                <v-data-table dense :headers="products_headers" :items="products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+                <v-data-table dense :headers="products_headers" :items="$store.state.products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
                     <template v-slot:[`item.version`]="{ item }">
                         {{localtime(item.version)}}
                     </template>   
@@ -82,10 +82,11 @@
                 products_headers: [
                     { text: this.$t('Name'), sortable: true, value: 'name'},
                     { text: this.$t('Company'), sortable: true, value: 'companies'},
-                    { text: this.$t('Version'), value: 'version', align:'right', width:"12%"},
+                    { text: this.$t('Elaborated products'), value: 'elaborated_products',width:"8%"},
                     { text: this.$t('System products'), value: 'system_products',width:"8%"},
-                    { text: this.$t('Obsolete'), value: 'obsolete' , width:"8%"},
                     { text: this.$t('Uses'), value: 'uses' , width:"8%"},
+                    { text: this.$t('Obsolete'), value: 'obsolete' , width:"8%"},
+                    { text: this.$t('Version'), value: 'version', align:'right', width:"12%"},
                     { text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"},
                 ],
                 system_products:[],
@@ -113,18 +114,7 @@
             empty_products,
             on_ProductsCRUD_cruded(){
                 this.dialog_products_crud=false
-                this.update_products()
-            },
-            update_products(){
-                this.loading=true
-                axios.get(`${this.$store.state.apiroot}/api/products/`, this.myheaders())
-                .then((response) => {
-                    this.products=response.data
-                    this.loading=false
-               }, (error) => {
-                    this.parseResponseError(error)
-                });
-
+                this.$store.dispatch("getProducts")
             },
             update_system_products(){
                 this.loading=true
@@ -153,7 +143,6 @@
             },
         },
         created(){
-            this.update_products()
             this.update_system_products()
         }
     }

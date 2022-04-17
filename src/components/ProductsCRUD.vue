@@ -6,7 +6,7 @@
                 <v-text-field :readonly="deleting" v-model="newproduct.name" :label="$t('Set product name')" :placeholder="$t('Set product name')" :rules="RulesString(200)" counter="200"/>
                 <AutoCompleteApiIdName v-model="newproduct.system_products" :url="`${this.$store.state.apiroot}/api/system_products/`" :label="$t('Select a system product')"></AutoCompleteApiIdName>
                 <AutoCompleteApiIdName v-model="newproduct.companies" :url="`${this.$store.state.apiroot}/api/companies/`" :label="$t('Select a company')"></AutoCompleteApiIdName>
-                <v-checkbox v-model="newproduct.obsolete" :label="$t('Is obsolete?')"></v-checkbox>l
+                <v-checkbox v-model="newproduct.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
                 <v-text-field :readonly="deleting" v-model="newproduct.amount" type="number" :label="$t('Set product amount (gr)')" :placeholder="$t('Set product amount (gr)')" :rules="RulesFloat(10,true)" counter="10"/>
                 <v-text-field :readonly="deleting" v-model="newproduct.fat" type="number" :label="$t('Set product fat (gr)')" :placeholder="$t('Set product fat (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
                 <v-text-field :readonly="deleting" v-model="newproduct.protein" type="number" :label="$t('Set product protein (gr)')" :placeholder="$t('Set product protein (gr)')" :rules="RulesFloat(10,false)" counter="10"/>

@@ -33,6 +33,11 @@
                         <v-list-item-icon><v-icon color="#757575;">mdi-food-apple</v-icon></v-list-item-icon>
                         <v-list-item-title>{{ $t("Products")}}</v-list-item-title>
                     </v-list-item>
+<!--                    ELABORATED PRODUCTS -->
+                    <v-list-item link router :to="{ name: 'elaborated_products'}">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-food-takeout-box</v-icon></v-list-item-icon>
+                        <v-list-item-title>{{ $t("Elaborated products")}}</v-list-item-title>
+                    </v-list-item>
 <!--                    MEALS -->
                     <v-list-item link router :to="{ name: 'meals'}">
                         <v-list-item-icon><v-icon color="#757575;">mdi-food-turkey</v-icon></v-list-item-icon>
