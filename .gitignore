@@ -2,3 +2,5 @@ node_modules
 /dist
 .vscode
 management/reusing/__pycache__/
+npm_i18n_report.json
+package-lock.json

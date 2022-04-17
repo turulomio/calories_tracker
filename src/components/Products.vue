@@ -12,9 +12,13 @@
         <v-tabs-items v-model="tab" class="ma-5">
             <v-tab-item key="products" >
                 <v-data-table dense :headers="products_headers"  :search="search" :items="$store.state.products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+                    <template v-slot:[`item.fullname`]="{ item }">
+                        <div v-html="item.fullname" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div>
+                    </template>                          
                     <template v-slot:[`item.version`]="{ item }">
                         {{localtime(item.version)}}
                     </template>       
+
                     <template v-slot:[`item.companies`]="{ item }">
                         <div v-html="$store.getters.getObjectPropertyByUrl('companies',item.companies,'name')"></div>
                     </template>   
@@ -26,6 +30,9 @@
                     </template>               
                     <template v-slot:[`item.obsolete`]="{ item }">
                             <v-icon small v-if="item.obsolete" >mdi-check-outline</v-icon>           
+                    </template>      
+                    <template v-slot:[`item.glutenfree`]="{ item }">
+                            <v-icon small v-if="item.glutenfree" >mdi-check-outline</v-icon>           
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon v-if="item.is_editable" small class="mr-2" @click="editCompany(item)">mdi-pencil</v-icon>
@@ -37,9 +44,12 @@
                 <v-data-table dense :headers="system_products_headers"  :search="search" :items="system_products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
                     <template v-slot:[`item.version`]="{ item }">
                         {{localtime(item.version)}}
-                    </template>   
-                    <template v-slot:[`item.obsolete`]="{ item }">
-                            <v-icon small v-if="item.obsolete" >mdi-check-outline</v-icon>           
+                    </template>                 
+                     <template v-slot:[`item.name`]="{ item }">
+                        <div v-html="item.name" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div>
+                    </template>      
+                    <template v-slot:[`item.glutenfree`]="{ item }">
+                            <v-icon small v-if="item.glutenfree" >mdi-check-outline</v-icon>           
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon small @click="linkProduct(item)">mdi-link-variant</v-icon>
@@ -111,7 +121,6 @@
                     { text: this.$t('Calcium'), sortable: true, value: 'calcium',align:'right'},
                     { text: this.$t('Gluten free'), sortable: true, value: 'glutenfree',align:'right'},
                     { text: this.$t('Uses'), value: 'uses'},
-                    { text: this.$t('Obsolete'), value: 'obsolete'},
                     { text: this.$t('Actions'), value: 'actions', sortable: false},
                 ],
                 system_products:[],
@@ -135,7 +144,6 @@
                     { text: this.$t('Calcium'), sortable: true, value: 'calcium',align:'right'},
                     { text: this.$t('Gluten free'), sortable: true, value: 'glutenfree',align:'right'},
                     { text: this.$t('Version'), value: 'version', align:'right'},
-                    { text: this.$t('Obsolete'), value: 'obsolete'},
                     { text: this.$t('Actions'), value: 'actions', sortable: false},
                 ],
                 loading:false,

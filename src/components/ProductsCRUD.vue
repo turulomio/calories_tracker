@@ -27,12 +27,6 @@
                 <v-autocomplete :readonly="deleting" :items="$store.state.food_types" v-model="newproduct.food_types" :label="$t('Select product food type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-autocomplete :readonly="deleting" :items="$store.state.additives" v-model="newproduct.additives" multiple :label="$t('Select product additives')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
 
-                <v-text-field :readonly="deleting" v-model="newproduct.amount" type="number" :label="$t('Set product amount (gr)')" :placeholder="$t('Set product amount (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.amount" type="number" :label="$t('Set product amount (gr)')" :placeholder="$t('Set product amount (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.amount" type="number" :label="$t('Set product amount (gr)')" :placeholder="$t('Set product amount (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.amount" type="number" :label="$t('Set product amount (gr)')" :placeholder="$t('Set product amount (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.amount" type="number" :label="$t('Set product amount (gr)')" :placeholder="$t('Set product amount (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-
                 <AutoCompleteApiIdName v-model="newproduct.version_parent" :url="`${this.$store.state.apiroot}/api/products/`" :label="$t('Select parent product')"></AutoCompleteApiIdName>
                 <v-text-field :readonly="deleting" v-model="newproduct.version_description" :label="$t('Set product version description')" :placeholder="$t('Set product version description')" :rules="RulesString(200,false)" counter="200"/>
                 <v-card class="mt-4">
