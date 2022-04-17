@@ -61,6 +61,22 @@
                 elaborated_products_headers: [
                     { text: this.$t('Name'), sortable: true, value: 'name'},
                     { text: this.$t('Food type'), sortable: true, value: 'food_types'},
+                    { text: this.$t('Calories'), sortable: true, value: 'calories',align:'right'},
+                    { text: this.$t('Fat'), sortable: true, value: 'fat',align:'right'},
+                    { text: this.$t('Protein'), sortable: true, value: 'protein',align:'right'},
+                    { text: this.$t('Carbohydrate'), sortable: true, value: 'carbohydrate',align:'right'},
+                    { text: this.$t('Salt'), sortable: true, value: 'salt',align:'right'},
+                    { text: this.$t('Cholesterol'), sortable: true, value: 'cholesterol',align:'right'},
+                    { text: this.$t('Sodium'), sortable: true, value: 'sodium',align:'right'},
+                    { text: this.$t('Potassium'), sortable: true, value: 'potassium',align:'right'},
+                    { text: this.$t('Fiber'), sortable: true, value: 'fiber',align:'right'},
+                    { text: this.$t('Sugars'), sortable: true, value: 'sugars',align:'right'},
+                    { text: this.$t('Saturated fat'), sortable: true, value: 'saturated_fat',align:'right'},
+                    { text: this.$t('Ferrum'), sortable: true, value: 'ferrum',align:'right'},
+                    { text: this.$t('Magnesium'), sortable: true, value: 'magnesium',align:'right'},
+                    { text: this.$t('Phosphor'), sortable: true, value: 'phosphor',align:'right'},
+                    { text: this.$t('Calcium'), sortable: true, value: 'calcium',align:'right'},
+                    { text: this.$t('Gluten free'), sortable: true, value: 'glutenfree',align:'right'},
                     { text: this.$t('Uses'), sortable: true, value: 'uses'},
                     { text: this.$t('Last update'), sortable: true, value: 'last',align:'right'},
                     { text: this.$t('Obsolete'), sortable: true, value: 'obsolete',align:'right'},
@@ -81,6 +97,7 @@
             on_ElaboratedProductsCRUD_cruded(){
                 this.dialog_elaborated_products_crud=false
                 this.$store.dispatch("getElaboratedProducts")
+                this.$store.dispatch("getProducts")
             },
             editElaboratedProduct(item){
                 this.elaborated_product=item
