@@ -12,7 +12,13 @@
                 <v-data-table dense :headers="products_headers" :items="$store.state.products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
                     <template v-slot:[`item.version`]="{ item }">
                         {{localtime(item.version)}}
+                    </template>       
+                    <template v-slot:[`item.companies`]="{ item }">
+                        <div v-html="$store.getters.getObjectPropertyByUrl('companies',item.companies,'name')"></div>
                     </template>   
+                    <template v-slot:[`item.elaborated_products`]="{ item }">
+                        <v-icon small v-if="item.elaborated_products" >mdi-check-outline</v-icon>
+                    </template>  
                     <template v-slot:[`item.system_products`]="{ item }">
                         <v-icon small v-if="item.system_products" >mdi-check-outline</v-icon>
                     </template>               
@@ -29,7 +35,7 @@
                 <v-data-table dense :headers="system_products_headers" :items="system_products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
                     <template v-slot:[`item.version`]="{ item }">
                         {{localtime(item.version)}}
-                    </template>             
+                    </template>   
                     <template v-slot:[`item.obsolete`]="{ item }">
                             <v-icon small v-if="item.obsolete" >mdi-check-outline</v-icon>           
                     </template>
@@ -94,7 +100,7 @@
                     { text: this.$t('Name'), sortable: true, value: 'name'},
                     { text: this.$t('System company'), sortable: true, value: 'system_companies'},
                     { text: this.$t('Version'), value: 'version', align:'right', width:"12%"},
-                    { text: this.$t('Obsolete'), value: 'obsolete' , width:"8%"},
+                    { text: this.$t('Obsolete'), value: 'obsolete'},
                     { text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"},
                 ],
                 loading:false,

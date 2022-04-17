@@ -9,10 +9,10 @@
         </v-tabs>
         <v-tabs-items v-model="tab" class="ma-5">
             <v-tab-item key="companies" >
-                <v-data-table dense :headers="companies_headers" :items="companies" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+                <v-data-table dense :headers="companies_headers" :items="$store.state.companies" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
                     <template v-slot:[`item.last`]="{ item }">
                         {{localtime(item.last)}}
-                    </template>   
+                    </template>        
                     <template v-slot:[`item.system_companies`]="{ item }">
                         <v-icon small v-if="item.system_companies" >mdi-check-outline</v-icon>
                     </template>               
@@ -107,18 +107,7 @@
             empty_companies,
             on_CompaniesCRUD_cruded(){
                 this.dialog_companies_crud=false
-                this.update_companies()
-            },
-            update_companies(){
-                this.loading=true
-                axios.get(`${this.$store.state.apiroot}/api/companies/`, this.myheaders())
-                .then((response) => {
-                    this.companies=response.data
-                    this.loading=false
-               }, (error) => {
-                    this.parseResponseError(error)
-                });
-
+                this.$store.dispatch("getCompanies")
             },
             update_system_companies(){
                 this.loading=true
@@ -147,7 +136,6 @@
             },
         },
         created(){
-            this.update_companies()
             this.update_system_companies()
         }
     }

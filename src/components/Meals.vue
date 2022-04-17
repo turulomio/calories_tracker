@@ -4,10 +4,15 @@
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
         </h1>
 
-        <v-date-picker v-model="day" @input="on_day_input()"></v-date-picker>
+        <div class="d-flex justify-center">
+            <v-date-picker dense no-title v-model="day" @input="on_day_input()"></v-date-picker>
+        </div>
         <v-data-table dense :headers="meals_headers" :items="meals" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
             <template v-slot:[`item.datetime`]="{ item }">
                 {{localtime(item.datetime)}}
+            </template>          
+            <template v-slot:[`item.products`]="{ item }">
+                <div v-html="$store.getters.getObjectPropertyByUrl('products',item.products,'name')"></div>
             </template>   
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="editMeal(item)">mdi-pencil</v-icon>

@@ -16,6 +16,7 @@ export const store = new Vuex.Store({
         activities: [],
         additive_risks: [],
         additives:[],
+        companies: [],
         food_types:[],
         formats: [],
         products: [],
@@ -81,6 +82,9 @@ export const store = new Vuex.Store({
         updateAdditives: (state, payload) =>{
             state.additives=payload
         },
+        updateCompanies: (state, payload) =>{
+            state.companies=payload
+        },
         updateFoodTypes: (state, payload) =>{
             state.food_types=payload
         },
@@ -105,6 +109,7 @@ export const store = new Vuex.Store({
             context.dispatch("getActivities")
             context.dispatch("getAdditiveRisks")
             context.dispatch("getAdditives")
+            context.dispatch("getCompanies")
             context.dispatch("getFoodTypes")
             context.dispatch("getFormats")
             context.dispatch("getProducts")
@@ -137,6 +142,16 @@ export const store = new Vuex.Store({
             .then((response) => {
                 context.commit('updateAdditives', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} additives in ${new Date()-start} ms`)
+            }, (error) => {
+                store.$app.parseResponseError(error)
+            });
+        },
+        getCompanies(context){
+            var start=new Date()
+            axios.get(`${store.state.apiroot}/api/companies/`, store.$app.myheaders())
+            .then((response) => {
+                context.commit('updateCompanies', sortObjectsArray(response.data, "name"))
+                console.log(`Updated ${response.data.length} companies in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });

@@ -7,7 +7,10 @@
         <v-data-table dense :headers="elaborated_products_headers" :items="$store.state.elaborated_products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
             <template v-slot:[`item.last`]="{ item }">
                 {{localtime(item.last)}}
-            </template>               
+            </template>          
+            <template v-slot:[`item.food_types`]="{ item }">
+                <div v-html="$store.getters.getObjectPropertyByUrl('food_types',item.food_types,'localname')"></div>
+            </template>            
             <template v-slot:[`item.obsolete`]="{ item }">
                     <v-icon small v-if="item.obsolete" >mdi-check-outline</v-icon>           
             </template>
