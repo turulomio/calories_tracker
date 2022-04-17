@@ -17,6 +17,22 @@
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="editMeal(item)">mdi-pencil</v-icon>
                 <v-icon small @click="deleteMeal(item)">mdi-delete</v-icon>
+            </template>            
+            <template v-slot:[`item.glutenfree`]="{ item }">
+                    <v-icon small v-if="item.glutenfree" >mdi-check-outline</v-icon>           
+            </template>
+            <template v-slot:[`body.append`]="{headers}">
+                <tr style="background-color: WhiteSmoke">
+                    <td v-for="(header,i) in headers" :key="i">
+                        <div v-if="header.value == 'products'">{{ $t(`Total (${meals.length} meals):`)}}</div>
+                        <div v-if="header.value == 'amount'" align="right" v-html="my_round(listobjects_sum(meals,'amount'),2)"></div>
+                        <div v-if="header.value == 'calories'" align="right" v-html="my_round(listobjects_sum(meals,'calories'),2)"></div>
+                        <div v-if="header.value == 'fat'" align="right" v-html="my_round(listobjects_sum(meals,'fat'),2)"></div>
+                        <div v-if="header.value == 'protein'" align="right" v-html="my_round(listobjects_sum(meals,'protein'),2)"></div>
+                        <div v-if="header.value == 'carbohydrate'" align="right" v-html="my_round(listobjects_sum(meals,'carbohydrate'),2)"></div>
+                        <div v-if="header.value == 'fiber'" align="right" v-html="my_round(listobjects_sum(meals,'fiber'),2)"></div>
+                    </td>
+                </tr>
             </template>
         </v-data-table>
 

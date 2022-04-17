@@ -41,6 +41,9 @@
                     <template v-slot:[`item.obsolete`]="{ item }">
                             <v-icon small v-if="item.obsolete" >mdi-check-outline</v-icon>           
                     </template>
+                    <template v-slot:[`item.actions`]="{ item }">
+                        <v-icon small @click="linkProduct(item)">mdi-link-variant</v-icon>
+                    </template>
                 </v-data-table>
             </v-tab-item>
         </v-tabs-items>
@@ -88,10 +91,9 @@
                 ],
                 products:[],
                 products_headers: [
-                    { text: this.$t('Name'), sortable: true, value: 'name'},
-                    { text: this.$t('Company'), sortable: true, value: 'companies'},
-                    { text: this.$t('Elaborated products'), value: 'elaborated_products',width:"8%"},
-                    { text: this.$t('System products'), value: 'system_products',width:"8%"},
+                    { text: this.$t('Name'), sortable: true, value: 'fullname'},
+                    { text: this.$t('Elaborated products'), value: 'elaborated_products'},
+                    { text: this.$t('System products'), value: 'system_products'},
                     { text: this.$t('Calories'), sortable: true, value: 'calories',align:'right'},
                     { text: this.$t('Fat'), sortable: true, value: 'fat',align:'right'},
                     { text: this.$t('Protein'), sortable: true, value: 'protein',align:'right'},
@@ -110,7 +112,6 @@
                     { text: this.$t('Gluten free'), sortable: true, value: 'glutenfree',align:'right'},
                     { text: this.$t('Uses'), value: 'uses'},
                     { text: this.$t('Obsolete'), value: 'obsolete'},
-                    { text: this.$t('Version'), value: 'version', align:'right'},
                     { text: this.$t('Actions'), value: 'actions', sortable: false},
                 ],
                 system_products:[],
@@ -156,6 +157,19 @@
             on_ProductsCRUD_cruded(){
                 this.dialog_products_crud=false
                 this.$store.dispatch("getProducts")
+            },
+            linkProduct(item){
+                this.loading=true
+                axios.post(`${this.$store.state.apiroot}/system_products_to_products/`, {system_products: item.url}, this.myheaders())
+                .then((response) => {
+                    console.log(response.data)
+                    this.$store.dispatch("getProducts")
+                    this.update_system_products()
+                    this.loading=false
+               }, (error) => {
+                    this.parseResponseError(error)
+                });
+
             },
             update_system_products(){
                 this.loading=true

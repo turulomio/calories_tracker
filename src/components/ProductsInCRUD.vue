@@ -3,7 +3,7 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-autocomplete :readonly="deleting" :items="$store.state.products" v-model="newproduct_in.products" item-text="name" item-value="url" :label="$t('Select a product')" @input="on_products_input()"></v-autocomplete>
+                <v-autocomplete :readonly="deleting" :items="$store.state.products" v-model="newproduct_in.products" item-text="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()"></v-autocomplete>
 
                 <v-autocomplete :readonly="deleting" :items="products_formats" v-model="product_format" :label="$t('Select format')" item-text="name" item-value="amount" :rules="RulesSelection(false)" @input="on_product_format_input()"></v-autocomplete>
                 <v-text-field :readonly="deleting" v-model="newproduct_in.amount" type="number" :label="$t('Set product_in amount (gr)')" :placeholder="$t('Set product_in amount (gr)')" :rules="RulesFloat(10,true)" counter="10"/>
