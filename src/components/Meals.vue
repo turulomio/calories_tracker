@@ -6,8 +6,8 @@
 
         <div class="d-flex justify-center">
             <v-date-picker dense no-title v-model="day" @input="on_day_input()"></v-date-picker>
-        </div>
-        <v-data-table dense :headers="meals_headers" :items="meals" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+
+        <v-data-table dense :headers="meals_headers" :items="meals" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key">
             <template v-slot:[`item.datetime`]="{ item }">
                 {{localtime(item.datetime).slice(10)}}
             </template>          
@@ -58,7 +58,7 @@
                 </tr>
             </template>
         </v-data-table>
-
+        </div>
         <!-- DIALOG PRODUCTS CRUD -->
         <v-dialog v-model="dialog_meals_crud" width="45%">
             <v-card class="pa-4">

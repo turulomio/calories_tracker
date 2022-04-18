@@ -6,7 +6,9 @@
                 <v-text-field :readonly="deleting" v-model="newproduct.name" :label="$t('Set product name')" :placeholder="$t('Set product name')" :rules="RulesString(200)" counter="200"/>
                 <AutoCompleteApiIdName v-model="newproduct.system_products" :url="`${this.$store.state.apiroot}/api/system_products/`" :label="$t('Select a system product')"></AutoCompleteApiIdName>
                 <AutoCompleteApiIdName v-model="newproduct.companies" :url="`${this.$store.state.apiroot}/api/companies/`" :label="$t('Select a company')"></AutoCompleteApiIdName>
-                <v-checkbox v-model="newproduct.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
+                <v-autocomplete :readonly="deleting" :items="$store.state.food_types" v-model="newproduct.food_types" :label="$t('Select product food type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="deleting" :items="$store.state.additives" v-model="newproduct.additives" multiple :label="$t('Select product additives')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+
                 <v-text-field :readonly="deleting" v-model="newproduct.amount" type="number" :label="$t('Set product amount (gr)')" :placeholder="$t('Set product amount (gr)')" :rules="RulesFloat(10,true)" counter="10"/>
                 <v-text-field :readonly="deleting" v-model="newproduct.fat" type="number" :label="$t('Set product fat (gr)')" :placeholder="$t('Set product fat (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
                 <v-text-field :readonly="deleting" v-model="newproduct.protein" type="number" :label="$t('Set product protein (gr)')" :placeholder="$t('Set product protein (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
@@ -22,13 +24,12 @@
                 <v-text-field :readonly="deleting" v-model="newproduct.ferrum" type="number" :label="$t('Set product ferrum (gr)')" :placeholder="$t('Set product ferrum (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
                 <v-text-field :readonly="deleting" v-model="newproduct.magnesium" type="number" :label="$t('Set product magnesium (gr)')" :placeholder="$t('Set product magnesium (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
                 <v-text-field :readonly="deleting" v-model="newproduct.phosphor" type="number" :label="$t('Set product phosphor (gr)')" :placeholder="$t('Set product phosphor (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-checkbox v-model="newproduct.glutenfree" :label="$t('Is gluten free?')"></v-checkbox>
                 <v-text-field :readonly="deleting" v-model="newproduct.calcium" type="number" :label="$t('Set product calcium (gr)')" :placeholder="$t('Set product calcium (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-autocomplete :readonly="deleting" :items="$store.state.food_types" v-model="newproduct.food_types" :label="$t('Select product food type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-autocomplete :readonly="deleting" :items="$store.state.additives" v-model="newproduct.additives" multiple :label="$t('Select product additives')" item-text="name" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-checkbox v-model="newproduct.glutenfree" :label="$t('Is gluten free?')"></v-checkbox>
 
                 <AutoCompleteApiIdName v-model="newproduct.version_parent" :url="`${this.$store.state.apiroot}/api/products/`" :label="$t('Select parent product')"></AutoCompleteApiIdName>
                 <v-text-field :readonly="deleting" v-model="newproduct.version_description" :label="$t('Set product version description')" :placeholder="$t('Set product version description')" :rules="RulesString(200,false)" counter="200"/>
+                <v-checkbox v-model="newproduct.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
                 <v-card class="mt-4">
                     <v-data-table dense :headers="formats_headers" :items="newproduct.formats" sort-by="formats" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250">
                         <template v-slot:[`item.actions`]="{ item }">
