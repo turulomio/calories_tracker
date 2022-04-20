@@ -12,7 +12,7 @@
                 {{localtime(item.datetime).slice(10)}}
             </template>          
             <template v-slot:[`item.products`]="{ item }">
-                <div v-html="$store.getters.getObjectPropertyByUrl('products',item.products,'name')"></div>
+                <div v-html="$store.getters.getObjectPropertyByUrl('products',item.products,'fullname')"></div>
             </template>                       
             <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
             <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
