@@ -178,9 +178,10 @@ export const store = new Vuex.Store({
         },
         getProducts(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/products/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/products/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateProducts', sortObjectsArray(response.data, "name"))
+                console.log(response.data)
                 console.log(`Updated ${response.data.length} products in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
@@ -188,7 +189,7 @@ export const store = new Vuex.Store({
         },
         getElaboratedProducts(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/elaborated_products/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/elaborated_products/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateElaboratedProducts', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} elaborated products in ${new Date()-start} ms`)
