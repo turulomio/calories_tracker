@@ -13,6 +13,7 @@ export const store = new Vuex.Store({
         apiroot: process.env.VUE_APP_DJANGO_CALORIESTRACKER_URL,
         publicPath: process.env.VUE_APP_PUBLIC_PATH,
         local_zone:"Europe/Madrid",
+        catalog_manager: false,
         activities: [],
         additive_risks: [],
         additives:[],
@@ -82,6 +83,9 @@ export const store = new Vuex.Store({
         updateAdditives: (state, payload) =>{
             state.additives=payload
         },
+        updateCatalogManager: (state, payload) =>{
+            state.catalog_manager=payload
+        },
         updateCompanies: (state, payload) =>{
             state.companies=payload
         },
@@ -109,6 +113,7 @@ export const store = new Vuex.Store({
             context.dispatch("getActivities")
             context.dispatch("getAdditiveRisks")
             context.dispatch("getAdditives")
+            context.dispatch("getCatalogManager")
             context.dispatch("getCompanies")
             context.dispatch("getFoodTypes")
             context.dispatch("getFormats")
@@ -142,6 +147,16 @@ export const store = new Vuex.Store({
             .then((response) => {
                 context.commit('updateAdditives', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} additives in ${new Date()-start} ms`)
+            }, (error) => {
+                store.$app.parseResponseError(error)
+            });
+        },
+        getCatalogManager(context){
+            var start=new Date()
+            axios.get(`${store.state.apiroot}/catalog_manager/`, store.$app.myheaders())
+            .then((response) => {
+                context.commit('updateCatalogManager', response.data)
+                console.log(`Updated catalog manager in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });

@@ -83,7 +83,9 @@
                     <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon v-if="item.glutenfree" small class="mr-1"  @click="on_icon_glutenfree">mdi-barley-off</v-icon>
-                        <v-icon small @click="linkProduct(item)">mdi-link-variant</v-icon>
+                        <v-icon small @click="linkProduct(item)">mdi-link-variant</v-icon>   
+                        <v-icon class="mr-1" small @click="editSystemProduct(item)"  color="#AA0000" v-if="$store.state.catalog_manager">mdi-pencil</v-icon>
+                        <v-icon class="mr-1" small @click="deleteSystemProduct(item)" color="#AA0000" v-if="$store.state.catalog_manager">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
             </v-tab-item>
@@ -101,7 +103,13 @@
         <!-- DIALOG PRODUCTS CRUD -->
         <v-dialog v-model="dialog_products_crud" width="45%" persistent>
             <v-card class="pa-4">
-                <ProductsCRUD :product="product" :deleting="product_deleting" :key="'B'+key" @cruded="on_ProductsCRUD_cruded()"></ProductsCRUD>
+                <ProductsCRUD :product="product" :mode="product_cu_mode" :key="'B'+key" @cruded="on_ProductsCRUD_cruded()"></ProductsCRUD>
+            </v-card>
+        </v-dialog>
+        <!-- DIALOG SYSTEM PRODUCTS CRUD -->
+        <v-dialog v-model="dialog_system_products_crud" width="45%" persistent>
+            <v-card class="pa-4">
+                <SystemProductsCRUD :system_product="system_product" :mode="system_product_cu_mode" :key="'B'+key" @cruded="on_SystemProductsCRUD_cruded()"></SystemProductsCRUD>
             </v-card>
         </v-dialog>
     </div>
@@ -109,14 +117,16 @@
 
 <script>
     import axios from 'axios'
-    import { empty_products,empty_elaborated_products } from '../empty_objects.js'
+    import { empty_products,empty_elaborated_products,empty_system_products } from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import ProductsCRUD from './ProductsCRUD.vue'
+    import SystemProductsCRUD from './SystemProductsCRUD.vue'
     import ElaboratedProductsCRUD from './ElaboratedProductsCRUD.vue'
     export default {
         components: {
             MyMenuInline,
             ProductsCRUD,
+            SystemProductsCRUD,
             ElaboratedProductsCRUD,
         },
         data(){
@@ -129,10 +139,25 @@
                                 name: this.$t("Add product"),
                                 icon: "mdi-plus",
                                 code: function(this_){
-                                    this_.product_deleting=false
+                                    this_.product_cu_mode="C"
                                     this_.product=this_.empty_products()
                                     this_.key=this_.key+1
                                     this_.dialog_products_crud=true
+                                },
+                            },
+                        ]
+                    },
+                    {
+                        subheader: this.$t("System product options"),
+                        children: [
+                            {
+                                name: this.$t("Add system product"),
+                                icon: "mdi-plus",
+                                code: function(this_){
+                                    this_.system_product_cu_mode="C"
+                                    this_.system_product=this_.empty_system_products()
+                                    this_.key=this_.key+1
+                                    this_.dialog_system_products_crud=true
                                 },
                             },
                         ]
@@ -225,21 +250,32 @@
                 tab:0,
                 search:"",
 
-                //CRUD COMPANY
+                //CRUD PRODUCT
                 product:null,
-                product_deleting:null,
+                product_cu_mode:null,
                 dialog_products_crud:false,
 
                 //DIALOG FORMATS
                 dialog_formats:false,
+
+                //CRUD SYSTEM PRODUCT
+                system_product:null,
+                system_product_cu_mode:null,
+                dialog_system_products_crud:false,
             }
         },        
         methods:{
             empty_products,
+            empty_system_products,
             empty_elaborated_products,
             on_ProductsCRUD_cruded(){
                 this.dialog_products_crud=false
                 this.$store.dispatch("getProducts")
+            },
+            on_SystemProductsCRUD_cruded(){
+                this.dialog_system_products_crud=false
+                this.$store.dispatch("getProducts")
+                this.update_system_products()
             },
             linkProduct(item){
                 this.loading=true
@@ -267,19 +303,29 @@
             },
             editProduct(item){
                 this.product=item
-                this.product_deleting=false
+                this.product_cu_mode="U"
                 this.key=this.key+1
 
                 this.dialog_products_crud=true
             },
             deleteProduct(item){
                 this.product=item
-                this.product_deleting=true
+                this.product_cu_mode="D"
                 this.key=this.key+1
 
                 this.dialog_products_crud=true
             },
 
+            editSystemProduct(item){
+                console.log(item)
+                this.system_product=item
+                this.system_product_cu_mode="U"
+                this.key=this.key+1
+                this.dialog_system_products_crud=true
+            },
+            deleteSystemProduct(){
+                alert(this.$t("System products never should be deleted. You can set obsolete or rename to Reusable when needed."))
+            },
             on_ElaboratedProductsCRUD_cruded(){
                 this.dialog_elaborated_products_crud=false
                 this.$store.dispatch("getElaboratedProducts")

@@ -8,6 +8,7 @@
                         <v-list-item-content>
                             <v-list-item-title class="title">Calories Tracker</v-list-item-title>
                             <v-list-item-subtitle>{{ $store.state.version }} ({{ $store.state.versiondate.toISOString().slice(0,10)}})</v-list-item-subtitle>
+                            <v-list-item-subtitle class="boldred" v-if="$store.state.catalog_manager"><span class="vuered">{{ $t("With catalog manager role") }}</span></v-list-item-subtitle>
                         </v-list-item-content>
                     </v-list-item>
 

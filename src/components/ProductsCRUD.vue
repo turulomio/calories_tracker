@@ -3,32 +3,32 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-6 mt-4" style="overflow-y: scroll" :height="600" >
             <v-form ref="form" v-model="form_valid" lazy-validation >
-                <v-text-field :readonly="deleting" v-model="newproduct.name" :label="$t('Set product name')" :placeholder="$t('Set product name')" :rules="RulesString(200)" counter="200"/>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct.name" :label="$t('Set product name')" :placeholder="$t('Set product name')" :rules="RulesString(200)" counter="200"/>
                 <AutoCompleteApiIdName v-model="newproduct.system_products" :url="`${this.$store.state.apiroot}/api/system_products/`" :label="$t('Select a system product')"></AutoCompleteApiIdName>
                 <AutoCompleteApiIdName v-model="newproduct.companies" :url="`${this.$store.state.apiroot}/api/companies/`" :label="$t('Select a company')"></AutoCompleteApiIdName>
-                <v-autocomplete :readonly="deleting" :items="$store.state.food_types" v-model="newproduct.food_types" :label="$t('Select product food type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-autocomplete :readonly="deleting" :items="$store.state.additives" v-model="newproduct.additives" multiple :label="$t('Select product additives')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="$store.state.food_types" v-model="newproduct.food_types" :label="$t('Select product food type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="$store.state.additives" v-model="newproduct.additives" multiple :label="$t('Select product additives')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
 
-                <v-text-field :readonly="deleting" v-model="newproduct.amount" type="number" :label="$t('Set product amount (gr)')" :placeholder="$t('Set product amount (gr)')" :rules="RulesFloat(10,true)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.fat" type="number" :label="$t('Set product fat (gr)')" :placeholder="$t('Set product fat (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.protein" type="number" :label="$t('Set product protein (gr)')" :placeholder="$t('Set product protein (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.carbohydrate" type="number" :label="$t('Set product carbohydrate (gr)')" :placeholder="$t('Set product carbohydrate (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.calories" type="number" :label="$t('Set product calories (gr)')" :placeholder="$t('Set product calories (gr)')" :rules="RulesFloat(10,true)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.salt" type="number" :label="$t('Set product salt (gr)')" :placeholder="$t('Set product salt (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.cholesterol" type="number" :label="$t('Set product cholesterol (gr)')" :placeholder="$t('Set product cholesterol (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.sodium" type="number" :label="$t('Set product sodium (gr)')" :placeholder="$t('Set product sodium (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.potassium" type="number" :label="$t('Set product potassium (gr)')" :placeholder="$t('Set product potassium (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.fiber" type="number" :label="$t('Set product fiber (gr)')" :placeholder="$t('Set product fiber (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.sugars" type="number" :label="$t('Set product sugars (gr)')" :placeholder="$t('Set product sugars (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.saturated_fat" type="number" :label="$t('Set product saturated_fat (gr)')" :placeholder="$t('Set product saturated_fat (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.ferrum" type="number" :label="$t('Set product ferrum (gr)')" :placeholder="$t('Set product ferrum (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.magnesium" type="number" :label="$t('Set product magnesium (gr)')" :placeholder="$t('Set product magnesium (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.phosphor" type="number" :label="$t('Set product phosphor (gr)')" :placeholder="$t('Set product phosphor (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newproduct.calcium" type="number" :label="$t('Set product calcium (gr)')" :placeholder="$t('Set product calcium (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct.amount" type="number" :label="$t('Set product amount (gr)')" :placeholder="$t('Set product amount (gr)')" :rules="RulesFloat(10,true)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct.fat" type="number" :label="$t('Set product fat (gr)')" :placeholder="$t('Set product fat (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct.protein" type="number" :label="$t('Set product protein (gr)')" :placeholder="$t('Set product protein (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct.carbohydrate" type="number" :label="$t('Set product carbohydrate (gr)')" :placeholder="$t('Set product carbohydrate (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct.calories" type="number" :label="$t('Set product calories (gr)')" :placeholder="$t('Set product calories (gr)')" :rules="RulesFloat(10,true)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct.salt" type="number" :label="$t('Set product salt (gr)')" :placeholder="$t('Set product salt (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct.cholesterol" type="number" :label="$t('Set product cholesterol (gr)')" :placeholder="$t('Set product cholesterol (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct.sodium" type="number" :label="$t('Set product sodium (gr)')" :placeholder="$t('Set product sodium (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct.potassium" type="number" :label="$t('Set product potassium (gr)')" :placeholder="$t('Set product potassium (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct.fiber" type="number" :label="$t('Set product fiber (gr)')" :placeholder="$t('Set product fiber (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct.sugars" type="number" :label="$t('Set product sugars (gr)')" :placeholder="$t('Set product sugars (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct.saturated_fat" type="number" :label="$t('Set product saturated_fat (gr)')" :placeholder="$t('Set product saturated_fat (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct.ferrum" type="number" :label="$t('Set product ferrum (gr)')" :placeholder="$t('Set product ferrum (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct.magnesium" type="number" :label="$t('Set product magnesium (gr)')" :placeholder="$t('Set product magnesium (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct.phosphor" type="number" :label="$t('Set product phosphor (gr)')" :placeholder="$t('Set product phosphor (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct.calcium" type="number" :label="$t('Set product calcium (gr)')" :placeholder="$t('Set product calcium (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
                 <v-checkbox v-model="newproduct.glutenfree" :label="$t('Is gluten free?')"></v-checkbox>
 
                 <AutoCompleteApiIdName v-model="newproduct.version_parent" :url="`${this.$store.state.apiroot}/api/products/`" :label="$t('Select parent product')"></AutoCompleteApiIdName>
-                <v-text-field :readonly="deleting" v-model="newproduct.version_description" :label="$t('Set product version description')" :placeholder="$t('Set product version description')" :rules="RulesString(200,false)" counter="200"/>
+                <v-text-field :readonly="mode=='D'" v-model="newproduct.version_description" :label="$t('Set product version description')" :placeholder="$t('Set product version description')" :rules="RulesString(200,false)" counter="200"/>
                 <v-checkbox v-model="newproduct.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
                 <v-card class="mt-4">
                     <v-data-table dense :headers="formats_headers" :items="newproduct.formats" sort-by="formats" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250">
@@ -53,7 +53,7 @@
         <!-- DIALOG FORMATS CRUD -->
         <v-dialog v-model="dialog_formats_crud" width="45%">
             <v-card class="pa-4">
-                <FormatsCRUD :format="format" :deleting="format_deleting" :key="'B'+key" @cruded="on_FormatsCRUD_cruded"></FormatsCRUD>
+                <FormatsCRUD :format="format" :mode="format.mode" :key="'B'+key" @cruded="on_FormatsCRUD_cruded"></FormatsCRUD>
             </v-card>
         </v-dialog>
     </div>
@@ -73,16 +73,14 @@
             product: { // An account transfer object
                 required: true
             },
-            deleting: {
-                required: false,
-                default: false,
-            }
+            mode: { 
+                required: true
+            },
         },
         data(){ 
             return{
                 form_valid:false,
                 newproduct: null,
-                mode: "", // CRUD mode
                 key:0,
                 
                 formats_headers: [
@@ -93,7 +91,7 @@
 
                 //Formats crud
                 format:null,
-                format_deleting:false,
+                format_mode:false,
                 dialog_formats_crud:false,
             }
         },
@@ -144,21 +142,21 @@
             },
             addFormat(){
                 this.format=this.empty_formats()
-                this.format_deleting=false
+                this.format_mode="C"
                 this.key=this.key+1
 
                 this.dialog_formats_crud=true
             },
             editFormat(item){
                 this.format=item
-                this.format_deleting=false
+                this.format_mode="U"
                 this.key=this.key+1
 
                 this.dialog_formats_crud=true
             },
             deleteFormat(item){
                 this.format=item
-                this.format_deleting=true
+                this.format_mode="D"
                 this.key=this.key+1
 
                 this.dialog_formats_crud=true
@@ -182,15 +180,6 @@
         created(){
             // Guess crud mode
             this.newproduct=Object.assign({},this.product)
-            if ( this.product.url==null){ 
-                this.mode="C"
-            } else if (this.product.url!= null && this.deleting ==false) { 
-                this.mode="U"
-            } else if (this.product.url!= null && this.deleting ==true) { 
-                this.mode="D"
-            }
-
-
         }
     }
 </script>

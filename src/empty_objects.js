@@ -50,6 +50,38 @@ export function empty_products(){
 
     }    
 }
+export function empty_system_products(){
+    return {
+        url:null,
+        name: null,
+        amount:null,
+        fat:null,
+        protein:null,
+        carbohydrate:null,
+        calories:null,
+        salt:null,
+        cholesterol:null,
+        sodium:null,
+        potassium:null,
+        fiber:null,
+        sugars:null,
+        saturated_fat:null,
+        ferrum:null,
+        magnesium:null,
+        phosphor:null,
+        glutenfree:false,
+        calcium:null,
+        obsolete: false,
+        food_types:null,
+        additives:[],
+        formats:[],
+        system_companies:null,
+        version: new Date().toISOString(),
+        version_parent:null,
+        version_description:null
+
+    }    
+}
 
 export function empty_formats(){
     return {
