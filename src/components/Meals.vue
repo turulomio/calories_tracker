@@ -34,7 +34,7 @@
                 <v-icon small class="mr-1" @click="deleteMeal(item)">mdi-delete</v-icon>
                 <v-icon small v-if="item.glutenfree"  @click="on_icon_glutenfree">mdi-barley-off</v-icon>
             </template>            
-            <template v-slot:[`body.append`]="{headers}">
+            <template v-slot:[`body.append`]="{headers}" v-if="meals.length>0">
                 <tr style="background-color: WhiteSmoke">
                     <td v-for="(header,i) in headers" :key="i">
                         <div v-if="header.value == 'products'">{{ $t(`Total (${meals.length} meals):`)}}</div>
@@ -158,9 +158,8 @@
                     axios.get(`${this.$store.state.apiroot}/api/meals/?day=${this.day}`, this.myheaders())
                 ])
                 .then(([resBiometric,resMeals]) => {
-                    this.biometric=resBiometric.data[0]
-                    console.log(this.biometric)
                     this.meals=resMeals.data
+                    this.biometric=resBiometric.data[0]
                     this.loading=false
                 });
             },

@@ -116,3 +116,9 @@ export function empty_products_in(){
         amount: null,
     }
 }
+export function empty_settings(){
+    return {
+        birthday: null,
+        male: null,
+    }
+}

@@ -12,7 +12,7 @@ export const store = new Vuex.Store({
         versiondate: new Date(2022, 1, 20, 20, 46),
         apiroot: process.env.VUE_APP_DJANGO_CALORIESTRACKER_URL,
         publicPath: process.env.VUE_APP_PUBLIC_PATH,
-        local_zone:"Europe/Madrid",
+        settings:[],
         catalog_manager: false,
         activities: [],
         additive_risks: [],
@@ -104,6 +104,9 @@ export const store = new Vuex.Store({
         updateWeightWishes: (state, payload) =>{
             state.weight_wishes=payload
         },
+        updateSettings: (state, payload) =>{
+            state.settings=payload
+        },
 
 
     },
@@ -119,6 +122,7 @@ export const store = new Vuex.Store({
             context.dispatch("getFormats")
             context.dispatch("getElaboratedProducts")
             context.dispatch("getProducts")
+            context.dispatch("getSettings")
             context.dispatch("getWeightWishes")
         },
         getActivities(context){
@@ -227,7 +231,7 @@ export const store = new Vuex.Store({
             axios.get(`${store.state.apiroot}/settings/`, store.$app.myheaders())
             .then((response) => {
                 context.commit("updateSettings", response.data)
-                console.log(`Updated ${response.data.length} settings in ${new Date()-start} ms`)
+                console.log(`Updated settings in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
