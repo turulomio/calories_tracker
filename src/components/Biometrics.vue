@@ -109,7 +109,8 @@
                     { text: this.$t('Height'), value: 'height', align:'right', width:"8%"},
                     { text: this.$t('Weight'), value: 'weight', align:'right' , width:"8%"},
                     { text: this.$t('Activity'), value: 'activities'},
-                    { text: this.$t('Weight wish'), value: 'weight_wishes'},
+                    { text: this.$t('Weight wish'), value: 'weight_wishes'},             
+                    { text: this.$t('IMC status'), value: 'imc_comment'},
                     { text: this.$t('Actions'), value: 'actions', sortable: false, width:"5%"},
                 ],
                 loading:false,
@@ -136,6 +137,7 @@
                     r.push({title:this.$t('Weight'), value: this.biometric_last.weight})
                     r.push({title:this.$t('Height'), value: this.biometric_last.height})
                     r.push({title:this.$t('Weight wish'), value: this.$store.getters.getObjectPropertyByUrl("weight_wishes",this.biometric_last.weight_wishes,"localname")})
+                    r.push({title:this.$t('IMC status'), value: this.biometric_last.imc_comment})
                     r.push({title:this.$t('Activity'), value: this.$store.getters.getObjectPropertyByUrl("activities",this.biometric_last.activities,"localname")})
 
                 }
@@ -150,6 +152,7 @@
                 axios.get(`${this.$store.state.apiroot}/api/biometrics/`, this.myheaders())
                 .then((response) => {
                     this.biometrics=response.data
+                    console.log(this.biometrics)
                     if (this.biometrics.length>0) this.biometric_last=this.biometrics[this.biometrics.length - 1]
                     this.chart_height_data=[]
                     this.chart_weight_data=[]
