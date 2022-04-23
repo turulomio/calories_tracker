@@ -56,6 +56,17 @@
                         <div v-if="header.value == 'saturated_fat'" align="right" v-html="my_round(listobjects_sum(meals,'saturated_fat'),0)"></div>
                     </td>
                 </tr>
+                <tr style="background-color: WhiteSmoke">
+                    <td v-for="(header,i) in headers" :key="i">
+                        <div v-if="header.value == 'products'">{{ $t(`Recomendations:`)}}</div>
+                        <div v-if="header.value == 'calories'"  :class="(biometric.bmr>listobjects_sum(meals,'calories')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.bmr,0)"></div>
+                        <div v-if="header.value == 'fat'" :class="(biometric.recommended_fat>listobjects_sum(meals,'fat')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.recommended_fat,0)"></div>
+                        <div v-if="header.value == 'protein'"  :class="(biometric.recommended_protein>listobjects_sum(meals,'protein')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.recommended_protein,0)"></div>
+                        <div v-if="header.value == 'carbohydrate'" :class="(biometric.recommended_carbohydrate>listobjects_sum(meals,'carbohydrate')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.recommended_carbohydrate,0)"></div>
+                        <div v-if="header.value == 'fiber'"  :class="(biometric.recommended_fiber<listobjects_sum(meals,'fiber')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.recommended_fiber,0)"></div>
+                        <div v-if="header.value == 'sugars'" :class="(biometric.recommended_sugars>listobjects_sum(meals,'sugars')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.recommended_sugars,0)"></div>
+                    </td>
+                </tr>
             </template>
         </v-data-table>
         </div>
@@ -98,6 +109,7 @@
                     },
                 ],
                 meals:[],
+                biometric: null,
                 meals_headers: [
                     { text: this.$t('Time'), sortable: true, value: 'datetime'},
                     { text: this.$t('Product'), sortable: true, value: 'products',width:"30%"},
@@ -137,20 +149,22 @@
             empty_meals,
             on_MealsCRUD_cruded(){
                 this.dialog_meals_crud=false
-                this.update_meals()
+                this.update_all()
             },
-            update_meals(){
+            update_all(){
                 this.loading=true
-                axios.get(`${this.$store.state.apiroot}/api/meals/?day=${this.day}`, this.myheaders())
-                .then((response) => {
-                    console.log(response.data)
-                    this.meals=response.data
+                axios.all([
+                    axios.get(`${this.$store.state.apiroot}/api/biometrics/?day=${this.day}`, this.myheaders()),
+                    axios.get(`${this.$store.state.apiroot}/api/meals/?day=${this.day}`, this.myheaders())
+                ])
+                .then(([resBiometric,resMeals]) => {
+                    this.biometric=resBiometric.data[0]
+                    console.log(this.biometric)
+                    this.meals=resMeals.data
                     this.loading=false
-               }, (error) => {
-                    this.parseResponseError(error)
                 });
-
             },
+
             editMeal(item){
                 this.meal=item
                 this.meal_deleting=false
@@ -166,14 +180,14 @@
                 this.dialog_meals_crud=true
             },
             on_day_input(){
-                this.update_meals()
+                this.update_all()
             },
             on_icon_glutenfree(){
                 alert(this.$t("This meal is gluten free"))
             },
         },
         created(){
-            this.update_meals()
+            this.update_all()
         }
     }
 </script>
