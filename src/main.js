@@ -53,7 +53,7 @@ import {
     date2zulu,
     my_round
 } from './functions.js'
-import {RulesFloat,RulesDate,RulesDatetime,RulesInteger,RulesString,RulesSelection, RulesFloatPositive, RulesFloatNegative, } from './components/reusing/rules.js'
+import {RulesFloat,RulesDate,RulesDatetime,RulesInteger,RulesString,RulesSelection, RulesEmail } from './components/reusing/rules.js'
 Vue.mixin({
     data: function () {
         return {
@@ -72,12 +72,11 @@ Vue.mixin({
         listobjects_sum,
         RulesDate,
         RulesDatetime,
+        RulesEmail,
         RulesFloat,
         RulesInteger,
         RulesString,
         RulesSelection,
-        RulesFloatPositive,
-        RulesFloatNegative,
 
 
         currency_string(num, currency, decimals=2){
