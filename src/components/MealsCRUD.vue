@@ -106,7 +106,7 @@
                 });
             },
             on_product_format_input(){
-                this.newmeal.amount=this.product_format
+                this.on_multiplier_input()
             },
             on_multiplier_input(){
                 if (this.product_format) this.newmeal.amount=this.multiplier*this.product_format
