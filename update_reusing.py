@@ -14,6 +14,7 @@ if args.local==False:
     download_from_github("turulomio", "moneymoney", "src/components/btnLogOut.vue", "src/components/reusing")
     download_from_github("turulomio", "moneymoney", "src/components/ChartPie.vue", "src/components/reusing")
     download_from_github("turulomio", "moneymoney", "src/components/DisplayValues.vue", "src/components/reusing")
+    download_from_github("turulomio", "moneymoney", "src/components/MyDatePicker.vue", "src/components/reusing")
     download_from_github("turulomio", "moneymoney", "src/components/MyDateTimePicker.vue", "src/components/reusing")
     download_from_github("turulomio", "moneymoney", "src/components/MyMenuInline.vue", "src/components/reusing")
     download_from_github("turulomio", "moneymoney", "src/components/SwitchLanguages.vue", "src/components/reusing")

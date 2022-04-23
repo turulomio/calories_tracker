@@ -4,72 +4,73 @@
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
         </h1>
 
-        <div class="d-flex justify-center">
-            <v-date-picker dense no-title v-model="day" @input="on_day_input()"></v-date-picker>
+            <v-card width="20%" class="pa-5 mx-auto" outlined>
+                <MyDatePicker dense :label="$t('Select a date')" v-model="day" @input="on_day_input()"></MyDatePicker>
+            </v-card>
 
-        <v-data-table dense :headers="meals_headers" :items="meals" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key">
-            <template v-slot:[`item.datetime`]="{ item }">
-                {{localtime(item.datetime).slice(10)}}
-            </template>          
-            <template v-slot:[`item.products`]="{ item }">
-                <div v-html="$store.getters.getObjectPropertyByUrl('products',item.products,'fullname')"></div>
-            </template>                       
-            <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
-            <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
-            <template v-slot:[`item.protein`]="{ item }"><div v-html="my_round(item.protein,0)"></div></template>  
-            <template v-slot:[`item.carbohydrate`]="{ item }"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
-            <template v-slot:[`item.salt`]="{ item }"><div v-html="my_round(item.salt,0)"></div></template>  
-            <template v-slot:[`item.fiber`]="{ item }"><div v-html="my_round(item.fiber,0)"></div></template>  
-            <template v-slot:[`item.sugars`]="{ item }"><div v-html="my_round(item.sugars,0)"></div></template>  
-            <template v-slot:[`item.saturated_fat`]="{ item }"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
-            <template v-slot:[`item.cholesterol`]="{ item }"><div v-html="my_round(item.cholesterol,0)"></div></template>  
-            <template v-slot:[`item.sodium`]="{ item }"><div v-html="my_round(item.sodium,0)"></div></template>  
-            <template v-slot:[`item.potassium`]="{ item }"><div v-html="my_round(item.potassium,0)"></div></template>  
-            <template v-slot:[`item.ferrum`]="{ item }"><div v-html="my_round(item.ferrum,0)"></div></template>  
-            <template v-slot:[`item.magnesium`]="{ item }"><div v-html="my_round(item.magnesium,0)"></div></template>  
-            <template v-slot:[`item.phosphor`]="{ item }"><div v-html="my_round(item.phosphor,0)"></div></template>  
-            <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
-            <template v-slot:[`item.actions`]="{ item }">
-                <v-icon small class="mr-1" @click="editMeal(item)">mdi-pencil</v-icon>
-                <v-icon small class="mr-1" @click="deleteMeal(item)">mdi-delete</v-icon>
-                <v-icon small v-if="item.glutenfree"  @click="on_icon_glutenfree">mdi-barley-off</v-icon>
-            </template>            
-            <template v-slot:[`body.append`]="{headers}" v-if="meals.length>0">
-                <tr style="background-color: WhiteSmoke">
-                    <td v-for="(header,i) in headers" :key="i">
-                        <div v-if="header.value == 'products'">{{ $t(`Total (${meals.length} meals):`)}}</div>
-                        <div v-if="header.value == 'amount'" align="right" v-html="my_round(listobjects_sum(meals,'amount'),0)"></div>
-                        <div v-if="header.value == 'calories'" align="right" v-html="my_round(listobjects_sum(meals,'calories'),0)"></div>
-                        <div v-if="header.value == 'fat'" align="right" v-html="my_round(listobjects_sum(meals,'fat'),0)"></div>
-                        <div v-if="header.value == 'protein'" align="right" v-html="my_round(listobjects_sum(meals,'protein'),0)"></div>
-                        <div v-if="header.value == 'carbohydrate'" align="right" v-html="my_round(listobjects_sum(meals,'carbohydrate'),0)"></div>
-                        <div v-if="header.value == 'fiber'" align="right" v-html="my_round(listobjects_sum(meals,'fiber'),0)"></div>
-                        <div v-if="header.value == 'salt'" align="right" v-html="my_round(listobjects_sum(meals,'salt'),0)"></div>
-                        <div v-if="header.value == 'cholesterol'" align="right" v-html="my_round(listobjects_sum(meals,'cholesterol'),0)"></div>
-                        <div v-if="header.value == 'sodium'" align="right" v-html="my_round(listobjects_sum(meals,'sodium'),0)"></div>
-                        <div v-if="header.value == 'potassium'" align="right" v-html="my_round(listobjects_sum(meals,'potassium'),0)"></div>
-                        <div v-if="header.value == 'ferrum'" align="right" v-html="my_round(listobjects_sum(meals,'ferrum'),0)"></div>
-                        <div v-if="header.value == 'magnesium'" align="right" v-html="my_round(listobjects_sum(meals,'magnesium'),0)"></div>
-                        <div v-if="header.value == 'phosphor'" align="right" v-html="my_round(listobjects_sum(meals,'phosphor'),0)"></div>
-                        <div v-if="header.value == 'calcium'" align="right" v-html="my_round(listobjects_sum(meals,'calcium'),0)"></div>
-                        <div v-if="header.value == 'sugars'" align="right" v-html="my_round(listobjects_sum(meals,'sugars'),0)"></div>
-                        <div v-if="header.value == 'saturated_fat'" align="right" v-html="my_round(listobjects_sum(meals,'saturated_fat'),0)"></div>
-                    </td>
-                </tr>
-                <tr style="background-color: WhiteSmoke">
-                    <td v-for="(header,i) in headers" :key="i">
-                        <div v-if="header.value == 'products'">{{ $t(`Recomendations:`)}}</div>
-                        <div v-if="header.value == 'calories'"  :class="(biometric.bmr>listobjects_sum(meals,'calories')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.bmr,0)"></div>
-                        <div v-if="header.value == 'fat'" :class="(biometric.recommended_fat>listobjects_sum(meals,'fat')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.recommended_fat,0)"></div>
-                        <div v-if="header.value == 'protein'"  :class="(biometric.recommended_protein>listobjects_sum(meals,'protein')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.recommended_protein,0)"></div>
-                        <div v-if="header.value == 'carbohydrate'" :class="(biometric.recommended_carbohydrate>listobjects_sum(meals,'carbohydrate')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.recommended_carbohydrate,0)"></div>
-                        <div v-if="header.value == 'fiber'"  :class="(biometric.recommended_fiber<listobjects_sum(meals,'fiber')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.recommended_fiber,0)"></div>
-                        <div v-if="header.value == 'sugars'" :class="(biometric.recommended_sugars>listobjects_sum(meals,'sugars')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.recommended_sugars,0)"></div>
-                    </td>
-                </tr>
-            </template>
-        </v-data-table>
-        </div>
+
+            <v-data-table dense class="mt-4 elevation-1" :headers="meals_headers" :items="meals" sort-by="name" hide-default-footer disable-pagination :loading="loading" :key="'T'+key">
+                <template v-slot:[`item.datetime`]="{ item }">
+                    {{localtime(item.datetime).slice(10)}}
+                </template>          
+                <template v-slot:[`item.products`]="{ item }">
+                    <div v-html="$store.getters.getObjectPropertyByUrl('products',item.products,'fullname')"></div>
+                </template>                       
+                <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
+                <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
+                <template v-slot:[`item.protein`]="{ item }"><div v-html="my_round(item.protein,0)"></div></template>  
+                <template v-slot:[`item.carbohydrate`]="{ item }"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
+                <template v-slot:[`item.salt`]="{ item }"><div v-html="my_round(item.salt,0)"></div></template>  
+                <template v-slot:[`item.fiber`]="{ item }"><div v-html="my_round(item.fiber,0)"></div></template>  
+                <template v-slot:[`item.sugars`]="{ item }"><div v-html="my_round(item.sugars,0)"></div></template>  
+                <template v-slot:[`item.saturated_fat`]="{ item }"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
+                <template v-slot:[`item.cholesterol`]="{ item }"><div v-html="my_round(item.cholesterol,0)"></div></template>  
+                <template v-slot:[`item.sodium`]="{ item }"><div v-html="my_round(item.sodium,0)"></div></template>  
+                <template v-slot:[`item.potassium`]="{ item }"><div v-html="my_round(item.potassium,0)"></div></template>  
+                <template v-slot:[`item.ferrum`]="{ item }"><div v-html="my_round(item.ferrum,0)"></div></template>  
+                <template v-slot:[`item.magnesium`]="{ item }"><div v-html="my_round(item.magnesium,0)"></div></template>  
+                <template v-slot:[`item.phosphor`]="{ item }"><div v-html="my_round(item.phosphor,0)"></div></template>  
+                <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
+                <template v-slot:[`item.actions`]="{ item }">
+                    <v-icon small class="mr-1" @click="editMeal(item)">mdi-pencil</v-icon>
+                    <v-icon small class="mr-1" @click="deleteMeal(item)">mdi-delete</v-icon>
+                    <v-icon small v-if="item.glutenfree"  @click="on_icon_glutenfree">mdi-barley-off</v-icon>
+                </template>            
+                <template v-slot:[`body.append`]="{headers}" v-if="meals.length>0">
+                    <tr style="background-color: WhiteSmoke">
+                        <td v-for="(header,i) in headers" :key="i">
+                            <div v-if="header.value == 'products'">{{ $t(`Total (${meals.length} meals):`)}}</div>
+                            <div v-if="header.value == 'amount'" align="right" v-html="my_round(listobjects_sum(meals,'amount'),0)"></div>
+                            <div v-if="header.value == 'calories'" align="right" v-html="my_round(listobjects_sum(meals,'calories'),0)"></div>
+                            <div v-if="header.value == 'fat'" align="right" v-html="my_round(listobjects_sum(meals,'fat'),0)"></div>
+                            <div v-if="header.value == 'protein'" align="right" v-html="my_round(listobjects_sum(meals,'protein'),0)"></div>
+                            <div v-if="header.value == 'carbohydrate'" align="right" v-html="my_round(listobjects_sum(meals,'carbohydrate'),0)"></div>
+                            <div v-if="header.value == 'fiber'" align="right" v-html="my_round(listobjects_sum(meals,'fiber'),0)"></div>
+                            <div v-if="header.value == 'salt'" align="right" v-html="my_round(listobjects_sum(meals,'salt'),0)"></div>
+                            <div v-if="header.value == 'cholesterol'" align="right" v-html="my_round(listobjects_sum(meals,'cholesterol'),0)"></div>
+                            <div v-if="header.value == 'sodium'" align="right" v-html="my_round(listobjects_sum(meals,'sodium'),0)"></div>
+                            <div v-if="header.value == 'potassium'" align="right" v-html="my_round(listobjects_sum(meals,'potassium'),0)"></div>
+                            <div v-if="header.value == 'ferrum'" align="right" v-html="my_round(listobjects_sum(meals,'ferrum'),0)"></div>
+                            <div v-if="header.value == 'magnesium'" align="right" v-html="my_round(listobjects_sum(meals,'magnesium'),0)"></div>
+                            <div v-if="header.value == 'phosphor'" align="right" v-html="my_round(listobjects_sum(meals,'phosphor'),0)"></div>
+                            <div v-if="header.value == 'calcium'" align="right" v-html="my_round(listobjects_sum(meals,'calcium'),0)"></div>
+                            <div v-if="header.value == 'sugars'" align="right" v-html="my_round(listobjects_sum(meals,'sugars'),0)"></div>
+                            <div v-if="header.value == 'saturated_fat'" align="right" v-html="my_round(listobjects_sum(meals,'saturated_fat'),0)"></div>
+                        </td>
+                    </tr>
+                    <tr style="background-color: WhiteSmoke">
+                        <td v-for="(header,i) in headers" :key="i">
+                            <div v-if="header.value == 'products'">{{ $t(`Recomendations:`)}}</div>
+                            <div v-if="header.value == 'calories'"  :class="(biometric.bmr>listobjects_sum(meals,'calories')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.bmr,0)"></div>
+                            <div v-if="header.value == 'fat'" :class="(biometric.recommended_fat>listobjects_sum(meals,'fat')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.recommended_fat,0)"></div>
+                            <div v-if="header.value == 'protein'"  :class="(biometric.recommended_protein>listobjects_sum(meals,'protein')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.recommended_protein,0)"></div>
+                            <div v-if="header.value == 'carbohydrate'" :class="(biometric.recommended_carbohydrate>listobjects_sum(meals,'carbohydrate')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.recommended_carbohydrate,0)"></div>
+                            <div v-if="header.value == 'fiber'"  :class="(biometric.recommended_fiber<listobjects_sum(meals,'fiber')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.recommended_fiber,0)"></div>
+                            <div v-if="header.value == 'sugars'" :class="(biometric.recommended_sugars>listobjects_sum(meals,'sugars')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.recommended_sugars,0)"></div>
+                        </td>
+                    </tr>
+                </template>
+            </v-data-table>
         <!-- DIALOG PRODUCTS CRUD -->
         <v-dialog v-model="dialog_meals_crud" width="45%">
             <v-card class="pa-4">
@@ -82,12 +83,14 @@
 <script>
     import axios from 'axios'
     import { empty_meals } from '../empty_objects.js'
+    import MyDatePicker from './reusing/MyDatePicker.vue'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import MealsCRUD from './MealsCRUD.vue'
     export default {
         components: {
             MyMenuInline,
             MealsCRUD,
+            MyDatePicker,
         },
         data(){
             return {
