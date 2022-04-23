@@ -60,7 +60,7 @@
                     </tr>
                     <tr style="background-color: WhiteSmoke">
                         <td v-for="(header,i) in headers" :key="i">
-                            <div v-if="header.value == 'products'">{{ $t(`Recomendations:`)}}</div>
+                            <div v-if="header.value == 'products'">{{ $t(`Recomendation for {0} kg and {1} cm`).format(biometric.weight,biometric.height)}}</div>
                             <div v-if="header.value == 'calories'"  :class="(biometric.bmr>listobjects_sum(meals,'calories')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.bmr,0)"></div>
                             <div v-if="header.value == 'fat'" :class="(biometric.recommended_fat>listobjects_sum(meals,'fat')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.recommended_fat,0)"></div>
                             <div v-if="header.value == 'protein'"  :class="(biometric.recommended_protein>listobjects_sum(meals,'protein')) ? 'boldgreen':'boldred'" align="right" v-html="my_round(biometric.recommended_protein,0)"></div>

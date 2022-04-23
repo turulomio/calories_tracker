@@ -3,7 +3,7 @@
         <h1>{{ $t(`Biometrics`) }}
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
         </h1>
-        <DisplayValues :items="displayvalues()" :key="key" :minimized_items="6"></DisplayValues>
+        <DisplayValues :items="displayvalues()" :key="key" :minimized_items="6" width="30%"></DisplayValues>
 
         <v-tabs  background-color="primary" dark v-model="tab" >
             <v-tab key="height">{{ $t('Height chart') }}</v-tab>
