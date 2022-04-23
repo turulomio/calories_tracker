@@ -5,8 +5,11 @@
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <MyDateTimePicker :readonly="deleting" v-model="newmeal.datetime" :label="$t('Set transfer date and time')"></MyDateTimePicker>
                 <v-autocomplete :readonly="deleting" :items="$store.state.products" v-model="newmeal.products" item-text="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()"></v-autocomplete>
-                <v-autocomplete :readonly="deleting" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-text="name" item-value="amount" :rules="RulesSelection(false)"  @input="on_product_format_input()"></v-autocomplete>
-                <v-text-field :readonly="deleting" v-model="newmeal.amount" type="number" :label="$t('Set your amount')" :placeholder="$t('Set your amount')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-row class="pa-3">     
+                    <v-text-field :readonly="deleting" v-model="newmeal.amount" type="number" :label="$t('Set your amount')" :placeholder="$t('Set your amount')" :rules="RulesInteger(10,true)" counter="10"/>
+                    <v-autocomplete  class="mx-2" :readonly="deleting" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-text="name" item-value="amount" :rules="RulesSelection(false)"  @input="on_product_format_input()"></v-autocomplete>
+                    <Multiplier v-model="multiplier" :readonly="deleting" @input="on_multiplier_input()"></Multiplier>
+                </v-row>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -18,9 +21,11 @@
 <script>
     import axios from 'axios'
     import MyDateTimePicker from './reusing/MyDateTimePicker.vue'
+    import Multiplier from './Multiplier.vue'
     export default {
         components: {
             MyDateTimePicker,
+            Multiplier,
         },
         props: {
             // An account object
@@ -37,6 +42,7 @@
                 form_valid:false,
                 newmeal: null,
                 mode: "", // CRUD mode
+                multiplier:1,
 
                 loading_formats: false,
 
@@ -101,6 +107,9 @@
             },
             on_product_format_input(){
                 this.newmeal.amount=this.product_format
+            },
+            on_multiplier_input(){
+                if (this.product_format) this.newmeal.amount=this.multiplier*this.product_format
             }
         },
         created(){
