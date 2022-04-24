@@ -3,13 +3,15 @@
         <h1>{{ $t(`Companies`) }}
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
         </h1>
+        <v-text-field class="ml-10 mr-10 mb-5" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"></v-text-field>
+    
         <v-tabs  background-color="primary" dark v-model="tab" >
             <v-tab key="companies">{{ $t('Companies') }}</v-tab>
             <v-tab key="system_companies">{{ $t('System companies') }}</v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab" class="ma-5">
             <v-tab-item key="companies" >
-                <v-data-table dense :headers="companies_headers" :items="$store.state.companies" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+                <v-data-table dense :headers="companies_headers" :search="search" :items="$store.state.companies" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
                     <template v-slot:[`item.last`]="{ item }">
                         {{localtime(item.last)}}
                     </template>        
@@ -26,12 +28,17 @@
                 </v-data-table>
             </v-tab-item>
             <v-tab-item key="system_companies" >                 
-                <v-data-table dense :headers="system_companies_headers" :items="system_companies" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+                <v-data-table dense :headers="system_companies_headers" :search="search" :items="system_companies" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
                     <template v-slot:[`item.last`]="{ item }">
                         {{localtime(item.last)}}
                     </template>             
                     <template v-slot:[`item.obsolete`]="{ item }">
                             <v-icon small v-if="item.obsolete" >mdi-check-outline</v-icon>           
+                    </template>
+                    <template v-slot:[`item.actions`]="{ item }">
+                        <v-icon small @click="linkCompany(item)">mdi-link-variant</v-icon>   
+                        <v-icon class="mr-1" small @click="editSystemCompany(item)"  color="#AA0000" v-if="$store.state.catalog_manager">mdi-pencil</v-icon>
+                        <v-icon class="mr-1" small @click="deleteSystemCompany(item)" color="#AA0000" v-if="$store.state.catalog_manager">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
             </v-tab-item>
@@ -43,7 +50,13 @@
         <!-- DIALOG COMPANIES CRUD -->
         <v-dialog v-model="dialog_companies_crud" width="45%">
             <v-card class="pa-4">
-                <CompaniesCRUD :company="company" :deleting="company_deleting" :key="'B'+key" @cruded="on_CompaniesCRUD_cruded()"></CompaniesCRUD>
+                <CompaniesCRUD :company="company" :mode="company_mode" :key="'B'+key" @cruded="on_CompaniesCRUD_cruded()"></CompaniesCRUD>
+            </v-card>
+        </v-dialog>
+        <!-- DIALOG SYSTEM COMPANIES CRUD -->
+        <v-dialog v-model="dialog_system_companies_crud" width="45%">
+            <v-card class="pa-4">
+                <SystemCompaniesCRUD :system_company="system_company" :mode="system_company_mode" :key="'C'+key" @cruded="on_SystemCompaniesCRUD_cruded()"></SystemCompaniesCRUD>
             </v-card>
         </v-dialog>
     </div>
@@ -51,13 +64,15 @@
 
 <script>
     import axios from 'axios'
-    import { empty_companies } from '../empty_objects.js'
+    import { empty_companies,empty_system_companies } from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import CompaniesCRUD from './CompaniesCRUD.vue'
+    import SystemCompaniesCRUD from './SystemCompaniesCRUD.vue'
     export default {
         components: {
             MyMenuInline,
             CompaniesCRUD,
+            SystemCompaniesCRUD,
         },
         data(){
             return {
@@ -66,11 +81,26 @@
                         subheader: this.$t("Company options"),
                         children: [
                             {
-                                name: this.$t("Add company"),
+                                name: this.$t("Add a company"),
                                 icon: "mdi-plus",
                                 code: function(this_){
-                                    this_.company_deleting=false
+                                    this_.company_mode="C"
                                     this_.company=this_.empty_companies()
+                                    this_.key=this_.key+1
+                                    this_.dialog_companies_crud=true
+                                },
+                            },
+                        ]
+                    },
+                    {
+                        subheader: this.$t("System company options"),
+                        children: [
+                            {
+                                name: this.$t("Add a system company"),
+                                icon: "mdi-plus",
+                                code: function(this_){
+                                    this_.system_company_mode="C"
+                                    this_.system_company=this_.empty_system_companies()
                                     this_.key=this_.key+1
                                     this_.dialog_companies_crud=true
                                 },
@@ -96,22 +126,35 @@
                 loading:false,
                 key:0,
                 tab:0,
+                search:"",
 
                 //CRUD COMPANY
                 company:null,
-                company_deleting:null,
+                company_mode:null,
                 dialog_companies_crud:false,
+                //CRUD SYSTEM COMPANY
+                system_company:null,
+                system_company_mode:null,
+                dialog_system_companies_crud:false,
             }
         },        
         methods:{
             empty_companies,
+            empty_system_companies,
             on_CompaniesCRUD_cruded(){
                 this.dialog_companies_crud=false
                 this.$store.dispatch("getCompanies")
             },
+            on_SystemCompaniesCRUD_cruded(){
+                this.dialog_system_companies_crud=false
+                this.update_system_companies().then(() => {
+                    this.$store.dispatch("getCompanies")
+                    this.key=this.key+1
+                })
+            },
             update_system_companies(){
                 this.loading=true
-                axios.get(`${this.$store.state.apiroot}/api/system_companies/`, this.myheaders())
+                return axios.get(`${this.$store.state.apiroot}/api/system_companies/`, this.myheaders())
                 .then((response) => {
                     this.system_companies=response.data
                     this.loading=false
@@ -122,17 +165,26 @@
             },
             editCompany(item){
                 this.company=item
-                this.company_deleting=false
+                this.company_mode="U"
                 this.key=this.key+1
 
                 this.dialog_companies_crud=true
             },
             deleteCompany(item){
                 this.company=item
-                this.company_deleting=true
+                this.company_mode="D"
                 this.key=this.key+1
 
                 this.dialog_companies_crud=true
+            },
+            editSystemCompany(item){
+                this.system_company=item
+                this.system_company_mode="U"
+                this.key=this.key+1
+                this.dialog_system_companies_crud=true
+            },
+            deleteSystemCompany(){
+                alert(this.$t("System products never should be deleted. You can set obsolete or rename to Reusable when needed."))
             },
         },
         created(){

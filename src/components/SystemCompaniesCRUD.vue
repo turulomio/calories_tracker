@@ -3,9 +3,8 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-text-field :readonly="deleting" v-model="newcompany.name" :label="$t('Set company name')" :placeholder="$t('Set company name')" :rules="RulesString(200)" counter="200"/>
-                <AutoCompleteApiIdName v-model="newcompany.system_companies" :url="`${this.$store.state.apiroot}/api/system_companies/`" :label="$t('Select a system company')"></AutoCompleteApiIdName>
-                <v-checkbox v-model="newcompany.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
+                <v-text-field :readonly="mode=='D'" v-model="new_system_company.name" :label="$t('Set company name')" :placeholder="$t('Set company name')" :rules="RulesString(200)" counter="200"/>
+                <v-checkbox v-model="new_system_company.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -16,14 +15,10 @@
 </template>
 <script>
     import axios from 'axios'
-    import AutoCompleteApiIdName from './AutoCompleteApiIdName.vue'
     export default {
-        components: {
-            AutoCompleteApiIdName,
-        },
         props: {
             // An account object
-            company: { // An account transfer object
+            system_company: { // An account transfer object
                 required: true
             },
             mode: {
@@ -33,7 +28,7 @@
         data(){ 
             return{
                 form_valid:false,
-                newcompany: null,
+                new_system_company: null,
             }
         },
         methods: {
@@ -43,14 +38,14 @@
                 if (this.mode=="D") return this.$t('Delete')
             },
             title(){
-                if (this.mode=="C") return this.$t('Add a new company')
-                if (this.mode=="U") return this.$t('Update this company')
-                if (this.mode=="D") return this.$t('Delete this company')
+                if (this.mode=="C") return this.$t('Add a new system company')
+                if (this.mode=="U") return this.$t('Update this system company')
+                if (this.mode=="D") return this.$t('Delete this system company')
             },
             acceptDialog(){             
                 if( this.$refs.form.validate()==false) return
                 if (this.mode=="C"){
-                    axios.post(`${this.$store.state.apiroot}/api/companies/`, this.newcompany,  this.myheaders())
+                    axios.post(`${this.$store.state.apiroot}/api/system_companies/`, this.new_system_company,  this.myheaders())
                     .then((response) => {
                         console.log(response.data)
                         this.$emit("cruded")
@@ -59,7 +54,7 @@
                     })
                 }
                 if (this.mode=="U"){
-                    axios.put(this.newcompany.url, this.newcompany,  this.myheaders())
+                    axios.put(this.new_system_company.url, this.new_system_company,  this.myheaders())
                     .then((response) => {
                         console.log(response.data)
                         this.$emit("cruded")
@@ -68,9 +63,9 @@
                     })
                 }
                 if (this.mode=="D"){             
-                    var r = confirm(this.$t("Do you want to delete this company?"))
+                    var r = confirm(this.$t("Do you want to delete this system company?"))
                     if(r == true) {
-                        axios.delete(this.newcompany.url, this.myheaders())
+                        axios.delete(this.new_system_company.url, this.myheaders())
                         .then((response) => {
                             console.log(response.data)
                             this.$emit("cruded")
@@ -82,7 +77,7 @@
             },
         },
         created(){
-            this.newcompany=Object.assign({},this.company)
+            this.new_system_company=Object.assign({},this.system_company)
         }
     }
 </script>

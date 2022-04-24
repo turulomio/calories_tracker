@@ -17,6 +17,14 @@ export function empty_companies(){
         system_companies: null,
     }
 }
+export function empty_system_companies(){
+    return {
+        last: new Date().toISOString(),
+        url:null,
+        name: null,
+        obsolete: false,
+    }
+}
 export function empty_products(){
     return {
         url:null,

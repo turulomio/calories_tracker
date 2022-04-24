@@ -167,7 +167,7 @@ export const store = new Vuex.Store({
         },
         getCompanies(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/companies/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/companies/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateCompanies', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} companies in ${new Date()-start} ms`)
