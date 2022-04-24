@@ -1,10 +1,17 @@
+/* 
+    This Component needs to use hyperlinked drf models
+    Must be defined as `${this.$store.state.apiroot}/api/id/` for
+    This path can get search=name, url with returnobject=false or {url:} with returnobject with try
+*/
+
+
 <template>
     <div>
         <v-autocomplete
             v-if="returnobject==false"
             v-model="localValue"
             :items="entries"
-            :loading="isLoading"
+            :loading="loading"
             :search-input.sync="search"
             item-text="name"
             item-value="url"
@@ -19,7 +26,7 @@
             v-if="returnobject==true"
             v-model="localValue"
             :items="entries"
-            :loading="isLoading"
+            :loading="loading"
             :search-input.sync="search"
             item-text="name"
             return-object
@@ -40,15 +47,7 @@
                 required: true
             },
             url:{
-                // Must be defined as `${this.$store.state.apiroot}/api/find/`
-                // This path can get search=name, and id=id
                 required: true
-            },
-            id:{
-                default: "id"
-            },
-            name:{
-                default: "name"
             },
             label:{
                 default: "Select an item"
@@ -67,7 +66,7 @@
             return{
                 descriptionLimit: 60,
                 entries: [],
-                isLoading: false,
+                loading: false,
                 search: null,
                 localValue: null
             }
@@ -78,14 +77,14 @@
                 if (this.search ==null || this.search==""|| this.search.length<this.minchars) return
 
                 // Items have already been requested
-                if (this.isLoading) return
+                if (this.loading) return
 
-                this.isLoading = true
+                this.loading = true
 
                 axios.get(`${this.url}?search=${val}`, this.myheaders())
                 .then((response) => {
                     this.entries=response.data
-                    this.isLoading = false
+                    this.loading = false
                 }, (error) => {
                     this.parseResponseError(error)
                 })
@@ -105,12 +104,18 @@
         methods: {
             forceValue(force){       
                 if (force!=null){
-                    axios.get(`${this.url}/${force}/`, this.myheaders())
+                    axios.get(force, this.myheaders())
                     .then((response) => {
                         console.log(response.data)
-                        this.entries=response.data
-                        this.localValue=response.data.id
-                        this.isLoading = false
+                        if (this.returnobject){
+                            this.entries=[response.data]
+                            this.localValue=response.data
+
+                        } else {
+                            this.entries=[response.data]
+                            this.localValue=response.data.url
+                        }
+                        this.loading = false
                     }, (error) => {
                         console.log(error)
                     })

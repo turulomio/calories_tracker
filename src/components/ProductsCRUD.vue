@@ -32,6 +32,7 @@
                 <v-checkbox v-model="newproduct.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
                 <v-card class="mt-4">
                     <v-data-table dense :headers="formats_headers" :items="newproduct.formats" sort-by="formats" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250">
+                        <template v-slot:[`item.formats`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('formats', item.formats,'name')"></div></template> 
                         <template v-slot:[`item.actions`]="{ item }">
                             <v-icon small class="mr-2" @click="editFormat(item)">mdi-pencil</v-icon>
                             <v-icon small @click="deleteFormat(item)">mdi-delete</v-icon>
@@ -42,9 +43,9 @@
         </v-card>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="addFormat()" >{{ $t("Add a format") }}</v-btn>
-                <v-btn color="primary" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn> 
-                <v-btn color="error" @click="$emit('cruded')" >{{ $t("Cancel") }}</v-btn>
+                <v-btn color="primary" v-if="['C','U'].includes(mode)" @click="addFormat()" >{{ $t("Add a format") }}</v-btn>
+                <v-btn color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn> 
+                <v-btn color="error" @click="$emit('cruded')" >{{ $t("Close") }}</v-btn>
 
             </v-card-actions>
 
@@ -90,7 +91,7 @@
                 ],
 
                 //Formats crud
-                format:null,
+                format:this.empty_formats(),
                 format_mode:false,
                 dialog_formats_crud:false,
             }
@@ -104,6 +105,7 @@
             },
             title(){
                 if (this.mode=="C") return this.$t('Add a new product')
+                if (this.mode=="R") return this.$t('View this product')
                 if (this.mode=="U") return this.$t('Update this product')
                 if (this.mode=="D") return this.$t('Delete this product')
             },

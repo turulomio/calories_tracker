@@ -12,7 +12,7 @@
         </v-tabs>
         <v-tabs-items v-model="tab" class="ma-5">
             <v-tab-item key="products" >
-                <v-data-table dense :headers="products_headers"  :search="search" :items="$store.state.products" sort-by="fullname" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+                <v-data-table dense :headers="products_headers"  :search="search" :items="$store.state.products" sort-by="fullname" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" @click:row="viewProduct">
                     <template v-slot:[`item.fullname`]="{ item }"><div v-html="item.fullname" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
@@ -39,7 +39,7 @@
                 </v-data-table>
             </v-tab-item>
             <v-tab-item key="elaborated_products">
-                <v-data-table dense :headers="elaborated_products_headers" :search="search"  :items="$store.state.elaborated_products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+                <v-data-table dense :headers="elaborated_products_headers" :search="search"  :items="$store.state.elaborated_products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" @click:row="viewElaboratedProduct">
                     <template v-slot:[`item.name`]="{ item }"><div v-html="item.name" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
@@ -64,7 +64,7 @@
                 </v-data-table>
             </v-tab-item>
             <v-tab-item key="system_products" >                 
-                <v-data-table dense :headers="system_products_headers"  :search="search" :items="system_products" sort-by="fullname" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+                <v-data-table dense :headers="system_products_headers"  :search="search" :items="system_products" sort-by="fullname" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500"  @click:row="viewSystemProduct">
                    <template v-slot:[`item.fullname`]="{ item }"><div v-html="item.fullname" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
@@ -315,6 +315,13 @@
 
                 this.dialog_products_crud=true
             },
+            viewProduct(item){
+                this.product=item
+                this.product_cu_mode="R"
+                this.key=this.key+1
+
+                this.dialog_products_crud=true
+            },
 
             editSystemProduct(item){
                 console.log(item)
@@ -325,6 +332,14 @@
             },
             deleteSystemProduct(){
                 alert(this.$t("System products never should be deleted. You can set obsolete or rename to Reusable when needed."))
+            },
+
+            viewSystemProduct(item){
+                this.system_product=item
+                this.system_product_cu_mode="R"
+                this.key=this.key+1
+
+                this.dialog_system_products_crud=true
             },
             on_ElaboratedProductsCRUD_cruded(){
                 this.dialog_elaborated_products_crud=false
@@ -344,6 +359,10 @@
                 this.key=this.key+1
 
                 this.dialog_elaborated_products_crud=true
+            },
+            viewElaboratedProduct(item){
+                this.elaborated_product=item
+                console.log("TODO")
             },
             on_icon_glutenfree(){
                 alert(this.$t("This product is gluten free"))
