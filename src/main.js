@@ -43,6 +43,7 @@ const router = new VueRouter({
 import {
     localtime,
     myheaders,
+    myheaders_noauth,
     parseResponse,
     parseResponseError,
     listobjects_sum,
@@ -62,6 +63,7 @@ Vue.mixin({
     methods: {
         localtime,
         myheaders,
+        myheaders_noauth,
         my_round,
         myheaders_formdata,
         parseResponse,
