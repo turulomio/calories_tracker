@@ -14,7 +14,7 @@
                     {{localtime(item.datetime).slice(10)}}
                 </template>          
                 <template v-slot:[`item.products`]="{ item }">
-                    <div v-html="colorized_product(item)"></div>
+                    <v-icon :color="product_risk_color(item)">mdi-checkbox-blank-circle-outline</v-icon> {{$store.getters.getObjectPropertyByUrl('products',item.products,'fullname')}}
                 </template>                       
                 <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                 <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
@@ -187,8 +187,9 @@
             on_icon_glutenfree(){
                 alert(this.$t("This meal is gluten free"))
             },
-            colorized_product(item){
-                return `<v-icon color="red">mdi-checkbox-blank-circle-outline</v-icon>${this.$store.getters.getObjectPropertyByUrl('products',item.products,'fullname')}`
+            product_risk_color(item){
+                console.log(item)
+                return "red"
             }
         },
         created(){
