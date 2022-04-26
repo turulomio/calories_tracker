@@ -5,7 +5,7 @@
         </h1>
 
             <v-card width="20%" class="pa-5 mx-auto" outlined>
-                <MyDatePicker dense :label="$t('Select a date')" v-model="day" @input="on_day_input()"></MyDatePicker>
+                <MyDatePicker dense :label="$t('Select a date')" v-model="day" hidenullicon @input="on_day_input()"></MyDatePicker>
             </v-card>
 
 
