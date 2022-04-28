@@ -200,7 +200,6 @@ export const store = new Vuex.Store({
             return axios.get(`${store.state.apiroot}/api/products/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateProducts', sortObjectsArray(response.data, "name"))
-                console.log(response.data)
                 console.log(`Updated ${response.data.length} products in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)

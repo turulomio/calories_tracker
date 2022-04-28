@@ -263,35 +263,29 @@
                 system_product_cu_mode:null,
                 dialog_system_products_crud:false,
             }
-        },        
-        watch: {
-            search() {
-                if (this.search.length>2) this.update_system_products()
-
-            }
-        },
+        },     
         methods:{
             empty_products,
             empty_system_products,
             empty_elaborated_products,
             on_ProductsCRUD_cruded(){
                 this.dialog_products_crud=false
-                this.update_products(true)
+                this.update_all(true)
             },
             on_SystemProductsCRUD_cruded(){
                 this.dialog_system_products_crud=false
-                this.update_products(true)
+                this.update_all(true)
             },
             on_ElaboratedProductsCRUD_cruded(){
                 this.dialog_elaborated_products_crud=false
-                this.update_products(true)
+                this.update_all(true)
             },
             linkProduct(item){
                 this.loading=true
                 axios.post(`${this.$store.state.apiroot}/system_products_to_products/`, {system_products: item.url}, this.myheaders())
                 .then((response) => {
                     console.log(response.data)
-                    this.update_products(true)
+                    this.update_all(true)
 
                     this.loading=false
                }, (error) => {
@@ -368,43 +362,45 @@
             },
             on_search_change(){
                 //Pressing enter
-                this.update_products(true)
+                this.update_all()
             },
-            update_products( with_dispatch=false){
+            update_products(with_dispatch){
+                if (with_dispatch){
+                    return this.$store.dispatch("getProducts")
+                    .then(() => {             
+                        this.products=this.$store.state.products.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
+                    })
+                } else {                
+                    this.products=this.$store.state.products.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
+                }
+            },
+            update_elaborated_products(with_dispatch){
+                if (with_dispatch){
+                    return this.$store.dispatch("getElaboratedProducts")
+                    .then(() => {             
+                       this.elaborated_products=this.$store.state.elaborated_products.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
+                    })
+                } else {                
+                    this.elaborated_products=this.$store.state.elaborated_products.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
+                }
+            },
+            update_system_products(){
+                axios.get(`${this.$store.state.apiroot}/api/system_products/?search=${this.search}`, this.myheaders())
+                .then((response) => {
+                    this.system_products=response.data
+               }, (error) => {
+                    this.parseResponseError(error)
+                })
+            },
+            update_all( with_dispatch=false){
                 // Refresh products and elaborated products filtering products and elaborated products
                 // Refresh system products making a query
                 if (this.search==null) return
                 this.loading=true
-                this.products=this.$store.state.products.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
-                this.elaborated_products=this.$store.state.elaborated_products.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
-                axios.get(`${this.$store.state.apiroot}/api/system_products/?search=${this.search}`, this.myheaders())
-                .then((response) => {
-                    console.log("AI")
-                    this.system_products=response.data
-                    console.log(this.system_products)
-                    if (with_dispatch==false) this.loading=false
-                    console.log("AF")
-               }, (error) => {
-                    this.parseResponseError(error)
+                Promise.all([this.update_products(with_dispatch), this.update_elaborated_products(with_dispatch), this.update_system_products()])
+                .then( ()=> {
+                    this.loading=false
                 })
-                .then(() => {
-                    if (with_dispatch==true){
-                        console.log("BI")
-                        this.$store.dispatch("getProducts")
-                        .then(() => {
-                            console.log("BF")
-                            if (with_dispatch==true){
-                                console.log("CI")
-                                this.$store.dispatch("getElaboratedProducts")
-                                .then(() => {
-                                    console.log("CF")
-                                    this.loading=false
-                                })
-                            }
-                        })
-                    }
-                })
-
             },
         },
     }
