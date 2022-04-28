@@ -102,7 +102,7 @@
                                     this_.system_company_mode="C"
                                     this_.system_company=this_.empty_system_companies()
                                     this_.key=this_.key+1
-                                    this_.dialog_companies_crud=true
+                                    this_.dialog_system_companies_crud=true
                                 },
                             },
                         ]
@@ -157,6 +157,7 @@
                 return axios.get(`${this.$store.state.apiroot}/api/system_companies/`, this.myheaders())
                 .then((response) => {
                     this.system_companies=response.data
+                    this.key=this.key+1
                     this.loading=false
                }, (error) => {
                     this.parseResponseError(error)

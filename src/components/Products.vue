@@ -264,6 +264,12 @@
                 dialog_system_products_crud:false,
             }
         },        
+        watch: {
+            search() {
+                if (this.search.length>2) this.update_system_products()
+
+            }
+        },
         methods:{
             empty_products,
             empty_system_products,
@@ -286,6 +292,7 @@
                 .then((response) => {
                     console.log(response.data)
                     this.update_products(true)
+
                     this.loading=false
                }, (error) => {
                     this.parseResponseError(error)

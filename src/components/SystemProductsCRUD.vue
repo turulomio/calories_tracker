@@ -36,6 +36,7 @@
 
                 <v-card class="mt-4">
                     <v-data-table dense :headers="formats_headers" :items="new_system_product.formats" sort-by="formats" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250">
+                        <template v-slot:[`item.formats`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('formats', item.formats,'name')"></div></template> 
                         <template v-slot:[`item.actions`]="{ item }">
                             <v-icon small class="mr-2" @click="editFormat(item)">mdi-pencil</v-icon>
                             <v-icon small @click="deleteFormat(item)">mdi-delete</v-icon>
