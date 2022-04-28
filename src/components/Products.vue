@@ -3,7 +3,7 @@
         <h1>{{ $t(`Products`) }}
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
         </h1>
-          <v-text-field class="ml-10 mr-10 mb-5" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"></v-text-field>
+          <v-text-field class="ml-10 mr-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
     
         <v-tabs  background-color="primary" dark v-model="tab" >
             <v-tab key="products"><v-icon left>mdi-apple</v-icon>{{ $t('Products') }}</v-tab>
@@ -12,7 +12,7 @@
         </v-tabs>
         <v-tabs-items v-model="tab" class="ma-5">
             <v-tab-item key="products" >
-                <v-data-table dense :headers="products_headers"  :search="search" :items="$store.state.products" sort-by="fullname" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" @click:row="viewProduct">
+                <v-data-table dense :headers="products_headers" :items="products" sort-by="fullname" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" @click:row="viewProduct">
                     <template v-slot:[`item.fullname`]="{ item }"><div v-html="item.fullname" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
@@ -39,7 +39,7 @@
                 </v-data-table>
             </v-tab-item>
             <v-tab-item key="elaborated_products">
-                <v-data-table dense :headers="elaborated_products_headers" :search="search"  :items="$store.state.elaborated_products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" @click:row="viewElaboratedProduct">
+                <v-data-table dense :headers="elaborated_products_headers" :items="elaborated_products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" @click:row="viewElaboratedProduct">
                     <template v-slot:[`item.name`]="{ item }"><div v-html="item.name" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
@@ -64,7 +64,7 @@
                 </v-data-table>
             </v-tab-item>
             <v-tab-item key="system_products" >                 
-                <v-data-table dense :headers="system_products_headers"  :search="search" :items="system_products" sort-by="fullname" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500"  @click:row="viewSystemProduct">
+                <v-data-table dense :headers="system_products_headers" :items="system_products" sort-by="fullname" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500"  @click:row="viewSystemProduct">
                    <template v-slot:[`item.fullname`]="{ item }"><div v-html="item.fullname" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
@@ -248,7 +248,7 @@
                 loading:false,
                 key:0,
                 tab:0,
-                search:"",
+                search: null,
 
                 //CRUD PRODUCT
                 product:null,
@@ -270,31 +270,22 @@
             empty_elaborated_products,
             on_ProductsCRUD_cruded(){
                 this.dialog_products_crud=false
-                this.$store.dispatch("getProducts")
+                this.update_products(true)
             },
             on_SystemProductsCRUD_cruded(){
                 this.dialog_system_products_crud=false
-                this.$store.dispatch("getProducts")
-                this.update_system_products()
+                this.update_products(true)
+            },
+            on_ElaboratedProductsCRUD_cruded(){
+                this.dialog_elaborated_products_crud=false
+                this.update_products(true)
             },
             linkProduct(item){
                 this.loading=true
                 axios.post(`${this.$store.state.apiroot}/system_products_to_products/`, {system_products: item.url}, this.myheaders())
                 .then((response) => {
                     console.log(response.data)
-                    this.$store.dispatch("getProducts")
-                    this.update_system_products()
-                    this.loading=false
-               }, (error) => {
-                    this.parseResponseError(error)
-                });
-
-            },
-            update_system_products(){
-                this.loading=true
-                axios.get(`${this.$store.state.apiroot}/api/system_products/`, this.myheaders())
-                .then((response) => {
-                    this.system_products=response.data
+                    this.update_products(true)
                     this.loading=false
                }, (error) => {
                     this.parseResponseError(error)
@@ -341,11 +332,6 @@
 
                 this.dialog_system_products_crud=true
             },
-            on_ElaboratedProductsCRUD_cruded(){
-                this.dialog_elaborated_products_crud=false
-                this.$store.dispatch("getElaboratedProducts")
-                this.$store.dispatch("getProducts")
-            },
             editElaboratedProduct(item){
                 this.elaborated_product=item
                 this.elaborated_product_deleting=false
@@ -362,7 +348,7 @@
             },
             viewElaboratedProduct(item){
                 this.elaborated_product=item
-                console.log("TODO")
+                alert("TODO")
             },
             on_icon_glutenfree(){
                 alert(this.$t("This product is gluten free"))
@@ -373,9 +359,46 @@
             on_icon_system_product(){
                 alert(this.$t("This is a system product"))
             },
+            on_search_change(){
+                //Pressing enter
+                this.update_products(true)
+            },
+            update_products( with_dispatch=false){
+                // Refresh products and elaborated products filtering products and elaborated products
+                // Refresh system products making a query
+                if (this.search==null) return
+                this.loading=true
+                this.products=this.$store.state.products.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
+                this.elaborated_products=this.$store.state.elaborated_products.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
+                axios.get(`${this.$store.state.apiroot}/api/system_products/?search=${this.search}`, this.myheaders())
+                .then((response) => {
+                    console.log("AI")
+                    this.system_products=response.data
+                    console.log(this.system_products)
+                    if (with_dispatch==false) this.loading=false
+                    console.log("AF")
+               }, (error) => {
+                    this.parseResponseError(error)
+                })
+                .then(() => {
+                    if (with_dispatch==true){
+                        console.log("BI")
+                        this.$store.dispatch("getProducts")
+                        .then(() => {
+                            console.log("BF")
+                            if (with_dispatch==true){
+                                console.log("CI")
+                                this.$store.dispatch("getElaboratedProducts")
+                                .then(() => {
+                                    console.log("CF")
+                                    this.loading=false
+                                })
+                            }
+                        })
+                    }
+                })
+
+            },
         },
-        created(){
-            this.update_system_products()
-        }
     }
 </script>
