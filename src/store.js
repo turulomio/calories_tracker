@@ -113,21 +113,23 @@ export const store = new Vuex.Store({
     actions: {// Can be asynchronous. Fetch data
 
         getAll(context){
-            context.dispatch("getActivities")
-            context.dispatch("getAdditiveRisks")
-            context.dispatch("getAdditives")
-            context.dispatch("getCatalogManager")
-            context.dispatch("getCompanies")
-            context.dispatch("getFoodTypes")
-            context.dispatch("getFormats")
-            context.dispatch("getElaboratedProducts")
-            context.dispatch("getProducts")
-            context.dispatch("getSettings")
-            context.dispatch("getWeightWishes")
+            return Promise.all([
+                context.dispatch("getActivities"),
+                context.dispatch("getAdditiveRisks"),
+                context.dispatch("getAdditives"),
+                context.dispatch("getCatalogManager"),
+                context.dispatch("getCompanies"),
+                context.dispatch("getFoodTypes"),
+                context.dispatch("getFormats"),
+                context.dispatch("getElaboratedProducts"),
+                context.dispatch("getProducts"),
+                context.dispatch("getSettings"),
+                context.dispatch("getWeightWishes")
+            ])
         },
         getActivities(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/activities/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/activities/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateActivities', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} activities in ${new Date()-start} ms`)
@@ -137,7 +139,7 @@ export const store = new Vuex.Store({
         },
         getAdditiveRisks(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/additive_risks/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/additive_risks/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateAdditiveRisks', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} additive risks in ${new Date()-start} ms`)
@@ -147,7 +149,7 @@ export const store = new Vuex.Store({
         },
         getAdditives(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/additives/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/additives/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateAdditives', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} additives in ${new Date()-start} ms`)
@@ -157,7 +159,7 @@ export const store = new Vuex.Store({
         },
         getCatalogManager(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/catalog_manager/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/catalog_manager/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateCatalogManager', response.data)
                 console.log(`Updated catalog manager in ${new Date()-start} ms`)
@@ -177,7 +179,7 @@ export const store = new Vuex.Store({
         },
         getFoodTypes(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/food_types/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/food_types/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateFoodTypes', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} food types in ${new Date()-start} ms`)
@@ -187,7 +189,7 @@ export const store = new Vuex.Store({
         },
         getFormats(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/formats/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/formats/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateFormats', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} formats in ${new Date()-start} ms`)
@@ -217,7 +219,7 @@ export const store = new Vuex.Store({
         },
         getWeightWishes(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/api/weight_wishes/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/api/weight_wishes/`, store.$app.myheaders())
             .then((response) => {
                 context.commit('updateWeightWishes', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} weight wishes in ${new Date()-start} ms`)
@@ -227,7 +229,7 @@ export const store = new Vuex.Store({
         },
         getSettings(context){
             var start=new Date()
-            axios.get(`${store.state.apiroot}/settings/`, store.$app.myheaders())
+            return axios.get(`${store.state.apiroot}/settings/`, store.$app.myheaders())
             .then((response) => {
                 context.commit("updateSettings", response.data)
                 console.log(`Updated settings in ${new Date()-start} ms`)
