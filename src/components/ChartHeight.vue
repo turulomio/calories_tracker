@@ -13,7 +13,6 @@
 
 </template>
 <script>
-    import {arrayobjects_to_array} from '../functions.js'
     export default {
         props:{
             data:{ //Must be an array [(date, float)]
@@ -28,7 +27,6 @@
             }
         },
         methods: {
-            arrayobjects_to_array,
             chart_option(){
                 return {
                     legend: {

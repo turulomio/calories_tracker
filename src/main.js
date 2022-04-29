@@ -47,12 +47,8 @@ import {
     parseResponse,
     parseResponseError,
     listobjects_sum,
-    percentage_generic_html,
-    percentage_generic_string, 
-    zulu2date,
-    date2zulu,
     my_round
-} from './functions.js'
+} from './components/reusing/my_commons.js'
 import {RulesFloat,RulesDate,RulesDatetime,RulesInteger,RulesString,RulesSelection, RulesEmail } from './components/reusing/rules.js'
 Vue.mixin({
     data: function () {
@@ -66,9 +62,6 @@ Vue.mixin({
         my_round,
         parseResponse,
         parseResponseError,
-        zulu2date,
-        date2zulu,
-
         listobjects_sum,
         RulesDate,
         RulesDatetime,
@@ -77,28 +70,6 @@ Vue.mixin({
         RulesInteger,
         RulesString,
         RulesSelection,
-
-
-        currency_string(num, currency, decimals=2){
-            return this.$store.getters.currency_generic_string(num, currency, this.$i18n.locale,decimals )
-        },
-        currency_html(num, currency, decimals=2){
-            return this.$store.getters.currency_generic_html(num, currency, this.$i18n.locale,decimals )
-        },
-        percentage_string(num, decimals=2){
-            return percentage_generic_string(num,this.$i18n.locale,decimals )
-        },
-        percentage_html(num, decimals=2){
-            return percentage_generic_html(num,this.$i18n.locale,decimals )
-        },
-        localcurrency_string(num, decimals=2){
-            return this.$store.getters.currency_generic_string(num, this.$store.state.local_currency, this.$i18n.locale,decimals )
-        },
-        localcurrency_html(num, decimals=2){
-            return this.$store.getters.currency_generic_html(num, this.$store.state.local_currency, this.$i18n.locale,decimals )
-        },
-
-
     }
 })
 

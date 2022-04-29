@@ -1,5 +1,4 @@
-import moment from 'moment-timezone';
-import axios from 'axios'
+import moment from 'moment-timezone'
 
 
 
@@ -22,24 +21,14 @@ export function my_round(num, decimals = 2) {
 // Value es un utc iso string with T and Z
 export function localtime(value){
     if (value){
-        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
         var dateFormat = 'YYYY-MM-DD HH:mm:ss';
         var testDateUtc = moment.utc(value);
-        var localDate = testDateUtc.tz(timezone)
+        var localDate = testDateUtc.tz(this.$store.state.local_zone)
         return (localDate.format(dateFormat)); // 2015-30-01 02:00:00
     }
     return null;
 }   
 
-
-// Uses .local()
-export function zulu2date(value){
-    return new Date(value)
-}   
-// Uses .local()
-export function date2zulu(value){
-    return value.toISOString()
-}   
 
 export function myheaders(){
     return {
@@ -51,6 +40,7 @@ export function myheaders(){
     }
 }
 
+
 export function myheaders_noauth(){
     return {
         headers:{
@@ -60,25 +50,19 @@ export function myheaders_noauth(){
     }
 }
 
+export function myheaders_formdata(){
+    return {
+        headers:{
+            'Authorization': `Token ${this.$store.state.token}`,
+            'Accept-Language': `${this.$i18n.locale}-${this.$i18n.locale}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    }
+}
+
 export function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
-
-
-
-
-export function logout(){
-    const formData = new FormData();
-    formData.append('key', this.$store.state.token);
-    axios.post(`${this.$store.state.apiroot}/logout/`, formData)
-    .then((response) => {
-        console.log(response.data);
-        this.$store.state.token=null;
-        this.$store.state.logged=false;
-    }, (error) => {
-        this.parseResponseError(error)
-        });
-}
 
 export function parseNumber(strg){
     strg = strg.toString().replace(',', '.');
@@ -228,6 +212,9 @@ export function listobjects_average_ponderated(lo,key1, key2){
     return prod/total
 }
 
+export function get_current_monthpicker_string(){
+    return `${new Date().getFullYear()}-${(new Date().getMonth()+1).toString().padStart(2,'0')}`
+}
 
 export function ifnullempty(value){
     if (value==null) return ""

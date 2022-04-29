@@ -35,7 +35,7 @@
 
         },
         mounted(){
-            this.check_time()
+            if ( this.$store.state.logged) this.check_time()
         }
     }
 </script>

@@ -21,22 +21,22 @@
                         <v-list-item-title>Home</v-list-item-title>
                     </v-list-item>
 <!--                    BIOMETRICS -->
-                    <v-list-item link router :to="{ name: 'biometrics'}">
+                    <v-list-item link router :to="{ name: 'biometrics'}" v-if="$store.state.logged">
                         <v-list-item-icon><v-icon color="#757575;">mdi-human-male-height</v-icon></v-list-item-icon>
                         <v-list-item-title>{{ $t("Biometrics")}}</v-list-item-title>
                     </v-list-item>
 <!--                    COMPANIES -->
-                    <v-list-item link router :to="{ name: 'companies'}">
+                    <v-list-item link router :to="{ name: 'companies'}" v-if="$store.state.logged">
                         <v-list-item-icon><v-icon color="#757575;">mdi-domain</v-icon></v-list-item-icon>
                         <v-list-item-title>{{ $t("Companies")}}</v-list-item-title>
                     </v-list-item>
 <!--                    PRODUCTS -->
-                    <v-list-item link router :to="{ name: 'products'}">
+                    <v-list-item link router :to="{ name: 'products'}" v-if="$store.state.logged">
                         <v-list-item-icon><v-icon color="#757575;">mdi-apple</v-icon></v-list-item-icon>
                         <v-list-item-title>{{ $t("Products")}}</v-list-item-title>
                     </v-list-item>
 <!--                    MEALS -->
-                    <v-list-item link router :to="{ name: 'meals'}">
+                    <v-list-item link router :to="{ name: 'meals'}" v-if="$store.state.logged">
                         <v-list-item-icon><v-icon color="#757575;">mdi-food-turkey</v-icon></v-list-item-icon>
                         <v-list-item-title>{{ $t("Meals")}}</v-list-item-title>
                     </v-list-item>
