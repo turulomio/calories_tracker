@@ -22,8 +22,8 @@
                             <v-icon small v-if="item.obsolete" >mdi-check-outline</v-icon>           
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon v-if="!item.system_companies" small class="mr-2" @click="editCompany(item)">mdi-pencil</v-icon>
-                        <v-icon v-if="item.uses==0" small @click="deleteCompany(item)">mdi-delete</v-icon>
+                        <v-icon v-if="item.is_editable" small class="mr-2" @click="editCompany(item)">mdi-pencil</v-icon>
+                        <v-icon v-if="item.is_deletable" small @click="deleteCompany(item)">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
             </v-tab-item>
