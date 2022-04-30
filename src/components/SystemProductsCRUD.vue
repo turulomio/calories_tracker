@@ -47,8 +47,8 @@
         </v-card>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="addFormat()" >{{ $t("Add a format") }}</v-btn>
-                <v-btn color="primary" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn> 
+                <v-btn color="primary" v-if="['C','U'].includes(mode)" @click="addFormat()" >{{ $t("Add a format") }}</v-btn>
+                <v-btn color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn> 
                 <v-btn color="error" @click="$emit('cruded')" >{{ $t("Cancel") }}</v-btn>
 
             </v-card-actions>
@@ -109,6 +109,7 @@
             },
             title(){
                 if (this.mode=="C") return this.$t('Add a new system product')
+                if (this.mode=="R") return this.$t('View this system product')
                 if (this.mode=="U") return this.$t('Update this system product')
                 if (this.mode=="D") return this.$t('Delete this system product')
             },

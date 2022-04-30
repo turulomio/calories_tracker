@@ -1,7 +1,7 @@
 <template>
     <div class="ma-4">
         <h1>{{ $t(`Products`) }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items()" :context="this"></MyMenuInline>
         </h1>
           <v-text-field class="ml-10 mr-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
     
@@ -134,53 +134,6 @@
         },
         data(){
             return {
-                menuinline_items: [
-                    {
-                        subheader: this.$t("Product options"),
-                        children: [
-                            {
-                                name: this.$t("Add product"),
-                                icon: "mdi-plus",
-                                code: function(this_){
-                                    this_.product_cu_mode="C"
-                                    this_.product=this_.empty_products()
-                                    this_.key=this_.key+1
-                                    this_.dialog_products_crud=true
-                                },
-                            },
-                        ]
-                    },
-                    {
-                        subheader: this.$t("System product options"),
-                        children: [
-                            {
-                                name: this.$t("Add system product"),
-                                icon: "mdi-plus",
-                                code: function(this_){
-                                    this_.system_product_cu_mode="C"
-                                    this_.system_product=this_.empty_system_products()
-                                    this_.key=this_.key+1
-                                    this_.dialog_system_products_crud=true
-                                },
-                            },
-                        ]
-                    },
-                    {
-                        subheader: this.$t("ElaboratedProduct options"),
-                        children: [
-                            {
-                                name: this.$t("Add elaborated_product"),
-                                icon: "mdi-plus",
-                                code: function(this_){
-                                    this_.elaborated_product_deleting=false
-                                    this_.elaborated_product=this_.empty_elaborated_products()
-                                    this_.key=this_.key+1
-                                    this_.dialog_elaborated_products_crud=true
-                                },
-                            },
-                        ]
-                    },
-                ],
                 products:[],
                 products_headers: [
                     { text: this.$t('Name'), sortable: true, value: 'fullname',width:"30%"},    
@@ -271,6 +224,59 @@
             empty_products,
             empty_system_products,
             empty_elaborated_products,
+
+            menuinline_items(){
+                let r= [
+                    {
+                        subheader: this.$t("Product options"),
+                        children: [
+                            {
+                                name: this.$t("Add product"),
+                                icon: "mdi-plus",
+                                code: function(this_){
+                                    this_.product_cu_mode="C"
+                                    this_.product=this_.empty_products()
+                                    this_.key=this_.key+1
+                                    this_.dialog_products_crud=true
+                                },
+                            },
+                        ]
+                    },
+                    {
+                        subheader: this.$t("System product options"),
+                        children: [
+                            {
+                                name: this.$t("Add system product"),
+                                icon: "mdi-plus",
+                                code: function(this_){
+                                    this_.system_product_cu_mode="C"
+                                    this_.system_product=this_.empty_system_products()
+                                    this_.key=this_.key+1
+                                    this_.dialog_system_products_crud=true
+                                },
+                            },
+                        ]
+                    },
+                ]
+                if (this.$store.state.catalog_manager){
+                    r.push({
+                        subheader: this.$t("ElaboratedProduct options"),
+                        children: [
+                            {
+                                name: this.$t("Add elaborated_product"),
+                                icon: "mdi-plus",
+                                code: function(this_){
+                                    this_.elaborated_product_deleting=false
+                                    this_.elaborated_product=this_.empty_elaborated_products()
+                                    this_.key=this_.key+1
+                                    this_.dialog_elaborated_products_crud=true
+                                },
+                            },
+                        ]
+                    })
+                }
+                return r
+            },
             on_ProductsCRUD_cruded(){
                 this.dialog_products_crud=false
                 this.update_all(true)
