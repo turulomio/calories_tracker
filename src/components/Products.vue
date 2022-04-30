@@ -291,7 +291,6 @@
                }, (error) => {
                     this.parseResponseError(error)
                 });
-
             },
             editProduct(item){
                 this.product=item
@@ -323,7 +322,7 @@
                 this.dialog_system_products_crud=true
             },
             deleteSystemProduct(){
-                alert(this.$t("System products never should be deleted. You can set obsolete or rename to Reusable when needed."))
+                alert(this.$t("System products never should be deleted. You can set obsolete or rename to REUSABLE when needed."))
             },
 
             viewSystemProduct(item){

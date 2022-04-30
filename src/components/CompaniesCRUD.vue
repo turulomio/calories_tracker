@@ -4,7 +4,6 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <v-text-field :readonly="mode=='D'" v-model="newcompany.name" :label="$t('Set company name')" :placeholder="$t('Set company name')" :rules="RulesString(200)" counter="200"/>
-                <AutoCompleteApiIdName v-model="newcompany.system_companies" :url="`${this.$store.state.apiroot}/api/system_companies/`" :label="$t('Select a system company')"></AutoCompleteApiIdName>
                 <v-checkbox v-model="newcompany.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
             </v-form>
             <v-card-actions>
@@ -16,11 +15,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import AutoCompleteApiIdName from './AutoCompleteApiIdName.vue'
     export default {
-        components: {
-            AutoCompleteApiIdName,
-        },
         props: {
             // An account object
             company: { // An account transfer object

@@ -3,7 +3,7 @@
         <h1>{{ $t(`Companies`) }}
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
         </h1>
-        <v-text-field class="ml-10 mr-10 mb-5" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"></v-text-field>
+        <v-text-field class="ml-10 mr-10 mb-5" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"  v-on:keyup.enter="on_search_change()"></v-text-field>
     
         <v-tabs  background-color="primary" dark v-model="tab" >
             <v-tab key="companies">{{ $t('Companies') }}</v-tab>
@@ -11,7 +11,7 @@
         </v-tabs>
         <v-tabs-items v-model="tab" class="ma-5">
             <v-tab-item key="companies" >
-                <v-data-table dense :headers="companies_headers" :search="search" :items="$store.state.companies" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+                <v-data-table dense :headers="companies_headers" :items="companies" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
                     <template v-slot:[`item.last`]="{ item }">
                         {{localtime(item.last)}}
                     </template>        
@@ -22,13 +22,13 @@
                             <v-icon small v-if="item.obsolete" >mdi-check-outline</v-icon>           
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon v-if="item.is_editable" small class="mr-2" @click="editCompany(item)">mdi-pencil</v-icon>
-                        <v-icon v-if="item.is_deletable" small @click="deleteCompany(item)">mdi-delete</v-icon>
+                        <v-icon v-if="!item.system_companies" small class="mr-2" @click="editCompany(item)">mdi-pencil</v-icon>
+                        <v-icon v-if="item.uses==0" small @click="deleteCompany(item)">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
             </v-tab-item>
             <v-tab-item key="system_companies" >                 
-                <v-data-table dense :headers="system_companies_headers" :search="search" :items="system_companies" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+                <v-data-table dense :headers="system_companies_headers" :items="system_companies" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
                     <template v-slot:[`item.last`]="{ item }">
                         {{localtime(item.last)}}
                     </template>             
@@ -143,26 +143,11 @@
             empty_system_companies,
             on_CompaniesCRUD_cruded(){
                 this.dialog_companies_crud=false
-                this.$store.dispatch("getCompanies")
+                this.update_all(true)
             },
             on_SystemCompaniesCRUD_cruded(){
                 this.dialog_system_companies_crud=false
-                this.update_system_companies().then(() => {
-                    this.$store.dispatch("getCompanies")
-                    this.key=this.key+1
-                })
-            },
-            update_system_companies(){
-                this.loading=true
-                return axios.get(`${this.$store.state.apiroot}/api/system_companies/`, this.myheaders())
-                .then((response) => {
-                    this.system_companies=response.data
-                    this.key=this.key+1
-                    this.loading=false
-               }, (error) => {
-                    this.parseResponseError(error)
-                });
-
+                this.update_all(true)
             },
             editCompany(item){
                 this.company=item
@@ -185,11 +170,51 @@
                 this.dialog_system_companies_crud=true
             },
             deleteSystemCompany(){
-                alert(this.$t("System products never should be deleted. You can set obsolete or rename to Reusable when needed."))
+                alert(this.$t("System companies never should be deleted. You can set obsolete or rename to REUSABLE when needed."))
+            },
+
+            on_search_change(){
+                //Pressing enter
+                this.update_all(true) 
+            },
+            linkCompany(item){
+                axios.post(`${this.$store.state.apiroot}/system_companies_to_companies/`, {system_companies: item.url}, this.myheaders())
+                .then(() => {
+                    this.update_all(true)
+               }, (error) => {
+                    this.parseResponseError(error)
+                });
+            },
+            update_companies(with_dispatch){
+                if (with_dispatch){
+                    return this.$store.dispatch("getCompanies")
+                    .then(() => {             
+                        this.companies=this.$store.state.companies.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
+                    })
+                } else {                
+                    this.companies=this.$store.state.companies.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
+                }
+            },
+            update_system_companies(){
+                return axios.get(`${this.$store.state.apiroot}/api/system_companies/?search=${this.search}`, this.myheaders())
+                .then((response) => {
+                    this.system_companies=response.data
+               }, (error) => {
+                    this.parseResponseError(error)
+                });
+
+            },
+            update_all( with_dispatch=false){
+                // Refresh companies and system companies
+                // dispatch true refreshes uses
+                if (this.search==null) return
+                this.loading=true
+                Promise.all([this.update_companies(with_dispatch), this.update_system_companies()])
+                .then( ()=> {
+                    this.key=this.key+1
+                    this.loading=false
+                })
             },
         },
-        created(){
-            this.update_system_companies()
-        }
     }
 </script>

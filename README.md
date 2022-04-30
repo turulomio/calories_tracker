@@ -2,34 +2,31 @@
 
 This template should help get you started developing with Vue 3 in Vite.
 
-## Recommended IDE Setup
+## Installation method
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.vscode-typescript-vue-plugin).
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
 
 ```sh
+# You need to create a new database. I recommend postgresql.
+createdb -U postgres calories_tracker -h 127.0.0.1
+
+# Clone repository and install requirements
+git clone https://github.com/turulomio/django_calories_tracker
+cd django_calories_tracker
+pip install -r requirements.txt
+
+# Edit settings.py if needed and run backend
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py update_catalogs
+python manage.py runserver
+
+# Clone repository and install node_modules
+git clone https://github.com/turulomio/calories_tracker
+cd calories_tracker
 npm install
+
+# Run frontend
+npm run serve"
 ```
 
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
