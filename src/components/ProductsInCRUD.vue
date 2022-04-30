@@ -71,7 +71,7 @@
                 this.on_multiplier_input()
             },
             on_multiplier_input(){
-                if (this.product_format) this.newproduct_in.amount=this.multiplier*this.product_format
+                if (this.product_format) this.newproduct_in.amount=this.my_round(this.multiplier*this.product_format,3)
             }
         },
         created(){
