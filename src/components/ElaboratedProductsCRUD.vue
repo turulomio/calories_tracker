@@ -14,8 +14,8 @@
                             {{$store.getters.getObjectPropertyByUrl("products",item.products,"name")}}
                         </template>
                         <template v-slot:[`item.actions`]="{ item }">
-                            <v-icon small class="mr-2" @click="editProductIn(item)">mdi-pencil</v-icon>
-                            <v-icon small @click="deleteProductIn(item)">mdi-delete</v-icon>
+                            <v-icon v-if="['C','U'].includes(mode)" small class="mr-2" @click="editProductIn(item)">mdi-pencil</v-icon>
+                            <v-icon v-if="['C','U'].includes(mode)" small @click="deleteProductIn(item)">mdi-delete</v-icon>
                         </template>
                     </v-data-table>
                 </v-card>
