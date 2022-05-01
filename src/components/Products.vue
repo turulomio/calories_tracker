@@ -243,23 +243,6 @@
                         ]
                     },
                     {
-                        subheader: this.$t("System product options"),
-                        children: [
-                            {
-                                name: this.$t("Add system product"),
-                                icon: "mdi-plus",
-                                code: function(this_){
-                                    this_.system_product_cu_mode="C"
-                                    this_.system_product=this_.empty_system_products()
-                                    this_.key=this_.key+1
-                                    this_.dialog_system_products_crud=true
-                                },
-                            },
-                        ]
-                    },
-                ]
-                if (this.$store.state.catalog_manager){
-                    r.push({
                         subheader: this.$t("ElaboratedProduct options"),
                         children: [
                             {
@@ -270,6 +253,23 @@
                                     this_.elaborated_product=this_.empty_elaborated_products()
                                     this_.key=this_.key+1
                                     this_.dialog_elaborated_products_crud=true
+                                },
+                            },
+                        ]
+                    },
+                ]
+                if (this.$store.state.catalog_manager){
+                    r.push({
+                        subheader: this.$t("System product options"),
+                        children: [
+                            {
+                                name: this.$t("Add system product"),
+                                icon: "mdi-plus",
+                                code: function(this_){
+                                    this_.system_product_cu_mode="C"
+                                    this_.system_product=this_.empty_system_products()
+                                    this_.key=this_.key+1
+                                    this_.dialog_system_products_crud=true
                                 },
                             },
                         ]
@@ -391,6 +391,7 @@
                 }
             },
             update_system_products(){
+                if (this.search==null)return
                 axios.get(`${this.$store.state.apiroot}/api/system_products/?search=${this.search}`, this.myheaders())
                 .then((response) => {
                     this.system_products=response.data

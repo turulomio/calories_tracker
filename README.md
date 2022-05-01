@@ -19,6 +19,7 @@ pip install -r requirements.txt
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py update_catalogs
+python manage.py sqlsequencereset calories_tracker | python manage.py dbshell
 python manage.py runserver
 
 # Clone repository and install node_modules
@@ -27,6 +28,6 @@ cd calories_tracker
 npm install
 
 # Run frontend
-npm run serve"
+npm run serve
 ```
 

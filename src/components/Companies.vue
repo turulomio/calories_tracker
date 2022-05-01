@@ -1,7 +1,7 @@
 <template>
     <div class="ma-4">
         <h1>{{ $t(`Companies`) }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items()" :context="this"></MyMenuInline>
         </h1>
         <v-text-field class="ml-10 mr-10 mb-5" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"  v-on:keyup.enter="on_search_change()"></v-text-field>
     
@@ -76,38 +76,6 @@
         },
         data(){
             return {
-                menuinline_items: [
-                    {
-                        subheader: this.$t("Company options"),
-                        children: [
-                            {
-                                name: this.$t("Add a company"),
-                                icon: "mdi-plus",
-                                code: function(this_){
-                                    this_.company_mode="C"
-                                    this_.company=this_.empty_companies()
-                                    this_.key=this_.key+1
-                                    this_.dialog_companies_crud=true
-                                },
-                            },
-                        ]
-                    },
-                    {
-                        subheader: this.$t("System company options"),
-                        children: [
-                            {
-                                name: this.$t("Add a system company"),
-                                icon: "mdi-plus",
-                                code: function(this_){
-                                    this_.system_company_mode="C"
-                                    this_.system_company=this_.empty_system_companies()
-                                    this_.key=this_.key+1
-                                    this_.dialog_system_companies_crud=true
-                                },
-                            },
-                        ]
-                    },
-                ],
                 companies:[],
                 companies_headers: [
                     { text: this.$t('Name'), sortable: true, value: 'name'},
@@ -141,6 +109,42 @@
         methods:{
             empty_companies,
             empty_system_companies,
+
+            menuinline_items(){
+                let r= [
+                    {
+                        subheader: this.$t("Company options"),
+                        children: [
+                            {
+                                name: this.$t("Add a company"),
+                                icon: "mdi-plus",
+                                code: function(this_){
+                                    this_.company_mode="C"
+                                    this_.company=this_.empty_companies()
+                                    this_.key=this_.key+1
+                                    this_.dialog_companies_crud=true
+                                },
+                            },
+                        ]
+                    },
+                ]
+                if (this.$store.state.catalog_manager) r.push({
+                        subheader: this.$t("System company options"),
+                        children: [
+                            {
+                                name: this.$t("Add a system company"),
+                                icon: "mdi-plus",
+                                code: function(this_){
+                                    this_.system_company_mode="C"
+                                    this_.system_company=this_.empty_system_companies()
+                                    this_.key=this_.key+1
+                                    this_.dialog_system_companies_crud=true
+                                },
+                            },
+                        ]
+                })
+                return r
+            },
             on_CompaniesCRUD_cruded(){
                 this.dialog_companies_crud=false
                 this.update_all(true)
