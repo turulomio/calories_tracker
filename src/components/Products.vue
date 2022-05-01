@@ -60,7 +60,7 @@
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon v-if="item.glutenfree" small class="mr-1"  @click="on_icon_glutenfree">mdi-barley-off</v-icon>
                         <v-icon small class="mr-1" @click="viewElaboratedProduct(item)">mdi-eye</v-icon>
-                        <v-icon small v-if="item.is_editable" class="mr-1" @click="editElaboratedProduct(item)">mdi-pencil</v-icon>
+                        <v-icon small class="mr-1" @click="editElaboratedProduct(item)">mdi-pencil</v-icon>
                         <v-icon small v-if="item.is_deletable" @click="deleteElaboratedProduct(item)">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
@@ -99,7 +99,7 @@
         <!-- DIALOG ELABORATED PRODUCTS CRUD -->
         <v-dialog v-model="dialog_elaborated_products_crud" width="45%" persistent>
             <v-card class="pa-4">
-                <ElaboratedProductsCRUD  :ep="elaborated_product" :deleting="elaborated_product_deleting" :key="'B'+key" @cruded="on_ElaboratedProductsCRUD_cruded()"></ElaboratedProductsCRUD>
+                <ElaboratedProductsCRUD  :ep="elaborated_product" :mode="elaborated_product_mode" :key="'B'+key" @cruded="on_ElaboratedProductsCRUD_cruded()"></ElaboratedProductsCRUD>
             </v-card>
         </v-dialog>
 
@@ -198,7 +198,7 @@
 
                 //CRUD ELABORATED PRODUCTS
                 elaborated_product:null,
-                elaborated_product_deleting:null,
+                elaborated_product_mode:null,
                 dialog_elaborated_products_crud:false,
 
                 loading:false,
@@ -249,7 +249,7 @@
                                 name: this.$t("Add elaborated_product"),
                                 icon: "mdi-plus",
                                 code: function(this_){
-                                    this_.elaborated_product_deleting=false
+                                    this_.elaborated_product_mode='C'
                                     this_.elaborated_product=this_.empty_elaborated_products()
                                     this_.key=this_.key+1
                                     this_.dialog_elaborated_products_crud=true
@@ -290,11 +290,9 @@
                 this.update_all(true)
             },
             linkProduct(item){
-                console.log("ahora")
                 axios.post(`${this.$store.state.apiroot}/system_products_to_products/`, {system_products: item.url}, this.myheaders())
                 .then(() => {
                     this.update_all(true)
-                    console.log("despues")
                }, (error) => {
                     this.parseResponseError(error)
                 });
@@ -322,7 +320,6 @@
             },
 
             editSystemProduct(item){
-                console.log(item)
                 this.system_product=item
                 this.system_product_cu_mode="U"
                 this.key=this.key+1
@@ -336,26 +333,25 @@
                 this.system_product=item
                 this.system_product_cu_mode="R"
                 this.key=this.key+1
-
                 this.dialog_system_products_crud=true
             },
             editElaboratedProduct(item){
                 this.elaborated_product=item
-                this.elaborated_product_deleting=false
+                this.elaborated_product_mode='U'
                 this.key=this.key+1
-
                 this.dialog_elaborated_products_crud=true
             },
             deleteElaboratedProduct(item){
                 this.elaborated_product=item
-                this.elaborated_product_deleting=true
+                this.elaborated_product_mode='D'
                 this.key=this.key+1
-
                 this.dialog_elaborated_products_crud=true
             },
             viewElaboratedProduct(item){
                 this.elaborated_product=item
-                alert("TODO")
+                this.elaborated_product_mode='R'
+                this.key=this.key+1
+                this.dialog_elaborated_products_crud=true
             },
             on_icon_glutenfree(){
                 alert(this.$t("This product is gluten free"))

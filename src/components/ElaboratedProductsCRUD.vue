@@ -3,9 +3,9 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-4">
             <v-form ref="form" v-model="form_valid" lazy-validation>                
-                <v-text-field :readonly="deleting" v-model="newep.name" :label="$t('Set name')" :placeholder="$t('Set name')" :rules="RulesString(200)" counter="200"/>
-                <v-autocomplete :readonly="deleting" :items="$store.state.food_types" v-model="newep.food_types" :label="$t('Select product food type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field :readonly="deleting" v-model="newep.final_amount" type="number" :label="$t('Set your final amount')" :placeholder="$t('Set your final amount')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="newep.name" :label="$t('Set name')" :placeholder="$t('Set name')" :rules="RulesString(200)" counter="200"/>
+                <v-autocomplete :readonly="mode=='D'" :items="$store.state.food_types" v-model="newep.food_types" :label="$t('Select product food type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-text-field :readonly="mode=='D'" v-model="newep.final_amount" type="number" :label="$t('Set your final amount')" :placeholder="$t('Set your final amount')" :rules="RulesInteger(10,true)" counter="10"/>
                 <v-checkbox v-model="newep.obsolete" :label="$t('Is obsolete?')"></v-checkbox>                
                 <v-card class="mt-4">
                     <v-data-table dense :headers="products_in_headers" :items="newep.products_in" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250">
@@ -22,8 +22,8 @@
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="addProductIn()" >{{ $t("Add a product") }}</v-btn>
-                <v-btn color="primary" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn> 
+                <v-btn color="primary" v-if="['C','U'].includes(mode)" @click="addProductIn()" >{{ $t("Add a product") }}</v-btn>
+                <v-btn color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn> 
                 <v-btn color="error" @click="$emit('cruded')" >{{ $t("Cancel") }}</v-btn>
             </v-card-actions>
         </v-card>
@@ -49,16 +49,14 @@
             ep: { // An account transfer object
                 required: true
             },
-            deleting: {
-                required: false,
-                default: false,
+            mode: {
+                required: true,
             }
         },
         data(){ 
             return{
                 form_valid:false,
                 newep: null,
-                mode: "", // CRUD mode
 
                 loading_products: false,
 
@@ -84,6 +82,7 @@
             },
             title(){
                 if (this.mode=="C") return this.$t('Add a new elaborated product register')
+                if (this.mode=="R") return this.$t('View this elaborated product register')
                 if (this.mode=="U") return this.$t('Update this elaborated product register')
                 if (this.mode=="D") return this.$t('Delete this elaborated product register')
             },
@@ -163,15 +162,6 @@
         created(){
             // Guess crud mode
             this.newep=Object.assign({},this.ep)
-            if ( this.ep.url==null){ 
-                this.mode="C"
-            } else if (this.ep.url!= null && this.deleting ==false) { 
-                this.mode="U"
-            } else if (this.ep.url!= null && this.deleting ==true) { 
-                this.mode="D"
-            }
-
-
         }
     }
 </script>
