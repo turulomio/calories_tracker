@@ -66,7 +66,7 @@
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon small class="mr-1" @click="viewElaboratedProduct(item)">mdi-eye</v-icon>
                         <v-icon small class="mr-1" @click="editElaboratedProduct(item)">mdi-pencil</v-icon>
-                        <v-icon small v-if="item.is_deletable" @click="deleteElaboratedProduct(item)">mdi-delete</v-icon>
+                        <v-icon small v-if="is_product_elaborated_deletable(item)" @click="deleteElaboratedProduct(item)">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
             </v-tab-item>
@@ -415,6 +415,13 @@
                     this.loading=false
                 })
             },
+            is_product_elaborated_deletable(item){
+                let product
+                this.$store.state.products.forEach(element => {
+                    if (element.elaborated_products==item.url) product=element
+                });
+                return product.is_deletable
+            }
         },
     }
 </script>

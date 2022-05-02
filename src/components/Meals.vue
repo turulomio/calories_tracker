@@ -108,6 +108,28 @@
                                     this_.dialog_meals_crud=true
                                 },
                             },
+                            {
+                                name: this.$t("Delete selected day meals"),
+                                icon: "mdi-plus",
+                                code: function(this_){
+                                    var r = confirm(this_.$t("Do you want to delete select day meals?"))
+                                    if(r == true) {
+                                        let day_meals=[]
+                                        this_.meals.forEach(element => {
+                                            day_meals.push(element.url)
+                                        })
+
+                                        axios.post(`${this_.$store.state.apiroot}/api/meals/delete_several/`, {meals:day_meals},  this_.myheaders())
+                                        .then((response) => {
+                                            console.log(response.data)
+                                            this_.update_all()
+                                        }, (error) => {
+                                            this_.parseResponseError(error)
+                                        })
+                                    }
+                                
+                                },
+                            },
                         ]
                     },
                 ],
