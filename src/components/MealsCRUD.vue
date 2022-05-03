@@ -3,12 +3,12 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <MyDateTimePicker :readonly="deleting" v-model="newmeal.datetime" :label="$t('Set transfer date and time')"></MyDateTimePicker>
-                <v-autocomplete :readonly="deleting" :items="$store.state.products" v-model="newmeal.products" item-text="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()"></v-autocomplete>
+                <MyDateTimePicker :readonly="mode=='D'" v-model="newmeal.datetime" :label="$t('Set transfer date and time')"></MyDateTimePicker>
+                <v-autocomplete :readonly="mode=='D'" :items="$store.state.products" v-model="newmeal.products" item-text="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()"></v-autocomplete>
                 <v-row class="pa-3">     
-                    <v-text-field :readonly="deleting" v-model="newmeal.amount" type="number" :label="$t('Set your amount')" :placeholder="$t('Set your amount')" :rules="RulesInteger(10,true)" counter="10"/>
-                    <v-autocomplete  class="mx-2" :readonly="deleting" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-text="name" item-value="amount" :rules="RulesSelection(false)"  @input="on_product_format_input()"></v-autocomplete>
-                    <Multiplier v-model="multiplier" :readonly="deleting" @input="on_multiplier_input()"></Multiplier>
+                    <v-text-field :readonly="mode=='D'" v-model="newmeal.amount" type="number" :label="$t('Set your amount')" :placeholder="$t('Set your amount')" :rules="RulesInteger(10,true)" counter="10"/>
+                    <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-text="name" item-value="amount" :rules="RulesSelection(false)"  @input="on_product_format_input()"></v-autocomplete>
+                    <Multiplier v-model="multiplier" :readonly="mode=='D'" @input="on_multiplier_input()"></Multiplier>
                 </v-row>
             </v-form>
             <v-card-actions>
@@ -32,16 +32,14 @@
             meal: { // An account transfer object
                 required: true
             },
-            deleting: {
-                required: false,
-                default: false,
+            mode: {
+                required: true
             }
         },
         data(){ 
             return{
                 form_valid:false,
                 newmeal: null,
-                mode: "", // CRUD mode
                 multiplier:1,
 
                 loading_formats: false,
@@ -115,13 +113,9 @@
         created(){
             // Guess crud mode
             this.newmeal=Object.assign({},this.meal)
-            if ( this.meal.url==null){ 
-                this.mode="C"
-            } else if (this.meal.url!= null && this.deleting ==false) { 
-                this.mode="U"
-            } else if (this.meal.url!= null && this.deleting ==true) { 
-                this.mode="D"
-            }
+            if (this.mode=="U"){ //To load formats in update mode
+                this.on_products_input()
+            } 
 
 
         }

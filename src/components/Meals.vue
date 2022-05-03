@@ -72,9 +72,9 @@
                 </template>
             </v-data-table>
         <!-- DIALOG PRODUCTS CRUD -->
-        <v-dialog v-model="dialog_meals_crud" width="45%">
+        <v-dialog v-model="meals_crud_dialog" width="45%">
             <v-card class="pa-4">
-                <MealsCRUD :meal="meal" :deleting="meal_deleting" :key="'B'+key" @cruded="on_MealsCRUD_cruded()"></MealsCRUD>
+                <MealsCRUD :meal="meal" :mode="meals_crud_mode" :key="'B'+key" @cruded="on_MealsCRUD_cruded()"></MealsCRUD>
             </v-card>
         </v-dialog>
     </div>
@@ -102,10 +102,10 @@
                                 name: this.$t("Add meal"),
                                 icon: "mdi-plus",
                                 code: function(this_){
-                                    this_.meal_deleting=false
+                                    this_.meals_crud_mode="C"
                                     this_.meal=this_.empty_meals()
                                     this_.key=this_.key+1
-                                    this_.dialog_meals_crud=true
+                                    this_.meals_crud_dialog=true
                                 },
                             },
                             {
@@ -163,8 +163,8 @@
                 day:new Date().toISOString().substring(0, 10),
                 //CRUD COMPANY
                 meal:null,
-                meal_deleting:null,
-                dialog_meals_crud:false,
+                meals_crud_mode:null,
+                meals_crud_dialog:false,
 
                 //DIALOG FORMATS
                 dialog_formats:false,
@@ -173,7 +173,7 @@
         methods:{
             empty_meals,
             on_MealsCRUD_cruded(){
-                this.dialog_meals_crud=false
+                this.meals_crud_dialog=false
                 this.update_all()
             },
             update_all(){
@@ -191,17 +191,15 @@
 
             editMeal(item){
                 this.meal=item
-                this.meal_deleting=false
+                this.meals_crud_mode="U"
                 this.key=this.key+1
-
-                this.dialog_meals_crud=true
+                this.meals_crud_dialog=true
             },
             deleteMeal(item){
                 this.meal=item
-                this.meal_deleting=true
+                this.meals_crud_mode="D"
                 this.key=this.key+1
-
-                this.dialog_meals_crud=true
+                this.meals_crud_dialog=true
             },
             on_day_input(){
                 this.update_all()
