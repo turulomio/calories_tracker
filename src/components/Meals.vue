@@ -13,9 +13,8 @@
                 <template v-slot:[`item.datetime`]="{ item }">
                     {{localtime(item.datetime).slice(10)}}
                 </template>          
-                <template v-slot:[`item.products`]="{ item }">
-                    <div v-html="html_fullname(item,4)"></div>
-                </template>                       
+                <template v-slot:[`item.products`]="{ item }"><div v-html="html_fullname(item,4)"></div></template>                       
+                <template v-slot:[`item.amount`]="{ item }"><div v-html="my_round(item.amount,0)"></div></template>                  
                 <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                 <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
                 <template v-slot:[`item.protein`]="{ item }"><div v-html="my_round(item.protein,0)"></div></template>  
@@ -34,7 +33,6 @@
                 <template v-slot:[`item.actions`]="{ item }">
                     <v-icon small class="mr-1" @click="editMeal(item)">mdi-pencil</v-icon>
                     <v-icon small class="mr-1" @click="deleteMeal(item)">mdi-delete</v-icon>
-                    <v-icon small v-if="item.glutenfree"  @click="on_icon_glutenfree">mdi-barley-off</v-icon>
                 </template>            
                 <template v-slot:[`body.append`]="{headers}" v-if="meals.length>0">
                     <tr style="background-color: WhiteSmoke">
@@ -154,7 +152,7 @@
                     { text: this.$t('Magnesium (mg)'), sortable: true, value: 'magnesium',align:'right'},
                     { text: this.$t('Phosphor (mg)'), sortable: true, value: 'phosphor',align:'right'},
                     { text: this.$t('Calcium (mg)'), sortable: true, value: 'calcium',align:'right'},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false,width:"6%"},
+                    { text: this.$t('Actions'), value: 'actions', sortable: false},
 
                 ],
                 loading:false,

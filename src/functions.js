@@ -7,19 +7,14 @@ export function product_risk_color(item){
     if (item.additives_risk==3) return "red"
     if (item.additives_risk==100) return "gray"
 }
-// item is an object with additives_risk parameters as integer
-export function product_risk_tooltip(item){
-    if (item.additives_risk==0) return "No risk"
-    if (item.additives_risk==1) return "Low risk"
-    if (item.additives_risk==2) return "Medium risk"
-    if (item.additives_risk==3) return "High risk"
-    if (item.additives_risk==100) return "Not evaluated"
-}
 
 // item is an object with additives_risk parameters as integer,glutenfree
 // type: 1:system_product, 2:product, 3:elaborated products, 4: meals
 export function html_fullname(item,type_){
-    if (type_==4) item=this.$store.getters.getObjectByUrl("products",item.products)
+    if (type_==4) {
+        item=this.$store.getters.getObjectByUrl("products",item.products)
+        type_=2
+    }
 
     let obsolete=(item.obsolete)? 'text-decoration-line-through' : ''
     let risk_color=product_risk_color(item)
@@ -44,7 +39,15 @@ export function html_fullname(item,type_){
         type_icon="mdi-food-takeout-box"
     }
 
-    let type=`<span title="${type_string}\n${product_risk_tooltip(item)}" class="mdi ${type_icon}" style="color:${risk_color};" color="${risk_color}"></span>`
+    let product_risk_tooltip
+
+    if (item.additives_risk==0) product_risk_tooltip= this.$t("No risk")
+    if (item.additives_risk==1) product_risk_tooltip= this.$t( "Low risk")
+    if (item.additives_risk==2) product_risk_tooltip= this.$t( "Medium risk")
+    if (item.additives_risk==3) product_risk_tooltip= this.$t( "High risk")
+    if (item.additives_risk==100) product_risk_tooltip= this.$t( "Not evaluated")
+
+    let type=`<span title="${type_string}\n${product_risk_tooltip}" class="mdi ${type_icon}" style="color:${risk_color};" color="${risk_color}"></span>`
     let glutenfree=(item.glutenfree)? '<span title="Gluten free" style="color:#00aaff" class="mdi mdi-barley-off"></span>':''
     return `${type} <span class="${obsolete}">${item.fullname}</span> ${glutenfree}`
 }
