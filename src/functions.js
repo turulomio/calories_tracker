@@ -17,8 +17,10 @@ export function product_risk_tooltip(item){
 }
 
 // item is an object with additives_risk parameters as integer,glutenfree
-// type: 1:system_product, 2:product, 3:elaborated products
+// type: 1:system_product, 2:product, 3:elaborated products, 4: meals
 export function html_fullname(item,type_){
+    if (type_==4) item=this.$store.getters.getObjectByUrl("products",item.products)
+
     let obsolete=(item.obsolete)? 'text-decoration-line-through' : ''
     let risk_color=product_risk_color(item)
     let type_icon
