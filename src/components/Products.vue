@@ -17,7 +17,11 @@
                         <v-icon v-if="item.glutenfree" small class="mr-1"  @click="on_icon_glutenfree">mdi-barley-off</v-icon>
                         <v-icon v-if="item.elaborated_products" small  class="mr-1" @click="on_icon_elaborated_product">mdi-food-takeout-box</v-icon>
                         <v-icon v-if="item.system_products" small class="mr-1" @click="on_icon_system_product">mdi-database</v-icon>
-                    </template>
+                    </template>  
+
+
+                      
+                    <template v-slot:[`item.risk`]="{ item }"><v-icon :color="product_risk_color(item)">mdi-checkbox-blank-circle-outline</v-icon></template>
                     <template v-slot:[`item.fullname`]="{ item }"><div v-html="item.fullname" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
@@ -144,6 +148,7 @@
                 products:[],
                 products_headers: [
                     { text: '', sortable: true, value: 'icons'},    
+                    { text: '', sortable: true, value: 'risk'},    
                     { text: this.$t('Name'), sortable: true, value: 'fullname',width:"30%"},    
                     { text: this.$t('Calories (kcal)'), sortable: true, value: 'calories',align:'right'},
                     { text: this.$t('Fat (g)'), sortable: true, value: 'fat',align:'right'},
@@ -421,6 +426,14 @@
                     if (element.elaborated_products==item.url) product=element
                 });
                 return product.is_deletable
+            },
+            product_risk_color(item){
+                console.log(item)
+                if (item.additives_risk==0) return "green"
+                if (item.additives_risk==1) return "yellow"
+                if (item.additives_risk==2) return "orange"
+                if (item.additives_risk==3) return "red"
+                if (item.additives_risk==100) return "gray"
             }
         },
     }
