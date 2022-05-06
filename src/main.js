@@ -49,6 +49,9 @@ import {
     listobjects_sum,
     my_round
 } from './components/reusing/my_commons.js'
+import {
+    html_risk_icon,
+} from './functions.js'
 import {RulesFloat,RulesDate,RulesDatetime,RulesInteger,RulesString,RulesSelection, RulesEmail } from './components/reusing/rules.js'
 Vue.mixin({
     data: function () {
@@ -56,6 +59,7 @@ Vue.mixin({
         }
     },
     methods: {
+        html_risk_icon,
         localtime,
         myheaders,
         myheaders_noauth,
