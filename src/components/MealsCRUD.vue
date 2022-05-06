@@ -4,7 +4,9 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <MyDateTimePicker :readonly="mode=='D'" v-model="newmeal.datetime" :label="$t('Set transfer date and time')"></MyDateTimePicker>
-                <v-autocomplete :readonly="mode=='D'" :items="$store.state.products" v-model="newmeal.products" item-text="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()"></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="$store.state.products" v-model="newmeal.products" item-text="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()">
+                    <template v-slot:item="{item}" ><div v-html="html_fullname(item,2)"></div></template>
+                </v-autocomplete>
                 <v-row class="pa-3">     
                     <v-text-field :readonly="mode=='D'" v-model="newmeal.amount" type="number" :label="$t('Set your amount')" :placeholder="$t('Set your amount')" :rules="RulesInteger(10,true)" counter="10"/>
                     <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-text="name" item-value="amount" :rules="RulesSelection(false)"  @input="on_product_format_input()"></v-autocomplete>
