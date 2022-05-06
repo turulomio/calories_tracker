@@ -13,12 +13,7 @@
         <v-tabs-items v-model="tab" class="ma-5">
             <v-tab-item key="products" >
                 <v-data-table dense :headers="products_headers" :items="products" sort-by="fullname" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
-                    <template v-slot:[`item.icons`]="{ item }">
-                        <v-icon v-if="item.glutenfree" small class="mr-1"  @click="on_icon_glutenfree">mdi-barley-off</v-icon>
-                        <v-icon v-if="item.elaborated_products" small  class="mr-1" @click="on_icon_elaborated_product">mdi-food-takeout-box</v-icon>
-                        <v-icon v-if="item.system_products" small class="mr-1" @click="on_icon_system_product">mdi-database</v-icon>
-                    </template>
-                    <template v-slot:[`item.fullname`]="{ item }"><div v-html="html_risk_icon(item)+ ' ' + item.fullname" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div></template>
+                    <template v-slot:[`item.fullname`]="{ item }"><div v-html="html_fullname(item,2)"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
                     <template v-slot:[`item.protein`]="{ item }"><div v-html="my_round(item.protein,0)"></div></template>  
@@ -43,11 +38,7 @@
             </v-tab-item>
             <v-tab-item key="elaborated_products">
                 <v-data-table dense :headers="elaborated_products_headers" :items="elaborated_products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" >
-                    <template v-slot:[`item.icons`]="{ item }">
-                        <v-icon v-if="item.glutenfree" small class="mr-1"  @click="on_icon_glutenfree">mdi-barley-off</v-icon>
-                        <v-icon small  class="mr-1" @click="on_icon_elaborated_product">mdi-food-takeout-box</v-icon>
-                    </template>
-                    <template v-slot:[`item.name`]="{ item }"><div v-html="item.name" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div></template>
+                    <template v-slot:[`item.fullname`]="{ item }"><div v-html="html_fullname(item,3)"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
                     <template v-slot:[`item.protein`]="{ item }"><div v-html="my_round(item.protein,0)"></div></template>  
@@ -71,11 +62,8 @@
                 </v-data-table>
             </v-tab-item>
             <v-tab-item key="system_products" >                 
-                <v-data-table dense :headers="system_products_headers" :items="system_products" sort-by="fullname" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" >                    <template v-slot:[`item.icons`]="{ item }">
-                        <v-icon v-if="item.glutenfree" small class="mr-1"  @click="on_icon_glutenfree">mdi-barley-off</v-icon>
-                        <v-icon small class="mr-1" @click="on_icon_system_product">mdi-database</v-icon>
-                    </template>
-                    <template v-slot:[`item.fullname`]="{ item }"><div v-html="html_risk_icon(item)+ ' ' + item.fullname" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div></template>
+                <v-data-table dense :headers="system_products_headers" :items="system_products" sort-by="fullname" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" >
+                    <template v-slot:[`item.fullname`]="{ item }"><div v-html="html_fullname(item,1)"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
                     <template v-slot:[`item.protein`]="{ item }"><div v-html="my_round(item.protein,0)"></div></template>  
@@ -143,7 +131,6 @@
             return {
                 products:[],
                 products_headers: [
-                    { text: '', sortable: true, value: 'icons'},    
                     { text: this.$t('Name'), sortable: true, value: 'fullname',width:"30%"},    
                     { text: this.$t('Calories (kcal)'), sortable: true, value: 'calories',align:'right'},
                     { text: this.$t('Fat (g)'), sortable: true, value: 'fat',align:'right'},
@@ -163,8 +150,7 @@
                     { text: this.$t('Actions'), value: 'actions', sortable: false},
                 ],
                 system_products:[],
-                system_products_headers: [
-                    { text: '', sortable: true, value: 'icons'},    
+                system_products_headers: [ 
                     { text: this.$t('Name'), sortable: true, value: 'fullname',width:"30%"},          
                     { text: this.$t('Calories (kcal)'), sortable: true, value: 'calories',align:'right'},
                     { text: this.$t('Fat (g)'), sortable: true, value: 'fat',align:'right'},
@@ -185,9 +171,8 @@
                 ],
 
                 elaborated_products:[],
-                elaborated_products_headers: [
-                    { text: '', sortable: true, value: 'icons'},    
-                    { text: this.$t('Name'), sortable: true, value: 'name',width:"30%"},
+                elaborated_products_headers: [   
+                    { text: this.$t('Name'), sortable: true, value: 'fullname',width:"30%"},
                     { text: this.$t('Calories (kcal)'), sortable: true, value: 'calories',align:'right'},
                     { text: this.$t('Fat (g)'), sortable: true, value: 'fat',align:'right'},
                     { text: this.$t('Protein (g)'), sortable: true, value: 'protein',align:'right'},
@@ -409,12 +394,11 @@
                 // Refresh products and elaborated products filtering products and elaborated products
                 // Refresh system products making a query
                 this.loading=true
-                console.log(with_dispatch)
-                //Promise.all([this.update_products(with_dispatch), this.update_elaborated_products(with_dispatch), this.update_system_products()])
-                Promise.all([this.update_system_products(),])                
+                Promise.all([this.update_products(with_dispatch), this.update_elaborated_products(with_dispatch), this.update_system_products()])
+                // Promise.all([this.update_elaborated_products(with_dispatch),])                
                 .then( ()=> {
-                    this.key=this.key+1
                     this.loading=false
+                    this.key=this.key+1
                 })
             },
             is_product_elaborated_deletable(item){
