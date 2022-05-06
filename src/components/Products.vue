@@ -75,7 +75,7 @@
                         <v-icon v-if="item.glutenfree" small class="mr-1"  @click="on_icon_glutenfree">mdi-barley-off</v-icon>
                         <v-icon small class="mr-1" @click="on_icon_system_product">mdi-database</v-icon>
                     </template>
-                   <template v-slot:[`item.fullname`]="{ item }"><div v-html="item.fullname" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div></template>
+                    <template v-slot:[`item.fullname`]="{ item }"><div v-html="html_risk_icon(item)+ ' ' + item.fullname" :class="(item.obsolete)? 'text-decoration-line-through' : ''"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
                     <template v-slot:[`item.protein`]="{ item }"><div v-html="my_round(item.protein,0)"></div></template>  
@@ -409,8 +409,9 @@
                 // Refresh products and elaborated products filtering products and elaborated products
                 // Refresh system products making a query
                 this.loading=true
-                Promise.all([this.update_products(with_dispatch), this.update_elaborated_products(with_dispatch), this.update_system_products()])
-                //Promise.all([this.update_products(with_dispatch),])                
+                console.log(with_dispatch)
+                //Promise.all([this.update_products(with_dispatch), this.update_elaborated_products(with_dispatch), this.update_system_products()])
+                Promise.all([this.update_system_products(),])                
                 .then( ()=> {
                     this.key=this.key+1
                     this.loading=false
