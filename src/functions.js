@@ -9,10 +9,10 @@ export function product_risk_color(item){
 }
 
 // item is an object with additives_risk parameters as integer,glutenfree
-// type: 1:system_product, 2:product, 3:elaborated products, 4: meals
+// type: 1:system_product, 2:product, 3:elaborated products, 4: meals (item is product_url)
 export function html_fullname(item,type_){
     if (type_==4) {
-        item=this.$store.getters.getObjectByUrl("products",item.products)
+        item=this.$store.getters.getObjectByUrl("products",item)
         type_=2
     }
 

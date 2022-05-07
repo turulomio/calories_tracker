@@ -13,7 +13,7 @@
                 <template v-slot:[`item.datetime`]="{ item }">
                     {{localtime(item.datetime).slice(10)}}
                 </template>          
-                <template v-slot:[`item.products`]="{ item }"><div v-html="html_fullname(item,4)"></div></template>                       
+                <template v-slot:[`item.products`]="{ item }"><div v-html="html_fullname(item.products,4)"></div></template>                       
                 <template v-slot:[`item.amount`]="{ item }"><div v-html="my_round(item.amount,0)"></div></template>                  
                 <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                 <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  

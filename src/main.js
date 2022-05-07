@@ -20,6 +20,7 @@ import Biometrics from './components/Biometrics.vue'
 import Companies from './components/Companies.vue'
 import Curiosities from './components/Curiosities.vue'
 import Meals from './components/Meals.vue'
+import MealsRanking from './components/MealsRanking.vue'
 import Products from './components/Products.vue'
 import MaintenanceCatalogsUpdate from './components/MaintenanceCatalogsUpdate.vue'
 
@@ -35,6 +36,7 @@ const router = new VueRouter({
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/companies/`, name: 'companies', component: Companies },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/curiosities/`, name: 'curiosities', component: Curiosities },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/meals/`, name: 'meals', component: Meals },
+    { path: `${process.env.VUE_APP_PUBLIC_PATH}/meals/ranking/`, name: 'meals_ranking', component: MealsRanking },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/products/`, name: 'products', component: Products },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/home/`, name: 'home', component: Home },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/settings/`, name: 'settings', component: Settings },

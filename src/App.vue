@@ -45,6 +45,9 @@
                         <template v-slot:activator>
                             <v-list-item-title>{{ $t("Reports") }}</v-list-item-title>
                         </template>
+                        <v-list-item link router :to="{ name: 'meals_ranking'}">
+                            <v-list-item-title>{{ $t("Meals ranking") }}</v-list-item-title>
+                        </v-list-item>
                         <v-list-item link router :to="{ name: 'curiosities'}">
                             <v-list-item-title>{{ $t("Curiosities") }}</v-list-item-title>
                         </v-list-item>
