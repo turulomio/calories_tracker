@@ -20,6 +20,7 @@ import Biometrics from './components/Biometrics.vue'
 import Companies from './components/Companies.vue'
 import Meals from './components/Meals.vue'
 import Products from './components/Products.vue'
+import MaintenanceCatalogsUpdate from './components/MaintenanceCatalogsUpdate.vue'
 
 
 
@@ -36,6 +37,7 @@ const router = new VueRouter({
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/home/`, name: 'home', component: Home },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/settings/`, name: 'settings', component: Settings },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/statistics/`, name: 'statistics', component: Statistics },
+    { path: `${process.env.VUE_APP_PUBLIC_PATH}/maintenance/catalogs/update/`, name: 'maintenance_catalogs_update', component: MaintenanceCatalogsUpdate },
   ]
 });
 
@@ -44,6 +46,7 @@ import {
     localtime,
     myheaders,
     myheaders_noauth,
+    myheaders_formdata,
     parseResponse,
     parseResponseError,
     listobjects_sum,
@@ -62,6 +65,7 @@ Vue.mixin({
         html_fullname,
         localtime,
         myheaders,
+        myheaders_formdata,
         myheaders_noauth,
         my_round,
         parseResponse,

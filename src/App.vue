@@ -40,6 +40,15 @@
                         <v-list-item-icon><v-icon color="#757575;">mdi-food-turkey</v-icon></v-list-item-icon>
                         <v-list-item-title>{{ $t("Meals")}}</v-list-item-title>
                     </v-list-item>
+<!--                     ADMINISTRATION -->
+                    <v-list-group :value="false" prepend-icon="mdi-file-chart-outline"  v-if="$store.state.logged">
+                        <template v-slot:activator>
+                            <v-list-item-title>{{ $t("Administration") }}</v-list-item-title>
+                        </template>
+                        <v-list-item link router :to="{ name: 'maintenance_catalogs_update'}">
+                            <v-list-item-title>{{ $t("Catalogs update") }}</v-list-item-title>
+                        </v-list-item>
+                    </v-list-group>    
 <!--                     HELP -->
                     <v-list-group :value="false" prepend-icon="mdi-lifebuoy">
                         <template v-slot:activator>
