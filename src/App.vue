@@ -40,8 +40,17 @@
                         <v-list-item-icon><v-icon color="#757575;">mdi-food-turkey</v-icon></v-list-item-icon>
                         <v-list-item-title>{{ $t("Meals")}}</v-list-item-title>
                     </v-list-item>
+<!--                     REPORTS -->
+                    <v-list-group :value="false" prepend-icon="mdi-chart-box-outline"  v-if="$store.state.logged">
+                        <template v-slot:activator>
+                            <v-list-item-title>{{ $t("Reports") }}</v-list-item-title>
+                        </template>
+                        <v-list-item link router :to="{ name: 'curiosities'}">
+                            <v-list-item-title>{{ $t("Curiosities") }}</v-list-item-title>
+                        </v-list-item>
+                    </v-list-group>    
 <!--                     ADMINISTRATION -->
-                    <v-list-group :value="false" prepend-icon="mdi-file-chart-outline"  v-if="$store.state.logged">
+                    <v-list-group :value="false" prepend-icon="mdi-cogs"  v-if="$store.state.logged">
                         <template v-slot:activator>
                             <v-list-item-title>{{ $t("Administration") }}</v-list-item-title>
                         </template>
