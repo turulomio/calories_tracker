@@ -241,7 +241,7 @@
                         subheader: this.$t("ElaboratedProduct options"),
                         children: [
                             {
-                                name: this.$t("Add elaborated_product"),
+                                name: this.$t("Add a elaborated product"),
                                 icon: "mdi-plus",
                                 code: function(this_){
                                     this_.elaborated_product_mode='C'
