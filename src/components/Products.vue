@@ -313,7 +313,6 @@
 
                 this.dialog_products_crud=true
             },
-
             editSystemProduct(item){
                 this.system_product=item
                 this.system_product_cu_mode="U"
@@ -365,10 +364,10 @@
                 if (with_dispatch){
                     return this.$store.dispatch("getProducts")
                     .then(() => {             
-                        this.products=this.$store.state.products.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
+                        this.products=this.$store.state.products.filter(o=> o.fullname.toLowerCase().includes(this.search.toLowerCase()))
                     })
                 } else {                
-                    this.products=this.$store.state.products.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
+                    this.products=this.$store.state.products.filter(o=> o.fullname.toLowerCase().includes(this.search.toLowerCase()))
                 }
             },
             update_elaborated_products(with_dispatch){
