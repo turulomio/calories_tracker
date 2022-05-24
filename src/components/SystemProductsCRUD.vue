@@ -77,8 +77,8 @@
             FormatsCRUD,
         },
         props: {
-            // An account object
-            system_product: { // An account transfer object
+            
+            system_product: { 
                 required: true
             },
             mode: { 

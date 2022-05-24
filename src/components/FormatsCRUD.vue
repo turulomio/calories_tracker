@@ -16,8 +16,8 @@
 <script>
     export default {
         props: {
-            // An account object
-            format: { // An account transfer object
+            
+            format: { 
                 required: true
             },
             mode: {

@@ -3,7 +3,7 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <MyDateTimePicker :readonly="deleting" v-model="newbiometric.datetime" :label="$t('Set transfer date and time')"></MyDateTimePicker>
+                <MyDateTimePicker :readonly="deleting" v-model="newbiometric.datetime" :label="$t('Set date and time')"></MyDateTimePicker>
                 <v-autocomplete :readonly="deleting" :items="$store.state.activities" v-model="newbiometric.activities" :label="$t('Select your activity level')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-autocomplete :readonly="deleting" :items="$store.state.weight_wishes" v-model="newbiometric.weight_wishes" :label="$t('Select your weight wish')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-text-field :readonly="deleting" v-model="newbiometric.height" type="number" :label="$t('Set your height')" :placeholder="$t('Set your height')" :rules="RulesInteger(10,true)" counter="10"/>
@@ -24,8 +24,8 @@
             MyDateTimePicker,
         },
         props: {
-            // An account object
-            biometric: { // An account transfer object
+            
+            biometric: { 
                 required: true
             },
             deleting: {

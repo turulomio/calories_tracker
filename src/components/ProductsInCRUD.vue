@@ -26,8 +26,8 @@
             Multiplier,
         },
         props: {
-            // An account object
-            product_in: { // An account transfer object
+            
+            product_in: { 
                 required: true
             },
             mode: { // C D U

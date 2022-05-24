@@ -72,8 +72,8 @@
             FormatsCRUD,
         },
         props: {
-            // An account object
-            product: { // An account transfer object
+            
+            product: { 
                 required: true
             },
             mode: { 

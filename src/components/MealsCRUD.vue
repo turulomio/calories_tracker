@@ -30,8 +30,8 @@
             Multiplier,
         },
         props: {
-            // An account object
-            meal: { // An account transfer object
+            
+            meal: { 
                 required: true
             },
             mode: {
