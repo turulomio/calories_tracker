@@ -39,13 +39,7 @@ export function html_fullname(item,type_){
         type_icon="mdi-food-takeout-box"
     }
 
-    let product_risk_tooltip
-
-    if (item.additives_risk==0) product_risk_tooltip= this.$t("No risk")
-    if (item.additives_risk==1) product_risk_tooltip= this.$t( "Low risk")
-    if (item.additives_risk==2) product_risk_tooltip= this.$t( "Medium risk")
-    if (item.additives_risk==3) product_risk_tooltip= this.$t( "High risk")
-    if (item.additives_risk==100) product_risk_tooltip= this.$t( "Not evaluated")
+    let product_risk_tooltip=this.$store.getters.getObjectPropertyById("additive_risks",item.additives_risk,"localname")
 
     let type=`<span title="${type_string}\n${product_risk_tooltip}" class="mdi ${type_icon}" style="color:${risk_color};" color="${risk_color}"></span>`
     let glutenfree=(item.glutenfree)? '<span title="Gluten free" style="color:#00aaff" class="mdi mdi-barley-off"></span>':''
