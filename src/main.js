@@ -9,6 +9,9 @@ import "echarts";
 import ECharts from 'vue-echarts'
 Vue.component('v-chart', ECharts)
 
+
+import 'flag-icons/css/flag-icons.min.css'
+
 Vue.use(VueRouter);
 
 
