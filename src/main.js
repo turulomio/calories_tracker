@@ -47,6 +47,8 @@ const router = new VueRouter({
 
 // MIXIN GLOBAL
 import {
+    hyperlinked_url,
+    id_from_hyperlinked_url,
     localtime,
     myheaders,
     myheaders_noauth,
@@ -57,7 +59,7 @@ import {
     my_round
 } from './components/reusing/my_commons.js'
 import {
-    html_fullname,
+    products_html_fullname,
 } from './functions.js'
 import {RulesFloat,RulesDate,RulesDatetime,RulesInteger,RulesString,RulesSelection, RulesEmail } from './components/reusing/rules.js'
 Vue.mixin({
@@ -66,7 +68,10 @@ Vue.mixin({
         }
     },
     methods: {
-        html_fullname,
+        products_html_fullname,
+
+        id_from_hyperlinked_url,
+        hyperlinked_url,
         localtime,
         myheaders,
         myheaders_formdata,

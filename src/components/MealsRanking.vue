@@ -7,7 +7,7 @@
 
         <v-data-table dense :headers="ranking_headers" :items="ranking" sort-by="position" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="key" fixed-header height="500">
             <template v-slot:[`item.position`]="{ index }">{{index+1}}</template>    
-            <template v-slot:[`item.product`]="{ item }"><div v-html="html_fullname(item.product,4)"></div></template>            
+            <template v-slot:[`item.product`]="{ item }"><div v-html="products_html_fullname(item.product,4)"></div></template>            
             <template v-slot:[`item.amount`]="{ item }">{{ my_round(item.amount,0)}}</template>
         </v-data-table>
     </div>
