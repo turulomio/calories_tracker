@@ -17,8 +17,8 @@
     import axios from 'axios'
     export default {
         props: {
-            // An account object
-            system_company: { // An account transfer object
+            
+            system_company: { 
                 required: true
             },
             mode: {

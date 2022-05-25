@@ -6,8 +6,8 @@
         <v-text-field class="ml-10 mr-10 mb-5" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"  v-on:keyup.enter="on_search_change()"></v-text-field>
     
         <v-tabs  background-color="primary" dark v-model="tab" >
-            <v-tab key="companies">{{ $t('Companies') }}</v-tab>
-            <v-tab key="system_companies">{{ $t('System companies') }}</v-tab>
+            <v-tab key="companies">{{ $t('Companies') }}<v-badge v-if="companies.length>0" color="error" class="ml-2" :content="companies.length"/></v-tab>
+            <v-tab key="system_companies">{{ $t('System companies') }}<v-badge v-if="system_companies.length>0" color="error" class="ml-2" :content="system_companies.length"/></v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab" class="ma-5">
             <v-tab-item key="companies" >

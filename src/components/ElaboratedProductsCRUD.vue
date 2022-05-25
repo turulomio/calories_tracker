@@ -45,8 +45,8 @@
             ProductsInCRUD,
         },
         props: {
-            // An account object
-            ep: { // An account transfer object
+            
+            ep: { 
                 required: true
             },
             mode: {

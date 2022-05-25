@@ -4,7 +4,7 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <v-autocomplete :readonly="mode=='D'" :items="$store.state.products" v-model="newproduct_in.products" item-text="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()">
-                    <template v-slot:item="{item}" ><div v-html="html_fullname(item,2)"></div></template>
+                    <template v-slot:item="{item}" ><div v-html="products_html_fullname(item,2)"></div></template>
                 </v-autocomplete>
                 <v-row class="pa-3">     
                     <v-text-field :readonly="mode=='D'" v-model="newproduct_in.amount" type="number" :label="$t('Set product amount')" :placeholder="$t('Set product amount')" :rules="RulesInteger(10,true)" counter="10"/>
@@ -26,8 +26,8 @@
             Multiplier,
         },
         props: {
-            // An account object
-            product_in: { // An account transfer object
+            
+            product_in: { 
                 required: true
             },
             mode: { // C D U

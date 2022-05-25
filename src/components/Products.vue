@@ -6,14 +6,14 @@
           <v-text-field class="ml-10 mr-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
     
         <v-tabs  background-color="primary" dark v-model="tab" >
-            <v-tab key="products"><v-icon left>mdi-apple</v-icon>{{ $t('Products') }}</v-tab>
-            <v-tab key="elaborated_products"><v-icon left>mdi-food-takeout-box</v-icon>{{ $t('Elaborated products') }}</v-tab>
-            <v-tab key="system_products"><v-icon left>mdi-database</v-icon>{{ $t('System products') }}</v-tab>
+            <v-tab key="products"><v-icon left>mdi-apple</v-icon>{{ $t('Products') }}<v-badge v-if="products.length>0" color="error" class="ml-2" :content="products.length"/></v-tab>
+            <v-tab key="elaborated_products"><v-icon left>mdi-food-takeout-box</v-icon>{{ $t('Elaborated products') }}<v-badge v-if="elaborated_products.length>0" color="error" class="ml-2" :content="elaborated_products.length"/></v-tab>
+            <v-tab key="system_products"><v-icon left>mdi-database</v-icon>{{ $t('System products') }}<v-badge v-if="system_products.length>0" color="error" class="ml-2" :content="system_products.length"/></v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab" class="ma-5">
             <v-tab-item key="products" >
                 <v-data-table dense :headers="products_headers" :items="products" sort-by="fullname" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
-                    <template v-slot:[`item.fullname`]="{ item }"><div v-html="html_fullname(item,2)"></div></template>
+                    <template v-slot:[`item.fullname`]="{ item }"><div v-html="products_html_fullname(item,2)"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
                     <template v-slot:[`item.protein`]="{ item }"><div v-html="my_round(item.protein,0)"></div></template>  
@@ -38,7 +38,7 @@
             </v-tab-item>
             <v-tab-item key="elaborated_products">
                 <v-data-table dense :headers="elaborated_products_headers" :items="elaborated_products" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" >
-                    <template v-slot:[`item.fullname`]="{ item }"><div v-html="html_fullname(item,3)"></div></template>
+                    <template v-slot:[`item.fullname`]="{ item }"><div v-html="products_html_fullname(item,3)"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
                     <template v-slot:[`item.protein`]="{ item }"><div v-html="my_round(item.protein,0)"></div></template>  
@@ -63,7 +63,7 @@
             </v-tab-item>
             <v-tab-item key="system_products" >                 
                 <v-data-table dense :headers="system_products_headers" :items="system_products" sort-by="fullname" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" >
-                    <template v-slot:[`item.fullname`]="{ item }"><div v-html="html_fullname(item,1)"></div></template>
+                    <template v-slot:[`item.fullname`]="{ item }"><div v-html="products_html_fullname(item,1)"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
                     <template v-slot:[`item.protein`]="{ item }"><div v-html="my_round(item.protein,0)"></div></template>  
@@ -313,7 +313,6 @@
 
                 this.dialog_products_crud=true
             },
-
             editSystemProduct(item){
                 this.system_product=item
                 this.system_product_cu_mode="U"
@@ -365,10 +364,10 @@
                 if (with_dispatch){
                     return this.$store.dispatch("getProducts")
                     .then(() => {             
-                        this.products=this.$store.state.products.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
+                        this.products=this.$store.state.products.filter(o=> o.fullname.toLowerCase().includes(this.search.toLowerCase()))
                     })
                 } else {                
-                    this.products=this.$store.state.products.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
+                    this.products=this.$store.state.products.filter(o=> o.fullname.toLowerCase().includes(this.search.toLowerCase()))
                 }
             },
             update_elaborated_products(with_dispatch){

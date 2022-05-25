@@ -30,7 +30,7 @@
             chart_option(){
                 return {
                     legend: {
-                        data: [this.$t("Height evolution")],
+                        data: [this.$t("Weight evolution")],
                         inactiveColor: '#777',
                     },
                     tooltip: {
@@ -83,7 +83,7 @@
                 var r=[]
                 r.push({
                     type: 'line',
-                    name: this.$t("Height evolution"),
+                    name: this.$t("Weight evolution"),
                     data: this.data,
                     showSymbol:false, 
                 })

@@ -5,7 +5,7 @@
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <MyDateTimePicker :readonly="mode=='D'" v-model="newmeal.datetime" :label="$t('Set transfer date and time')"></MyDateTimePicker>
                 <v-autocomplete :readonly="mode=='D'" :items="$store.state.products" v-model="newmeal.products" item-text="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()">
-                    <template v-slot:item="{item}" ><div v-html="html_fullname(item,2)"></div></template>
+                    <template v-slot:item="{item}" ><div v-html="products_html_fullname(item,2)"></div></template>
                 </v-autocomplete>
                 <v-row class="pa-3">     
                     <v-text-field :readonly="mode=='D'" v-model="newmeal.amount" type="number" :label="$t('Set your amount')" :placeholder="$t('Set your amount')" :rules="RulesInteger(10,true)" counter="10"/>
@@ -30,8 +30,8 @@
             Multiplier,
         },
         props: {
-            // An account object
-            meal: { // An account transfer object
+            
+            meal: { 
                 required: true
             },
             mode: {

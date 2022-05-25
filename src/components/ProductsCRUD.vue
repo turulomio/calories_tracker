@@ -6,7 +6,9 @@
                 <v-text-field :readonly="mode=='D'" v-model="newproduct.name" :label="$t('Set product name')" :placeholder="$t('Set product name')" :rules="RulesString(200)" counter="200"/>
                 <AutoCompleteApiIdName v-model="newproduct.companies" :url="`${this.$store.state.apiroot}/api/companies/`" :label="$t('Select a company')"></AutoCompleteApiIdName>
                 <v-autocomplete :readonly="mode=='D'" :items="$store.state.food_types" v-model="newproduct.food_types" :label="$t('Select product food type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-autocomplete :readonly="mode=='D'" :items="$store.state.additives" v-model="newproduct.additives" multiple :label="$t('Select product additives')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="$store.state.additives" v-model="newproduct.additives" multiple :label="$t('Select product additives')" item-text="fullname" item-value="url" :rules="RulesSelection(true)">
+                    <template v-slot:item="{item}" ><div v-html="additives_html_fullname(item)"></div></template>
+                </v-autocomplete>
 
                 <v-text-field :readonly="mode=='D'" v-model="newproduct.amount" type="number" :label="$t('Set product amount (gr)')" :placeholder="$t('Set product amount (gr)')" :rules="RulesFloat(10,true)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model="newproduct.fat" type="number" :label="$t('Set product fat (gr)')" :placeholder="$t('Set product fat (gr)')" :rules="RulesFloat(10,false)" counter="10"/>
@@ -63,14 +65,15 @@
     import AutoCompleteApiIdName from './AutoCompleteApiIdName.vue'
     import FormatsCRUD from './FormatsCRUD.vue'
     import { empty_formats } from '../empty_objects.js'
+    import { additives_html_fullname} from '../functions.js'
     export default {
         components: {
             AutoCompleteApiIdName,
             FormatsCRUD,
         },
         props: {
-            // An account object
-            product: { // An account transfer object
+            
+            product: { 
                 required: true
             },
             mode: { 
@@ -97,6 +100,7 @@
         },
         methods: {
             empty_formats,
+            additives_html_fullname,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')

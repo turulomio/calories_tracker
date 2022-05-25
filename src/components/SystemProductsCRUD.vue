@@ -7,6 +7,9 @@
                 <AutoCompleteApiIdName v-model="new_system_product.system_companies" :url="`${this.$store.state.apiroot}/api/system_companies/`" :label="$t('Select a system company')"></AutoCompleteApiIdName>
                 <v-autocomplete :readonly="mode=='D'" :items="$store.state.food_types" v-model="new_system_product.food_types" :label="$t('Select system product food type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
 
+                <v-autocomplete :readonly="mode=='D'" :items="$store.state.additives" v-model="new_system_product.additives" multiple :label="$t('Select system product additives')" item-text="fullname" item-value="url" :rules="RulesSelection(true)">
+                    <template v-slot:item="{item}" ><div v-html="additives_html_fullname(item)"></div></template>
+                </v-autocomplete>
                 <v-text-field :readonly="mode=='D'" v-model="new_system_product.amount" type="number" :label="$t('Set system product amount (gr)')" :placeholder="$t('Set system product amount (gr)')" :rules="RulesFloat(10,true)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model="new_system_product.calories" type="number" :label="$t('Set system product calories (gr)')" :placeholder="$t('Set system product calories (gr)')" :rules="RulesFloat(10,true)" counter="10"/>
 
@@ -32,7 +35,6 @@
                 <v-text-field :readonly="mode=='D'" v-model="new_system_product.version_description" :label="$t('Set system product version description')" :placeholder="$t('Set system product version description')" :rules="RulesString(200,false)" counter="200"/>
                 <v-checkbox v-model="new_system_product.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
 
-                <v-autocomplete :readonly="mode=='D'" :items="$store.state.additives" v-model="new_system_product.additives" multiple :label="$t('Select system product additives')" item-text="fullname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
 
                 <v-card class="mt-4">
                     <v-data-table dense :headers="formats_headers" :items="new_system_product.formats" sort-by="formats" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250">
@@ -68,14 +70,15 @@
     import AutoCompleteApiIdName from './AutoCompleteApiIdName.vue'
     import FormatsCRUD from './FormatsCRUD.vue'
     import { empty_formats } from '../empty_objects.js'
+    import { additives_html_fullname} from '../functions.js'
     export default {
         components: {
             AutoCompleteApiIdName,
             FormatsCRUD,
         },
         props: {
-            // An account object
-            system_product: { // An account transfer object
+            
+            system_product: { 
                 required: true
             },
             mode: { 
@@ -101,6 +104,7 @@
             }
         },
         methods: {
+            additives_html_fullname,
             empty_formats,
             button(){
                 if (this.mode=="C") return this.$t('Add')
