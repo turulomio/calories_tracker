@@ -124,3 +124,10 @@ export function empty_products_in(){
         amount: null,
     }
 }
+
+export function empyt_products_data_transfer(){
+    return {
+        product_from: null,
+        product_to: null
+    }
+}
