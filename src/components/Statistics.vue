@@ -1,11 +1,7 @@
 <template>
     <div v-show="this.$store.state.logged">
-        <div class="login">
             <h1>{{ $t("Statistics") }}</h1>
-            <v-card>
-            <chart-pie :name="$t('Calories Tracker registers')" :items="items" height="600px" :key="key"></chart-pie>
-            </v-card>
-        </div>
+            <chart-pie :name="$t('Calories Tracker registers')" :items="items" :height="600" :key="key"></chart-pie>
     </div>
 </template>
 
