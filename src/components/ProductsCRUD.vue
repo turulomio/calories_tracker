@@ -55,7 +55,7 @@
         <!-- DIALOG FORMATS CRUD -->
         <v-dialog v-model="dialog_formats_crud" width="45%">
             <v-card class="pa-4">
-                <FormatsCRUD :format="format" :mode="format.mode" :key="'B'+key" @cruded="on_FormatsCRUD_cruded"></FormatsCRUD>
+                <FormatsCRUD :format="format" :mode="format_mode" :key="'B'+key" @cruded="on_FormatsCRUD_cruded"></FormatsCRUD>
             </v-card>
         </v-dialog>
     </div>
