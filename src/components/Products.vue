@@ -30,6 +30,7 @@
                     <template v-slot:[`item.phosphor`]="{ item }"><div v-html="my_round(item.phosphor,0)"></div></template>  
                     <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
                     <template v-slot:[`item.actions`]="{ item }">
+                        <v-icon v-if="item.system_products==null && item.elaborated_products==null" small class="mr-1" @click="convertToSystemProduct(item)">mdi-database-arrow-right</v-icon>
                         <v-icon small class="mr-1" @click="viewProduct(item)">mdi-eye</v-icon>
                         <v-icon v-if="item.is_editable" small class="mr-1" @click="editProduct(item)">mdi-pencil</v-icon>
                         <v-icon v-if="item.is_deletable" small @click="deleteProduct(item)">mdi-delete</v-icon>
@@ -307,6 +308,7 @@
                 this.dialog_products_crud=true
             },
             viewProduct(item){
+                console.log(item)
                 this.product=item
                 this.product_cu_mode="R"
                 this.key=this.key+1
@@ -328,6 +330,16 @@
                 this.system_product_cu_mode="R"
                 this.key=this.key+1
                 this.dialog_system_products_crud=true
+            },
+            convertToSystemProduct(item){
+
+                axios.post(`${this.$store.state.apiroot}/products_to_system_products/`, {product: item.url}, this.myheaders())
+                .then((response) => {
+                    console.log(response.data)
+                    this.update_all(true)
+               }, (error) => {
+                    this.parseResponseError(error)
+                });
             },
             editElaboratedProduct(item){
                 this.elaborated_product=item
