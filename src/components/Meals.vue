@@ -31,6 +31,7 @@
                 <template v-slot:[`item.phosphor`]="{ item }"><div v-html="my_round(item.phosphor,0)"></div></template>  
                 <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
                 <template v-slot:[`item.actions`]="{ item }">
+                    <v-icon small class="mr-1" @click="copyMeal(item)">mdi-content-copy</v-icon>
                     <v-icon small class="mr-1" @click="editMeal(item)">mdi-pencil</v-icon>
                     <v-icon small class="mr-1" @click="deleteMeal(item)">mdi-delete</v-icon>
                 </template>            
@@ -152,7 +153,7 @@
                     { text: this.$t('Magnesium (mg)'), sortable: true, value: 'magnesium',align:'right'},
                     { text: this.$t('Phosphor (mg)'), sortable: true, value: 'phosphor',align:'right'},
                     { text: this.$t('Calcium (mg)'), sortable: true, value: 'calcium',align:'right'},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false},
+                    { text: this.$t('Actions'), value: 'actions', sortable: false,width:"6%"},
 
                 ],
                 loading:false,
@@ -186,7 +187,14 @@
                     this.loading=false
                 });
             },
-
+            copyMeal(item){
+                this.meals_crud_mode="C"
+                this.meal=this.empty_meals()
+                this.meal.products=item.products
+                this.meal.amount=item.amount
+                this.key=this.key+1
+                this.meals_crud_dialog=true
+            },
             editMeal(item){
                 this.meal=item
                 this.meals_crud_mode="U"
