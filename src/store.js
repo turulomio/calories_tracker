@@ -8,8 +8,8 @@ export const store = new Vuex.Store({
     state: {
         token:null,
         logged:false,
-        version: "0.1.0",
-        versiondate: new Date(2022, 1, 20, 20, 46),
+        version: "0.2.0",
+        versiondate: new Date(2022, 6, 30, 9, 49),
         apiroot: process.env.VUE_APP_DJANGO_CALORIESTRACKER_URL,
         publicPath: process.env.VUE_APP_PUBLIC_PATH,
         settings:[],

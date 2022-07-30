@@ -31,3 +31,6 @@ npm install
 npm run serve
 ```
 
+## Changelog
+### 0.2.0 (2022-07-30)
+- Basic features
