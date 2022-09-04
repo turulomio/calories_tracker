@@ -20,6 +20,7 @@ export const store = new Vuex.Store({
         companies: [],
         food_types:[],
         formats: [],
+        pots: [],
         products: [],
         elaborated_products: [],
         weight_wishes: [],
@@ -80,6 +81,9 @@ export const store = new Vuex.Store({
         updateFormats: (state, payload) =>{
             state.formats=payload
         },
+        updatePots: (state, payload) =>{
+            state.pots=payload
+        },
         updateProducts: (state, payload) =>{
             state.products=payload
         },
@@ -107,6 +111,7 @@ export const store = new Vuex.Store({
                 context.dispatch("getFoodTypes"),
                 context.dispatch("getFormats"),
                 context.dispatch("getElaboratedProducts"),
+                context.dispatch("getPots"),
                 context.dispatch("getProducts"),
                 context.dispatch("getSettings"),
                 context.dispatch("getWeightWishes")
@@ -178,6 +183,16 @@ export const store = new Vuex.Store({
             .then((response) => {
                 context.commit('updateFormats', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} formats in ${new Date()-start} ms`)
+            }, (error) => {
+                store.$app.parseResponseError(error)
+            });
+        },
+        getPots(context){
+            var start=new Date()
+            return axios.get(`${store.state.apiroot}/api/pots/`, store.$app.myheaders())
+            .then((response) => {
+                context.commit('updatePots', sortObjectsArray(response.data, "name"))
+                console.log(`Updated ${response.data.length} pots in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });

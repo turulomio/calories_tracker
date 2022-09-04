@@ -40,6 +40,11 @@
                         <v-list-item-icon><v-icon color="#757575;">mdi-food-turkey</v-icon></v-list-item-icon>
                         <v-list-item-title>{{ $t("Meals")}}</v-list-item-title>
                     </v-list-item>
+<!--                    POTS -->
+                    <v-list-item link router :to="{ name: 'pots'}" v-if="$store.state.logged">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-pot</v-icon></v-list-item-icon>
+                        <v-list-item-title>{{ $t("Pots")}}</v-list-item-title>
+                    </v-list-item>
 <!--                     REPORTS -->
                     <v-list-group :value="false" prepend-icon="mdi-chart-box-outline"  v-if="$store.state.logged">
                         <template v-slot:activator>

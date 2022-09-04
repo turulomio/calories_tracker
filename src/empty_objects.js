@@ -131,3 +131,11 @@ export function empty_products_data_transfer(){
         product_to: null
     }
 }
+
+export function empty_pots(){
+    return {
+        name: '',
+        weight: 0,
+        diameter: 0,
+    }
+}
