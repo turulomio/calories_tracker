@@ -10,7 +10,7 @@
                 <v-card class="mt-4">
                     <v-data-table dense :headers="products_in_headers" :items="newep.products_in" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250" fixed-header>
                         <template v-slot:[`item.products`]="{ item }">
-                            {{$store.getters.getObjectPropertyByUrl("products",item.products,"name")}}
+                            <div v-html="products_html_fullname(item.products,4)"></div>
                         </template>
                         <template v-slot:[`item.actions`]="{ item }">
                             <v-icon v-if="['C','U'].includes(mode)" small class="mr-2" @click="editProductIn(item)">mdi-pencil</v-icon>
