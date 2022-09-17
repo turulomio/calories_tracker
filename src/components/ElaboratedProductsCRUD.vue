@@ -8,14 +8,21 @@
                 <v-text-field :readonly="mode=='D'" v-model="newep.final_amount" type="number" :label="$t('Set your final amount')" :placeholder="$t('Set your final amount')" :rules="RulesInteger(10,true)" counter="10"/>
                 <v-checkbox v-model="newep.obsolete" :label="$t('Is obsolete?')"></v-checkbox>                
                 <v-card class="mt-4">
-                    <v-data-table dense :headers="products_in_headers" :items="newep.products_in" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250">
-                                
+                    <v-data-table dense :headers="products_in_headers" :items="newep.products_in" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250" fixed-header>
                         <template v-slot:[`item.products`]="{ item }">
                             {{$store.getters.getObjectPropertyByUrl("products",item.products,"name")}}
                         </template>
                         <template v-slot:[`item.actions`]="{ item }">
                             <v-icon v-if="['C','U'].includes(mode)" small class="mr-2" @click="editProductIn(item)">mdi-pencil</v-icon>
                             <v-icon v-if="['C','U'].includes(mode)" small @click="deleteProductIn(item)">mdi-delete</v-icon>
+                        </template>
+                        <template v-slot:[`body.append`]="{headers}" v-if="newep.products_in.length>0">
+                            <tr style="background-color: WhiteSmoke">
+                                <td v-for="(header,i) in headers" :key="i">
+                                    <div v-if="header.value=='products'">{{ $t("Total {0} products):").format(newep.products_in.length) }}</div>
+                                    <div v-if="header.value == 'amount'" align="right" v-html="listobjects_sum(newep.products_in,'amount')"></div>
+                                </td>
+                            </tr>
                         </template>
                     </v-data-table>
                 </v-card>
