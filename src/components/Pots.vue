@@ -4,13 +4,14 @@
             <MyMenuInline :items="menuinline_items()" :context="this"></MyMenuInline>
         </h1>
         <v-text-field class="ml-10 mr-10 mb-5" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"  v-on:keyup.enter="on_search_change()"></v-text-field>
-
-                <v-data-table dense :headers="pots_headers" :items="pots" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">   
-                    <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon small class="mr-2" @click="editPot(item)">mdi-pencil</v-icon>
-                        <v-icon small @click="deletePot(item)">mdi-delete</v-icon>
-                    </template>
-                </v-data-table>
+  
+        <v-data-table dense :headers="pots_headers" :items="pots" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">   
+          <template v-slot:[`item.name`]="{ item }"><v-icon small class="mr-2">mdi-pot</v-icon>{{ item.name }}</template>
+            <template v-slot:[`item.actions`]="{ item }">
+                <v-icon small class="mr-2" @click="editPot(item)">mdi-pencil</v-icon>
+                <v-icon small @click="deletePot(item)">mdi-delete</v-icon>
+            </template>
+        </v-data-table>
 
 
         <!-- DIALOG COMPANIES CRUD -->
