@@ -151,6 +151,10 @@ span.vuered{
 }
 
 
+.bold{
+    color: black;
+    font-weight: 900;
+}
 .boldred{
     color: red;
     font-weight: 900;
