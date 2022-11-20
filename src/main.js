@@ -68,7 +68,7 @@ import {
 import {
     products_html_fullname,
 } from './functions.js'
-import {RulesFloat,RulesDate,RulesDatetime,RulesInteger,RulesString,RulesSelection, RulesEmail } from './components/reusing/rules.js'
+import {RulesFloatGEZ,RulesDate,RulesDatetime,RulesInteger,RulesString,RulesSelection, RulesEmail } from './components/reusing/rules.js'
 Vue.mixin({
     data: function () {
         return {
@@ -90,7 +90,7 @@ Vue.mixin({
         RulesDate,
         RulesDatetime,
         RulesEmail,
-        RulesFloat,
+        RulesFloatGEZ,
         RulesInteger,
         RulesString,
         RulesSelection,

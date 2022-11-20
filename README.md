@@ -31,6 +31,10 @@ npm install
 npm run serve
 ```
 
+## Health links used to develop calories_tracker
+- https://cardiacos.net/sal-y-sodio/
+
+
 ## Changelog
 ### 0.2.0 (2022-07-30)
 - Basic features

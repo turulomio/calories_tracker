@@ -4,8 +4,8 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <v-text-field :readonly="mode=='D'" v-model="new_pot.name" :label="$t('Set pot name')" :placeholder="$t('Set pot name')" :rules="RulesString(200)" counter="200"/>
-                <v-text-field :readonly="mode=='D'" v-model.number="new_pot.diameter" type="number" :label="$t('Set pot diameter (cm)')" :placeholder="$t('Set pot diameter (cm)')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field :readonly="mode=='D'" v-model.number="new_pot.weight" type="number" :label="$t('Set pot weight (g)')" :placeholder="$t('Set pot weight (g)')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model.number="new_pot.diameter" :label="$t('Set pot diameter (cm)')" :placeholder="$t('Set pot diameter (cm)')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model.number="new_pot.weight" :label="$t('Set pot weight (g)')" :placeholder="$t('Set pot weight (g)')" :rules="RulesInteger(10,true)" counter="10"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>

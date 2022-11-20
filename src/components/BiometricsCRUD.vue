@@ -6,8 +6,8 @@
                 <MyDateTimePicker :readonly="deleting" v-model="newbiometric.datetime" :label="$t('Set date and time')"></MyDateTimePicker>
                 <v-autocomplete :readonly="deleting" :items="$store.state.activities" v-model="newbiometric.activities" :label="$t('Select your activity level')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-autocomplete :readonly="deleting" :items="$store.state.weight_wishes" v-model="newbiometric.weight_wishes" :label="$t('Select your weight wish')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field :readonly="deleting" v-model="newbiometric.height" type="number" :label="$t('Set your height')" :placeholder="$t('Set your height')" :rules="RulesInteger(10,true)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newbiometric.weight" type="number" :label="$t('Set your weight')" :placeholder="$t('Set your weight')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field :readonly="deleting" v-model="newbiometric.height" :label="$t('Set your height')" :placeholder="$t('Set your height')" :rules="RulesFloatGEZ(10,true,2)" counter="10"/>
+                <v-text-field :readonly="deleting" v-model="newbiometric.weight" :label="$t('Set your weight')" :placeholder="$t('Set your weight')" :rules="RulesFloatGEZ(10,true,2)" counter="10"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
