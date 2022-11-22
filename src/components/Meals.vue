@@ -13,7 +13,7 @@
                 <template v-slot:[`item.datetime`]="{ item }">
                     {{localtime(item.datetime).slice(10)}}
                 </template>          
-                <template v-slot:[`item.products`]="{ item }"><div v-html="products_html_fullname(item.products,4)"></div></template>                       
+                <template v-slot:[`item.products`]="{ item }"><div v-html="products_html_fullname(item.products,4)" @click="on_product_click(item)"></div></template>                       
                 <template v-slot:[`item.amount`]="{ item }"><div v-html="my_round(item.amount,0)"></div></template>                  
                 <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                 <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
@@ -88,7 +88,6 @@
     import MyDatePicker from './reusing/MyDatePicker.vue'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import MealsCRUD from './MealsCRUD.vue'
-import { listobjects_sum } from './reusing/my_commons.js'
     export default {
         components: {
             MyMenuInline,
@@ -218,12 +217,26 @@ import { listobjects_sum } from './reusing/my_commons.js'
                 alert(this.$t("This meal is gluten free"))
             },
             on_icon_salt_info(){
-                alert(this.$t("Salt is converted to sodium to calculate recommended daily amount"))
+                var salt=this.listobjects_sum(this.meals,"salt")
+                var salt_as_sodium=salt*396
+                var sodium=this.listobjects_sum(this.meals,'sodium')
+                var total=sodium+salt_as_sodium
+
+
+
+                alert(this.$t(`Salt is converted to sodium to calculate recommended daily amount.
+    - Salt amount: {0} g => {1} sodium mg
+    - Sodium amount: {2} mg
+    - Total sodium: {3} mg
+                `).format(this.my_round(salt,2) , this.my_round(salt_as_sodium,0), sodium, this.my_round(total,0)))
             },
             total_sodium(){
-                var sum_sodium=listobjects_sum(this.meals,'sodium')
-                var salt=listobjects_sum(this.meals,"salt")
+                var sum_sodium=this.listobjects_sum(this.meals,'sodium')
+                var salt=this.listobjects_sum(this.meals,"salt")
                 return  this.my_round(sum_sodium+salt*396,0)
+            },
+            on_product_click(item){
+                console.log(item)
             }
         },
         created(){
