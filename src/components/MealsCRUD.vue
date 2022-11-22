@@ -8,7 +8,7 @@
                     <template v-slot:item="{item}" ><div v-html="products_html_fullname(item,2)"></div></template>
                 </v-autocomplete>
                 <v-row class="pa-3">     
-                    <v-text-field :readonly="mode=='D'" v-model="newmeal.amount" :label="$t('Set your amount')" :placeholder="$t('Set your amount')" :rules="RulesFloat(10,true,3)" counter="10"/>
+                    <v-text-field :readonly="mode=='D'" v-model.number="newmeal.amount" :label="$t('Set your amount')" :placeholder="$t('Set your amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
                     <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-text="name" item-value="amount" :rules="RulesSelection(false)"  @input="on_product_format_input()"></v-autocomplete>
                     <Multiplier v-model="multiplier" :readonly="mode=='D'" @input="on_multiplier_input()"></Multiplier>
                 </v-row>

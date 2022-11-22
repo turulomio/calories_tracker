@@ -73,10 +73,22 @@
                     </tr>
                 </template>
             </v-data-table>
-        <!-- DIALOG PRODUCTS CRUD -->
+        <!-- DIALOG MEALS CRUD -->
         <v-dialog v-model="meals_crud_dialog" width="45%">
             <v-card class="pa-4">
                 <MealsCRUD :meal="meal" :mode="meals_crud_mode" :key="'B'+key" @cruded="on_MealsCRUD_cruded()"></MealsCRUD>
+            </v-card>
+        </v-dialog>
+        <!-- DIALOG ELABORATED PRODUCT CRUD -->
+        <v-dialog v-model="elaborated_product_crud_dialog" width="45%">
+            <v-card class="pa-4">
+                <ElaboratedProductsCRUD :ep="elaborated_product" :mode="elaborated_product_crud_mode" :key="'B'+key" @cruded="on_ElaboratedProductsCRUD_cruded()"></ElaboratedProductsCRUD>
+            </v-card>
+        </v-dialog>
+        <!-- DIALOG PRODUCT CRUD -->
+        <v-dialog v-model="product_crud_dialog" width="45%">
+            <v-card class="pa-4">
+                <ProductsCRUD :product="product" :mode="product_crud_mode" :key="'B'+key" @cruded="on_ProductsCRUD_cruded()"></ProductsCRUD>
             </v-card>
         </v-dialog>
     </div>
@@ -88,11 +100,15 @@
     import MyDatePicker from './reusing/MyDatePicker.vue'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import MealsCRUD from './MealsCRUD.vue'
+    import ElaboratedProductsCRUD from './ElaboratedProductsCRUD.vue'
+    import ProductsCRUD from './ProductsCRUD.vue'
     export default {
         components: {
             MyMenuInline,
             MealsCRUD,
             MyDatePicker,
+            ElaboratedProductsCRUD,
+            ProductsCRUD,
         },
         data(){
             return {
@@ -122,8 +138,7 @@
                                         })
 
                                         axios.post(`${this_.$store.state.apiroot}/api/meals/delete_several/`, {meals:day_meals},  this_.myheaders())
-                                        .then((response) => {
-                                            console.log(response.data)
+                                        .then(() => {
                                             this_.update_all()
                                         }, (error) => {
                                             this_.parseResponseError(error)
@@ -163,13 +178,19 @@
                 key:0,
                 tab:0,
                 day:new Date().toISOString().substring(0, 10),
-                //CRUD COMPANY
+                //MEAL CRUD 
                 meal:null,
                 meals_crud_mode:null,
                 meals_crud_dialog:false,
 
-                //DIALOG FORMATS
-                dialog_formats:false,
+                //ELABORATED PRODUCT CRUD
+                elaborated_product: null,
+                elaborated_product_crud_mode:null,
+                elaborated_product_crud_dialog:false,
+                //PRODUCT CRUD
+                product: null,
+                product_crud_mode:null,
+                product_crud_dialog:false,
             }
         },        
         methods:{
@@ -236,8 +257,30 @@
                 return  this.my_round(sum_sodium+salt*396,0)
             },
             on_product_click(item){
-                console.log(item)
-            }
+                var product=this.$store.getters.getObjectByUrl("products",item.products)
+                this.key=this.key+1
+                if (product.elaborated_products!=null){ //ELABORATED PRODUCT
+                    this.elaborated_product_crud_mode="R"
+                    this.elaborated_product=this.$store.getters.getObjectByUrl("elaborated_products",product.elaborated_products)
+                    console.log(this.elaborated_product)
+                    this.elaborated_product_crud_dialog=true
+                } else { // SYSTEM PRODUCTS AND PRODUCTS
+                    this.product_crud_mode="R"
+                    this.product=product
+                   console.log(product)
+                    this.product_crud_dialog=true
+                } 
+            },
+            on_ElaboratedProductsCRUD_cruded(){
+                this.elaborated_product_crud_dialog=false
+                this.update_all()
+
+            },
+            on_ProductsCRUD_cruded(){
+                this.product_crud_dialog=false
+                this.update_all()
+
+            },
         },
         created(){
             this.update_all()
