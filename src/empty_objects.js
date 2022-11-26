@@ -139,3 +139,22 @@ export function empty_pots(){
         diameter: 0,
     }
 }
+
+export function empty_recipes(){
+    return {
+        url:null,
+        name: '',
+        last: new Date().toISOString(),
+        food_types:null,
+        obsolete:false,
+        comment:''
+    }
+}
+
+export function empty_recipes_links_types(){
+    return {
+        url:null,
+        name: "",
+    }
+
+}

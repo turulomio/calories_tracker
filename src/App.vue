@@ -40,6 +40,11 @@
                         <v-list-item-icon><v-icon color="#757575;">mdi-food-turkey</v-icon></v-list-item-icon>
                         <v-list-item-title>{{ $t("Meals")}}</v-list-item-title>
                     </v-list-item>
+<!--                    RECIPES -->
+                    <v-list-item link router :to="{ name: 'recipes'}" v-if="$store.state.logged">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-book-open-variant</v-icon></v-list-item-icon>
+                        <v-list-item-title>{{ $t("Recipes")}}</v-list-item-title>
+                    </v-list-item>
 <!--                    POTS -->
                     <v-list-item link router :to="{ name: 'pots'}" v-if="$store.state.logged">
                         <v-list-item-icon><v-icon color="#757575;">mdi-pot</v-icon></v-list-item-icon>
@@ -62,6 +67,9 @@
                         <template v-slot:activator>
                             <v-list-item-title>{{ $t("Administration") }}</v-list-item-title>
                         </template>
+                        <v-list-item link router :to="{ name: 'catalog_tables'}" v-if="$store.state.catalog_manager">
+                            <v-list-item-title>{{ $t("Catalog tables") }}</v-list-item-title>
+                        </v-list-item>
                         <v-list-item link router :to="{ name: 'products_datatransfer'}">
                             <v-list-item-title>{{ $t("Products data transfer") }}</v-list-item-title>
                         </v-list-item>
