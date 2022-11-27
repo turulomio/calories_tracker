@@ -196,9 +196,23 @@ export function empty_elaborations(){
         recipes: null,
     }
 }
+
 export function empty_elaborations_products_in(){
     return {
         products: null,
         amount: null,
+    }
+}
+
+export function empty_elaborations_steps(){
+    return {
+        order: 1,
+        elaborations: null,
+        steps: null,
+        duration: null,
+        temperature: null,
+        stir:null,
+        comment: null,
+        products_in_step: [],
     }
 }

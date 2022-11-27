@@ -9,7 +9,7 @@
             </template>
         </v-data-table>   
         <!-- ItemCRUD DIALOG -->
-        <v-dialog v-model="elaboration_crud_dialog" width="35%">
+        <v-dialog v-model="elaboration_crud_dialog" width="100%">
             <v-card class="pa-3">
                 <ElaborationCRUD :elaboration="elaboration" :mode="elaboration_crud_mode" :key="key"  @cruded="on_ElaborationsCRUD_cruded()"></ElaborationCRUD>
             </v-card>

@@ -27,6 +27,7 @@ export const store = new Vuex.Store({
         recipes_links_types: [],
         stir_types: [],
         temperatures_types: [],
+        steps: [],
     },    
     getters:{
         getObjectByUrl:(state) => (catalog,url,default_=null) => {
@@ -102,6 +103,9 @@ export const store = new Vuex.Store({
         updateRecipesLinksTypes: (state, payload) =>{
             state.recipes_links_types=payload
         },
+        updateSteps: (state, payload) =>{
+            state.steps=payload
+        },
         updateStirTypes: (state, payload) =>{
             state.stir_types=payload
         },
@@ -127,6 +131,7 @@ export const store = new Vuex.Store({
                 context.dispatch("getProducts"),
                 context.dispatch("getSettings"),
                 context.dispatch("getWeightWishes"),
+                context.dispatch("getSteps"),
                 context.dispatch("getStirTypes"),
                 context.dispatch("getRecipesLinksTypes"),
                 context.dispatch("getTemperaturesTypes"),
@@ -259,6 +264,16 @@ export const store = new Vuex.Store({
             .then((response) => {
                 context.commit('updateRecipesLinksTypes', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} recipes links types in ${new Date()-start} ms`)
+            }, (error) => {
+                store.$app.parseResponseError(error)
+            });
+        },
+        getSteps(context){
+            var start=new Date()
+            return axios.get(`${store.state.apiroot}/api/steps/`, store.$app.myheaders())
+            .then((response) => {
+                context.commit('updateSteps', sortObjectsArray(response.data, "name"))
+                console.log(`Updated ${response.data.length} steps in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
