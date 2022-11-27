@@ -147,7 +147,10 @@ export function empty_recipes(){
         last: new Date().toISOString(),
         food_types:null,
         obsolete:false,
-        comment:''
+        comment:'',
+        valoration:null,
+        guests:false,
+        soon:false,
     }
 }
 

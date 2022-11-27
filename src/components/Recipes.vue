@@ -8,6 +8,8 @@
         <v-data-table dense :headers="recipes_headers" :items="recipes" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
             <template v-slot:[`item.last`]="{ item }">{{localtime(item.last)}}</template>      
             <template v-slot:[`item.food_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('food_types', item.food_types,'localname')"></div></template> 
+            <template v-slot:[`item.guests`]="{ item }"><v-icon small v-if="item.guests" >mdi-check-outline</v-icon></template>   
+            <template v-slot:[`item.soon`]="{ item }"><v-icon small v-if="item.soon" >mdi-check-outline</v-icon></template>    
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-1" @click="viewRecipe(item)">mdi-eye</v-icon>
                 <v-icon small class="mr-1" @click="editRecipe(item)">mdi-pencil</v-icon>
@@ -50,8 +52,11 @@
                 recipes_headers: [
                     { text: this.$t('Name'), sortable: true, value: 'name'},    
                     { text: this.$t('Food type'), sortable: true, value: 'food_types', width: "15%"},
+                    { text: this.$t('Valoration'), sortable: true, value: 'valoration', width: "7%"},
+                    { text: this.$t('Guests'), sortable: true, value: 'guests', width: "5%"},
+                    { text: this.$t('Soon'), sortable: true, value: 'soon', width: "5%"},
                     { text: this.$t('Last'), sortable: true, value: 'last', width: "10%"},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false, width: "10%"},
+                    { text: this.$t('Actions'), value: 'actions', sortable: false, width: "8%"},
                 ],
 
 
@@ -128,8 +133,9 @@
             },
             update_recipes(){
                 this.loading=true
-                axios.get(`${this.$store.state.apiroot}/api/recipes/`, this.myheaders())
+                axios.get(`${this.$store.state.apiroot}/api/recipes/?search=${this.search}`, this.myheaders())
                 .then((response) => {
+                    console.log(response.data)
                     this.recipes=response.data
                     this.loading=false
                }, (error) => {
