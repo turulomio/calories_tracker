@@ -91,7 +91,7 @@
                 const linkSource = `data:${item.mime};base64,${item.content}`
                 const downloadLink = document.createElement("a")
                 downloadLink.href = linkSource
-                downloadLink.download = `CT.RL.${this.recipe.name.slice(0,20)}.${item.id}`
+                downloadLink.download = `CT.RL.${this.recipe.name.slice(0,30)}.${item.id}`
                 downloadLink.click()
             },
         },
