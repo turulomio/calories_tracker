@@ -23,7 +23,6 @@
     </div>  
 </template>
 <script>
-    import axios from 'axios'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import DisplayValues from './reusing/DisplayValues.vue'
     export default {
@@ -43,18 +42,12 @@
                 loading:true,
                 items: [
                     {
-                        subheader:this.$t('Investment orders'),
+                        subheader:this.$t('Recipe options'),
                         children: [
                             {
-                                name:this.$t('Change active status'),
+                                name:this.$t('Generate PDF'),
                                 code: function(this_){
-                                    this_.investment.active=!this_.investment.active
-                                    axios.put(this_.investment.url, this_.investment,  this_.myheaders())
-                                    .then(() => {
-                                        this_.$emit("cruded")
-                                    }, (error) => {
-                                        this_.parseResponseError(error)
-                                    })
+                                    console.log(this_)
                                 },
                                 icon: "mdi-pencil",
                             },

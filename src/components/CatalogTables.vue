@@ -23,12 +23,24 @@
                 <NameCRUD  :item="register" :mode="register_mode" apiname="recipes_links_types" :key="key" @cruded="on_CRUD_cruded()"></NameCRUD>
             </v-card>
         </v-dialog>
+        <!-- DIALOG STIR TYPES CRUD -->
+        <v-dialog v-model="dialog_stir_types" width="45%" persistent>
+            <v-card class="pa-4">
+                <NameCRUD  :item="register" :mode="register_mode" apiname="stir_types" :key="key" @cruded="on_CRUD_cruded()"></NameCRUD>
+            </v-card>
+        </v-dialog>
+        <!-- DIALOG TEMPERATURES TYPES CRUD -->
+        <v-dialog v-model="dialog_temperatures_types" width="45%" persistent>
+            <v-card class="pa-4">
+                <NameCRUD  :item="register" :mode="register_mode" apiname="temperatures_types" :key="key" @cruded="on_CRUD_cruded()"></NameCRUD>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
 <script>
     import axios from 'axios'
-    import { empty_recipes_links_types} from '../empty_objects.js'
+    import { empty_recipes_links_types,empty_temperatures_types,empty_stir_types} from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import NameCRUD from './NameCrud.vue'
     export default {
@@ -43,8 +55,10 @@
             
                 tables:[
                     {text:this.$t("Recipes links types"), value:"recipes_links_types"},
+                    {text:this.$t("Stir types"), value:"stir_types"},
+                    {text:this.$t("Temperatures types"), value:"temperatures_types"},
                 ],
-                table: null,
+                table: "recipes_links_types",
 
 
                 catalog_table_headers:[],
@@ -54,12 +68,16 @@
 
                 //CRUD 
                 dialog_recipes_links_types:false,
+                dialog_stir_types:false,
+                dialog_temperatures_types:false,
             }
         },     
         computed:{
         },
         methods:{
             empty_recipes_links_types,
+            empty_stir_types,
+            empty_temperatures_types,
 
             menuinline_items(){
                 let r= [
@@ -73,6 +91,12 @@
                                     if (this_.table=="recipes_links_types"){
                                         this_.register=this_.empty_recipes_links_types()
                                         this_.dialog_recipes_links_types=true
+                                    } else if (this_.table=="stir_types"){
+                                        this_.register=this_.empty_stir_types()
+                                        this_.dialog_stir_types=true
+                                    } else if (this_.table=="temperatures_types"){
+                                        this_.register=this_.empty_temperatures_types()
+                                        this_.dialog_temperatures_types=true
                                     }
                                     this_.register_mode="C"
                                     this_.key=this_.key+1
@@ -87,6 +111,10 @@
             on_CRUD_cruded(){
                 if (this.table=="recipes_links_types"){
                     this.dialog_recipes_links_types=false
+                } else if (this.table=="stir_types"){
+                    this.dialog_stir_types=false
+                } else if (this.table=="temperatures_types"){
+                    this.dialog_temperatures_types=false
                 }
                 this.on_table_change()
             },
@@ -112,12 +140,13 @@
                 this.dialog_recipes_crud=true
             },
             on_table_change(){
-                if (this.table=="recipes_links_types"){
+                if (this.table=="recipes_links_types" || this.table=="stir_types" || this.table=="temperatures_types"){
                     this.catalog_table_headers= [
                         { text: this.$t('Name'), sortable: true, value: 'name'},
                         { text: this.$t('Actions'), value: 'actions', sortable: false, width: "10%"},
                     ]
                 }
+                this.key=this.key+1
 
                 this.loading=true
 
@@ -130,5 +159,8 @@
                 });
             }
         },
+        created(){
+            this.on_table_change()
+        }
     }
 </script>

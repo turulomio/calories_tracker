@@ -24,6 +24,9 @@ export const store = new Vuex.Store({
         products: [],
         elaborated_products: [],
         weight_wishes: [],
+        recipes_links_types: [],
+        stir_types: [],
+        temperatures_types: [],
     },    
     getters:{
         getObjectByUrl:(state) => (catalog,url,default_=null) => {
@@ -96,6 +99,15 @@ export const store = new Vuex.Store({
         updateSettings: (state, payload) =>{
             state.settings=payload
         },
+        updateRecipesLinksTypes: (state, payload) =>{
+            state.recipes_links_types=payload
+        },
+        updateStirTypes: (state, payload) =>{
+            state.stir_types=payload
+        },
+        updateTemperaturesTypes: (state, payload) =>{
+            state.temperatures_types=payload
+        },
 
 
     },
@@ -114,7 +126,10 @@ export const store = new Vuex.Store({
                 context.dispatch("getPots"),
                 context.dispatch("getProducts"),
                 context.dispatch("getSettings"),
-                context.dispatch("getWeightWishes")
+                context.dispatch("getWeightWishes"),
+                context.dispatch("getStirTypes"),
+                context.dispatch("getRecipesLinksTypes"),
+                context.dispatch("getTemperaturesTypes"),
             ])
         },
         getActivities(context){
@@ -238,5 +253,35 @@ export const store = new Vuex.Store({
             });
         },
 
+        getRecipesLinksTypes(context){
+            var start=new Date()
+            return axios.get(`${store.state.apiroot}/api/recipes_links_types/`, store.$app.myheaders())
+            .then((response) => {
+                context.commit('updateRecipesLinksTypes', sortObjectsArray(response.data, "name"))
+                console.log(`Updated ${response.data.length} recipes links types in ${new Date()-start} ms`)
+            }, (error) => {
+                store.$app.parseResponseError(error)
+            });
+        },
+        getStirTypes(context){
+            var start=new Date()
+            return axios.get(`${store.state.apiroot}/api/stir_types/`, store.$app.myheaders())
+            .then((response) => {
+                context.commit('updateStirTypes', sortObjectsArray(response.data, "name"))
+                console.log(`Updated ${response.data.length} stir types in ${new Date()-start} ms`)
+            }, (error) => {
+                store.$app.parseResponseError(error)
+            });
+        },
+        getTemperaturesTypes(context){
+            var start=new Date()
+            return axios.get(`${store.state.apiroot}/api/temperatures_types/`, store.$app.myheaders())
+            .then((response) => {
+                context.commit('updateTemperaturesTypes', sortObjectsArray(response.data, "name"))
+                console.log(`Updated ${response.data.length} temperatures types in ${new Date()-start} ms`)
+            }, (error) => {
+                store.$app.parseResponseError(error)
+            });
+        },
     }
 })

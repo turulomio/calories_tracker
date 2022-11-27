@@ -158,3 +158,17 @@ export function empty_recipes_links_types(){
     }
 
 }
+export function empty_stir_types(){
+    return {
+        url:null,
+        name: "",
+    }
+
+}
+export function empty_temperatures_types(){
+    return {
+        url:null,
+        name: "",
+    }
+
+}
