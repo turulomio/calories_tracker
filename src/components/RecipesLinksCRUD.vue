@@ -3,10 +3,10 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-4">
             <v-form ref="form" v-model="form_valid" lazy-validation>                
-                <v-text-field :readonly="mode=='D'" v-model="new_recipe.name" :label="$t('Set name')" :placeholder="$t('Set name')" :rules="RulesString(200)" counter="200"/>
-                <v-autocomplete :readonly="mode=='D'" :items="$store.state.food_types" v-model="new_recipe.food_types" :label="$t('Select product food type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-textarea :readonly="mode=='D'" v-model="new_recipe.comment" :label="$t('Set your comment')" :placeholder="$t('Set your comment')" :rules="RulesString(2000,false)" counter="2000"/>
-                <v-checkbox v-model="new_recipe.obsolete" :label="$t('Is obsolete?')"></v-checkbox>                
+                <v-text-field :readonly="mode=='D'" v-model="new_recipes_links.description" :label="$t('Set description')" :placeholder="$t('Set description')" :rules="RulesString(200,true)" counter="200"/>
+                <v-autocomplete :readonly="mode=='D'" :items="$store.state.recipes_links_types" v-model="new_recipes_links.type" :label="$t('Select type')" item-text="localname" item-value="url" :rules="RulesSelection(true)" @change="on_type_change()"></v-autocomplete>
+                <v-text-field  v-if="!type_with_content" :readonly="mode=='D'" v-model="new_recipes_links.link" :label="$t('Set an Internet link')" :placeholder="$t('Set an Internet link')" :rules="RulesString(2000,false)" counter="2000"/>
+                <v-file-input v-if="type_with_content" show-size v-model="document" :label="$t('Select a document')"></v-file-input>           
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -34,11 +34,14 @@
         data(){ 
             return{
                 form_valid:false,
-                new_recipe: null,
+                new_recipes_links: null,
 
                 loading_products: false,
 
                 key:0,
+                document:null,
+
+                type_with_content:false,
             }
         },
         methods: {
@@ -48,16 +51,49 @@
                 if (this.mode=="D") return this.$t('Delete')
             },
             title(){
-                if (this.mode=="C") return this.$t('Add a new recipe')
-                if (this.mode=="R") return this.$t('View this recipe')
-                if (this.mode=="U") return this.$t('Update this recipe')
-                if (this.mode=="D") return this.$t('Delete this recipe')
+                if (this.mode=="C") return this.$t('Add a new recipe link')
+                if (this.mode=="R") return this.$t('View this recipe link')
+                if (this.mode=="U") return this.$t('Update this recipe link')
+                if (this.mode=="D") return this.$t('Delete this recipe link')
             },
-            acceptDialog(){             
+            readDocument(file){
+                return new Promise((resolve, reject) => {
+                    var reader = new FileReader();
+                    reader.onload = function() {
+                        const result=reader.result
+                        var r={
+                            jsdoc: result,
+                            doc: result.split(",")[1],
+                            mime: result.split(";base64,")[0].split(":")[1],
+                        }
+                        return resolve(r)
+                    }
+                    reader.onerror=function(error){
+                        return reject(error)
+                    }
+                    reader.readAsDataURL(file)
+                })
+            },
+            on_type_change(){
+                var id=this.id_from_hyperlinked_url(this.new_recipes_links.type)
+                if ([6,2,4,5].includes(id)){
+                    this.type_with_content=true
+                } else {
+                    this.type_with_content=false
+                }
+            },
+            async acceptDialog(){             
                 if( this.$refs.form.validate()==false) return
 
+
+                if (this.document){
+                    var readed= await this.readDocument(this.document)
+                    this.new_recipes_links.mime=readed.mime
+                    this.new_recipes_links.content=readed.doc
+                }
+
                 if (this.mode=="C"){
-                    axios.post(`${this.$store.state.apiroot}/api/recipes/`, this.new_recipe,  this.myheaders())
+                    axios.post(`${this.$store.state.apiroot}/api/recipes_links/`, this.new_recipes_links,  this.myheaders())
                     .then((response) => {
                         console.log(response.data)
                         this.$emit("cruded")
@@ -66,7 +102,7 @@
                     })
                 }
                 if (this.mode=="U"){
-                    axios.put(this.new_recipe.url, this.new_recipe,  this.myheaders())
+                    axios.put(this.new_recipes_links.url, this.new_recipes_links,  this.myheaders())
                     .then((response) => {
                         console.log(response.data)
                         this.$emit("cruded")
@@ -75,9 +111,9 @@
                     })
                 }
                 if (this.mode=="D"){             
-                    var r = confirm(this.$t("Do you want to delete this recipe?"))
+                    var r = confirm(this.$t("Do you want to delete this recipe link?"))
                     if(r == true) {
-                        axios.delete(this.new_recipe.url, this.myheaders())
+                        axios.delete(this.new_recipes_links.url, this.myheaders())
                         .then((response) => {
                             console.log(response.data)
                             this.$emit("cruded")
@@ -89,7 +125,7 @@
             },
         },
         created(){
-            this.new_recipe=Object.assign({},this.recipe)
+            this.new_recipes_links=Object.assign({},this.recipes_links)
         }
     }
 </script>

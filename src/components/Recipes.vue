@@ -102,8 +102,8 @@
                 this.update_recipes()
             },
             on_RecipesView_cruded(){
-                this.dialog_recipes_view=false
                 this.update_recipes()
+                console.log("RECIPES CRUDED")
             },
             editRecipe(item){
                 this.recipe=item

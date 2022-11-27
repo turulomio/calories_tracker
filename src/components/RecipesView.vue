@@ -13,7 +13,8 @@
         <v-tabs-items v-model="tab">
             <v-tab-item key="documentation">      
                 <v-card outlined>
-                    <TableRecipesLinks :recipe="recipe" :key="key" @click="on_TableRecipesLinks_cruded()"></TableRecipesLinks>
+
+                    <TableRecipesLinks :recipe="new_recipe" :key="key" @cruded="on_TableRecipesLinks_cruded()"></TableRecipesLinks>
                 </v-card>
             </v-tab-item>
             <v-tab-item key="elaborations">          
@@ -24,6 +25,7 @@
     </div>  
 </template>
 <script>
+    import axios from 'axios'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import DisplayValues from './reusing/DisplayValues.vue'
     import TableRecipesLinks from './TableRecipesLinks.vue'
@@ -64,19 +66,29 @@
         methods: {          
             displayvalues(){
                 return [
-                    {title:this.$t('Valoration'), value: this.recipe.valoration},
-                    {title:this.$t('Is a recipe for guests?'), value: this.recipe.guests},
-                    {title:this.$t('Do you want to make it soon?'), value: this.recipe.soon},
-                    {title:this.$t('Id'), value: this.recipe.id},
-                    {title:this.$t('Food type'), value: this.$store.getters.getObjectPropertyByUrl("food_types", this.recipe.food_types,"localname")},
+                    {title:this.$t('Valoration'), value: this.new_recipe.valoration},
+                    {title:this.$t('Is a recipe for guests?'), value: this.new_recipe.guests},
+                    {title:this.$t('Do you want to make it soon?'), value: this.new_recipe.soon},
+                    {title:this.$t('Id'), value: this.new_recipe.id},
+                    {title:this.$t('Food type'), value: this.$store.getters.getObjectPropertyByUrl("food_types", this.new_recipe.food_types,"localname")},
 
                 ]
             },
             on_TableRecipesLinks_cruded(){
+                console.log("CRUDED RECIPESVIEW")
+                axios.get(this.recipe.url, this.myheaders())
+                .then((response) => {
+                    console.log(response.data)
+                    this.new_recipe=response.data
+                    this.key=this.key+1
+               }, (error) => {
+                    this.parseResponseError(error)
+                });
                 this.$emit("cruded")
             },
         },
         created(){
+            this.new_recipe=Object.assign({},this.recipe)
         }
     }
 </script>

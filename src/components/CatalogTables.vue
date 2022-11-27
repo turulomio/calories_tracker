@@ -119,29 +119,48 @@
                 this.on_table_change()
             },
             editItem(item){
-                this.recipe=item
-                this.recipe_mode="U"
+                this.register=item
+                this.register_mode="U"
                 this.key=this.key+1
 
-                this.dialog_recipes_crud=true
+                if (this.table=="recipes_links_types"){
+                    this.dialog_recipes_links_types=true
+                } else if (this.table=="stir_types"){
+                    this.dialog_stir_types=true
+                } else if (this.table=="temperatures_types"){
+                    this.dialog_temperatures_types=true
+                }
             },
             deleteItem(item){
-                this.recipe=item
-                this.recipe_mode="D"
+                this.register=item
+                this.register_mode="D"
                 this.key=this.key+1
 
-                this.dialog_recipes_crud=true
+                if (this.table=="recipes_links_types"){
+                    this.dialog_recipes_links_types=true
+                } else if (this.table=="stir_types"){
+                    this.dialog_stir_types=true
+                } else if (this.table=="temperatures_types"){
+                    this.dialog_temperatures_types=true
+                }
             },
             viewItem(item){
-                this.recipe=item
-                this.recipe_mode="R"
+                this.register=item
+                this.register_mode="R"
                 this.key=this.key+1
 
-                this.dialog_recipes_crud=true
+                if (this.table=="recipes_links_types"){
+                    this.dialog_recipes_links_types=true
+                } else if (this.table=="stir_types"){
+                    this.dialog_stir_types=true
+                } else if (this.table=="temperatures_types"){
+                    this.dialog_temperatures_types=true
+                }
             },
             on_table_change(){
                 if (this.table=="recipes_links_types" || this.table=="stir_types" || this.table=="temperatures_types"){
                     this.catalog_table_headers= [
+                        { text: this.$t('Id'), sortable: true, value: 'id', width:"10%"},
                         { text: this.$t('Name'), sortable: true, value: 'name'},
                         { text: this.$t('Actions'), value: 'actions', sortable: false, width: "10%"},
                     ]

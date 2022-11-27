@@ -159,19 +159,30 @@ export function empty_recipes_links_types(){
         url:null,
         name: "",
     }
-
 }
+
 export function empty_stir_types(){
     return {
         url:null,
         name: "",
     }
-
 }
+
 export function empty_temperatures_types(){
     return {
         url:null,
         name: "",
     }
+}
 
+export function empty_recipes_links(){
+    return {
+        url:null,
+        description: "",
+        type: null,
+        link:null,
+        content: null, //Base 64 string
+        recipes: null,
+        mime: null,
+    }
 }
