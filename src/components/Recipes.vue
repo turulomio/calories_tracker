@@ -119,12 +119,19 @@
 
                 this.dialog_recipes_crud=true
             },
-            viewRecipe(item){
-                console.log(item)
-                this.recipe=item
-                this.key=this.key+1
+            viewRecipe(item){            
+                var recipe_full_url=item.url.replace("/recipes/","/recipes_full/")
+                console.log(item.url)
+                axios.get(recipe_full_url, this.myheaders())
+                .then((response) => {
+                    this.recipe=response.data
+                    console.log(this.recipe)
+                    this.key=this.key+1
 
-                this.dialog_recipes_view=true
+                    this.dialog_recipes_view=true
+                }, (error) => {
+                    this.parseResponseError(error)
+                })
             },
 
             on_search_change(){

@@ -7,7 +7,7 @@
                 <v-text-field :readonly="mode=='D'" v-model="new_elaboration_step.duration" :label="$t('Set step duration')" :placeholder="$t('Set step duration')" :rules="RulesString(10,true)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="new_elaboration_step.temperature" :label="$t('Set temperature')" :placeholder="$t('Set temperature')" :rules="RulesInteger(10,false)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="new_elaboration_step.stir" :label="$t('Set stir')" :placeholder="$t('Set stir')" :rules="RulesInteger(10,false)" counter="10"/>
-                <v-text-field :readonly="mode=='D'" v-model="new_elaboration_step.comment" :label="$t('Set a comment')" :placeholder="$t('Set a comment')" :rules="RulesString(10,false)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model="new_elaboration_step.comment" :label="$t('Set a comment')" :placeholder="$t('Set a comment')" :rules="RulesString(200,false)" counter="200"/>
                 <v-autocomplete :items="elaboration.elaborations_products_in" v-model="new_elaboration_step.products_in_step" :label="$t('Products in step')" :item-text="get_item_products_step" item-value="url" multiple :rules="RulesSelection(true)" chips ></v-autocomplete>
             </v-form>
             <v-card-actions>

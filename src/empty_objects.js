@@ -154,6 +154,13 @@ export function empty_recipes(){
     }
 }
 
+export function empty_recipes_categories(){
+    return {
+        url:null,
+        name: "",
+    }
+}
+
 export function empty_recipes_links_types(){
     return {
         url:null,
@@ -209,7 +216,7 @@ export function empty_elaborations_steps(){
         order: 1,
         elaborations: null,
         steps: null,
-        duration: null,
+        duration: "00:01:00",
         temperature: null,
         stir:null,
         comment: null,

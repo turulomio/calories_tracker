@@ -8,7 +8,7 @@
                     <v-text-field :readonly="mode=='D'" class="ml-5" v-model="new_elaboration.final_amount" :label="$t('Set your final amount')" :placeholder="$t('Set your final amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
                 </v-row>      
                 <v-card class="mt-4">
-                    <v-data-table dense :headers="products_in_headers" :items="new_elaboration.elaborations_products_in" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250" fixed-header>
+                    <v-data-table dense :headers="products_in_headers" :items="new_elaboration.elaborations_products_in" sort-by="amount" :sort-desc="['amount']" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250" fixed-header>
                         <template v-slot:[`item.products`]="{ item }">
                             <div v-html="products_html_fullname(item.products,4)"></div>
                         </template>
@@ -32,9 +32,11 @@
                         <template v-slot:[`item.steps`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('steps', item.steps,'localname')"></div></template> 
                         <template v-slot:[`item.products_in_step`]="{ item }"><div v-html="list_of_products_in_step(item)"></div></template> 
 
-                        <template v-slot:[`item.actions`]="{ item }">
-                            <v-icon v-if="['C','U'].includes(mode)" small class="mr-2" @click="editElaborationStep(item)">mdi-pencil</v-icon>
-                            <v-icon v-if="['C','U'].includes(mode)" small @click="deleteElaborationStep(item)">mdi-delete</v-icon>
+                        <template v-slot:[`item.actions`]="{ item,index }">                     
+                            <v-icon :disabled="index==0" small class="mr-2" @click="setOneUp(item)">mdi-arrow-up-bold</v-icon>
+                            <v-icon :disabled="index==new_elaboration.elaborations_steps.length-1" small class="mr-2" @click="setOneDown(item)">mdi-arrow-down-bold</v-icon>
+                            <v-icon small class="mr-2" @click="editElaborationStep(item)">mdi-pencil</v-icon>
+                            <v-icon small @click="deleteElaborationStep(item)">mdi-delete</v-icon>
                         </template>
                         <template v-slot:[`body.append`]="{headers}" v-if="new_elaboration.elaborations_steps.length>0">
                             <tr style="background-color: WhiteSmoke">
@@ -202,6 +204,7 @@
             on_ElaborationProductsInCRUD_cruded(mode,item,olditem){
                 this.dialog_products_in_crud=false  
                 if (mode=="C"){
+                    item.elaborations=this.new_elaboration.url
                     this.new_elaboration.elaborations_products_in.push(item)
                 } else if (mode=="U"){
                     let index = this.new_elaboration.elaborations_products_in.indexOf(olditem)
@@ -212,6 +215,7 @@
                     let index = this.new_elaboration.elaborations_products_in.indexOf(olditem)
                     this.new_elaboration.elaborations_products_in.splice(index,1)
                 }
+                this.acceptDialog()
                 this.key=this.key+1
             },
             addElaborationStep(){
@@ -246,8 +250,24 @@
                     let index = this.new_elaboration.elaborations_steps.indexOf(olditem)
                     this.new_elaboration.elaborations_steps.splice(index,1)
                 }
+                this.reorder_steps()
                 this.key=this.key+1
                 this.dialog_elaboration_step_crud=false  
+            },
+            setOneUp(item){
+                let index = this.new_elaboration.elaborations_steps.indexOf(item)
+                this.new_elaboration.elaborations_steps[index]=this.new_elaboration.elaborations_steps[index-1]
+                this.new_elaboration.elaborations_steps[index-1]=item
+                this.reorder_steps()
+                this.key=this.key+1
+            },
+            setOneDown(item){
+                let index = this.new_elaboration.elaborations_steps.indexOf(item)
+                this.new_elaboration.elaborations_steps[index]=this.new_elaboration.elaborations_steps[index+1]
+                this.new_elaboration.elaborations_steps[index+1]=item
+                this.reorder_steps()
+                this.key=this.key+1
+
             },
             list_of_products_in_step(item){
                 var r=""
@@ -255,12 +275,17 @@
 
                     this.new_elaboration.elaborations_products_in.forEach(p=> {
                         if (p.url==o){
-                            r=r+this.$store.getters.getObjectPropertyByUrl('products', p.products,'name')
+                            r=r+this.$store.getters.getObjectPropertyByUrl('products', p.products,'fullname')+", "
                         }
 
                     })
                 })
-                return r
+                return r.slice(0,-2)
+            },
+            reorder_steps(){
+                for (var i = 0; i < this.new_elaboration.elaborations_steps.length; i++) {
+                    this.new_elaboration.elaborations_steps[i].order=i+1
+                }
             }
         },
         created(){

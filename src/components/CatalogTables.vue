@@ -23,6 +23,13 @@
                 <NameCRUD  :item="register" :mode="register_mode" apiname="recipes_links_types" :key="key" @cruded="on_CRUD_cruded()"></NameCRUD>
             </v-card>
         </v-dialog>
+
+        <!-- DIALOG RECIPES CATEGORIES CRUD -->
+        <v-dialog v-model="dialog_recipes_categories" width="45%" persistent>
+            <v-card class="pa-4">
+                <NameCRUD  :item="register" :mode="register_mode" apiname="recipes_categories" :key="key" @cruded="on_CRUD_cruded()"></NameCRUD>
+            </v-card>
+        </v-dialog>
         <!-- DIALOG STIR TYPES CRUD -->
         <v-dialog v-model="dialog_stir_types" width="45%" persistent>
             <v-card class="pa-4">
@@ -40,7 +47,7 @@
 
 <script>
     import axios from 'axios'
-    import { empty_recipes_links_types,empty_temperatures_types,empty_stir_types} from '../empty_objects.js'
+    import { empty_recipes_links_types,empty_temperatures_types,empty_stir_types,empty_recipes_categories} from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import NameCRUD from './NameCrud.vue'
     export default {
@@ -54,11 +61,12 @@
                 key:0,
             
                 tables:[
+                    {text:this.$t("Recipes categories"), value:"recipes_categories"},
                     {text:this.$t("Recipes links types"), value:"recipes_links_types"},
                     {text:this.$t("Stir types"), value:"stir_types"},
                     {text:this.$t("Temperatures types"), value:"temperatures_types"},
                 ],
-                table: "recipes_links_types",
+                table: "recipes_categories",
 
 
                 catalog_table_headers:[],
@@ -67,6 +75,7 @@
                 register_mode: null,
 
                 //CRUD 
+                dialog_recipes_categories:false,
                 dialog_recipes_links_types:false,
                 dialog_stir_types:false,
                 dialog_temperatures_types:false,
@@ -78,6 +87,7 @@
             empty_recipes_links_types,
             empty_stir_types,
             empty_temperatures_types,
+            empty_recipes_categories,
 
             menuinline_items(){
                 let r= [
@@ -88,9 +98,12 @@
                                 name: this.$t("Add a new register"),
                                 icon: "mdi-plus",
                                 code: function(this_){
-                                    if (this_.table=="recipes_links_types"){
+                                    if (this_.table=="recipes_categories"){
+                                        this_.register=this_.empty_recipes_categories()
+                                        this_.dialog_recipes_categories=true
+                                    } else if (this_.table=="recipes_links_types"){
                                         this_.register=this_.empty_recipes_links_types()
-                                        this_.dialog_recipes_links_types=true
+                                        this_.dialog_recipes_categories=true
                                     } else if (this_.table=="stir_types"){
                                         this_.register=this_.empty_stir_types()
                                         this_.dialog_stir_types=true
@@ -109,7 +122,9 @@
                 return r
             },
             on_CRUD_cruded(){
-                if (this.table=="recipes_links_types"){
+                if (this.table=="recipes_categories"){
+                    this.dialog_recipes_categories=false
+                } else if (this.table=="recipes_links_types"){
                     this.dialog_recipes_links_types=false
                 } else if (this.table=="stir_types"){
                     this.dialog_stir_types=false
@@ -123,7 +138,9 @@
                 this.register_mode="U"
                 this.key=this.key+1
 
-                if (this.table=="recipes_links_types"){
+                if (this.table=="recipes_categories"){
+                    this.dialog_recipes_categories=true
+                } else if (this.table=="recipes_links_types"){
                     this.dialog_recipes_links_types=true
                 } else if (this.table=="stir_types"){
                     this.dialog_stir_types=true
@@ -136,7 +153,9 @@
                 this.register_mode="D"
                 this.key=this.key+1
 
-                if (this.table=="recipes_links_types"){
+                if (this.table=="recipes_categories"){
+                    this.dialog_recipes_categories=true
+                } else if (this.table=="recipes_links_types"){
                     this.dialog_recipes_links_types=true
                 } else if (this.table=="stir_types"){
                     this.dialog_stir_types=true
@@ -149,7 +168,9 @@
                 this.register_mode="R"
                 this.key=this.key+1
 
-                if (this.table=="recipes_links_types"){
+                if (this.table=="recipes_categories"){
+                    this.dialog_recipes_categories=true
+                } else if (this.table=="recipes_links_types"){
                     this.dialog_recipes_links_types=true
                 } else if (this.table=="stir_types"){
                     this.dialog_stir_types=true
@@ -158,7 +179,7 @@
                 }
             },
             on_table_change(){
-                if (this.table=="recipes_links_types" || this.table=="stir_types" || this.table=="temperatures_types"){
+                if (this.table=="recipes_links_types" || this.table=="stir_types" || this.table=="temperatures_types" || this.table=="recipes_categories"){
                     this.catalog_table_headers= [
                         { text: this.$t('Id'), sortable: true, value: 'id', width:"10%"},
                         { text: this.$t('Name'), sortable: true, value: 'name'},

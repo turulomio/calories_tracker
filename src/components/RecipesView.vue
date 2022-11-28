@@ -38,7 +38,7 @@
             TableElaborations
         },
         props: {
-            recipe: {
+            recipe: { //Is a item of RecipesFullViewSet
                 required: true
             },
         },
