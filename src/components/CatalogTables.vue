@@ -46,7 +46,6 @@
 </template>
 
 <script>
-    import axios from 'axios'
     import { empty_recipes_links_types,empty_temperatures_types,empty_stir_types,empty_recipes_categories} from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import NameCRUD from './NameCrud.vue'
@@ -190,13 +189,31 @@
 
                 this.loading=true
 
-                axios.get(`${this.$store.state.apiroot}/api/${this.table}/`, this.myheaders())
-                .then((response) => {
-                    this.catalog_table=response.data
-                    this.loading=false
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
+                if (this.table=="recipes_categories"){
+                    this.$store.dispatch("getRecipesCategories")
+                    .then(()=>{
+                        this.catalog_table=this.$store.state[this.table]
+                        this.loading=false
+                    })
+                } else if (this.table=="recipes_links_types"){
+                    this.$store.dispatch("getRecipesLinksTypes")
+                    .then(()=>{
+                        this.catalog_table=this.$store.state[this.table]
+                        this.loading=false
+                    })
+                } else if (this.table=="stir_types"){
+                    this.$store.dispatch("getStirTypes")
+                    .then(()=>{
+                        this.catalog_table=this.$store.state[this.table]
+                        this.loading=false
+                    })
+                } else if (this.table=="temperatures_types"){
+                    this.$store.dispatch("getTemperatureTypes")
+                    .then(()=>{
+                        this.catalog_table=this.$store.state[this.table]
+                        this.loading=false
+                    })
+                }
             }
         },
         created(){

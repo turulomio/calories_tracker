@@ -28,6 +28,7 @@ export const store = new Vuex.Store({
         stir_types: [],
         temperatures_types: [],
         steps: [],
+        recipes_categories: [],
     },    
     getters:{
         getObjectByUrl:(state) => (catalog,url,default_=null) => {
@@ -112,6 +113,9 @@ export const store = new Vuex.Store({
         updateTemperaturesTypes: (state, payload) =>{
             state.temperatures_types=payload
         },
+        updateRecipesCategories: (state, payload) =>{
+            state.recipes_categories=payload
+        },
 
 
     },
@@ -135,6 +139,7 @@ export const store = new Vuex.Store({
                 context.dispatch("getStirTypes"),
                 context.dispatch("getRecipesLinksTypes"),
                 context.dispatch("getTemperaturesTypes"),
+                context.dispatch("getRecipesCategories"),
             ])
         },
         getActivities(context){
@@ -294,6 +299,16 @@ export const store = new Vuex.Store({
             .then((response) => {
                 context.commit('updateTemperaturesTypes', sortObjectsArray(response.data, "name"))
                 console.log(`Updated ${response.data.length} temperatures types in ${new Date()-start} ms`)
+            }, (error) => {
+                store.$app.parseResponseError(error)
+            });
+        },
+        getRecipesCategories(context){
+            var start=new Date()
+            return axios.get(`${store.state.apiroot}/api/recipes_categories/`, store.$app.myheaders())
+            .then((response) => {
+                context.commit('updateRecipesCategories', sortObjectsArray(response.data, "name"))
+                console.log(`Updated ${response.data.length} recipes categories in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
             });
