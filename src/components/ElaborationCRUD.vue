@@ -234,6 +234,7 @@
             addElaborationStep(){
                 this.tab=1
                 this.elaboration_step=this.empty_elaborations_steps()
+                this.elaboration_step.elaborations=this.new_elaboration.url
                 this.elaboration_step_mode='C'
                 this.key=this.key+1
                 this.dialog_elaboration_step_crud=true
