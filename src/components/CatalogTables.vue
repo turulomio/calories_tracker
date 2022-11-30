@@ -42,11 +42,17 @@
                 <NameCRUD  :item="register" :mode="register_mode" apiname="temperatures_types" :key="key" @cruded="on_CRUD_cruded()"></NameCRUD>
             </v-card>
         </v-dialog>
+        <!-- DIALOG MEASURES TYPES CRUD -->
+        <v-dialog v-model="dialog_measures_types" width="45%" persistent>
+            <v-card class="pa-4">
+                <NameCRUD  :item="register" :mode="register_mode" apiname="measures_types" :key="key" @cruded="on_CRUD_cruded()"></NameCRUD>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
 <script>
-    import { empty_recipes_links_types,empty_temperatures_types,empty_stir_types,empty_recipes_categories} from '../empty_objects.js'
+    import { empty_recipes_links_types,empty_temperatures_types,empty_stir_types,empty_recipes_categories,empty_measures_types} from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import NameCRUD from './NameCrud.vue'
     export default {
@@ -64,6 +70,7 @@
                     {text:this.$t("Recipes links types"), value:"recipes_links_types"},
                     {text:this.$t("Stir types"), value:"stir_types"},
                     {text:this.$t("Temperatures types"), value:"temperatures_types"},
+                    {text:this.$t("Measures types"), value:"measures_types"},
                 ],
                 table: "recipes_categories",
 
@@ -78,6 +85,7 @@
                 dialog_recipes_links_types:false,
                 dialog_stir_types:false,
                 dialog_temperatures_types:false,
+                dialog_measures_types:false,
             }
         },     
         computed:{
@@ -87,6 +95,7 @@
             empty_stir_types,
             empty_temperatures_types,
             empty_recipes_categories,
+            empty_measures_types,
 
             menuinline_items(){
                 let r= [
@@ -109,6 +118,9 @@
                                     } else if (this_.table=="temperatures_types"){
                                         this_.register=this_.empty_temperatures_types()
                                         this_.dialog_temperatures_types=true
+                                    } else if (this_.table=="measures_types"){
+                                        this_.register=this_.empty_measures_types()
+                                        this_.dialog_measures_types=true
                                     }
                                     this_.register_mode="C"
                                     this_.key=this_.key+1
@@ -129,6 +141,8 @@
                     this.dialog_stir_types=false
                 } else if (this.table=="temperatures_types"){
                     this.dialog_temperatures_types=false
+                } else if (this.table=="measures_types"){
+                    this.dialog_measures_types=false
                 }
                 this.on_table_change()
             },
@@ -145,6 +159,8 @@
                     this.dialog_stir_types=true
                 } else if (this.table=="temperatures_types"){
                     this.dialog_temperatures_types=true
+                } else if (this.table=="measures_types"){
+                    this.dialog_measures_types=true
                 }
             },
             deleteItem(item){
@@ -160,6 +176,8 @@
                     this.dialog_stir_types=true
                 } else if (this.table=="temperatures_types"){
                     this.dialog_temperatures_types=true
+                } else if (this.table=="measures_types"){
+                    this.dialog_measures_types=true
                 }
             },
             viewItem(item){
@@ -175,10 +193,12 @@
                     this.dialog_stir_types=true
                 } else if (this.table=="temperatures_types"){
                     this.dialog_temperatures_types=true
+                } else if (this.table=="measures_types"){
+                    this.dialog_measures_types=true
                 }
             },
             on_table_change(){
-                if (this.table=="recipes_links_types" || this.table=="stir_types" || this.table=="temperatures_types" || this.table=="recipes_categories"){
+                if (this.table=="recipes_links_types" || this.table=="stir_types" || this.table=="temperatures_types" || this.table=="recipes_categories" || this.table=="measures_types"){
                     this.catalog_table_headers= [
                         { text: this.$t('Id'), sortable: true, value: 'id', width:"10%"},
                         { text: this.$t('Name'), sortable: true, value: 'name'},
@@ -209,6 +229,12 @@
                     })
                 } else if (this.table=="temperatures_types"){
                     this.$store.dispatch("getTemperatureTypes")
+                    .then(()=>{
+                        this.catalog_table=this.$store.state[this.table]
+                        this.loading=false
+                    })
+                } else if (this.table=="measures_types"){
+                    this.$store.dispatch("getMeasuresTypes")
                     .then(()=>{
                         this.catalog_table=this.$store.state[this.table]
                         this.loading=false

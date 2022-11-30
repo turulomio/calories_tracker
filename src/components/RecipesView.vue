@@ -44,7 +44,7 @@
         },
         data () {
             return {
-                tab:0,
+                tab:1,
                 key:0,
                 loading:true,
                 items: [

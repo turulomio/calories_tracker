@@ -6,6 +6,8 @@
                 <v-autocomplete :readonly="mode=='D'" :items="$store.state.products" v-model="newproduct_in.products" item-text="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()">
                     <template v-slot:item="{item}" ><div v-html="products_html_fullname(item,2)"></div></template>
                 </v-autocomplete>
+                <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="$store.state.measures_types" v-model="newproduct_in.measures_types" :label="$t('Select your measure type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+
                 <v-row class="pa-3">     
                     <v-text-field :readonly="mode=='D'" v-model="newproduct_in.amount" :label="$t('Set product amount')" :placeholder="$t('Set product amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
                     <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-text="name" item-value="amount" :rules="RulesSelection(false)"  @input="on_product_format_input()"></v-autocomplete>
@@ -57,6 +59,7 @@
             },
             acceptDialog(){             
                 if( this.$refs.form.validate()==false) return
+                console.log(this.newproduct_in.measures_types)
                 this.$emit("cruded",this.mode,this.newproduct_in,this.product_in)
             },
 

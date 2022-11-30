@@ -52,6 +52,7 @@ export function empty_products(){
         food_types:null,
         additives:[],
         formats:[],
+        density: null,
         companies:null,
         version_parent:null,
         version_description:null
@@ -83,6 +84,7 @@ export function empty_system_products(){
         food_types:null,
         additives:[],
         formats:[],
+        density: null,
         system_companies:null,
         version: new Date().toISOString(),
         version_parent:null,
@@ -208,6 +210,7 @@ export function empty_elaborations_products_in(){
     return {
         products: null,
         amount: null,
+        measures_types: null,
     }
 }
 
@@ -221,5 +224,13 @@ export function empty_elaborations_steps(){
         stir:null,
         comment: null,
         products_in_step: [],
+    }
+}
+
+
+export function empty_measures_types(){
+    return {
+        url:null,
+        name: "",
     }
 }

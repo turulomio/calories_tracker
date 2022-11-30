@@ -9,9 +9,8 @@
                 </v-row>      
                 <v-card class="mt-4">
                     <v-data-table dense :headers="products_in_headers" :items="new_elaboration.elaborations_products_in" sort-by="amount" :sort-desc="['amount']" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250" fixed-header>
-                        <template v-slot:[`item.products`]="{ item }">
-                            <div v-html="products_html_fullname(item.products,4)"></div>
-                        </template>
+                        <template v-slot:[`item.products`]="{ item }"><div v-html="products_html_fullname(item.products,4)"></div></template>
+                        <template v-slot:[`item.measures_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('measures_types', item.measures_types,'localname')"></div></template> 
                         <template v-slot:[`item.actions`]="{ item }">
                             <v-icon v-if="['C','U'].includes(mode)" small class="mr-2" @click="editProductIn(item)">mdi-pencil</v-icon>
                             <v-icon v-if="['C','U'].includes(mode)" small @click="deleteProductIn(item)">mdi-delete</v-icon>
@@ -104,7 +103,8 @@
 
                 products_in_headers: [
                     { text: this.$t('Product'), sortable: true, value: 'products'},
-                    { text: this.$t('Amount'), value: 'amount', align:'right'},
+                    { text: this.$t('Measure type'), value: 'measures_types', width:"20%"},
+                    { text: this.$t('Amount'), value: 'amount', align:'right', width:"10%"},
                     { text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"},
                 ],
 
@@ -215,6 +215,7 @@
                     let index = this.new_elaboration.elaborations_products_in.indexOf(olditem)
                     this.new_elaboration.elaborations_products_in.splice(index,1)
                 }
+                console.log(item.measures_types)
                 this.acceptDialog()
                 this.key=this.key+1
             },
