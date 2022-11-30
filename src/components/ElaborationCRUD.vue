@@ -16,7 +16,7 @@
                     <v-tabs-items v-model="tab">
                         <v-tab-item key="documentation">      
                             <v-card outlined>
-                                <v-data-table dense :headers="products_in_headers" :items="new_elaboration.elaborations_products_in" sort-by="amount" :sort-desc="['amount']" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="600" fixed-header>
+                                <v-data-table dense :headers="products_in_headers" :items="new_elaboration.elaborations_products_in" sort-by="amount" :sort-desc="['amount']" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="450" fixed-header>
                                     <template v-slot:[`item.products`]="{ item }"><div v-html="products_html_fullname(item.products,4)"></div></template>
                                     <template v-slot:[`item.amount`]="{ item }">{{ fraction(item.amount).toFraction(true)}}</template>
                                     <template v-slot:[`item.measures_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('measures_types', item.measures_types,'localname')"></div></template> 
@@ -37,7 +37,7 @@
                         </v-tab-item>
                         <v-tab-item key="elaborations">  
                             <v-card outlined>
-                                <v-data-table dense :headers="steps_headers" :items="new_elaboration.elaborations_steps" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="600" fixed-header>
+                                <v-data-table dense :headers="steps_headers" :items="new_elaboration.elaborations_steps" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="450" fixed-header>
                                     <template v-slot:[`item.steps`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('steps', item.steps,'localname')"></div></template> 
                                     <template v-slot:[`item.products_in_step`]="{ item }"><div v-html="list_of_products_in_step(item)"></div></template> 
 

@@ -77,13 +77,24 @@
                 ]
             },
             on_TableRecipesLinks_cruded(){
-                console.log("CRUDED RECIPESVIEW")
-                this.update_recipe()
+                return axios.get(`${this.$store.state.apiroot}/api/recipes_links/?recipes=${this.new_recipe.url}`, this.myheaders())
+                .then((response) => {
+                    console.log(response.data)
+                    this.new_recipe.recipes_links=response.data
+                    this.key=this.key+1
+               }, (error) => {
+                    this.parseResponseError(error)
+                });
             },
             on_TableElaborations_cruded(){
-
-                console.log("CRUDED RECIPESVIEW")
-                this.update_recipe()
+                return axios.get(`${this.$store.state.apiroot}/api/elaborations/?recipes=${this.new_recipe.url}`, this.myheaders())
+                .then((response) => {
+                    console.log(response.data)
+                    this.new_recipe.elaborations=response.data
+                    this.key=this.key+1
+               }, (error) => {
+                    this.parseResponseError(error)
+                });
             },
             update_recipe(){
 

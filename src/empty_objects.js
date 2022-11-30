@@ -203,6 +203,7 @@ export function empty_elaborations(){
         diners:null,
         elaborations_products_in: [],
         recipes: null,
+        elaborations_steps: [],
     }
 }
 

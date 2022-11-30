@@ -125,6 +125,8 @@
                 axios.get(recipe_full_url, this.myheaders())
                 .then((response) => {
                     this.recipe=response.data
+                    this.recipe.url_full=recipe_full_url
+                    this.recipe.url=item.url
                     console.log(this.recipe)
                     this.key=this.key+1
 
