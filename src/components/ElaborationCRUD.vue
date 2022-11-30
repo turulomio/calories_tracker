@@ -8,44 +8,56 @@
                     <v-text-field :readonly="mode=='D'" class="ml-5" v-model="new_elaboration.final_amount" :label="$t('Set your final amount')" :placeholder="$t('Set your final amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
                 </v-row>      
                 <v-card class="mt-4">
-                    <v-data-table dense :headers="products_in_headers" :items="new_elaboration.elaborations_products_in" sort-by="amount" :sort-desc="['amount']" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250" fixed-header>
-                        <template v-slot:[`item.products`]="{ item }"><div v-html="products_html_fullname(item.products,4)"></div></template>
-                        <template v-slot:[`item.measures_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('measures_types', item.measures_types,'localname')"></div></template> 
-                        <template v-slot:[`item.actions`]="{ item }">
-                            <v-icon v-if="['C','U'].includes(mode)" small class="mr-2" @click="editProductIn(item)">mdi-pencil</v-icon>
-                            <v-icon v-if="['C','U'].includes(mode)" small @click="deleteProductIn(item)">mdi-delete</v-icon>
-                        </template>
-                        <template v-slot:[`body.append`]="{headers}" v-if="new_elaboration.elaborations_products_in.length>0">
-                            <tr style="background-color: WhiteSmoke">
-                                <td v-for="(header,i) in headers" :key="i">
-                                    <div v-if="header.value=='products'">{{ $t("Total {0} products):").format(new_elaboration.elaborations_products_in.length) }}</div>
-                                    <div v-if="header.value == 'amount'" class="d-flex justify-end" v-html="listobjects_sum(new_elaboration.elaborations_products_in,'amount')"></div>
-                                </td>
-                            </tr>
-                        </template>
-                    </v-data-table>
-                </v-card>
-                <p></p>
-                <v-card class="mt-4">
-                    <v-data-table dense :headers="steps_headers" :items="new_elaboration.elaborations_steps" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250" fixed-header>
-                        <template v-slot:[`item.steps`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('steps', item.steps,'localname')"></div></template> 
-                        <template v-slot:[`item.products_in_step`]="{ item }"><div v-html="list_of_products_in_step(item)"></div></template> 
+                    <v-tabs  background-color="primary" dark  v-model="tab" >
+                        <v-tab key="ingredients">{{ $t('Ingredients') }}</v-tab>
+                        <v-tab key="steps">{{ $t('Steps') }}</v-tab>
+                        <v-tabs-slider color="yellow"></v-tabs-slider>
+                    </v-tabs>
+                    <v-tabs-items v-model="tab">
+                        <v-tab-item key="documentation">      
+                            <v-card outlined>
+                                <v-data-table dense :headers="products_in_headers" :items="new_elaboration.elaborations_products_in" sort-by="amount" :sort-desc="['amount']" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="600" fixed-header>
+                                    <template v-slot:[`item.products`]="{ item }"><div v-html="products_html_fullname(item.products,4)"></div></template>
+                                    <template v-slot:[`item.measures_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('measures_types', item.measures_types,'localname')"></div></template> 
+                                    <template v-slot:[`item.actions`]="{ item }">
+                                        <v-icon v-if="['C','U'].includes(mode)" small class="mr-2" @click="editProductIn(item)">mdi-pencil</v-icon>
+                                        <v-icon v-if="['C','U'].includes(mode)" small @click="deleteProductIn(item)">mdi-delete</v-icon>
+                                    </template>
+                                    <template v-slot:[`body.append`]="{headers}" v-if="new_elaboration.elaborations_products_in.length>0">
+                                        <tr style="background-color: WhiteSmoke">
+                                            <td v-for="(header,i) in headers" :key="i">
+                                                <div v-if="header.value=='products'">{{ $t("Total {0} products):").format(new_elaboration.elaborations_products_in.length) }}</div>
+                                                <div v-if="header.value == 'amount'" class="d-flex justify-end" v-html="listobjects_sum(new_elaboration.elaborations_products_in,'amount')"></div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </v-data-table>
+                            </v-card>
+                        </v-tab-item>
+                        <v-tab-item key="elaborations">  
+                            <v-card outlined>
+                                <v-data-table dense :headers="steps_headers" :items="new_elaboration.elaborations_steps" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="600" fixed-header>
+                                    <template v-slot:[`item.steps`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('steps', item.steps,'localname')"></div></template> 
+                                    <template v-slot:[`item.products_in_step`]="{ item }"><div v-html="list_of_products_in_step(item)"></div></template> 
 
-                        <template v-slot:[`item.actions`]="{ item,index }">                     
-                            <v-icon :disabled="index==0" small class="mr-2" @click="setOneUp(item)">mdi-arrow-up-bold</v-icon>
-                            <v-icon :disabled="index==new_elaboration.elaborations_steps.length-1" small class="mr-2" @click="setOneDown(item)">mdi-arrow-down-bold</v-icon>
-                            <v-icon small class="mr-2" @click="editElaborationStep(item)">mdi-pencil</v-icon>
-                            <v-icon small @click="deleteElaborationStep(item)">mdi-delete</v-icon>
-                        </template>
-                        <template v-slot:[`body.append`]="{headers}" v-if="new_elaboration.elaborations_steps.length>0">
-                            <tr style="background-color: WhiteSmoke">
-                                <td v-for="(header,i) in headers" :key="i">
-                                    <div v-if="header.value=='products'">{{ $t("Total {0} products):").format(new_elaboration.elaborations_products_in.length) }}</div>
-                                    <div v-if="header.value == 'amount'" class="d-flex justify-end" v-html="listobjects_sum(new_elaboration.elaborations_products_in,'amount')"></div>
-                                </td>
-                            </tr>
-                        </template>
-                    </v-data-table>
+                                    <template v-slot:[`item.actions`]="{ item,index }">                     
+                                        <v-icon :disabled="index==0" small class="mr-2" @click="setOneUp(item)">mdi-arrow-up-bold</v-icon>
+                                        <v-icon :disabled="index==new_elaboration.elaborations_steps.length-1" small class="mr-2" @click="setOneDown(item)">mdi-arrow-down-bold</v-icon>
+                                        <v-icon small class="mr-2" @click="editElaborationStep(item)">mdi-pencil</v-icon>
+                                        <v-icon small @click="deleteElaborationStep(item)">mdi-delete</v-icon>
+                                    </template>
+                                    <template v-slot:[`body.append`]="{headers}" v-if="new_elaboration.elaborations_steps.length>0">
+                                        <tr style="background-color: WhiteSmoke">
+                                            <td v-for="(header,i) in headers" :key="i">
+                                                <div v-if="header.value=='products'">{{ $t("Total {0} products):").format(new_elaboration.elaborations_products_in.length) }}</div>
+                                                <div v-if="header.value == 'amount'" class="d-flex justify-end" v-html="listobjects_sum(new_elaboration.elaborations_products_in,'amount')"></div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </v-data-table>
+                            </v-card>
+                        </v-tab-item>
+                    </v-tabs-items>
                 </v-card>
             </v-form>
             <v-card-actions>
@@ -97,6 +109,7 @@
             return{
                 form_valid:false,
                 new_elaboration: null,
+                tab: 1,
 
                 loading_products: false,
 
@@ -105,6 +118,7 @@
                     { text: this.$t('Product'), sortable: true, value: 'products'},
                     { text: this.$t('Measure type'), value: 'measures_types', width:"20%"},
                     { text: this.$t('Amount'), value: 'amount', align:'right', width:"10%"},
+                    { text: this.$t('Final grams'), value: 'final_grams', align:'right', width:"10%"},
                     { text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"},
                 ],
 
@@ -201,23 +215,16 @@
                 this.dialog_products_in_crud=true
 
             },
-            on_ElaborationProductsInCRUD_cruded(mode,item,olditem){
+            on_ElaborationProductsInCRUD_cruded(){
                 this.dialog_products_in_crud=false  
-                if (mode=="C"){
-                    item.elaborations=this.new_elaboration.url
-                    this.new_elaboration.elaborations_products_in.push(item)
-                } else if (mode=="U"){
-                    let index = this.new_elaboration.elaborations_products_in.indexOf(olditem)
-                    this.new_elaboration.elaborations_products_in[index].products_in=item.products_in
-                    this.new_elaboration.elaborations_products_in[index].amount=item.amount
-                    
-                } else if (mode=="D"){
-                    let index = this.new_elaboration.elaborations_products_in.indexOf(olditem)
-                    this.new_elaboration.elaborations_products_in.splice(index,1)
-                }
-                console.log(item.measures_types)
-                this.acceptDialog()
-                this.key=this.key+1
+                return axios.get(`${this.$store.state.apiroot}/api/elaborationsproductsinthrough/?elaboration=${this.new_elaboration.url}`, this.myheaders())
+                .then((response) => {
+                    console.log(response.data)
+                    this.new_elaboration.elaborations_products_in=response.data
+                    this.key=this.key+1
+               }, (error) => {
+                    this.parseResponseError(error)
+                });
             },
             addElaborationStep(){
                 this.elaboration_step=this.empty_elaborations_steps()
