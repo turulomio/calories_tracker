@@ -1,7 +1,5 @@
 <template>
     <div>
-        <div class="d-flex justify-end"><v-btn color="primary" dark @click="on_new_click()"><v-icon small>mdi-plus</v-icon>{{$t("New elaboration")}}</v-btn></div>
-           
         <v-data-table dense :headers="table_headers" :items="recipe.elaborations" class="elevation-1" disable-pagination  hide-default-footer sort-by="date" fixed-header :height="$attrs.height" ref="table_elaborations">
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
@@ -9,7 +7,7 @@
             </template>
         </v-data-table>   
         <!-- ItemCRUD DIALOG -->
-        <v-dialog v-model="elaboration_crud_dialog" width="100%">
+        <v-dialog v-model="elaboration_crud_dialog" width="100%" persistent>
             <v-card class="pa-3">
                 <ElaborationCRUD :elaboration="elaboration" :mode="elaboration_crud_mode" :key="key"  @cruded="on_ElaborationsCRUD_cruded()"></ElaborationCRUD>
             </v-card>

@@ -202,6 +202,7 @@
                     this.catalog_table_headers= [
                         { text: this.$t('Id'), sortable: true, value: 'id', width:"10%"},
                         { text: this.$t('Name'), sortable: true, value: 'name'},
+                        { text: this.$t('Local name'), sortable: true, value: 'localname'},
                         { text: this.$t('Actions'), value: 'actions', sortable: false, width: "10%"},
                     ]
                 }

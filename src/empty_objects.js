@@ -212,6 +212,7 @@ export function empty_elaborations_products_in(){
         products: null,
         amount: null,
         measures_types: null,
+        elaborations: null,
     }
 }
 

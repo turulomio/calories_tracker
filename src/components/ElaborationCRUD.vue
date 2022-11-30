@@ -63,8 +63,8 @@
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" v-if="['C','U'].includes(mode)" @click="addProductIn()" >{{ $t("Add a product") }}</v-btn>
-                <v-btn color="primary" v-if="['C','U'].includes(mode)" @click="addElaborationStep()" >{{ $t("Add a step") }}</v-btn>
+                <v-btn color="primary" :disable="(new_elaboration.url==null)" v-if="['C','U'].includes(mode)" @click="addProductIn()" >{{ $t("Add a product") }}</v-btn>
+                <v-btn color="primary" :disable="(new_elaboration.url==null)" v-if="['C','U'].includes(mode)" @click="addElaborationStep()" >{{ $t("Add a step") }}</v-btn>
                 <v-btn color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn> 
                 <v-btn color="error" @click="$emit('cruded')" >{{ $t("Cancel") }}</v-btn>
             </v-card-actions>
@@ -198,7 +198,9 @@
                 }
             },
             addProductIn(){
+                this.tab=0
                 this.product_in=this.empty_elaborations_products_in()
+                this.product_in.elaborations=this.new_elaboration.url
                 this.product_in_mode='C'
                 this.key=this.key+1
                 this.dialog_products_in_crud=true
@@ -230,6 +232,7 @@
                 });
             },
             addElaborationStep(){
+                this.tab=1
                 this.elaboration_step=this.empty_elaborations_steps()
                 this.elaboration_step_mode='C'
                 this.key=this.key+1

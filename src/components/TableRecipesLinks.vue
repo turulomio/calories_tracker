@@ -1,7 +1,5 @@
 <template>
     <div>
-        <div class="d-flex justify-end"><v-btn color="primary" dark @click="on_new_click()"><v-icon small>mdi-plus</v-icon>{{$t("New recipe link")}}</v-btn></div>
-           
         <v-data-table dense :headers="table_headers" :items="recipe.recipes_links" class="elevation-1" disable-pagination  hide-default-footer sort-by="date" fixed-header :height="$attrs.height" ref="table_recipes_links">
             <template v-slot:[`item.type`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('recipes_links_types', item.type,'localname')"></div></template> 
             <template v-slot:[`item.link`]="{ item }"><div @click="on_link_click(item)">{{item.link}}</div></template> 

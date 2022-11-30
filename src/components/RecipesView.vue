@@ -13,12 +13,12 @@
         <v-tabs-items v-model="tab">
             <v-tab-item key="documentation">      
                 <v-card outlined>
-                    <TableRecipesLinks :recipe="new_recipe" :key="key" @cruded="on_TableRecipesLinks_cruded()"></TableRecipesLinks>
+                    <TableRecipesLinks ref="table_links" :recipe="new_recipe" :key="key" @cruded="on_TableRecipesLinks_cruded()"></TableRecipesLinks>
                 </v-card>
             </v-tab-item>
             <v-tab-item key="elaborations">  
                 <v-card outlined>
-                    <TableElaborations :recipe="new_recipe" :key="key" @cruded="on_TableElaborations_cruded()"></TableElaborations>
+                    <TableElaborations ref="table_elaborations" :recipe="new_recipe" :key="key" @cruded="on_TableElaborations_cruded()"></TableElaborations>
                 </v-card>
             </v-tab-item>
         </v-tabs-items>
@@ -52,6 +52,24 @@
                         subheader:this.$t('Recipe options'),
                         children: [
                             {
+                                name:this.$t('New recipe link'),
+                                code: async function(this_){
+                                    console.log(this_.$refs)
+                                    this_.tab=0
+                                    await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
+                                    this_.$refs.table_links.on_new_click()
+                                },
+                                icon: "mdi-pencil",
+                            },
+                            {
+                                name:this.$t('New elaboration'),
+                                code: function(this_){
+                                    this_.tab=1
+                                    this_.$refs.table_elaborations.on_new_click()
+                                },
+                                icon: "mdi-pencil",
+                            },
+                            {
                                 name:this.$t('Generate PDF'),
                                 code: function(this_){
                                     console.log(this_)
@@ -65,7 +83,7 @@
         },
         watch:{
         },
-        methods: {          
+        methods: {        
             displayvalues(){
                 return [
                     {title:this.$t('Valoration'), value: this.new_recipe.valoration},
