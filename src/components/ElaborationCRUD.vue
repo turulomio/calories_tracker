@@ -18,6 +18,7 @@
                             <v-card outlined>
                                 <v-data-table dense :headers="products_in_headers" :items="new_elaboration.elaborations_products_in" sort-by="amount" :sort-desc="['amount']" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="600" fixed-header>
                                     <template v-slot:[`item.products`]="{ item }"><div v-html="products_html_fullname(item.products,4)"></div></template>
+                                    <template v-slot:[`item.amount`]="{ item }">{{ fraction(item.amount).toFraction(true)}}</template>
                                     <template v-slot:[`item.measures_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('measures_types', item.measures_types,'localname')"></div></template> 
                                     <template v-slot:[`item.actions`]="{ item }">
                                         <v-icon v-if="['C','U'].includes(mode)" small class="mr-2" @click="editProductIn(item)">mdi-pencil</v-icon>
@@ -87,6 +88,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import fraction from 'fraction.js'
     import ElaborationProductsInCRUD from './ElaborationProductsInCRUD.vue'
     import ElaborationStepCRUD from './ElaborationStepCRUD.vue'
     import {empty_elaborations_products_in,empty_elaborations_steps} from '../empty_objects.js'
@@ -145,6 +147,7 @@
             }
         },
         methods: {
+            fraction,
             empty_elaborations_products_in,
             empty_elaborations_steps,
             button(){

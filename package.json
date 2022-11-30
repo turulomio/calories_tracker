@@ -14,6 +14,7 @@
     "core-js": "^3.26.1",
     "echarts": "^5.4.0",
     "flag-icons": "^6.6.6",
+    "fraction.js": "^4.2.0",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.39",
     "vue": "^2.7.14",
@@ -33,8 +34,8 @@
     "npm-check-updates": "^16.4.3",
     "sass": "^1.56.1",
     "sass-loader": "^13.2.0",
-    "vue-i18n-extract": "^2.0.7",
     "vue-cli-plugin-i18n": "~2.3.1",
+    "vue-i18n-extract": "^2.0.7",
     "vue-template-compiler": "^2.7.14"
   },
   "browserslist": [
