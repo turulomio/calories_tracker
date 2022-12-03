@@ -70,7 +70,6 @@
             on_ElaborationsCRUD_cruded(){
                 this.key=this.key+1
                 this.elaboration_crud_dialog=false
-                console.log("CRUDED TABLE RECIPESLINKS")
                 this.$emit("cruded")
             },
         },

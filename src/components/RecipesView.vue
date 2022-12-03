@@ -99,6 +99,7 @@
                 .then((response) => {
                     console.log(response.data)
                     this.new_recipe.recipes_links=response.data
+                    this.$emit("cruded")
                     this.key=this.key+1
                }, (error) => {
                     this.parseResponseError(error)
@@ -110,6 +111,7 @@
                     console.log(response.data)
                     this.new_recipe.elaborations=response.data
                     this.key=this.key+1
+                    this.$emit("cruded")
                }, (error) => {
                     this.parseResponseError(error)
                 });

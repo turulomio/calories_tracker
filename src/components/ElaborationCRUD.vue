@@ -164,8 +164,6 @@
             acceptDialog(){             
                 if( this.$refs.form.validate()==false) return   
 
-                console.log(this.new_elaboration)
-
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/elaborations/`, this.new_elaboration,  this.myheaders())
                     .then((response) => {
@@ -185,7 +183,7 @@
                     })
                 }
                 if (this.mode=="D"){             
-                    var r = confirm(this.$t("Do you want to delete this elaboration register?"))
+                    var r = confirm(this.$t("Do you want to delete this elaboration?"))
                     if(r == true) {
                         axios.delete(this.new_elaboration.url, this.myheaders())
                         .then((response) => {

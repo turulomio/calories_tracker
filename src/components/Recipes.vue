@@ -5,7 +5,7 @@
         </h1>
           <v-text-field class="ml-10 mr-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
     
-        <v-data-table dense :headers="recipes_headers" :items="recipes" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+        <v-data-table dense :headers="recipes_headers" :items="recipes" :sort-by="table_sort_by" :sort-desc="table_sort_desc" :class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
             <template v-slot:[`item.last`]="{ item }">{{localtime(item.last)}}</template>      
             <template v-slot:[`item.food_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('food_types', item.food_types,'localname')"></div></template> 
             <template v-slot:[`item.guests`]="{ item }"><v-icon small v-if="item.guests" >mdi-check-outline</v-icon></template>   
@@ -63,6 +63,8 @@
                 loading:false,
                 key:0,
                 search: "",
+                table_sort_by:"name",
+                table_sort_desc:"",
 
                 // RECIPE VIEW
                 dialog_recipes_view:false,
@@ -89,6 +91,42 @@
                                     this_.recipe=this_.empty_recipes()
                                     this_.key=this_.key+1
                                     this_.dialog_recipes_crud=true
+                                },
+                            },
+                            {
+                                name: this.$t("Show guests recipes"),
+                                icon: "mdi-account-group",
+                                code: function(this_){
+                                    this_.search=":GUESTS"
+                                    this_.on_search_change()
+                                    this_.key=this_.key+1
+                                },
+                            },
+                            {
+                                name: this.$t("Show recipes to elaborate soon"),
+                                icon: "mdi-account-group",
+                                code: function(this_){
+                                    this_.search=":SOON"
+                                    this_.on_search_change()
+                                    this_.key=this_.key+1
+                                },
+                            },
+                            {
+                                name: this.$t("Show evaluated recipes"),
+                                icon: "mdi-account-group",
+                                code: function(this_){
+                                    this_.search=":VALORATION"
+                                    this_.on_search_change()
+                                    this_.key=this_.key+1
+                                },
+                            },
+                            {
+                                name: this.$t("Show last edited recipes"),
+                                icon: "mdi-account-group",
+                                code: function(this_){
+                                    this_.search=":LAST:50"
+                                    this_.on_search_change()
+                                    this_.key=this_.key+1
                                 },
                             },
                         ]
@@ -141,6 +179,20 @@
                 this.update_recipes()
             },
             update_recipes(){
+
+                if (this.search==":SOON" || this.search.startsWith(":LAST")){
+                    this.table_sort_by="last"
+                    this.table_sort_desc="last"
+                } else if (this.search==":GUESTS" || this.search==":VALORATION"){
+                    this.table_sort_by="valoration"
+                    this.table_sort_desc="valoration"
+                } else{
+                    this.table_sort_by="name"
+                    this.table_sort_desc=""
+
+                }
+                
+
                 this.loading=true
                 axios.get(`${this.$store.state.apiroot}/api/recipes/?search=${this.search}`, this.myheaders())
                 .then((response) => {

@@ -11,17 +11,18 @@
                 </v-autocomplete>
 
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.amount" :label="$t('Set product amount (gr)')" :placeholder="$t('Set product amount (gr)')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model.number="newproduct.density" :label="$t(`Set product density (gr/ml). Empty if you don't know`)" :placeholder="$t('Set product density(gr/ml)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.fat" :label="$t('Set product fat (gr)')" :placeholder="$t('Set product fat (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model.number="newproduct.saturated_fat" :label="$t('Set product saturated_fat (gr)')" :placeholder="$t('Set product saturated_fat (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.protein" :label="$t('Set product protein (gr)')" :placeholder="$t('Set product protein (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.carbohydrate" :label="$t('Set product carbohydrate (gr)')" :placeholder="$t('Set product carbohydrate (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model.number="newproduct.sugars" :label="$t('Set product sugars (gr)')" :placeholder="$t('Set product sugars (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.calories" :label="$t('Set product calories (gr)')" :placeholder="$t('Set product calories (gr)')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
-                <v-text-field :readonly="mode=='D'" v-model.number="newproduct.salt" :label="$t('Set product salt (gr)')" :placeholder="$t('Set product salt (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.cholesterol" :label="$t('Set product cholesterol (gr)')" :placeholder="$t('Set product cholesterol (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model.number="newproduct.salt" :label="$t('Set product salt (gr)')" :placeholder="$t('Set product salt (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.sodium" :label="$t('Set product sodium (mg)')" :placeholder="$t('Set product sodium (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.potassium" :label="$t('Set product potassium (mg)')" :placeholder="$t('Set product potassium (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.fiber" :label="$t('Set product fiber (gr)')" :placeholder="$t('Set product fiber (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
-                <v-text-field :readonly="mode=='D'" v-model.number="newproduct.sugars" :label="$t('Set product sugars (gr)')" :placeholder="$t('Set product sugars (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
-                <v-text-field :readonly="mode=='D'" v-model.number="newproduct.saturated_fat" :label="$t('Set product saturated_fat (gr)')" :placeholder="$t('Set product saturated_fat (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.ferrum" :label="$t('Set product ferrum (mg)')" :placeholder="$t('Set product ferrum (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.magnesium" :label="$t('Set product magnesium (mg)')" :placeholder="$t('Set product magnesium (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.phosphor" :label="$t('Set product phosphor (mg)')" :placeholder="$t('Set product phosphor (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
