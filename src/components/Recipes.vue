@@ -3,8 +3,9 @@
         <h1>{{ $t(`Recipes`) }}
             <MyMenuInline :items="menuinline_items()" :context="this"></MyMenuInline>
         </h1>
-          <v-text-field class="ml-10 mr-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
+        <v-text-field class="mx-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
     
+        <p class="ml-10">{{ $t("{0} recipes found").format(recipes.length)}}</p>
         <v-data-table dense :headers="recipes_headers" :items="recipes" :sort-by="table_sort_by" :sort-desc="table_sort_desc" :class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
             <template v-slot:[`item.last`]="{ item }">{{localtime(item.last)}}</template>      
             <template v-slot:[`item.food_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('food_types', item.food_types,'localname')"></div></template> 
@@ -188,7 +189,7 @@
                     this.table_sort_desc="valoration"
                 } else{
                     this.table_sort_by="name"
-                    this.table_sort_desc=""
+                    this.table_sort_desc=[]
 
                 }
                 

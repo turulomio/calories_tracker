@@ -61,10 +61,11 @@
                     </v-tabs-items>
                 </v-card>
             </v-form>
-            <v-card-actions>
+            <v-card-actions>                
+                <v-btn color="error" :disabled="!new_elaboration.url" @click="createElaboratedProduct()" >{{ $t("Create an elaborated product") }}</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" :disable="(new_elaboration.url==null)" v-if="['C','U'].includes(mode)" @click="addProductIn()" >{{ $t("Add a product") }}</v-btn>
-                <v-btn color="primary" :disable="(new_elaboration.url==null)" v-if="['C','U'].includes(mode)" @click="addElaborationStep()" >{{ $t("Add a step") }}</v-btn>
+                <v-btn color="primary" :disabled="!new_elaboration.url" v-if="['C','U'].includes(mode)" @click="addProductIn()" >{{ $t("Add a product") }}</v-btn>
+                <v-btn color="primary" :disabled="!new_elaboration.url" v-if="['C','U'].includes(mode)" @click="addElaborationStep()" >{{ $t("Add a step") }}</v-btn>
                 <v-btn color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn> 
                 <v-btn color="error" @click="$emit('cruded')" >{{ $t("Cancel") }}</v-btn>
             </v-card-actions>
@@ -299,11 +300,28 @@
                 for (var i = 0; i < this.new_elaboration.elaborations_steps.length; i++) {
                     this.new_elaboration.elaborations_steps[i].order=i+1
                 }
-            }
+            },
+            createElaboratedProduct(){
+                return axios.post(`${this.new_elaboration.url}create_elaborated_product/`, {}, this.myheaders())
+                .then((response) => {
+                    Promise.all([
+                        this.$store.dispatch("getProducts"),
+                        this.$store.dispatch("getElaboratedProducts")
+                        ])
+                        .then(() => {
+                            alert(this.$t("Elaborated product created correctly. Now you can use it to track calories in your meals"))
+                            console.log(response.data)
+                        });
+               }, (error) => {
+                    this.parseResponseError(error)
+                });
+            },
+
         },
         created(){
             // Guess crud mode
             this.new_elaboration=Object.assign({},this.elaboration)
+            console.log(this.new_elaboration.url)
         }
     }
 </script>

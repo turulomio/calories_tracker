@@ -152,7 +152,7 @@
                 ],
                 system_products:[],
                 system_products_headers: [ 
-                    { text: this.$t('Name'), sortable: true, value: 'fullname',width:"30%"},          
+                    { text: this.$t('Name'), sortable: true, value: 'name',width:"30%"},          
                     { text: this.$t('Calories (kcal)'), sortable: true, value: 'calories',align:'right'},
                     { text: this.$t('Fat (g)'), sortable: true, value: 'fat',align:'right'},
                     { text: this.$t('Protein (g)'), sortable: true, value: 'protein',align:'right'},
@@ -302,6 +302,11 @@
             },
             deleteProduct(item){
                 this.product=item
+
+                if (this.product.elaborated_products){
+                    alert(this.$t("This is an elaborated products. Please remove from elaborated products tab"))
+                    return
+                }
                 this.product_cu_mode="D"
                 this.key=this.key+1
 
@@ -405,9 +410,9 @@
                 // Refresh products and elaborated products filtering products and elaborated products
                 // Refresh system products making a query
                 this.loading=true
-                Promise.all([this.update_products(with_dispatch), this.update_elaborated_products(with_dispatch), this.update_system_products()])
-                // Promise.all([this.update_elaborated_products(with_dispatch),])                
+                Promise.all([this.update_products(with_dispatch), this.update_elaborated_products(with_dispatch), this.update_system_products()])        
                 .then( ()=> {
+                    console.log(this.products)
                     this.loading=false
                     this.key=this.key+1
                 })
@@ -417,6 +422,7 @@
                 this.$store.state.products.forEach(element => {
                     if (element.elaborated_products==item.url) product=element
                 });
+                if (product==null) return true
                 return product.is_deletable
             },
 
