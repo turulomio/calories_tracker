@@ -45,27 +45,7 @@
                         </v-tab-item>
                         <v-tab-item key="steps">  
                             <v-card outlined>
-                                <v-data-table dense :headers="steps_headers" :items="new_elaboration.elaborations_steps" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="450" fixed-header>
-                                    <template v-slot:[`item.steps`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('steps', item.steps,'localname')"></div></template> 
-                                    <template v-slot:[`item.products_in_step`]="{ item }"><div v-html="list_of_products_in_step(item)"></div></template> 
-                                    <template v-slot:[`item.container`]="{ item }"><div v-html="get_container_name(item.container)"></div></template> 
-                                    <template v-slot:[`item.container_to`]="{ item }">{{ get_container_name(item.container_to) }}</template> 
-
-                                    <template v-slot:[`item.actions`]="{ item,index }">                     
-                                        <v-icon :disabled="index==0" small class="mr-2" @click="setOneUp(item)">mdi-arrow-up-bold</v-icon>
-                                        <v-icon :disabled="index==new_elaboration.elaborations_steps.length-1" small class="mr-2" @click="setOneDown(item)">mdi-arrow-down-bold</v-icon>
-                                        <v-icon small class="mr-2" @click="editElaborationStep(item)">mdi-pencil</v-icon>
-                                        <v-icon small @click="deleteElaborationStep(item)">mdi-delete</v-icon>
-                                    </template>
-                                    <template v-slot:[`body.append`]="{headers}" v-if="new_elaboration.elaborations_steps.length>0">
-                                        <tr style="background-color: WhiteSmoke">
-                                            <td v-for="(header,i) in headers" :key="i">
-                                                <div v-if="header.value=='products'">{{ $t("Total {0} products):").format(new_elaboration.elaborations_products_in.length) }}</div>
-                                                <div v-if="header.value == 'amount'" class="d-flex justify-end" v-html="listobjects_sum(new_elaboration.elaborations_products_in,'amount')"></div>
-                                            </td>
-                                        </tr>
-                                    </template>
-                                </v-data-table>
+                                <TableElaborationsSteps ref="table_elaborations_steps" :elaboration="new_elaboration" :key="key" @cruded="on_TableElaborationsSteps_cruded"></TableElaborationsSteps>
                             </v-card>
                         </v-tab-item>
                         <v-tab-item key="wording">      
@@ -97,27 +77,20 @@
             </v-card>
         </v-dialog>
 
-
-        <!-- STEPCRUD DIALOG -->
-        <v-dialog v-model="dialog_elaboration_step_crud" width="100%">
-            <v-card class="pa-3">
-                <ElaborationStepCRUD :elaboration_step="elaboration_step" :elaboration="new_elaboration" :mode="elaboration_step_mode" :key="key"  @cruded="on_ElaborationsStep_cruded"></ElaborationStepCRUD>
-            </v-card>
-        </v-dialog>
     </div>
 </template>
 <script>
     import axios from 'axios'
     import fraction from 'fraction.js'
     import ElaborationProductsInCRUD from './ElaborationProductsInCRUD.vue'
-    import ElaborationStepCRUD from './ElaborationStepCRUD.vue'
     import TableElaborationsContainers from './TableElaborationsContainers.vue'
-    import {empty_elaborations_products_in,empty_elaborations_steps} from '../empty_objects.js'
+    import TableElaborationsSteps from './TableElaborationsSteps.vue'
+    import {empty_elaborations_products_in} from '../empty_objects.js'
     export default {
         components: {
             ElaborationProductsInCRUD,
-            ElaborationStepCRUD,
             TableElaborationsContainers,
+            TableElaborationsSteps,
         },
         props: {
             
@@ -145,34 +118,16 @@
                     { text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"},
                 ],
 
-                steps_headers: [
-                    { text: this.$t('Order'), sortable: false, value: 'order'},
-                    { text: this.$t('Step'), sortable: false, value: 'steps'},
-                    { text: this.$t('Duration'), sortable: false, value: 'duration', align:'right'},
-                    { text: this.$t('Temperature'), value: 'temperature', sortable: false, width:"8%"},
-                    { text: this.$t('Stir'), value: 'stir', sortable: false, width:"8%"},
-                    { text: this.$t('Products in step'), sortable: false, value: 'products_in_step'},
-                    { text: this.$t('Container'), sortable: false, value: 'container'},
-                    { text: this.$t('Container to'), sortable: false, value: 'container_to'},
-                    { text: this.$t('Comment'), sortable: false, value: 'comment', width:"15%"},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"},
-                ],
 
                 key:0,
                 product_in:null,
                 product_in_mode:null,
                 dialog_products_in_crud:false,
-
-                // Elaboration step
-                elaboration_step:null,
-                elaboration_step_mode:null,
-                dialog_elaboration_step_crud:false,
             }
         },
         methods: {
             fraction,
             empty_elaborations_products_in,
-            empty_elaborations_steps,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')
@@ -217,6 +172,14 @@
                         })
                     }
                 }
+            },
+            async addElaborationStep(){
+                if (this.tab!=2){
+                    this.tab=2
+                    await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
+                }
+                this.$refs.table_elaborations_steps.addElaborationStep()
+
             },
             addProductIn(){
                 this.tab=0
@@ -263,78 +226,11 @@
                     this.parseResponseError(error)
                 });
             },
-            addElaborationStep(){
-                this.tab=2
-                this.elaboration_step=this.empty_elaborations_steps()
-                this.elaboration_step.elaborations=this.new_elaboration.url
-                this.elaboration_step_mode='C'
-                this.key=this.key+1
-                this.dialog_elaboration_step_crud=true
-
-            },
-            editElaborationStep(item){
-                this.elaboration_step=item
-                this.elaboration_step_mode='U'
-                this.key=this.key+1
-                this.dialog_elaboration_step_crud=true
-
-            },
-            deleteElaborationStep(item){
-                this.elaboration_step=item
-                this.elaboration_step_mode='D'
-                this.key=this.key+1
-                this.dialog_elaboration_step_crud=true
-
-            },
-            on_ElaborationsStep_cruded(mode,item,olditem){
-                console.log(item)
-                if (mode=="C"){
-                    this.new_elaboration.elaborations_steps.push(item)
-                } else if (mode=="U"){
-                    let index = this.new_elaboration.elaborations_steps.indexOf(olditem)
-                    this.new_elaboration.elaborations_steps[index]=item
-                    
-                } else if (mode=="D"){
-                    let index = this.new_elaboration.elaborations_steps.indexOf(olditem)
-                    this.new_elaboration.elaborations_steps.splice(index,1)
-                }
-                this.reorder_steps()
-                this.key=this.key+1
-                this.dialog_elaboration_step_crud=false 
-                this.acceptDialog(false) 
-            },
-            setOneUp(item){
-                let index = this.new_elaboration.elaborations_steps.indexOf(item)
-                this.new_elaboration.elaborations_steps[index]=this.new_elaboration.elaborations_steps[index-1]
-                this.new_elaboration.elaborations_steps[index-1]=item
-                this.reorder_steps()
-                this.key=this.key+1
-            },
-            setOneDown(item){
-                let index = this.new_elaboration.elaborations_steps.indexOf(item)
-                this.new_elaboration.elaborations_steps[index]=this.new_elaboration.elaborations_steps[index+1]
-                this.new_elaboration.elaborations_steps[index+1]=item
-                this.reorder_steps()
-                this.key=this.key+1
-
-            },
-            list_of_products_in_step(item){
-                var r=""
-                item.products_in_step.forEach(o=>{
-
-                    this.new_elaboration.elaborations_products_in.forEach(p=> {
-                        if (p.url==o){
-                            r=r+this.$store.getters.getObjectPropertyByUrl('products', p.products,'fullname')+", "
-                        }
-
-                    })
-                })
-                return r.slice(0,-2)
-            },
-            reorder_steps(){
-                for (var i = 0; i < this.new_elaboration.elaborations_steps.length; i++) {
-                    this.new_elaboration.elaborations_steps[i].order=i+1
-                }
+            on_TableElaborationsSteps_cruded(new_elaborations_steps){
+                console.log("on_Table_cruded")
+                console.log(new_elaborations_steps)
+                this.new_elaboration.elaborations_steps=new_elaborations_steps
+                this.acceptDialog(false)
             },
             createElaboratedProduct(){
                 return axios.post(`${this.new_elaboration.url}create_elaborated_product/`, {}, this.myheaders())
@@ -357,20 +253,10 @@
                 await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
                 this.$refs.table_elaborations_containers.on_new_click()
             },
-            get_container_name(item){
-                var r=""
-                this.elaboration.elaborations_containers.forEach(o => {
-                    if (o.url==item) {
-                        r=o.name
-                    }
-                });
-                return r
-            }
         },
         created(){
             // Guess crud mode
             this.new_elaboration=Object.assign({},this.elaboration)
-            console.log(this.new_elaboration.url)
         }
     }
 </script>

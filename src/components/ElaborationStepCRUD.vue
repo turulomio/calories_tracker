@@ -3,14 +3,14 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-autocomplete :readonly="mode=='D'" :items="$store.state.steps" v-model="new_elaboration_step.steps" item-text="localname" item-value="url" :label="$t('Select a step')"></v-autocomplete>
-                <v-text-field :readonly="mode=='D'" v-model="new_elaboration_step.duration" :label="$t('Set step duration')" :placeholder="$t('Set step duration')" :rules="RulesString(10,true)" counter="10"/>
-                <v-text-field :readonly="mode=='D'" v-model.number="new_elaboration_step.temperature" :label="$t('Set temperature')" :placeholder="$t('Set temperature')" :rules="RulesInteger(10,false)" counter="10"/>
-                <v-text-field :readonly="mode=='D'" v-model.number="new_elaboration_step.stir" :label="$t('Set stir')" :placeholder="$t('Set stir')" :rules="RulesInteger(10,false)" counter="10"/>
-                <v-text-field :readonly="mode=='D'" v-model="new_elaboration_step.comment" :label="$t('Set a comment')" :placeholder="$t('Set a comment')" :rules="RulesString(200,false)" counter="200"/>
-                <v-autocomplete :items="elaboration.elaborations_products_in" v-model="new_elaboration_step.products_in_step" :label="$t('Products in step')" :item-text="get_item_products_step" item-value="url" multiple :rules="RulesSelection(true)" chips ></v-autocomplete>
-                <v-select :readonly="mode=='D'" :items="elaboration.elaborations_containers" v-model="new_elaboration_step.container" item-text="name" item-value="url" :label="$t('Select a container')"></v-select>
-                <v-select :readonly="mode=='D'" :items="elaboration.elaborations_containers" v-model="new_elaboration_step.container_to" item-text="name" item-value="url" :label="$t('Select a container where to pour')"></v-select>
+                <v-autocomplete :readonly="mode=='D'" :items="$store.state.steps" v-model="new_elaborations_step.steps" item-text="localname" item-value="url" :label="$t('Select a step')"></v-autocomplete>
+                <v-text-field :readonly="mode=='D'" v-model="new_elaborations_step.duration" :label="$t('Set step duration')" :placeholder="$t('Set step duration')" :rules="RulesString(10,true)" counter="10"/>
+                <WidgetTemperatures :readonly="mode=='D'" v-model="widget_temperatures"/>
+                <WidgetStir :readonly="mode=='D'" v-model="widget_stir"/>
+                <v-text-field :readonly="mode=='D'" v-model="new_elaborations_step.comment" :label="$t('Set a comment')" :placeholder="$t('Set a comment')" :rules="RulesString(200,false)" counter="200"/>
+                <v-autocomplete :items="elaboration.elaborations_products_in" v-model="new_elaborations_step.products_in_step" :label="$t('Products in step')" :item-text="get_item_products_step" item-value="url" multiple :rules="RulesSelection(true)" chips ></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="elaboration.elaborations_containers" v-model="new_elaborations_step.container" item-text="name" item-value="url" :label="$t('Select a container')"></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="elaboration.elaborations_containers" v-model="new_elaborations_step.container_to" item-text="name" item-value="url" :label="$t('Select a container where to pour')"></v-autocomplete>
 
             </v-form>
             <v-card-actions>
@@ -21,14 +21,18 @@
     </div>
 </template>
 <script>
+    import WidgetTemperatures from './WidgetTemperatures.vue'
+    import WidgetStir from './WidgetStir.vue'
     export default {
         components: {
+            WidgetTemperatures,
+            WidgetStir,
         },
         props: {
             elaboration: {
                 required: true,
             },
-            elaboration_step: { 
+            elaborations_step: { 
                 required: true
             },
             mode: { // C D U
@@ -38,7 +42,9 @@
         data(){ 
             return{
                 form_valid:false,
-                new_elaboration_step: null,
+                new_elaborations_step: null,
+                widget_temperatures:null,
+                widget_stir:null,
             }
         },
         methods: {
@@ -57,11 +63,23 @@
             },
             acceptDialog(){             
                 if( this.$refs.form.validate()==false) return
-                this.$emit("cruded",this.mode,this.new_elaboration_step,this.elaboration_step)
+                this.new_elaborations_step.temperatures_types=this.widget_temperatures.temperatures_types
+                this.new_elaborations_step.temperatures_values=this.widget_temperatures.temperatures_values
+                this.new_elaborations_step.stir_types=this.widget_stir.stir_types
+                this.new_elaborations_step.stir_values=this.widget_stir.stir_values
+                this.$emit("cruded",this.mode,this.new_elaborations_step,this.elaborations_step)
             },
         },
         created(){
-            this.new_elaboration_step=Object.assign({},this.elaboration_step)
+            this.new_elaborations_step=Object.assign({},this.elaborations_step)
+            this.widget_temperatures={
+                temperatures_types:this.new_elaborations_step.temperatures_types,
+                temperatures_values:this.new_elaborations_step.temperatures_values
+            }
+            this.widget_stir={
+                stir_types:this.new_elaborations_step.stir_types,
+                stir_values:this.new_elaborations_step.stir_values
+            }
         }
     }
 </script>
