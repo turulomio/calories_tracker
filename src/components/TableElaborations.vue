@@ -69,7 +69,6 @@
             },
             on_ElaborationsCRUD_cruded(){
                 this.key=this.key+1
-                this.elaboration_crud_dialog=false
                 this.$emit("cruded")
             },
         },

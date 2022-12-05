@@ -184,6 +184,7 @@
             addProductIn(){
                 this.tab=0
                 this.product_in=this.empty_elaborations_products_in()
+                this.product_in.measures_types=this.hyperlinked_url("measures_types",1)
                 this.product_in.elaborations=this.new_elaboration.url
                 this.product_in_mode='C'
                 this.key=this.key+1

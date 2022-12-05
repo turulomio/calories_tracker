@@ -124,7 +124,7 @@
 
                     this.elaboration.elaborations_products_in.forEach(p=> {
                         if (p.url==o){
-                            r=r+this.$store.getters.getObjectPropertyByUrl('products', p.products,'fullname')+", "
+                            r=r+ p.fullname+", "
                         }
 
                     })
