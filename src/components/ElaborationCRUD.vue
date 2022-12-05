@@ -8,15 +8,18 @@
                     <v-text-field :readonly="mode=='D'" class="ml-5" v-model="new_elaboration.final_amount" :label="$t('Set your final amount')" :placeholder="$t('Set your final amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
                 </v-row>      
                 <v-card class="mt-4">
-                    <v-tabs  background-color="primary" dark  v-model="tab" >
+                    <v-tabs background-color="primary" dark  v-model="tab" >
                         <v-tab key="ingredients">{{ $t('Ingredients') }}</v-tab>
+                        <v-tab key="containers">{{ $t('Containers') }}</v-tab>
                         <v-tab key="steps">{{ $t('Steps') }}</v-tab>
+                        <v-tab key="wording">{{ $t('Wording') }}</v-tab>
+                        <v-tab key="experiences">{{ $t('Experiences') }}</v-tab>
                         <v-tabs-slider color="yellow"></v-tabs-slider>
                     </v-tabs>
                     <v-tabs-items v-model="tab">
-                        <v-tab-item key="documentation">      
+                        <v-tab-item key="ingredients">      
                             <v-card outlined>
-                                <v-data-table dense :headers="products_in_headers" :items="new_elaboration.elaborations_products_in" sort-by="amount" :sort-desc="['amount']" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="450" fixed-header>
+                                <v-data-table dense :headers="products_in_headers" :items="new_elaboration.elaborations_products_in" sort-by="final_grams" :sort-desc="['final_grams']" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="450" fixed-header>
                                     <template v-slot:[`item.products`]="{ item }"><div v-html="products_html_fullname(item.products,4)"></div></template>
                                     <template v-slot:[`item.amount`]="{ item }">{{ fraction(item.amount).toFraction(true)}}</template>
                                     <template v-slot:[`item.measures_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('measures_types', item.measures_types,'localname')"></div></template> 
@@ -33,6 +36,11 @@
                                         </tr>
                                     </template>
                                 </v-data-table>
+                            </v-card>
+                        </v-tab-item>
+                        <v-tab-item key="containers">      
+                            <v-card outlined>         
+                                <TableElaborationsContainers ref="table_elaborations_containers" :elaboration="new_elaboration" :key="key" @cruded="on_TableElaborationsContainers_cruded()"></TableElaborationsContainers>
                             </v-card>
                         </v-tab-item>
                         <v-tab-item key="elaborations">  
@@ -58,13 +66,22 @@
                                 </v-data-table>
                             </v-card>
                         </v-tab-item>
+                        <v-tab-item key="wording">      
+                            <v-card outlined>
+                            </v-card>
+                        </v-tab-item>
+                        <v-tab-item key="experiences">      
+                            <v-card outlined>
+                            </v-card>
+                        </v-tab-item>
                     </v-tabs-items>
                 </v-card>
             </v-form>
             <v-card-actions>                
                 <v-btn color="error" :disabled="!new_elaboration.url" @click="createElaboratedProduct()" >{{ $t("Create an elaborated product") }}</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" :disabled="!new_elaboration.url" v-if="['C','U'].includes(mode)" @click="addProductIn()" >{{ $t("Add a product") }}</v-btn>
+                <v-btn color="primary" :disabled="!new_elaboration.url" v-if="['C','U'].includes(mode)" @click="addProductIn()" >{{ $t("Add an ingredient") }}</v-btn>
+                <v-btn color="primary" :disabled="!new_elaboration.url" v-if="['C','U'].includes(mode)" @click="addContainer()" >{{ $t("Add a container") }}</v-btn>
                 <v-btn color="primary" :disabled="!new_elaboration.url" v-if="['C','U'].includes(mode)" @click="addElaborationStep()" >{{ $t("Add a step") }}</v-btn>
                 <v-btn color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn> 
                 <v-btn color="error" @click="$emit('cruded')" >{{ $t("Cancel") }}</v-btn>
@@ -92,12 +109,13 @@
     import fraction from 'fraction.js'
     import ElaborationProductsInCRUD from './ElaborationProductsInCRUD.vue'
     import ElaborationStepCRUD from './ElaborationStepCRUD.vue'
+    import TableElaborationsContainers from './TableElaborationsContainers.vue'
     import {empty_elaborations_products_in,empty_elaborations_steps} from '../empty_objects.js'
     export default {
         components: {
             ElaborationProductsInCRUD,
             ElaborationStepCRUD,
-
+            TableElaborationsContainers,
         },
         props: {
             
@@ -112,7 +130,7 @@
             return{
                 form_valid:false,
                 new_elaboration: null,
-                tab: 1,
+                tab: 2,
 
                 loading_products: false,
 
@@ -230,6 +248,17 @@
                     this.parseResponseError(error)
                 });
             },
+            on_TableElaborationsContainers_cruded(){
+                this.dialog_products_in_crud=false  
+                return axios.get(`${this.$store.state.apiroot}/api/elaborations_containers/?elaboration=${this.new_elaboration.url}`, this.myheaders())
+                .then((response) => {
+                    console.log(response.data)
+                    this.new_elaboration.elaborations_containers=response.data
+                    this.key=this.key+1
+               }, (error) => {
+                    this.parseResponseError(error)
+                });
+            },
             addElaborationStep(){
                 this.tab=1
                 this.elaboration_step=this.empty_elaborations_steps()
@@ -316,7 +345,12 @@
                     this.parseResponseError(error)
                 });
             },
-
+            async addContainer(){                                    
+                console.log(this.$refs)
+                this.tab=1
+                await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
+                this.$refs.table_elaborations_containers.on_new_click()
+            }
         },
         created(){
             // Guess crud mode

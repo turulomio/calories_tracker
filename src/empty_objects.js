@@ -236,3 +236,11 @@ export function empty_measures_types(){
         name: "",
     }
 }
+
+export function empty_elaborations_containers(){
+    return {
+        url: null,
+        name: "",
+        elaborations: null,
+    }
+}
