@@ -63,7 +63,7 @@
 
                 loading:false,
                 key:0,
-                search: "",
+                search: ":LAST:50",
                 table_sort_by:"name",
                 table_sort_desc:"",
 
@@ -206,5 +206,8 @@
             },
 
         },
+        mounted(){
+            this.update_recipes()
+        }
     }
 </script>
