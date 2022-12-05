@@ -226,6 +226,8 @@ export function empty_elaborations_steps(){
         stir:null,
         comment: null,
         products_in_step: [],
+        container: null,
+        container_to: null,
     }
 }
 

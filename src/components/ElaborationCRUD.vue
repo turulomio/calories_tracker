@@ -43,11 +43,13 @@
                                 <TableElaborationsContainers ref="table_elaborations_containers" :elaboration="new_elaboration" :key="key" @cruded="on_TableElaborationsContainers_cruded()"></TableElaborationsContainers>
                             </v-card>
                         </v-tab-item>
-                        <v-tab-item key="elaborations">  
+                        <v-tab-item key="steps">  
                             <v-card outlined>
                                 <v-data-table dense :headers="steps_headers" :items="new_elaboration.elaborations_steps" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="450" fixed-header>
                                     <template v-slot:[`item.steps`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('steps', item.steps,'localname')"></div></template> 
                                     <template v-slot:[`item.products_in_step`]="{ item }"><div v-html="list_of_products_in_step(item)"></div></template> 
+                                    <template v-slot:[`item.container`]="{ item }"><div v-html="get_container_name(item.container)"></div></template> 
+                                    <template v-slot:[`item.container_to`]="{ item }">{{ get_container_name(item.container_to) }}</template> 
 
                                     <template v-slot:[`item.actions`]="{ item,index }">                     
                                         <v-icon :disabled="index==0" small class="mr-2" @click="setOneUp(item)">mdi-arrow-up-bold</v-icon>
@@ -150,6 +152,8 @@
                     { text: this.$t('Temperature'), value: 'temperature', sortable: false, width:"8%"},
                     { text: this.$t('Stir'), value: 'stir', sortable: false, width:"8%"},
                     { text: this.$t('Products in step'), sortable: false, value: 'products_in_step'},
+                    { text: this.$t('Container'), sortable: false, value: 'container'},
+                    { text: this.$t('Container to'), sortable: false, value: 'container_to'},
                     { text: this.$t('Comment'), sortable: false, value: 'comment', width:"15%"},
                     { text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"},
                 ],
@@ -180,14 +184,14 @@
                 if (this.mode=="U") return this.$t('Update this elaboration')
                 if (this.mode=="D") return this.$t('Delete this elaboration')
             },
-            acceptDialog(){             
+            acceptDialog(cruded=true){             
                 if( this.$refs.form.validate()==false) return   
 
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/elaborations/`, this.new_elaboration,  this.myheaders())
                     .then((response) => {
                         console.log(response.data)
-                        this.$emit("cruded")
+                        if (cruded==true) this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
@@ -196,7 +200,7 @@
                     axios.put(this.new_elaboration.url, this.new_elaboration,  this.myheaders())
                     .then((response) => {
                         console.log(response.data)
-                        this.$emit("cruded")
+                        if (cruded==true) this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
@@ -207,7 +211,7 @@
                         axios.delete(this.new_elaboration.url, this.myheaders())
                         .then((response) => {
                             console.log(response.data)
-                            this.$emit("cruded")
+                        if (cruded==true) this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)
                         })
@@ -260,7 +264,7 @@
                 });
             },
             addElaborationStep(){
-                this.tab=1
+                this.tab=2
                 this.elaboration_step=this.empty_elaborations_steps()
                 this.elaboration_step.elaborations=this.new_elaboration.url
                 this.elaboration_step_mode='C'
@@ -283,6 +287,7 @@
 
             },
             on_ElaborationsStep_cruded(mode,item,olditem){
+                console.log(item)
                 if (mode=="C"){
                     this.new_elaboration.elaborations_steps.push(item)
                 } else if (mode=="U"){
@@ -295,7 +300,8 @@
                 }
                 this.reorder_steps()
                 this.key=this.key+1
-                this.dialog_elaboration_step_crud=false  
+                this.dialog_elaboration_step_crud=false 
+                this.acceptDialog(false) 
             },
             setOneUp(item){
                 let index = this.new_elaboration.elaborations_steps.indexOf(item)
@@ -350,6 +356,15 @@
                 this.tab=1
                 await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
                 this.$refs.table_elaborations_containers.on_new_click()
+            },
+            get_container_name(item){
+                var r=""
+                this.elaboration.elaborations_containers.forEach(o => {
+                    if (o.url==item) {
+                        r=o.name
+                    }
+                });
+                return r
             }
         },
         created(){
