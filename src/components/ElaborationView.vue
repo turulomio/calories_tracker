@@ -9,6 +9,7 @@
                 <v-card class="mt-4">
                     <v-tabs background-color="primary" dark  v-model="tab" >
                         <v-tab key="ingredients"><v-icon left>mdi-apple</v-icon>{{ $t('Ingredients') }}<v-badge v-if="new_elaboration.elaborations_products_in.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_products_in.length"/></v-tab>
+                        <v-tab key="nutritional"><v-icon left>mdi-apple</v-icon>{{ $t('Nutritional information') }}<v-badge v-if="new_elaboration.elaborations_products_in.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_products_in.length"/></v-tab>
                         <v-tab key="containers"><v-icon left>mdi-apple</v-icon>{{ $t('Containers') }}<v-badge v-if="new_elaboration.elaborations_containers.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_containers.length"/></v-tab>
                         <v-tab key="steps"><v-icon left>mdi-apple</v-icon>{{ $t('Steps') }}<v-badge v-if="new_elaboration.elaborations_steps.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_steps.length"/></v-tab>
                         <v-tab key="experiences"><v-icon left>mdi-apple</v-icon>{{ $t('Experiences') }}<v-badge v-if="new_elaboration.elaborations_experiences.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_experiences.length"/></v-tab>
@@ -18,6 +19,12 @@
                         <v-tab-item key="ingredients">      
                             <v-card outlined>
                                 <TableElaborationsIngredients ref="table_elaborations_ingredients" :elaboration="new_elaboration" :key="key" @cruded="on_TableElaborationsIngredients_cruded()"></TableElaborationsIngredients>
+
+                            </v-card>
+                        </v-tab-item>
+                        <v-tab-item key="nutritional">      
+                            <v-card outlined>
+                                <TableElaborationsIngredientsNI :elaboration="new_elaboration" :key="key" @cruded="on_TableElaborationsIngredientsNI_cruded()"></TableElaborationsIngredientsNI>
 
                             </v-card>
                         </v-tab-item>
@@ -54,19 +61,21 @@
 <script>
     import axios from 'axios'
     import fraction from 'fraction.js'
-    import TableElaborationsIngredients from './TableElaborationsIngredients.vue'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import TableElaborationsContainers from './TableElaborationsContainers.vue'
     import TableElaborationsSteps from './TableElaborationsSteps.vue'
     import {empty_elaborations_products_in} from '../empty_objects.js'
     import TableElaborationsExperiences from './TableElaborationsExperiences.vue'
+    import TableElaborationsIngredients from './TableElaborationsIngredients.vue'
+    import TableElaborationsIngredientsNI from './TableElaborationsIngredientsNI.vue'
     export default {
         components: {
             TableElaborationsIngredients,
             MyMenuInline,
             TableElaborationsContainers,
             TableElaborationsSteps,
-            TableElaborationsExperiences
+            TableElaborationsExperiences,
+            TableElaborationsIngredientsNI,
         },
         props: {
             
