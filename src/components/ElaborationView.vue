@@ -41,6 +41,7 @@
             </v-form>
             <v-card-actions>                
                 <v-btn color="error" :disabled="!new_elaboration.url" @click="createElaboratedProduct()" >{{ $t("Create an elaborated product") }}</v-btn>
+                <v-btn color="error" :disabled="!new_elaboration.url" @click="generate_pdf()" >{{ $t("Generate PDF") }}</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" :disabled="!new_elaboration.url" @click="addIngredient()" >{{ $t("Add an ingredient") }}</v-btn>
                 <v-btn color="primary" :disabled="!new_elaboration.url" @click="addContainer()" >{{ $t("Add a container") }}</v-btn>
@@ -82,8 +83,8 @@
                             {
                                 name: this.$t("Generate PDF"),
                                 icon: "mdi-file-pdf-box",
-                                code: function(this_){
-                                    console.log(this_)
+                                code: function(this_){                
+                                    this_.generate_pdf()
                                 },
                             },
                             {
@@ -188,6 +189,20 @@
                             console.log(response.data)
                         });
                }, (error) => {
+                    this.parseResponseError(error)
+                });
+            },
+            generate_pdf(){
+                axios.post(`${this.new_elaboration.url}generate_pdf/`, {}, this.myheaders())
+                .then((response) => {
+                    console.log(response.data)
+                    var link = window.document.createElement('a')
+                    link.href = `data:${response.data.data.mime};base64,${response.data.data.data}`
+                    link.download = response.data.data.filename
+                    document.body.appendChild(link)
+                    link.click()
+                    document.body.removeChild(link)
+                }, (error) => {
                     this.parseResponseError(error)
                 });
             },

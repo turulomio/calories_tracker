@@ -6,7 +6,7 @@
         <v-text-field class="mx-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
     
         <p class="ml-10">{{ $t("{0} recipes found").format(recipes.length)}}</p>
-        <v-data-table dense :headers="recipes_headers" :items="recipes" :sort-by="table_sort_by" :sort-desc="table_sort_desc" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+        <v-data-table dense :headers="recipes_headers" :items="recipes" :sort-by="table_sort_by" :sort-desc="table_sort_desc" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" height="70vh"  fixed-header>
             <template v-slot:[`item.last`]="{ item }">{{localtime(item.last)}}</template>      
             <template v-slot:[`item.food_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('food_types', item.food_types,'localname')"></div></template> 
             <template v-slot:[`item.guests`]="{ item }"><v-icon small v-if="item.guests" >mdi-check-outline</v-icon></template>   
