@@ -248,3 +248,12 @@ export function empty_elaborations_containers(){
         elaborations: null,
     }
 }
+
+export function empty_elaborations_experiences(){
+    return {
+        url: null,
+        datetime: new Date().toISOString(),
+        elaborations: null,
+        experience: ""
+    }
+}

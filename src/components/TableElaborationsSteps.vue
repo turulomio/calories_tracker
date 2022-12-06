@@ -1,20 +1,23 @@
 <template>
     <div>    
-        <v-data-table dense :headers="steps_headers" :items="new_elaborations_steps" sort-by="order" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="450" fixed-header>
+        <v-data-table dense :headers="steps_headers" :items="new_elaborations_steps" sort-by="order" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" height="60vh" fixed-header>
             <template v-slot:[`item.steps`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('steps', item.steps,'localname')"></div></template> 
             <template v-slot:[`item.products_in_step`]="{ item }"><div v-html="show_products_in_step(item)"></div></template> 
             <template v-slot:[`item.temperature`]="{ item }"><div v-html="show_temperature(item)"></div></template> 
             <template v-slot:[`item.stir`]="{ item }"><div v-html="show_stir(item)"></div></template> 
             <template v-slot:[`item.container`]="{ item }"><div v-html="show_container_name(item.container)"></div></template> 
             <template v-slot:[`item.container_to`]="{ item }">{{ show_container_name(item.container_to) }}</template> 
-
             <template v-slot:[`item.actions`]="{ item,index }">                     
                 <v-icon :disabled="index==0" small class="mr-2" @click="setOneUp(item)">mdi-arrow-up-bold</v-icon>
                 <v-icon :disabled="index==new_elaborations_steps.length-1" small class="mr-2" @click="setOneDown(item)">mdi-arrow-down-bold</v-icon>
                 <v-icon small class="mr-2" @click="editElaborationStep(item)">mdi-pencil</v-icon>
                 <v-icon small @click="deleteElaborationStep(item)">mdi-delete</v-icon>
             </template>
+            
+
         </v-data-table>  
+        <p class="my-2 bold d-flex justify-center">{{ $t("Elaboration time: {0}").format(elaboration.final_duration)}}</p>
+        <p v-if="unused_ingredients()" class="my-2 boldred d-flex justify-center">{{ $t("Products unused : {0}").format(unused_ingredients())}}</p>
         <!-- STEPCRUD DIALOG -->
         <v-dialog v-model="dialog_elaborations_step_crud" width="100%">
             <v-card class="pa-3">
@@ -89,18 +92,25 @@
                     this.new_elaborations_steps.push(item)
                 } else if (mode=="U"){
                     let index = this.new_elaborations_steps.indexOf(olditem)
-                    this.new_elaborations_steps[index]=item
+                    if (index>-1){
+                        this.new_elaborations_steps[index]=item
+                    } else {
+                        alert("Updating item wasn't found")
+                        return
+                    }
                     
                 } else if (mode=="D"){
                     let index = this.new_elaborations_steps.indexOf(olditem)
-                    this.new_elaborations_steps.splice(index,1)
+                    if (index>-1){
+                         this.new_elaborations_steps.splice(index,1)
+                    } else {
+                        alert("Deleting item wasn't found")
+                        return
+                    }
                 }
                 this.reorder_steps()
                 this.key=this.key+1
                 this.dialog_elaborations_step_crud=false 
-                console.log("ANTES")
-                console.log(typeof(this.new_elaborations_steps))
-                console.log(this.new_elaborations_steps)
                 this.$emit("cruded",this.new_elaborations_steps)
             },
             setOneUp(item){
@@ -108,6 +118,7 @@
                 this.new_elaborations_steps[index]=this.new_elaborations_steps[index-1]
                 this.new_elaborations_steps[index-1]=item
                 this.reorder_steps()
+                this.$emit("cruded",this.new_elaborations_steps)
                 this.key=this.key+1
             },
             setOneDown(item){
@@ -115,6 +126,7 @@
                 this.new_elaborations_steps[index]=this.new_elaborations_steps[index+1]
                 this.new_elaborations_steps[index+1]=item
                 this.reorder_steps()
+                this.$emit("cruded",this.new_elaborations_steps)
                 this.key=this.key+1
 
             },
@@ -122,6 +134,34 @@
                 var r=""
                 item.products_in_step.forEach(o=>{
 
+                    this.elaboration.elaborations_products_in.forEach(p=> {
+                        if (p.url==o){
+                            r=r+ p.fullname+", "
+                        }
+
+                    })
+                })
+                return r.slice(0,-2)
+            },
+            unused_ingredients(){
+                var r=""
+                //Load all ingredientes urls in elaboration
+                var unused_urls=[]
+                this.elaboration.elaborations_products_in.forEach(element => {
+                    unused_urls.push(element.url)  
+                })
+
+                this.new_elaborations_steps.forEach(s=>{
+
+                    s.products_in_step.forEach(ps=> {
+                        let index = unused_urls.indexOf(ps)
+                        if (index>=0) {
+                            unused_urls.splice(index,1)
+                        }
+
+                    })
+                })
+                unused_urls.forEach(o=>{
                     this.elaboration.elaborations_products_in.forEach(p=> {
                         if (p.url==o){
                             r=r+ p.fullname+", "
