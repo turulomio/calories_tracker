@@ -22,16 +22,16 @@
                 <template v-slot:[`body.append`]="{headers}" v-if="items.length>0">
                     <tr style="background-color: WhiteSmoke">
                         <td v-for="(header,i) in headers" :key="i">
-                            <div v-if="header.value == 'products'">{{ $t(`Total (${items.length} items):`)}}</div>
+                            <div v-if="header.value == 'products'">{{ $t(`Total ({0} items):`).format(items.length)}}</div>
                             <div v-if="header.value == 'amount'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'amount'),0)"></div>
                             <div v-if="header.value == 'calories'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'calories'),0)"></div>
                             <div v-if="header.value == 'fat'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'fat'),0)"></div>
                             <div v-if="header.value == 'protein'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'protein'),0)"></div>
                             <div v-if="header.value == 'carbohydrate'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'carbohydrate'),0)"></div>
                             <div v-if="header.value == 'fiber'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'fiber'),0)"></div>
-                            <div v-if="header.value == 'salt'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'salt'),0)"></div>
+                            <div v-if="header.value == 'salt'" class="d-flex justify-end" @click="on_icon_salt_info()" ><v-icon small >mdi-information-outline</v-icon></div>
                             <div v-if="header.value == 'cholesterol'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'cholesterol'),0)"></div>
-                            <!-- <div v-if="header.value == 'sodium'"  class="d-flex justify-end" v-html="total_sodium()"></div> -->
+                            <div v-if="header.value == 'sodium'"  class="d-flex justify-end" v-html="total_sodium()"></div>
                             <div v-if="header.value == 'potassium'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'potassium'),0)"></div>
                             <div v-if="header.value == 'ferrum'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'ferrum'),0)"></div>
                             <div v-if="header.value == 'magnesium'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'magnesium'),0)"></div>
@@ -39,6 +39,27 @@
                             <div v-if="header.value == 'calcium'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'calcium'),0)"></div>
                             <div v-if="header.value == 'sugars'"  class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'sugars'),0)"></div>
                             <div v-if="header.value == 'saturated_fat'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'saturated_fat'),0)"></div>
+                        </td>
+                    </tr>
+                    <tr style="background-color: WhiteSmoke">
+                        <td v-for="(header,i) in headers" :key="i">
+                            <div v-if="header.value == 'products'">{{ $t(`Nutritional information in 100 g:`)}}</div>
+                            <div v-if="header.value == 'amount'" class="d-flex justify-end" v-html="100"></div>
+                            <div v-if="header.value == 'calories'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'calories')/elaboration.final_amount,0)"></div>
+                            <div v-if="header.value == 'fat'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'fat')/elaboration.final_amount,0)"></div>
+                            <div v-if="header.value == 'protein'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'protein')/elaboration.final_amount,0)"></div>
+                            <div v-if="header.value == 'carbohydrate'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'carbohydrate')/elaboration.final_amount,0)"></div>
+                            <div v-if="header.value == 'fiber'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'fiber')/elaboration.final_amount,0)"></div>
+                            <div v-if="header.value == 'salt'" class="d-flex justify-end" @click="on_icon_salt_info()" ><v-icon small >mdi-information-outline</v-icon></div>
+                            <div v-if="header.value == 'cholesterol'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'cholesterol')/elaboration.final_amount,0)"></div>
+                            <div v-if="header.value == 'sodium'"  class="d-flex justify-end" v-html="my_round(100*total_sodium()/elaboration.final_amount,0)"></div>
+                            <div v-if="header.value == 'potassium'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'potassium')/elaboration.final_amount,0)"></div>
+                            <div v-if="header.value == 'ferrum'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'ferrum')/elaboration.final_amount,0)"></div>
+                            <div v-if="header.value == 'magnesium'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'magnesium')/elaboration.final_amount,0)"></div>
+                            <div v-if="header.value == 'phosphor'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'phosphor')/elaboration.final_amount,0)"></div>
+                            <div v-if="header.value == 'calcium'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'calcium')/elaboration.final_amount,0)"></div>
+                            <div v-if="header.value == 'sugars'"  class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'sugars')/elaboration.final_amount,0)"></div>
+                            <div v-if="header.value == 'saturated_fat'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'saturated_fat')/elaboration.final_amount,0)"></div>
                         </td>
                     </tr>
                 </template>
@@ -93,16 +114,47 @@
                     var product=this.$store.getters.getObjectByUrl("products",o.products)
                     var item={}
                     item.products=o.products
-                    item.amount=o.amount
+                    item.amount=o.final_grams
                     item.calories=o.amount*product.calories/product.amount
                     item.fat=o.amount*product.fat/product.amount
                     item.protein=o.amount*product.protein/product.amount
+                    item.carbohydrate=o.amount*product.carbohydrate/product.amount
+                    item.salt=o.amount*product.salt/product.amount
+                    item.fiber=o.amount*product.fiber/product.amount
+                    item.sugars=o.amount*product.sugars/product.amount
+                    item.saturated_fat=o.amount*product.saturated_fat/product.amount
+                    item.cholesterol=o.amount*product.cholesterol/product.amount
+                    item.sodium=o.amount*product.sodium/product.amount
+                    item.potassium=o.amount*product.potassium/product.amount
+                    item.ferrum=o.amount*product.ferrum/product.amount
+                    item.magnesium=o.amount*product.magnesium/product.amount
+                    item.phosphor=o.amount*product.phosphor/product.amount
+                    item.calcium=o.amount*product.calcium/product.amount
                     this.items.push(item)
                     
                 });
                 this.key=this.key+1
                 console.log(this.items)
 
+            },
+            on_icon_salt_info(){
+                var salt=this.listobjects_sum(this.items,"salt")
+                var salt_as_sodium=salt*396
+                var sodium=this.listobjects_sum(this.items,'sodium')
+                var total=sodium+salt_as_sodium
+
+
+
+                alert(this.$t(`Salt is converted to sodium to calculate recommended daily amount.
+    - Salt amount: {0} g => {1} sodium mg
+    - Sodium amount: {2} mg
+    - Total sodium: {3} mg
+                `).format(this.my_round(salt,2) , this.my_round(salt_as_sodium,0), sodium, this.my_round(total,0)))
+            },
+            total_sodium(){
+                var sum_sodium=this.listobjects_sum(this.items,'sodium')
+                var salt=this.listobjects_sum(this.items,"salt")
+                return  this.my_round(sum_sodium+salt*396,0)
             },
         },
         created(){
