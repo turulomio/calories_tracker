@@ -8,7 +8,7 @@
                 <WidgetTemperatures :readonly="mode=='D'" v-model="widget_temperatures"/>
                 <WidgetStir :readonly="mode=='D'" v-model="widget_stir"/>
                 <v-text-field :readonly="mode=='D'" v-model="new_elaborations_step.comment" :label="$t('Set a comment')" :placeholder="$t('Set a comment')" :rules="RulesString(200,false)" counter="200"/>
-                <v-autocomplete :items="elaboration.elaborations_products_in" v-model="new_elaborations_step.products_in_step" :label="$t('Products in step')" :item-text="get_item_products_step" item-value="url" multiple :rules="RulesSelection(true)" chips ></v-autocomplete>
+                <v-autocomplete :items="elaboration.elaborations_products_in" v-model="new_elaborations_step.products_in_step" :label="$t('Products in step')" item-text="fullname" item-value="url" multiple :rules="RulesSelection(true)" chips ></v-autocomplete>
                 <v-autocomplete :readonly="mode=='D'" :items="elaboration.elaborations_containers" v-model="new_elaborations_step.container" item-text="name" item-value="url" :label="$t('Select a container')"></v-autocomplete>
                 <v-autocomplete :readonly="mode=='D'" :items="elaboration.elaborations_containers" v-model="new_elaborations_step.container_to" item-text="name" item-value="url" :label="$t('Select a container where to pour')"></v-autocomplete>
 
@@ -48,9 +48,6 @@
             }
         },
         methods: {
-            get_item_products_step(item){
-                return `${this.$store.getters.getObjectPropertyByUrl('products', item.products,'fullname')} (${item.amount } g)`
-            },
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')

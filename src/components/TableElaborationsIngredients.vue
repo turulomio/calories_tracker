@@ -21,7 +21,7 @@
         <!-- DIALOG PRODUCTS_IN CRUD -->
         <v-dialog v-model="dialog_products_in_crud" width="45%">
             <v-card class="pa-4">
-                <ElaborationProductsInCRUD :product_in="product_in" :mode="product_in_mode" :key="'B'+key" @cruded="on_ElaborationProductsInCRUD_cruded"></ElaborationProductsInCRUD>
+                <ElaborationProductsInCRUD :elaboration="elaboration" :product_in="product_in" :mode="product_in_mode" :key="'B'+key" @cruded="on_ElaborationProductsInCRUD_cruded"></ElaborationProductsInCRUD>
             </v-card>
         </v-dialog>
 
@@ -45,8 +45,9 @@
             return{
                 products_in_headers: [
                     { text: this.$t('Product'), sortable: true, value: 'products'},
-                    { text: this.$t('Measure type'), value: 'measures_types', width:"20%"},
+                    { text: this.$t('Comment'), value: 'comment', align:'right'},
                     { text: this.$t('Amount'), value: 'amount', align:'right', width:"10%"},
+                    { text: this.$t('Measure type'), value: 'measures_types', width:"12%"},
                     { text: this.$t('Final grams'), value: 'final_grams', align:'right', width:"10%"},
                     { text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"},
                 ],

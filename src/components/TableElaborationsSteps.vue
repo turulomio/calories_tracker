@@ -1,6 +1,6 @@
 <template>
     <div>    
-        <v-data-table dense :headers="steps_headers" :items="new_elaborations_steps" sort-by="order" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" height="50vh" fixed-header>
+        <v-data-table  dense :headers="steps_headers" :items="new_elaborations_steps" sort-by="order" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" height="50vh" fixed-header>
             <template v-slot:[`item.steps`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('steps', item.steps,'localname')"></div></template> 
             <template v-slot:[`item.products_in_step`]="{ item }"><div v-html="show_products_in_step(item)"></div></template> 
             <template v-slot:[`item.temperature`]="{ item }"><div v-html="show_temperature(item)"></div></template> 
@@ -8,10 +8,10 @@
             <template v-slot:[`item.container`]="{ item }"><div v-html="show_container_name(item.container)"></div></template> 
             <template v-slot:[`item.container_to`]="{ item }">{{ show_container_name(item.container_to) }}</template> 
             <template v-slot:[`item.actions`]="{ item,index }">                     
-                <v-icon :disabled="index==0" small class="mr-2" @click="setOneUp(item)">mdi-arrow-up-bold</v-icon>
-                <v-icon :disabled="index==new_elaborations_steps.length-1" small class="mr-2" @click="setOneDown(item)">mdi-arrow-down-bold</v-icon>
-                <v-icon small class="mr-2" @click="editElaborationStep(item)">mdi-pencil</v-icon>
-                <v-icon small @click="deleteElaborationStep(item)">mdi-delete</v-icon>
+                <v-icon :disabled="(index==0 || can_crud==false)" small class="mr-2" @click="setOneUp(item)">mdi-arrow-up-bold</v-icon>
+                <v-icon :disabled="(index==new_elaborations_steps.length-1 || can_crud==false)" small class="mr-2" @click="setOneDown(item)">mdi-arrow-down-bold</v-icon>
+                <v-icon small :disabled="can_crud==false" class="mr-2" @click="editElaborationStep(item)">mdi-pencil</v-icon>
+                <v-icon small :disabled="can_crud==false" @click="deleteElaborationStep(item)">mdi-delete</v-icon>
             </template>
             
 
@@ -27,7 +27,8 @@
     </div>
 </template>
 <script>
-     import ElaborationStepCRUD from './ElaborationStepCRUD.vue'
+    import axios from 'axios'
+    import ElaborationStepCRUD from './ElaborationStepCRUD.vue'
     import {empty_elaborations_steps} from '../empty_objects.js'
     export default {
         components: {
@@ -43,6 +44,7 @@
                 form_valid:false,
                 steps_headers: [
                     { text: this.$t('Order'), sortable: false, value: 'order'},
+                    { text: this.$t('Id'), sortable: false, value: 'id'},
                     { text: this.$t('Step'), sortable: false, value: 'steps'},
                     { text: this.$t('Duration'), sortable: false, value: 'duration', align:'right'},
                     { text: this.$t('Temperature'), value: 'temperature', sortable: false, width:"8%"},
@@ -60,11 +62,18 @@
                 elaborations_step:null,
                 elaborations_step_mode:null,
                 dialog_elaborations_step_crud:false,
+
+                can_crud: true,
+
             }
         },
         methods: {
             empty_elaborations_steps,
             addElaborationStep(){
+                if (this.can_crud==false){
+                    alert("I can add a step yet")
+                    return
+                }
                 this.elaborations_step=this.empty_elaborations_steps()
                 this.elaborations_step.elaborations=this.elaboration.url
                 this.elaborations_step_mode='C'
@@ -86,8 +95,8 @@
                 this.dialog_elaborations_step_crud=true
 
             },
-            on_ElaborationsStep_cruded(mode,item,olditem){
-                console.log(item)
+            async on_ElaborationsStep_cruded(mode,item,olditem){
+                await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
                 if (mode=="C"){
                     this.new_elaborations_steps.push(item)
                 } else if (mode=="U"){
@@ -102,32 +111,31 @@
                 } else if (mode=="D"){
                     let index = this.new_elaborations_steps.indexOf(olditem)
                     if (index>-1){
-                         this.new_elaborations_steps.splice(index,1)
+                        this.new_elaborations_steps.splice(index,1)
                     } else {
                         alert("Deleting item wasn't found")
                         return
                     }
                 }
-                this.reorder_steps()
-                this.key=this.key+1
                 this.dialog_elaborations_step_crud=false 
-                this.$emit("cruded",this.new_elaborations_steps)
+                this.update_steps()                
+
             },
-            setOneUp(item){
+            async setOneUp(item){
+                await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
                 let index = this.new_elaborations_steps.indexOf(item)
                 this.new_elaborations_steps[index]=this.new_elaborations_steps[index-1]
                 this.new_elaborations_steps[index-1]=item
-                this.reorder_steps()
-                this.$emit("cruded",this.new_elaborations_steps)
-                this.key=this.key+1
+                this.update_steps()
+
             },
-            setOneDown(item){
+            async setOneDown(item){
+                await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
                 let index = this.new_elaborations_steps.indexOf(item)
                 this.new_elaborations_steps[index]=this.new_elaborations_steps[index+1]
                 this.new_elaborations_steps[index+1]=item
-                this.reorder_steps()
-                this.$emit("cruded",this.new_elaborations_steps)
-                this.key=this.key+1
+                this.update_steps()
+
 
             },
             show_products_in_step(item){
@@ -208,17 +216,34 @@
                 });
                 return r
             },
-            reorder_steps(){
-                for (var i = 0; i < this.new_elaborations_steps.length; i++) {
-                    this.new_elaborations_steps[i].order=i+1
-                }
+            update_steps(){ //Hago esta función porque creo que los errores de desorden se generan con peticiones recurrentes sin haber finalizado la anterior
+                // for (var i = 0; i < this.new_elaborations_steps.length; i++) {
+                //     this.new_elaborations_steps[i].order=i+1
+                // }
+                
+                this.can_crud=false
+                axios.post(`${this.elaboration.url}update_steps/`, {"steps":this.new_elaborations_steps}, this.myheaders())
+                .then((response) => {
+                    console.log(response.data)
+                    this.$emit("cruded")
+                    
+                    this.$nextTick(() => { //Usada para funcionar después del emit acabe
+                        console.log("YA")
+                        this.can_crud=true
+                    })
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
+
+
+
+
+
             },
 
         },
         created(){
-            // Guess crud mode
             this.new_elaborations_steps=Object.assign([],this.elaboration.elaborations_steps) //IS [] an array not a {}
-            typeof(this.new_elaborations_steps)
         }
     }
 </script>

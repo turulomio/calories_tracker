@@ -125,23 +125,23 @@
 
             },
             async addContainer(){
-                if (this.tab!=1){
-                    this.tab=1
+                if (this.tab!=2){
+                    this.tab=2
                     await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
                 }
                 this.$refs.table_elaborations_containers.on_new_click()
             },
             async addElaborationStep(){
-                if (this.tab!=2){
-                    this.tab=2
+                if (this.tab!=3){
+                    this.tab=3
                     await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
                 }
                 this.$refs.table_elaborations_steps.addElaborationStep()
 
             },
             async addExperience(){
-                if (this.tab!=3){
-                    this.tab=3
+                if (this.tab!=4){
+                    this.tab=4
                     await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
                 }
                 this.$refs.table_elaborations_experiences.addItem()
@@ -172,19 +172,19 @@
                 .then((response) => {
                     console.log(response.data)
                     this.new_elaboration.elaborations_experiences=response.data
-                    this.key=this.key+1
                }, (error) => {
                     this.parseResponseError(error)
                 });
             },
-            on_TableElaborationsSteps_cruded(new_elaborations_steps){
-                this.new_elaboration.elaborations_steps=new_elaborations_steps
-                axios.put(this.new_elaboration.url, this.new_elaboration,  this.myheaders())
+            on_TableElaborationsSteps_cruded(){
+                return axios.get(`${this.$store.state.apiroot}/api/elaborations_steps/?elaboration=${this.new_elaboration.url}`, this.myheaders())
                 .then((response) => {
                     console.log(response.data)
-                }, (error) => {
+                    this.new_elaboration.elaborations_steps=response.data
+                    this.key=this.key+1
+               }, (error) => {
                     this.parseResponseError(error)
-                })
+                });
             },
             createElaboratedProduct(){
                 return axios.post(`${this.new_elaboration.url}create_elaborated_product/`, {}, this.myheaders())

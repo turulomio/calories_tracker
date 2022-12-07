@@ -30,6 +30,7 @@ npm run serve
 ```
 
 ## Health links used to develop calories_tracker
+- https://www.weekendbakery.com/cooking-conversions/
 - https://cardiacos.net/sal-y-sodio/
 
 

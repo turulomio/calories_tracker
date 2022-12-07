@@ -213,12 +213,13 @@ export function empty_elaborations_products_in(){
         amount: null,
         measures_types: null,
         elaborations: null,
+        comment: null,
     }
 }
 
 export function empty_elaborations_steps(){
     return {
-        order: 1,
+        order: 0,
         elaborations: null,
         steps: null,
         duration: "00:01:00",

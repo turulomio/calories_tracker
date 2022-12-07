@@ -12,7 +12,9 @@
                     <v-text-field :readonly="mode=='D'" v-model="new_product_in.amount" :label="$t('Set product amount')" :placeholder="$t('Set product amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
                     <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-text="name" item-value="amount" :rules="RulesSelection(false)"  @input="on_product_format_input()"></v-autocomplete>
                     <Multiplier v-model="multiplier" :readonly="mode=='D'" @input="on_multiplier_input()"></Multiplier>
-                </v-row>
+                </v-row>                    
+                <v-text-field :readonly="mode=='D'" v-model="new_product_in.comment" :label="$t('Set a product coment (cut, temperature ...)')" :placeholder="$t('Set product amount (cut, temperature ...)')" :rules="RulesString(100,false)" counter="100"/>
+
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -29,7 +31,6 @@
             Multiplier,
         },
         props: {
-            
             product_in: { 
                 required: true
             },
