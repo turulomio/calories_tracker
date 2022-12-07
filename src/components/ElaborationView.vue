@@ -176,7 +176,8 @@
                     this.parseResponseError(error)
                 });
             },
-            on_TableElaborationsSteps_cruded(){
+            on_TableElaborationsSteps_cruded(nes){
+                this.new_elaboration.elaborations_steps=nes
             },
             createElaboratedProduct(){
                 return axios.post(`${this.new_elaboration.url}create_elaborated_product/`, {}, this.myheaders())

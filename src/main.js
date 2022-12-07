@@ -66,6 +66,7 @@ import {
     myheaders_formdata,
     parseResponse,
     parseResponseError,
+    sortObjectsArray,
     listobjects_sum,
     my_round
 } from './components/reusing/my_commons.js'
@@ -99,6 +100,7 @@ Vue.mixin({
         RulesInteger,
         RulesString,
         RulesSelection,
+        sortObjectsArray,
     }
 })
 

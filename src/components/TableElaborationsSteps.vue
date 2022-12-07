@@ -1,6 +1,6 @@
 <template>
     <div>    
-        <v-data-table  dense :headers="steps_headers" :items="new_elaborations_steps" sort-by="order" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" height="50vh" fixed-header>
+        <v-data-table  dense :headers="steps_headers" :items="new_elaborations_steps" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" height="50vh" fixed-header>
             <template v-slot:[`item.steps`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('steps', item.steps,'localname')"></div></template> 
             <template v-slot:[`item.products_in_step`]="{ item }"><div v-html="show_products_in_step(item)"></div></template> 
             <template v-slot:[`item.temperature`]="{ item }"><div v-html="show_temperature(item)"></div></template> 
@@ -98,9 +98,11 @@
             async on_ElaborationsStep_cruded(mode,item,olditem){
                 this.can_crud=false
                 if (mode=="C"){
+                    console.log("Adding item")
                     this.new_elaborations_steps.push(item)
                 } else if (mode=="U"){
                     let index = this.new_elaborations_steps.indexOf(olditem)
+                     console.log(`Updating item with index ${index}`)
                     if (index>-1){
                         this.new_elaborations_steps[index]=item
                     } else {
@@ -110,6 +112,7 @@
                     
                 } else if (mode=="D"){
                     let index = this.new_elaborations_steps.indexOf(olditem)
+                     console.log(`Deleting item with index ${index}`)
                     if (index>-1){
                         this.new_elaborations_steps.splice(index,1)
                     } else {
@@ -122,8 +125,10 @@
 
             },
             async setOneUp(item){
+
                 this.can_crud=false
                 let index = this.new_elaborations_steps.indexOf(item)
+                console.log(`Pressing up on item with index ${index}`)
                 this.new_elaborations_steps[index]=this.new_elaborations_steps[index-1]
                 this.new_elaborations_steps[index-1]=item
                 this.update_steps()
@@ -132,6 +137,7 @@
             async setOneDown(item){
                 this.can_crud=false
                 let index = this.new_elaborations_steps.indexOf(item)
+                console.log(`Pressing down on item with index ${index}`)
                 this.new_elaborations_steps[index]=this.new_elaborations_steps[index+1]
                 this.new_elaborations_steps[index+1]=item
                 this.update_steps()
@@ -218,27 +224,64 @@
             },
             update_steps(){ //Hago esta función que creo que los errores de desorden se generan con peticiones recurrentes sin haber finalizado la anterior
                 // AL final se arreglo devolviendo la lista y ordenando desde backend. Me volví loco.
+                //Creo que si no viene ordenado el sort lo oculta, pero luego se machaca. Hay que ordenar de backend
+                // HE QUITADO EL SORTED TAMBIEN PORQUE ME CAMBIABA DESDE CREATED
+
+                // PARECE QUE AL FINAL ES SERIALIZER DE FULLRECIPE NO ORDENA BIEN TUVE QUE PONER UN METODO TO_REPRESENTATION EN ELABORATIONSERIALIZER
 
                 var r=[]
                 for (var i = 0; i < this.new_elaborations_steps.length; i++) {
                     this.new_elaborations_steps[i].order=i+1
                     r.push(this.new_elaborations_steps[i].id)
                 }
-                console.log(r)
+                this.log_ids(this.new_elaborations_steps,"antes")
+                this.log_order(this.new_elaborations_steps,"order antes")
                 
                 axios.post(`${this.elaboration.url}update_steps/`, {"steps":this.new_elaborations_steps}, this.myheaders())
                 .then((response) => {
-                    console.log(response.data.data[0])
+                    // r=[]
+                    // o=[]
+                    // var ordered=this.sortObjectsArray(response.data.data, "order")
+                    // for (i = 0; i < ordered.length; i++) {
+                    //     r.push(ordered[i].id)
+                    //     o.push(ordered[i].order)
+                    // }
+                    // console.log(`ORDERED: ${r}`)
+                    // console.log(`ORDERED: ${o}`)
+                    this.log_ids(response.data.data,"db")
+                    this.log_order(response.data.data,"dborder")
+
+
                     this.new_elaborations_steps=response.data.data
+                    this.log_ids(this.new_elaborations_steps,"new_ela_ste")
+                    this.$emit("cruded",this.new_elaborations_steps)
                     this.can_crud=true
                     this.key=this.key+1
                 }, (error) => {
                     this.parseResponseError(error)
                 });
             },
+            log_ids(arr,title){
+                    var r=[]
+                    for (var i = 0; i < arr.length; i++) {
+                        r.push(arr[i].id)
+                    }
+                    console.log(`${title}: ${r}`)
+
+            },
+            log_order(arr,title){
+                    var r=[]
+                    for (var i = 0; i < arr.length; i++) {
+                        r.push(arr[i].order)
+                    }
+                    console.log(`${title}: ${r}`)
+
+            }
         },
         created(){
             this.new_elaborations_steps=Object.assign([],this.elaboration.elaborations_steps) //IS [] an array not a {}
+            this.log_ids(this.new_elaborations_steps,"created")
+            this.log_order(this.new_elaborations_steps,"ordercreated")
         }
     }
 </script>
