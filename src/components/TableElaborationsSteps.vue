@@ -216,15 +216,16 @@
                 });
                 return r
             },
-            update_steps(){ //Hago esta función porque creo que los errores de desorden se generan con peticiones recurrentes sin haber finalizado la anterior
+            update_steps(){ //Hago esta función que creo que los errores de desorden se generan con peticiones recurrentes sin haber finalizado la anterior
+                // AL final se arreglo devolviendo la lista y ordenando desde backend. Me volví loco.
 
+                var r=[]
                 for (var i = 0; i < this.new_elaborations_steps.length; i++) {
                     this.new_elaborations_steps[i].order=i+1
+                    r.push(this.new_elaborations_steps[i].id)
                 }
+                console.log(r)
                 
-                // console.log("ANTES")
-                // console.log(this.new_elaborations_steps[0])
-
                 axios.post(`${this.elaboration.url}update_steps/`, {"steps":this.new_elaborations_steps}, this.myheaders())
                 .then((response) => {
                     console.log(response.data.data[0])
