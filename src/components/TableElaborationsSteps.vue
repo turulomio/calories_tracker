@@ -122,7 +122,6 @@
 
             },
             async setOneUp(item){
-                await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
                 let index = this.new_elaborations_steps.indexOf(item)
                 this.new_elaborations_steps[index]=this.new_elaborations_steps[index-1]
                 this.new_elaborations_steps[index-1]=item
@@ -130,7 +129,6 @@
 
             },
             async setOneDown(item){
-                await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
                 let index = this.new_elaborations_steps.indexOf(item)
                 this.new_elaborations_steps[index]=this.new_elaborations_steps[index+1]
                 this.new_elaborations_steps[index+1]=item
@@ -217,11 +215,12 @@
                 return r
             },
             update_steps(){ //Hago esta función porque creo que los errores de desorden se generan con peticiones recurrentes sin haber finalizado la anterior
-                // for (var i = 0; i < this.new_elaborations_steps.length; i++) {
-                //     this.new_elaborations_steps[i].order=i+1
-                // }
-                
+
                 this.can_crud=false
+                for (var i = 0; i < this.new_elaborations_steps.length; i++) {
+                    this.new_elaborations_steps[i].order=i+1
+                }
+                
                 axios.post(`${this.elaboration.url}update_steps/`, {"steps":this.new_elaborations_steps}, this.myheaders())
                 .then((response) => {
                     console.log(response.data)
