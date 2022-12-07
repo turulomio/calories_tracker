@@ -222,12 +222,13 @@
                 });
                 return r
             },
-            update_steps(){ //Hago esta función que creo que los errores de desorden se generan con peticiones recurrentes sin haber finalizado la anterior
+            update_steps(){ 
+                // Hago esta función que creo que los errores de desorden se generan con peticiones recurrentes sin haber finalizado la anterior
                 // AL final se arreglo devolviendo la lista y ordenando desde backend. Me volví loco.
-                //Creo que si no viene ordenado el sort lo oculta, pero luego se machaca. Hay que ordenar de backend
+                // Creo que si no viene ordenado el sort lo oculta, pero luego se machaca. Hay que ordenar de backend
                 // HE QUITADO EL SORTED TAMBIEN PORQUE ME CAMBIABA DESDE CREATED
 
-                // PARECE QUE AL FINAL ES SERIALIZER DE FULLRECIPE NO ORDENA BIEN TUVE QUE PONER UN METODO TO_REPRESENTATION EN ELABORATIONSERIALIZER
+                // PARECE QUE AL FINAL ES EL SERIALIZER DE FULLRECIPE NO ORDENA BIEN TUVE QUE PONER UN METODO TO_REPRESENTATION EN ELABORATIONSERIALIZER
 
                 var r=[]
                 for (var i = 0; i < this.new_elaborations_steps.length; i++) {
@@ -239,15 +240,7 @@
                 
                 axios.post(`${this.elaboration.url}update_steps/`, {"steps":this.new_elaborations_steps}, this.myheaders())
                 .then((response) => {
-                    // r=[]
-                    // o=[]
-                    // var ordered=this.sortObjectsArray(response.data.data, "order")
-                    // for (i = 0; i < ordered.length; i++) {
-                    //     r.push(ordered[i].id)
-                    //     o.push(ordered[i].order)
-                    // }
-                    // console.log(`ORDERED: ${r}`)
-                    // console.log(`ORDERED: ${o}`)
+
                     this.log_ids(response.data.data,"db")
                     this.log_order(response.data.data,"dborder")
 
