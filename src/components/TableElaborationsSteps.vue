@@ -96,7 +96,7 @@
 
             },
             async on_ElaborationsStep_cruded(mode,item,olditem){
-                await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
+                this.can_crud=false
                 if (mode=="C"){
                     this.new_elaborations_steps.push(item)
                 } else if (mode=="U"){
@@ -122,6 +122,7 @@
 
             },
             async setOneUp(item){
+                this.can_crud=false
                 let index = this.new_elaborations_steps.indexOf(item)
                 this.new_elaborations_steps[index]=this.new_elaborations_steps[index-1]
                 this.new_elaborations_steps[index-1]=item
@@ -129,6 +130,7 @@
 
             },
             async setOneDown(item){
+                this.can_crud=false
                 let index = this.new_elaborations_steps.indexOf(item)
                 this.new_elaborations_steps[index]=this.new_elaborations_steps[index+1]
                 this.new_elaborations_steps[index+1]=item
@@ -216,30 +218,23 @@
             },
             update_steps(){ //Hago esta función porque creo que los errores de desorden se generan con peticiones recurrentes sin haber finalizado la anterior
 
-                this.can_crud=false
                 for (var i = 0; i < this.new_elaborations_steps.length; i++) {
                     this.new_elaborations_steps[i].order=i+1
                 }
                 
+                // console.log("ANTES")
+                // console.log(this.new_elaborations_steps[0])
+
                 axios.post(`${this.elaboration.url}update_steps/`, {"steps":this.new_elaborations_steps}, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
-                    this.$emit("cruded")
-                    
-                    this.$nextTick(() => { //Usada para funcionar después del emit acabe
-                        console.log("YA")
-                        this.can_crud=true
-                    })
+                    console.log(response.data.data[0])
+                    this.new_elaborations_steps=response.data.data
+                    this.can_crud=true
+                    this.key=this.key+1
                 }, (error) => {
                     this.parseResponseError(error)
                 });
-
-
-
-
-
             },
-
         },
         created(){
             this.new_elaborations_steps=Object.assign([],this.elaboration.elaborations_steps) //IS [] an array not a {}

@@ -1,9 +1,9 @@
 <template>
     <div>    
-        <h1>{{ $t("Elaboration for {0} diners").format(elaboration.diners) }}
+        <h1>{{ $t("Elaboration for {0} diners").format(new_elaboration.diners) }}
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
         </h1>           
-        <p class="my-2 bold d-flex justify-center">{{$t("Final amount: {0} g").format(elaboration.final_amount)}}</p>
+        <p class="my-2 bold d-flex justify-center">{{$t("Final amount: {0} g").format(new_elaboration.final_amount)}}</p>
         <v-card class="pa-8 mt-4">
             <v-form ref="form" v-model="form_valid" lazy-validation>          
                 <v-card class="mt-4">
@@ -177,14 +177,6 @@
                 });
             },
             on_TableElaborationsSteps_cruded(){
-                return axios.get(`${this.$store.state.apiroot}/api/elaborations_steps/?elaboration=${this.new_elaboration.url}`, this.myheaders())
-                .then((response) => {
-                    console.log(response.data)
-                    this.new_elaboration.elaborations_steps=response.data
-                    this.key=this.key+1
-               }, (error) => {
-                    this.parseResponseError(error)
-                });
             },
             createElaboratedProduct(){
                 return axios.post(`${this.new_elaboration.url}create_elaborated_product/`, {}, this.myheaders())
