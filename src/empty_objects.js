@@ -242,6 +242,14 @@ export function empty_measures_types(){
     }
 }
 
+
+export function empty_steps(){
+    return {
+        url:null,
+        name: "",
+    }
+}
+
 export function empty_elaborations_containers(){
     return {
         url: null,

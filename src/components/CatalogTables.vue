@@ -3,12 +3,10 @@
         <h1>{{ $t(`Catalog tables`) }}
             <MyMenuInline :items="menuinline_items()" :context="this"></MyMenuInline>
         </h1>
-        <v-select :items="tables" v-model="table" :label="$t('Select a catalog table')" @change="on_table_change()"></v-select>
+        <v-select :items="tables" v-model="table" :label="$t('Select a catalog table')" return-object @change="on_table_change()"/>
 
   
-        <v-data-table dense :headers="catalog_table_headers" :items="catalog_table" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
-            <template v-slot:[`item.last`]="{ item }">{{localtime(item.last)}}</template>      
-            <template v-slot:[`item.food_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('food_types', item.food_types,'localname')"></div></template> 
+        <v-data-table dense :headers="catalog_table_headers" :items="catalog_table" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" height="70vh">
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-1" @click="viewItem(item)">mdi-eye</v-icon>
                 <v-icon small class="mr-1" @click="editItem(item)">mdi-pencil</v-icon>
@@ -52,7 +50,13 @@
 </template>
 
 <script>
-    import { empty_recipes_links_types,empty_temperatures_types,empty_stir_types,empty_recipes_categories,empty_measures_types} from '../empty_objects.js'
+    import {    empty_recipes_links_types,
+                empty_temperatures_types,
+                empty_stir_types,
+                empty_recipes_categories,
+                empty_steps,
+                empty_measures_types,
+    } from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import NameCRUD from './NameCrud.vue'
     export default {
@@ -66,15 +70,14 @@
                 key:0,
             
                 tables:[
-                    {text:this.$t("Recipes categories"), value:"recipes_categories"},
-                    {text:this.$t("Recipes links types"), value:"recipes_links_types"},
-                    {text:this.$t("Stir types"), value:"stir_types"},
-                    {text:this.$t("Temperatures types"), value:"temperatures_types"},
-                    {text:this.$t("Measures types"), value:"measures_types"},
+                    {text:this.$t("Recipes categories"), value:"recipes_categories", dialog: "dialog_recipes_categories", empty:"empty_recipes_categories", dispatch:"getRecipesCategories"},
+                    {text:this.$t("Recipes links types"), value:"recipes_links_types", dialog: "dialog_recipes_links_types", empty:"empty_recipes_links_types", dispatch:"getRecipesLinksTypes"},
+                    {text:this.$t("Stir types"), value:"stir_types", dialog: "dialog_stir_types", empty:"empty_stir_types", dispatch:"getStirTypes"},
+                    {text:this.$t("Temperatures types"), value:"temperatures_types", dialog: "dialog_temperatures_types", empty:"empty_temperatures_types", dispatch:"getTemperaturesTypes"},
+                    {text:this.$t("Measures types"), value:"measures_types", dialog: "dialog_measures_types", empty:"empty_measures_types", dispatch:"getMeasuresTypes"},
+                    {text:this.$t("Steps"), value:"steps", dialog: "dialog_steps", empty:"empty_steps", dispatch:"getSteps"},
                 ],
-                table: "recipes_categories",
-
-
+                table: null,
                 catalog_table_headers:[],
                 catalog_table:[],
                 register:null,
@@ -83,12 +86,11 @@
                 //CRUD 
                 dialog_recipes_categories:false,
                 dialog_recipes_links_types:false,
+                dialog_steps:false,
                 dialog_stir_types:false,
                 dialog_temperatures_types:false,
                 dialog_measures_types:false,
             }
-        },     
-        computed:{
         },
         methods:{
             empty_recipes_links_types,
@@ -96,6 +98,7 @@
             empty_temperatures_types,
             empty_recipes_categories,
             empty_measures_types,
+            empty_steps,
 
             menuinline_items(){
                 let r= [
@@ -106,22 +109,8 @@
                                 name: this.$t("Add a new register"),
                                 icon: "mdi-plus",
                                 code: function(this_){
-                                    if (this_.table=="recipes_categories"){
-                                        this_.register=this_.empty_recipes_categories()
-                                        this_.dialog_recipes_categories=true
-                                    } else if (this_.table=="recipes_links_types"){
-                                        this_.register=this_.empty_recipes_links_types()
-                                        this_.dialog_recipes_categories=true
-                                    } else if (this_.table=="stir_types"){
-                                        this_.register=this_.empty_stir_types()
-                                        this_.dialog_stir_types=true
-                                    } else if (this_.table=="temperatures_types"){
-                                        this_.register=this_.empty_temperatures_types()
-                                        this_.dialog_temperatures_types=true
-                                    } else if (this_.table=="measures_types"){
-                                        this_.register=this_.empty_measures_types()
-                                        this_.dialog_measures_types=true
-                                    }
+                                    this_.register=this[this_.table.empty]
+                                    this_.$data[this_.table.dialog]=true
                                     this_.register_mode="C"
                                     this_.key=this_.key+1
                                 },
@@ -133,72 +122,34 @@
                 return r
             },
             on_CRUD_cruded(){
-                if (this.table=="recipes_categories"){
-                    this.dialog_recipes_categories=false
-                } else if (this.table=="recipes_links_types"){
-                    this.dialog_recipes_links_types=false
-                } else if (this.table=="stir_types"){
-                    this.dialog_stir_types=false
-                } else if (this.table=="temperatures_types"){
-                    this.dialog_temperatures_types=false
-                } else if (this.table=="measures_types"){
-                    this.dialog_measures_types=false
-                }
+                this.$data[this.table.dialog]=false  //Invoca una variable de data por su nombrre
                 this.on_table_change()
             },
             editItem(item){
                 this.register=item
                 this.register_mode="U"
                 this.key=this.key+1
-
-                if (this.table=="recipes_categories"){
-                    this.dialog_recipes_categories=true
-                } else if (this.table=="recipes_links_types"){
-                    this.dialog_recipes_links_types=true
-                } else if (this.table=="stir_types"){
-                    this.dialog_stir_types=true
-                } else if (this.table=="temperatures_types"){
-                    this.dialog_temperatures_types=true
-                } else if (this.table=="measures_types"){
-                    this.dialog_measures_types=true
-                }
+                this.$data[this.table.dialog]=true  //Invoca una variable de data por su nombrre
             },
             deleteItem(item){
                 this.register=item
                 this.register_mode="D"
                 this.key=this.key+1
-
-                if (this.table=="recipes_categories"){
-                    this.dialog_recipes_categories=true
-                } else if (this.table=="recipes_links_types"){
-                    this.dialog_recipes_links_types=true
-                } else if (this.table=="stir_types"){
-                    this.dialog_stir_types=true
-                } else if (this.table=="temperatures_types"){
-                    this.dialog_temperatures_types=true
-                } else if (this.table=="measures_types"){
-                    this.dialog_measures_types=true
-                }
+                this.$data[this.table.dialog]=true  //Invoca una variable de data por su nombrre
             },
             viewItem(item){
                 this.register=item
                 this.register_mode="R"
                 this.key=this.key+1
-
-                if (this.table=="recipes_categories"){
-                    this.dialog_recipes_categories=true
-                } else if (this.table=="recipes_links_types"){
-                    this.dialog_recipes_links_types=true
-                } else if (this.table=="stir_types"){
-                    this.dialog_stir_types=true
-                } else if (this.table=="temperatures_types"){
-                    this.dialog_temperatures_types=true
-                } else if (this.table=="measures_types"){
-                    this.dialog_measures_types=true
-                }
+                this.$data[this.table.dialog]=true  //Invoca una variable de data por su nombrre
             },
             on_table_change(){
-                if (this.table=="recipes_links_types" || this.table=="stir_types" || this.table=="temperatures_types" || this.table=="recipes_categories" || this.table=="measures_types"){
+                if (    this.table.value=="recipes_links_types" || 
+                        this.table.value=="stir_types" || 
+                        this.table.value=="temperatures_types" || 
+                        this.table.value=="recipes_categories" || 
+                        this.table.value=="measures_types"
+                ){
                     this.catalog_table_headers= [
                         { text: this.$t('Id'), sortable: true, value: 'id', width:"10%"},
                         { text: this.$t('Name'), sortable: true, value: 'name'},
@@ -209,41 +160,16 @@
                 this.key=this.key+1
 
                 this.loading=true
-
-                if (this.table=="recipes_categories"){
-                    this.$store.dispatch("getRecipesCategories")
-                    .then(()=>{
-                        this.catalog_table=this.$store.state[this.table]
-                        this.loading=false
-                    })
-                } else if (this.table=="recipes_links_types"){
-                    this.$store.dispatch("getRecipesLinksTypes")
-                    .then(()=>{
-                        this.catalog_table=this.$store.state[this.table]
-                        this.loading=false
-                    })
-                } else if (this.table=="stir_types"){
-                    this.$store.dispatch("getStirTypes")
-                    .then(()=>{
-                        this.catalog_table=this.$store.state[this.table]
-                        this.loading=false
-                    })
-                } else if (this.table=="temperatures_types"){
-                    this.$store.dispatch("getTemperatureTypes")
-                    .then(()=>{
-                        this.catalog_table=this.$store.state[this.table]
-                        this.loading=false
-                    })
-                } else if (this.table=="measures_types"){
-                    this.$store.dispatch("getMeasuresTypes")
-                    .then(()=>{
-                        this.catalog_table=this.$store.state[this.table]
-                        this.loading=false
-                    })
-                }
-            }
+                this.$store.dispatch(this.table.dispatch)
+                .then(()=>{
+                    this.catalog_table=this.$store.state[this.table.value]
+                    this.loading=false
+                })
+            },
         },
         created(){
+            this.table=this.tables[0]
+            console.log(this.table)
             this.on_table_change()
         }
     }

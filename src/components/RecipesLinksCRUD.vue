@@ -4,9 +4,10 @@
         <v-card class="pa-8 mt-4">
             <v-form ref="form" v-model="form_valid" lazy-validation>                
                 <v-text-field :readonly="mode=='D'" v-model="new_recipes_links.description" :label="$t('Set description')" :placeholder="$t('Set description')" :rules="RulesString(200,true)" counter="200"/>
-                <v-autocomplete :readonly="mode=='D'" :items="$store.state.recipes_links_types" v-model="new_recipes_links.type" :label="$t('Select type')" item-text="localname" item-value="url" :rules="RulesSelection(true)" @change="on_type_change()"></v-autocomplete>
-                <v-text-field  v-if="!type_with_content" :readonly="mode=='D'" v-model="new_recipes_links.link" :label="$t('Set an Internet link')" :placeholder="$t('Set an Internet link')" :rules="RulesString(2000,false)" counter="2000"/>
-                <v-file-input v-if="type_with_content" show-size v-model="document" :label="$t('Select a document')"></v-file-input>           
+                <v-autocomplete :readonly="mode=='D'" :items="$store.state.recipes_links_types" v-model="new_recipes_links.type" :label="$t('Select type')" item-text="localname" item-value="url" :rules="RulesSelection(true)" @change="on_type_change"></v-autocomplete>
+                <v-text-field  v-if="show_link" :readonly="mode=='D'" v-model="new_recipes_links.link" :label="$t('Set an Internet link')" :placeholder="$t('Set an Internet link')" :rules="RulesString(2000,false)" counter="2000"/>
+                <v-file-input v-if="show_fileinput" show-size v-model="document" :label="$t('Select a document')" @change="on_fileinput_change" />
+                <PasteImage v-if="show_paste" v-model="pasted_image" :rules="RulesSelection(true)" :key="key"  @change="on_paste_change" />
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -19,8 +20,10 @@
 </template>
 <script>
     import axios from 'axios'
+    import PasteImage from './reusing/PasteImage.vue'
     export default {
         components: {
+            PasteImage,
         },
         props: {
             
@@ -41,7 +44,10 @@
                 key:0,
                 document:null,
 
-                type_with_content:false,
+                pasted_image:null,
+                show_fileinput:false,
+                show_link:false,
+                show_paste:false,
             }
         },
         methods: {
@@ -74,13 +80,43 @@
                     reader.readAsDataURL(file)
                 })
             },
+            on_fileinput_change(){
+                var id=this.id_from_hyperlinked_url(this.new_recipes_links.type)
+                if([2,7].includes(id)){
+                    if (this.document){
+                        this.show_paste=false
+                    } else {
+                        this.show_paste=true
+                    }
+
+                }
+            },
+            on_paste_change(){
+                var id=this.id_from_hyperlinked_url(this.new_recipes_links.type)
+                if([2,7].includes(id)){
+                    if (this.pasted_image.image==null){
+                        this.show_fileinput=false
+                    } else {
+                        this.show_fileinput=true
+                    }
+
+                }
+            },
             on_type_change(){
                 var id=this.id_from_hyperlinked_url(this.new_recipes_links.type)
-                if ([6,2,4,5].includes(id)){
-                    this.type_with_content=true
-                } else {
-                    this.type_with_content=false
+                this.show_fileinput=false
+                this.show_link=false
+                this.show_paste=false
+                if ([2,7].includes(id)){ //Images
+                    this.show_fileinput=true
+                    this.show_paste=true
+                } else if ([4,5,6].includes(id)) { //Documentos con contenido
+                    this.show_fileinput=true
+                } else { //Documentos con enlace
+                    this.show_link=true
                 }
+                if (this.mode=="D") this.show_paste=false
+                this.key=this.key+1
             },
             async acceptDialog(){             
                 if( this.$refs.form.validate()==false) return
@@ -90,6 +126,10 @@
                     var readed= await this.readDocument(this.document)
                     this.new_recipes_links.mime=readed.mime
                     this.new_recipes_links.content=readed.doc
+                }
+                if (this.pasted_image){
+                    this.new_recipes_links.mime=this.pasted_image.mime
+                    this.new_recipes_links.content=this.pasted_image.image
                 }
 
                 if (this.mode=="C"){
@@ -126,6 +166,7 @@
         },
         created(){
             this.new_recipes_links=Object.assign({},this.recipes_links)
+            this.on_type_change()
         }
     }
 </script>

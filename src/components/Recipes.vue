@@ -7,6 +7,10 @@
     
         <p class="ml-10">{{ $t("{0} recipes found").format(recipes.length)}}</p>
         <v-data-table dense :headers="recipes_headers" :items="recipes" :sort-by="table_sort_by" :sort-desc="table_sort_desc" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" height="70vh"  fixed-header>
+            <template v-slot:[`item.photo`]="{ item }">
+                <img v-if="item.main_image" :src="item.main_image" style="width: 50px; height: 50px" 
+      @click="toggleFullscreen(item)"/>
+            </template>
             <template v-slot:[`item.last`]="{ item }">{{localtime(item.last)}}</template>      
             <template v-slot:[`item.food_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('food_types', item.food_types,'localname')"></div></template> 
             <template v-slot:[`item.guests`]="{ item }"><v-icon small v-if="item.guests" >mdi-check-outline</v-icon></template>   
@@ -32,6 +36,12 @@
                 <RecipesView  :recipe="recipe" :key="key" @cruded="on_RecipesView_cruded()"></RecipesView>
             </v-card>
         </v-dialog>
+        <!-- DIALOG SHO IMAGE VIEW -->
+        <v-dialog v-model="dialog_main_image_view" width="60%">
+            <v-card class="pa-4">
+                <v-img :src="selected_image" height="700" contain/>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -51,6 +61,7 @@
             return {
                 recipes:[],
                 recipes_headers: [
+                    { text: this.$t('Photo'), sortable: true, value: 'photo'},    
                     { text: this.$t('Name'), sortable: true, value: 'name'},    
                     { text: this.$t('Food type'), sortable: true, value: 'food_types', width: "15%"},
                     { text: this.$t('Valoration'), sortable: true, value: 'valoration', width: "7%"},
@@ -74,6 +85,10 @@
                 recipe:null,
                 recipe_mode:null,
                 dialog_recipes_crud:false,
+
+                // VIEW IMAGE
+                dialog_main_image_view: false,
+                selected_image:null,
             }
         },     
         methods:{
@@ -204,6 +219,11 @@
                     this.parseResponseError(error)
                 });
             },
+            toggleFullscreen(item){
+                this.selected_image=item.main_image
+                this.dialog_main_image_view=true
+
+            }
 
         },
         mounted(){

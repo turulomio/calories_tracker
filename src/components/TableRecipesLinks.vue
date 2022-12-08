@@ -11,7 +11,7 @@
             </template>
         </v-data-table>   
         <!-- ItemCRUD DIALOG -->
-        <v-dialog v-model="recipes_links_crud_dialog" width="35%">
+        <v-dialog v-model="recipes_links_crud_dialog" width="70%">
             <v-card class="pa-3">
                 <RecipesLinksCRUD :recipes_links="recipes_links" :mode="recipes_links_crud_mode" :key="key"  @cruded="on_RecipesLinksCRUD_cruded()"></RecipesLinksCRUD>
             </v-card>

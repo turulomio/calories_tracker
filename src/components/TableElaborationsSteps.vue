@@ -235,18 +235,18 @@
                     this.new_elaborations_steps[i].order=i+1
                     r.push(this.new_elaborations_steps[i].id)
                 }
-                this.log_ids(this.new_elaborations_steps,"antes")
-                this.log_order(this.new_elaborations_steps,"order antes")
+                // this.log_ids(this.new_elaborations_steps,"antes")
+                // this.log_order(this.new_elaborations_steps,"order antes")
                 
                 axios.post(`${this.elaboration.url}update_steps/`, {"steps":this.new_elaborations_steps}, this.myheaders())
                 .then((response) => {
 
-                    this.log_ids(response.data.data,"db")
-                    this.log_order(response.data.data,"dborder")
+                    // this.log_ids(response.data.data,"db")
+                    // this.log_order(response.data.data,"dborder")
 
 
                     this.new_elaborations_steps=response.data.data
-                    this.log_ids(this.new_elaborations_steps,"new_ela_ste")
+                    // this.log_ids(this.new_elaborations_steps,"new_ela_ste")
                     this.$emit("cruded",this.new_elaborations_steps)
                     this.can_crud=true
                     this.key=this.key+1
@@ -273,8 +273,8 @@
         },
         created(){
             this.new_elaborations_steps=Object.assign([],this.elaboration.elaborations_steps) //IS [] an array not a {}
-            this.log_ids(this.new_elaborations_steps,"created")
-            this.log_order(this.new_elaborations_steps,"ordercreated")
+            // this.log_ids(this.new_elaborations_steps,"created")
+            // this.log_order(this.new_elaborations_steps,"ordercreated")
         }
     }
 </script>

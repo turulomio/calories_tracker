@@ -20,6 +20,7 @@ if args.local==False:
     download_from_github("turulomio", "moneymoney", "src/components/SwitchLanguages.vue", "src/components/reusing")
     download_from_github("turulomio", "moneymoney", "src/rules.js", "src/components/reusing")
     download_from_github("turulomio", "moneymoney", "src/my_commons.js", "src/components/reusing")
+    download_from_github("turulomio", "vipcontacts", "src/components/PasteImage.vue", "src/components/reusing")
 
 replace_in_file("src/components/reusing/SwitchLanguages.vue", "../assets/", "../../assets/")
 replace_in_file("src/components/reusing/btnLogOut.vue", "../functions.js", "../../functions.js")
