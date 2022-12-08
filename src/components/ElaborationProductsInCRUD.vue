@@ -14,6 +14,7 @@
                     <Multiplier v-model="multiplier" :readonly="mode=='D'" @input="on_multiplier_input()"></Multiplier>
                 </v-row>                    
                 <v-text-field :readonly="mode=='D'" v-model="new_product_in.comment" :label="$t('Set a product coment (cut, temperature ...)')" :placeholder="$t('Set product amount (cut, temperature ...)')" :rules="RulesString(100,false)" counter="100"/>
+                <v-checkbox v-model="new_product_in.ni" :label="$t('Used for nutritional information calcs?')"></v-checkbox>
 
             </v-form>
             <v-card-actions>

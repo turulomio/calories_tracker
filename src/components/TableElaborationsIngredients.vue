@@ -4,6 +4,7 @@
             <template v-slot:[`item.products`]="{ item }"><div v-html="products_html_fullname(item.products,4)"></div></template>
             <template v-slot:[`item.amount`]="{ item }">{{ fraction(item.amount).toFraction(true)}}</template>
             <template v-slot:[`item.measures_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('measures_types', item.measures_types,'localname')"></div></template> 
+            <template v-slot:[`item.ni`]="{ item }"><v-icon small v-if="item.ni" >mdi-check-outline</v-icon></template>
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="editProductIn(item)">mdi-pencil</v-icon>
                 <v-icon small @click="deleteProductIn(item)">mdi-delete</v-icon>
@@ -49,6 +50,7 @@
                     { text: this.$t('Amount'), value: 'amount', align:'right', width:"10%"},
                     { text: this.$t('Measure type'), value: 'measures_types', width:"12%"},
                     { text: this.$t('Final grams'), value: 'final_grams', align:'right', width:"10%"},
+                    { text: this.$t('NI'), value: 'ni', align:'right', width:"4%"},
                     { text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"},
                 ],
 

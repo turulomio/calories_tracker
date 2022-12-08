@@ -112,26 +112,27 @@
             refresh(){
                 this.elaboration.elaborations_products_in.forEach(o => {
                     var product=this.$store.getters.getObjectByUrl("products",o.products)
-                    var item={}
-                    item.products=o.products
-                    item.amount=o.final_grams
-                    item.calories=o.amount*product.calories/product.amount
-                    item.fat=o.amount*product.fat/product.amount
-                    item.protein=o.amount*product.protein/product.amount
-                    item.carbohydrate=o.amount*product.carbohydrate/product.amount
-                    item.salt=o.amount*product.salt/product.amount
-                    item.fiber=o.amount*product.fiber/product.amount
-                    item.sugars=o.amount*product.sugars/product.amount
-                    item.saturated_fat=o.amount*product.saturated_fat/product.amount
-                    item.cholesterol=o.amount*product.cholesterol/product.amount
-                    item.sodium=o.amount*product.sodium/product.amount
-                    item.potassium=o.amount*product.potassium/product.amount
-                    item.ferrum=o.amount*product.ferrum/product.amount
-                    item.magnesium=o.amount*product.magnesium/product.amount
-                    item.phosphor=o.amount*product.phosphor/product.amount
-                    item.calcium=o.amount*product.calcium/product.amount
-                    this.items.push(item)
-                    
+                    if (o.ni){
+                        var item={}
+                        item.products=o.products
+                        item.amount=o.final_grams
+                        item.calories=o.amount*product.calories/product.amount
+                        item.fat=o.amount*product.fat/product.amount
+                        item.protein=o.amount*product.protein/product.amount
+                        item.carbohydrate=o.amount*product.carbohydrate/product.amount
+                        item.salt=o.amount*product.salt/product.amount
+                        item.fiber=o.amount*product.fiber/product.amount
+                        item.sugars=o.amount*product.sugars/product.amount
+                        item.saturated_fat=o.amount*product.saturated_fat/product.amount
+                        item.cholesterol=o.amount*product.cholesterol/product.amount
+                        item.sodium=o.amount*product.sodium/product.amount
+                        item.potassium=o.amount*product.potassium/product.amount
+                        item.ferrum=o.amount*product.ferrum/product.amount
+                        item.magnesium=o.amount*product.magnesium/product.amount
+                        item.phosphor=o.amount*product.phosphor/product.amount
+                        item.calcium=o.amount*product.calcium/product.amount
+                        this.items.push(item)
+                    }
                 });
                 this.key=this.key+1
                 console.log(this.items)

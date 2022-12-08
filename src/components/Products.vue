@@ -412,7 +412,6 @@
                 this.loading=true
                 Promise.all([this.update_products(with_dispatch), this.update_elaborated_products(with_dispatch), this.update_system_products()])        
                 .then( ()=> {
-                    console.log(this.products)
                     this.loading=false
                     this.key=this.key+1
                 })

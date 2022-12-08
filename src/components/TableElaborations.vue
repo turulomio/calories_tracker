@@ -2,6 +2,7 @@
     <div>
         <v-data-table dense :headers="table_headers" :items="recipe.elaborations" class="elevation-1" disable-pagination  hide-default-footer sort-by="date" fixed-header :height="$attrs.height" ref="table_elaborations">
             <template v-slot:[`item.actions`]="{ item }">
+                <v-icon small class="mr-2" @click="createAutomaticElaboration(item)">mdi-file-cog-outline</v-icon>
                 <v-icon small class="mr-2" @click="viewItem(item)">mdi-eye</v-icon>
                 <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                 <v-icon small class="mr-2" @click="deleteItem(item)">mdi-delete</v-icon>
@@ -22,6 +23,7 @@
     </div>
 </template>
 <script>
+    import axios from 'axios'
     import {empty_elaborations} from '../empty_objects.js'
     import ElaborationCRUD from './ElaborationCRUD.vue'
     import ElaborationView from './ElaborationView.vue'
@@ -90,6 +92,17 @@
                 this.key=this.key+1
                 this.$emit("cruded")
             },
+            createAutomaticElaboration(item){
+
+                var diners=prompt(this.$t("You are going to generate an automatic elaboration. How many diners do you want?"), item.diners*2)
+                axios.post(`${item.url}create_automatic_elaboration/`, {diners: diners},  this.myheaders())
+                .then((response) => {
+                    console.log(response.data)
+                    this.$emit("cruded")
+                }, (error) => {
+                    this.parseResponseError(error)
+                })
+            }
         },
     }
 </script>

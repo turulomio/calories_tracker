@@ -61,7 +61,7 @@
             return {
                 recipes:[],
                 recipes_headers: [
-                    { text: this.$t('Photo'), sortable: true, value: 'photo'},    
+                    { text: this.$t('Photo'), sortable: true, value: 'photo', width:"5%"},    
                     { text: this.$t('Name'), sortable: true, value: 'name'},    
                     { text: this.$t('Food type'), sortable: true, value: 'food_types', width: "15%"},
                     { text: this.$t('Valoration'), sortable: true, value: 'valoration', width: "7%"},
