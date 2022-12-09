@@ -262,12 +262,10 @@
                 if (product.elaborated_products!=null){ //ELABORATED PRODUCT
                     this.elaborated_product_crud_mode="R"
                     this.elaborated_product=this.$store.getters.getObjectByUrl("elaborated_products",product.elaborated_products)
-                    console.log(this.elaborated_product)
                     this.elaborated_product_crud_dialog=true
                 } else { // SYSTEM PRODUCTS AND PRODUCTS
                     this.product_crud_mode="R"
                     this.product=product
-                   console.log(product)
                     this.product_crud_dialog=true
                 } 
             },

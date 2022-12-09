@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table dense :headers="table_headers" :items="elaboration.elaborations_experiences" class="elevation-1" disable-pagination  hide-default-footer sort-by="date" fixed-header height="50vh" ref="table_elaborations_experiences">
+        <v-data-table dense :headers="table_headers()" :items="elaboration.elaborations_experiences" class="elevation-1" disable-pagination  hide-default-footer sort-by="date" fixed-header height="50vh" ref="table_elaborations_experiences">
             <template v-slot:[`item.datetime`]="{ item }">{{localtime(item.datetime)}}</template>      
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
@@ -32,11 +32,6 @@
                 dialog:false,
                 mode:null,
 
-                table_headers: [
-                    { text: this.$t('Date and time'), value: 'datetime', sortable: true,width:"10%"},
-                    { text: this.$t('Experience'), value: 'experience', sortable: true},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false, width: "7%"},
-                ],
                 items:[],
                 key: 0,
 
@@ -45,6 +40,16 @@
         },
         methods: {
             empty_elaborations_experiences,
+            table_headers(){
+                var r=[
+                    { text: this.$t('Date and time'), value: 'datetime', sortable: true,width:"10%"},
+                    { text: this.$t('Experience'), value: 'experience', sortable: true},
+                ]
+                if (this.elaboration.automatic==false){
+                    r.push({ text: this.$t('Actions'), value: 'actions', sortable: false, width: "7%"})
+                }
+                return r
+            },
             addItem(){
                 this.item=this.empty_elaborations_experiences()
                 this.item.elaborations=this.elaboration.url

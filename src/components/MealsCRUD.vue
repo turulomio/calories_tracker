@@ -67,8 +67,7 @@
 
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/meals/`, this.newmeal,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -76,8 +75,7 @@
                 }
                 if (this.mode=="U"){
                     axios.put(this.newmeal.url, this.newmeal,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -87,8 +85,7 @@
                     var r = confirm(this.$t("Do you want to delete this meal register?"))
                     if(r == true) {
                         axios.delete(this.newmeal.url, this.myheaders())
-                        .then((response) => {
-                            console.log(response.data)
+                        .then(() => {
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)

@@ -94,14 +94,11 @@
                 if (this.mode=="D") return this.$t('Delete this elaborated product register')
             },
             acceptDialog(){             
-                if( this.$refs.form.validate()==false) return   
-
-                console.log(this.newep)
+                if( this.$refs.form.validate()==false) return
 
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/elaborated_products/`, this.newep,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -109,8 +106,7 @@
                 }
                 if (this.mode=="U"){
                     axios.put(this.newep.url, this.newep,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -120,8 +116,7 @@
                     var r = confirm(this.$t("Do you want to delete this elaborated product register?"))
                     if(r == true) {
                         axios.delete(this.newep.url, this.myheaders())
-                        .then((response) => {
-                            console.log(response.data)
+                        .then(() => {
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)

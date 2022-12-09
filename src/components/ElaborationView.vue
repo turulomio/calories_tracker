@@ -4,6 +4,7 @@
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
         </h1>           
         <p class="my-2 bold d-flex justify-center">{{$t("Final amount: {0} g").format(new_elaboration.final_amount)}}</p>
+        <v-alert v-if="elaboration.automatic" type="error" dense text><div v-html="automatic_adaptation_text()"></div></v-alert>
         <v-card class="pa-8 mt-4">
             <v-form ref="form" v-model="form_valid" lazy-validation>          
                 <v-card class="mt-4">
@@ -12,7 +13,7 @@
                         <v-tab key="nutritional"><v-icon left>mdi-apple</v-icon>{{ $t('Nutritional information') }}<v-badge v-if="new_elaboration.elaborations_products_in.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_products_in.length"/></v-tab>
                         <v-tab key="containers"><v-icon left>mdi-apple</v-icon>{{ $t('Containers') }}<v-badge v-if="new_elaboration.elaborations_containers.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_containers.length"/></v-tab>
                         <v-tab key="steps"><v-icon left>mdi-apple</v-icon>{{ $t('Steps') }}<v-badge v-if="new_elaboration.elaborations_steps.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_steps.length"/></v-tab>
-                        <v-tab key="experiences"><v-icon left>mdi-apple</v-icon>{{ $t('Experiences') }}<v-badge v-if="new_elaboration.elaborations_experiences.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_experiences.length"/></v-tab>
+                        <v-tab key="experiences"  v-if="!elaboration.automatic"><v-icon left>mdi-apple</v-icon>{{ $t('Experiences') }}<v-badge v-if="new_elaboration.elaborations_experiences.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_experiences.length"/></v-tab>
                         <v-tabs-slider color="yellow"></v-tabs-slider>
                     </v-tabs>
                     <v-tabs-items v-model="tab">
@@ -38,7 +39,7 @@
                                 <TableElaborationsSteps ref="table_elaborations_steps" :elaboration="new_elaboration" :key="key" @cruded="on_TableElaborationsSteps_cruded"></TableElaborationsSteps>
                             </v-card>
                         </v-tab-item>
-                        <v-tab-item key="experiences">      
+                        <v-tab-item key="experiences" v-if="!elaboration.automatic">      
                             <v-card outlined>
                                 <TableElaborationsExperiences ref="table_elaborations_experiences" :elaboration="new_elaboration" :key="key" @cruded="on_TableElaborationsExperiences_cruded"></TableElaborationsExperiences>
                             </v-card>
@@ -47,13 +48,13 @@
                 </v-card>
             </v-form>
             <v-card-actions>                
-                <v-btn color="error" :disabled="!new_elaboration.url" @click="createElaboratedProduct()" >{{ $t("Create an elaborated product") }}</v-btn>
-                <v-btn color="error" :disabled="!new_elaboration.url" @click="generate_pdf()" >{{ $t("Generate PDF") }}</v-btn>
+                <v-btn color="error" @click="createElaboratedProduct()" >{{ $t("Create an elaborated product") }}</v-btn>
+                <v-btn color="error" @click="generate_pdf()" >{{ $t("Generate PDF") }}</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" :disabled="!new_elaboration.url" @click="addIngredient()" >{{ $t("Add an ingredient") }}</v-btn>
-                <v-btn color="primary" :disabled="!new_elaboration.url" @click="addContainer()" >{{ $t("Add a container") }}</v-btn>
-                <v-btn color="primary" :disabled="!new_elaboration.url" @click="addElaborationStep()" >{{ $t("Add a step") }}</v-btn>
-                <v-btn color="primary" :disabled="!new_elaboration.url" @click="addExperience()" >{{ $t("Add a experience") }}</v-btn>
+                <v-btn color="primary" :disabled="elaboration.automatic" @click="addIngredient()" >{{ $t("Add an ingredient") }}</v-btn>
+                <v-btn color="primary" :disabled="elaboration.automatic" @click="addContainer()" >{{ $t("Add a container") }}</v-btn>
+                <v-btn color="primary" :disabled="elaboration.automatic" @click="addElaborationStep()" >{{ $t("Add a step") }}</v-btn>
+                <v-btn color="primary" :disabled="elaboration.automatic" @click="addExperience()" >{{ $t("Add a experience") }}</v-btn>
             </v-card-actions>
         </v-card>
     </div>
@@ -96,19 +97,12 @@
                                     this_.generate_pdf()
                                 },
                             },
-                            {
-                                name: this.$t("Show nutritional information"),
-                                icon: "mdi-information",
-                                code: function(this_){
-                                    console.log(this_)
-                                },
-                            },
                         ]
                     },
                 ],
                 form_valid:false,
                 new_elaboration: null,
-                tab: 2,
+                tab: 3,
 
                 key:0,
             }
@@ -150,7 +144,6 @@
             on_TableElaborationsIngredients_cruded(){
                 return axios.get(`${this.$store.state.apiroot}/api/elaborationsproductsinthrough/?elaboration=${this.new_elaboration.url}`, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
                     this.new_elaboration.elaborations_products_in=response.data
                     this.key=this.key+1
                }, (error) => {
@@ -160,7 +153,6 @@
             on_TableElaborationsContainers_cruded(){
                 return axios.get(`${this.$store.state.apiroot}/api/elaborations_containers/?elaboration=${this.new_elaboration.url}`, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
                     this.new_elaboration.elaborations_containers=response.data
                     this.key=this.key+1
                }, (error) => {
@@ -170,7 +162,6 @@
             on_TableElaborationsExperiences_cruded(){
                 return axios.get(`${this.$store.state.apiroot}/api/elaborations_experiences/?elaboration=${this.new_elaboration.url}`, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
                     this.new_elaboration.elaborations_experiences=response.data
                }, (error) => {
                     this.parseResponseError(error)
@@ -181,14 +172,13 @@
             },
             createElaboratedProduct(){
                 return axios.post(`${this.new_elaboration.url}create_elaborated_product/`, {}, this.myheaders())
-                .then((response) => {
+                .then(() => {
                     Promise.all([
                         this.$store.dispatch("getProducts"),
                         this.$store.dispatch("getElaboratedProducts")
                         ])
                         .then(() => {
                             alert(this.$t("Elaborated product created correctly. Now you can use it to track calories in your meals"))
-                            console.log(response.data)
                         });
                }, (error) => {
                     this.parseResponseError(error)
@@ -197,7 +187,6 @@
             generate_pdf(){
                 axios.post(`${this.new_elaboration.url}generate_pdf/`, {}, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
                     var link = window.document.createElement('a')
                     link.href = `data:${response.data.data.mime};base64,${response.data.data.data}`
                     link.download = response.data.data.filename
@@ -208,6 +197,10 @@
                     this.parseResponseError(error)
                 });
             },
+            automatic_adaptation_text(){
+                let text=(this.elaboration.automatic_adaptation_step) ? this.elaboration.automatic_adaptation_step : ""
+                return this.$t("This is an automatic elaboration.") + "<p></p>" + text
+            }
         },
         created(){
             this.new_elaboration=Object.assign({},this.elaboration)

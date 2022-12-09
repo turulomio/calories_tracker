@@ -152,7 +152,6 @@
                 axios.get(`${this.$store.state.apiroot}/api/biometrics/`, this.myheaders())
                 .then((response) => {
                     this.biometrics=response.data
-                    console.log(this.biometrics)
                     if (this.biometrics.length>0) this.biometric_last=this.biometrics[this.biometrics.length - 1]
                     this.chart_height_data=[]
                     this.chart_weight_data=[]

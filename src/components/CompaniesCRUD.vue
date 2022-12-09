@@ -46,8 +46,7 @@
                 if( this.$refs.form.validate()==false) return
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/companies/`, this.newcompany,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -55,8 +54,7 @@
                 }
                 if (this.mode=="U"){
                     axios.put(this.newcompany.url, this.newcompany,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -66,8 +64,7 @@
                     var r = confirm(this.$t("Do you want to delete this company?"))
                     if(r == true) {
                         axios.delete(this.newcompany.url, this.myheaders())
-                        .then((response) => {
-                            console.log(response.data)
+                        .then(() => {
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)

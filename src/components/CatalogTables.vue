@@ -169,7 +169,6 @@
         },
         created(){
             this.table=this.tables[0]
-            console.log(this.table)
             this.on_table_change()
         }
     }

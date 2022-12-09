@@ -1,6 +1,6 @@
 <template>
     <div>    
-        <v-data-table dense :headers="products_in_headers" :items="elaboration.elaborations_products_in" sort-by="final_grams" :sort-desc="['final_grams']" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" height="50vh" fixed-header>
+        <v-data-table dense :headers="products_in_headers()" :items="elaboration.elaborations_products_in" sort-by="final_grams" :sort-desc="['final_grams']" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" height="50vh" fixed-header>
             <template v-slot:[`item.products`]="{ item }"><div v-html="products_html_fullname(item.products,4)"></div></template>
             <template v-slot:[`item.amount`]="{ item }">{{ fraction(item.amount).toFraction(true)}}</template>
             <template v-slot:[`item.measures_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('measures_types', item.measures_types,'localname')"></div></template> 
@@ -44,15 +44,6 @@
         },
         data(){ 
             return{
-                products_in_headers: [
-                    { text: this.$t('Product'), sortable: true, value: 'products'},
-                    { text: this.$t('Comment'), value: 'comment', align:'right'},
-                    { text: this.$t('Amount'), value: 'amount', align:'right', width:"10%"},
-                    { text: this.$t('Measure type'), value: 'measures_types', width:"12%"},
-                    { text: this.$t('Final grams'), value: 'final_grams', align:'right', width:"10%"},
-                    { text: this.$t('NI'), value: 'ni', align:'right', width:"4%"},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"},
-                ],
 
 
                 key:0,
@@ -64,6 +55,24 @@
         methods: {
             fraction,
             empty_elaborations_products_in,
+
+
+            products_in_headers(){
+                var r= [
+                    { text: this.$t('Product'), sortable: true, value: 'products'},
+                    { text: this.$t('Comment'), value: 'comment', align:'right'},
+                    { text: this.$t('Amount'), value: 'amount', align:'right', width:"10%"},
+                    { text: this.$t('Measure type'), value: 'measures_types', width:"12%"},
+                    { text: this.$t('Final grams'), value: 'final_grams', align:'right', width:"10%"},
+                    { text: this.$t('NI'), value: 'ni', align:'right', width:"4%"},
+                    { text: this.$t('Automatic %'), value: 'automatic_percentage', align:'right', width:"8%"},
+                    
+                ]
+                if (this.elaboration.automatic==false){
+                    r.push({ text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"})
+                }
+                return r
+            },
             addProductIn(){
                 this.tab=0
                 this.product_in=this.empty_elaborations_products_in()

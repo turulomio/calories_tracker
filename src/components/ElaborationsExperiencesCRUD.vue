@@ -54,8 +54,7 @@
                 if( this.$refs.form.validate()==false) return
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/elaborations_experiences/`, this.new_experience,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -63,8 +62,7 @@
                 }
                 if (this.mode=="U"){
                     axios.put(this.new_experience.url, this.new_experience,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -74,8 +72,7 @@
                     var r = confirm(this.$t("Do you want to delete this experience?"))
                     if(r == true) {
                         axios.delete(this.new_experience.url, this.myheaders())
-                        .then((response) => {
-                            console.log(response.data)
+                        .then(() => {
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)

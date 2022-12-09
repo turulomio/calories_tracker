@@ -1,6 +1,6 @@
 <template>
     <div>    
-        <v-data-table  dense :headers="steps_headers" :items="new_elaborations_steps" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" height="50vh" fixed-header>
+        <v-data-table  dense :headers="steps_headers()" :items="new_elaborations_steps" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" height="50vh" fixed-header>
             <template v-slot:[`item.steps`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('steps', item.steps,'localname')"></div></template> 
             <template v-slot:[`item.products_in_step`]="{ item }"><div v-html="show_products_in_step(item)"></div></template> 
             <template v-slot:[`item.temperature`]="{ item }"><div v-html="show_temperature(item)"></div></template> 
@@ -42,19 +42,6 @@
         data(){ 
             return{
                 form_valid:false,
-                steps_headers: [
-                    { text: this.$t('Order'), sortable: false, value: 'order'},
-                    { text: this.$t('Id'), sortable: false, value: 'id'},
-                    { text: this.$t('Step'), sortable: false, value: 'steps'},
-                    { text: this.$t('Duration'), sortable: false, value: 'duration', align:'right'},
-                    { text: this.$t('Temperature'), value: 'temperature', sortable: false, width:"8%"},
-                    { text: this.$t('Stir'), value: 'stir', sortable: false, width:"8%"},
-                    { text: this.$t('Products in step'), sortable: false, value: 'products_in_step'},
-                    { text: this.$t('Container'), sortable: false, value: 'container'},
-                    { text: this.$t('Container to'), sortable: false, value: 'container_to'},
-                    { text: this.$t('Comment'), sortable: false, value: 'comment', width:"15%"},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"},
-                ],
 
                 key:0,
                 // Elaboration step
@@ -69,6 +56,25 @@
         },
         methods: {
             empty_elaborations_steps,
+
+            steps_headers(){
+                var r= [
+                    { text: this.$t('Order'), sortable: false, value: 'order'},
+                    { text: this.$t('Id'), sortable: false, value: 'id'},
+                    { text: this.$t('Step'), sortable: false, value: 'steps'},
+                    { text: this.$t('Duration'), sortable: false, value: 'duration', align:'right'},
+                    { text: this.$t('Temperature'), value: 'temperature', sortable: false, width:"8%"},
+                    { text: this.$t('Stir'), value: 'stir', sortable: false, width:"8%"},
+                    { text: this.$t('Products in step'), sortable: false, value: 'products_in_step'},
+                    { text: this.$t('Container'), sortable: false, value: 'container'},
+                    { text: this.$t('Container to'), sortable: false, value: 'container_to'},
+                    { text: this.$t('Comment'), sortable: false, value: 'comment', width:"15%"},
+                ]
+                if (this.elaboration.automatic==false){
+                    r.push({ text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"})
+                }
+                return r
+            },
             addElaborationStep(){
                 if (this.can_crud==false){
                     alert("I can add a step yet")

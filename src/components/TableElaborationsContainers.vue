@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table dense :headers="table_headers" :items="elaboration.elaborations_containers" class="elevation-1" disable-pagination  hide-default-footer sort-by="date" fixed-header height="50vh" ref="table_elaborations_containers">
+        <v-data-table dense :headers="table_headers()" :items="elaboration.elaborations_containers" class="elevation-1" disable-pagination  hide-default-footer sort-by="date" fixed-header height="50vh" ref="table_elaborations_containers">
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                 <v-icon small class="mr-2" @click="deleteItem(item)">mdi-delete</v-icon>
@@ -31,10 +31,6 @@
                 dialog:false,
                 mode:null,
 
-                table_headers: [
-                    { text: this.$t('Name'), value: 'name', sortable: true},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false, width: "10%"},
-                ],
                 items:[],
                 key: 0,
 
@@ -43,6 +39,16 @@
         },
         methods: {
             empty_elaborations_containers,
+            
+            table_headers(){
+                var r= [
+                    { text: this.$t('Name'), value: 'name', sortable: true},
+                ]
+                if (this.elaboration.automatic==false){
+                    r.push({ text: this.$t('Actions'), value: 'actions', sortable: false, width: "10%"})
+                }
+                return r
+            },
             on_new_click(){
                 this.item=this.empty_elaborations_containers()
                 this.item.elaborations=this.elaboration.url

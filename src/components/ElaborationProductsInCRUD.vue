@@ -9,12 +9,14 @@
                 <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="$store.state.measures_types" v-model="new_product_in.measures_types" :label="$t('Select your measure type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
 
                 <v-row class="pa-3">     
-                    <v-text-field :readonly="mode=='D'" v-model="new_product_in.amount" :label="$t('Set product amount')" :placeholder="$t('Set product amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
+                    <v-text-field :readonly="mode=='D'" v-model.number="new_product_in.amount" :label="$t('Set product amount')" :placeholder="$t('Set product amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
                     <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-text="name" item-value="amount" :rules="RulesSelection(false)"  @input="on_product_format_input()"></v-autocomplete>
                     <Multiplier v-model="multiplier" :readonly="mode=='D'" @input="on_multiplier_input()"></Multiplier>
                 </v-row>                    
-                <v-text-field :readonly="mode=='D'" v-model="new_product_in.comment" :label="$t('Set a product coment (cut, temperature ...)')" :placeholder="$t('Set product amount (cut, temperature ...)')" :rules="RulesString(100,false)" counter="100"/>
                 <v-checkbox v-model="new_product_in.ni" :label="$t('Used for nutritional information calcs?')"></v-checkbox>
+                <v-text-field :readonly="mode=='D'" v-model.number="new_product_in.automatic_percentage" :label="$t('Set automatic transformation percentage')" :placeholder="$t('Set automatic transformation percentage')" :rules="RulesInteger(3,true,3)" counter="3"/>
+
+                <v-text-field :readonly="mode=='D'" v-model="new_product_in.comment" :label="$t('Set a product comment (cut, temperature ...)')" :placeholder="$t('Set a product comment (cut, temperature ...)')" :rules="RulesString(100,false)" counter="100"/>
 
             </v-form>
             <v-card-actions>
@@ -64,8 +66,7 @@
                 if( this.$refs.form.validate()==false) return
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/elaborationsproductsinthrough/`, this.new_product_in,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -73,8 +74,7 @@
                 }
                 if (this.mode=="U"){
                     axios.put(this.new_product_in.url, this.new_product_in,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -84,8 +84,7 @@
                     var r = confirm(this.$t("Do you want to delete this elaboration product?"))
                     if(r == true) {
                         axios.delete(this.new_product_in.url, this.myheaders())
-                        .then((response) => {
-                            console.log(response.data)
+                        .then(() => {
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)

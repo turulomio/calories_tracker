@@ -56,8 +56,7 @@
 
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/biometrics/`, this.newbiometric,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -65,8 +64,7 @@
                 }
                 if (this.mode=="U"){
                     axios.put(this.newbiometric.url, this.newbiometric,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -76,8 +74,7 @@
                     var r = confirm(this.$t("Do you want to delete this biometric register?"))
                     if(r == true) {
                         axios.delete(this.newbiometric.url, this.myheaders())
-                        .then((response) => {
-                            console.log(response.data)
+                        .then(() => {
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)

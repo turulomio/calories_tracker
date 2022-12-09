@@ -5,13 +5,17 @@
         </h1>           
         <v-card class="pa-8 mt-4">
             <v-form ref="form" v-model="form_valid" lazy-validation>          
-                <v-row>
-                    <v-text-field :readonly="mode=='D'" v-model.number="new_elaboration.diners" :label="$t('Set the number of diners')" :placeholder="$t('Set the number of diners')" :rules="RulesInteger(5,true)" counter="200"/>
-                    <v-text-field :readonly="mode=='D'" class="ml-5" v-model="new_elaboration.final_amount" :label="$t('Set your final amount')" :placeholder="$t('Set your final amount')" :rules="RulesFloatGZ(10,true,3)" counter="10"/>
-                    <v-btn color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn> 
+                <v-text-field :readonly="(mode=='D' || new_elaboration.automatic )" v-model.number="new_elaboration.diners" :label="$t('Set the number of diners')" :placeholder="$t('Set the number of diners')" :rules="RulesInteger(5,true)" counter="200"/>
+                <v-text-field :readonly="mode=='D'" class="ml-5" v-model="new_elaboration.final_amount" :label="$t('Set your final amount')" :placeholder="$t('Set your final amount')" :rules="RulesFloatGZ(10,true,3)" counter="10"/>
+                <v-checkbox readonly v-model="new_elaboration.automatic" :label="$t('Is an automatic elaboration?')"></v-checkbox>
+                <v-textarea :readonly="mode=='D'" v-model="new_elaboration.automatic_adaptation_step" :label="$t('Add your comment for this automatic elaboration')" :placeholder="$t('Add your comment for this automatic elaboration')" :rules="RulesString(2000,false)" counter="2000"/>
 
-                </v-row>      
+
             </v-form>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn> 
+            </v-card-actions>
         </v-card>
 
     </div>
@@ -80,8 +84,7 @@
 
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/elaborations/`, this.new_elaboration,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         if (cruded==true) this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -89,8 +92,7 @@
                 }
                 if (this.mode=="U"){
                     axios.put(this.new_elaboration.url, this.new_elaboration,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         if (cruded==true) this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -100,8 +102,7 @@
                     var r = confirm(this.$t("Do you want to delete this elaboration?"))
                     if(r == true) {
                         axios.delete(this.new_elaboration.url, this.myheaders())
-                        .then((response) => {
-                            console.log(response.data)
+                        .then(() => {
                         if (cruded==true) this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)

@@ -54,8 +54,7 @@
 
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/${this.apiname}/`, this.new_item,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -63,8 +62,7 @@
                 }
                 if (this.mode=="U"){
                     axios.put(this.new_item.url, this.new_item,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -74,8 +72,7 @@
                     var r = confirm(this.$t("Do you want to delete this item?"))
                     if(r == true) {
                         axios.delete(this.new_item.url, this.myheaders())
-                        .then((response) => {
-                            console.log(response.data)
+                        .then(() => {
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)
