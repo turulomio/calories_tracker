@@ -86,7 +86,7 @@
 
                 loading:false,
                 key:0,
-                search: ":LAST:50",
+                search: ":LAST:25",
                 table_sort_by:"name",
                 table_sort_desc:"",
 
