@@ -10,6 +10,7 @@
             <template v-slot:[`item.photo`]="{ item }"><img v-if="item.main_image" :src="item.main_image" style="width: 50px; height: 50px" @click="toggleFullscreen(item)"/></template>
             <template v-slot:[`item.name`]="{ item }"><div v-html="item.name" @click="searchGoogle(item)"></div></template>      
             <template v-slot:[`item.last`]="{ item }">{{localtime(item.last)}}</template>      
+            <template v-slot:[`item.categories`]="{ item }">{{show_categories(item)}}</template>      
             <template v-slot:[`item.food_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('food_types', item.food_types,'localname')"></div></template> 
             <template v-slot:[`item.guests`]="{ item }"><v-icon small v-if="item.guests" >mdi-check-outline</v-icon></template>   
             <template v-slot:[`item.soon`]="{ item }"><v-icon small v-if="item.soon" >mdi-check-outline</v-icon></template>    
@@ -74,6 +75,7 @@
                     { text: this.$t('Photo'), sortable: true, value: 'photo', width:"5%"},    
                     { text: this.$t('Name'), sortable: true, value: 'name'},    
                     { text: this.$t('Food type'), sortable: true, value: 'food_types', width: "15%"},
+                    { text: this.$t('Categories'), sortable: true, value: 'categories', width: "15%"},
                     { text: this.$t('Valoration'), sortable: true, value: 'valoration', width: "7%"},
                     { text: this.$t('Guests'), sortable: true, value: 'guests', width: "5%"},
                     { text: this.$t('Soon'), sortable: true, value: 'soon', width: "5%"},
@@ -236,6 +238,14 @@
                 this.selected_image=item.main_image
                 this.dialog_main_image_view=true
 
+            },            
+            show_categories(item){
+                var r=""
+                item.recipes_categories.forEach(o=>{
+                    var categorie=this.$store.getters.getObjectByUrl("recipes_categories",o)
+                        r=r+ categorie.localname + ", "
+                })
+                return r.slice(0,-2)
             },
             addMainPhoto(item){
                 this.recipes_links=this.empty_recipes_links()
