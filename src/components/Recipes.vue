@@ -7,16 +7,14 @@
     
         <p class="ml-10">{{ $t("{0} recipes found").format(recipes.length)}}</p>
         <v-data-table dense :headers="recipes_headers" :items="recipes" :sort-by="table_sort_by" :sort-desc="table_sort_desc" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" height="70vh"  fixed-header>
-            <template v-slot:[`item.photo`]="{ item }">
-                <img v-if="item.main_image" :src="item.main_image" style="width: 50px; height: 50px" 
-      @click="toggleFullscreen(item)"/>
-            </template>
+            <template v-slot:[`item.photo`]="{ item }"><img v-if="item.main_image" :src="item.main_image" style="width: 50px; height: 50px" @click="toggleFullscreen(item)"/></template>
+            <template v-slot:[`item.name`]="{ item }"><div v-html="item.name" @click="searchGoogle(item)"></div></template>      
             <template v-slot:[`item.last`]="{ item }">{{localtime(item.last)}}</template>      
             <template v-slot:[`item.food_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('food_types', item.food_types,'localname')"></div></template> 
             <template v-slot:[`item.guests`]="{ item }"><v-icon small v-if="item.guests" >mdi-check-outline</v-icon></template>   
             <template v-slot:[`item.soon`]="{ item }"><v-icon small v-if="item.soon" >mdi-check-outline</v-icon></template>    
             <template v-slot:[`item.actions`]="{ item }">
-                <v-icon small class="mr-1" @click="addMainPhoto(item)">mdi-camera</v-icon>
+                <v-icon small class="mr-1" @click="addMainPhoto(item)">mdi-link-variant</v-icon>
                 <v-icon small class="mr-1" @click="viewRecipe(item)">mdi-eye</v-icon>
                 <v-icon small class="mr-1" @click="editRecipe(item)">mdi-pencil</v-icon>
                 <v-icon small @click="deleteRecipe(item)">mdi-delete</v-icon>
@@ -252,6 +250,10 @@
                 this.dialog_main_photo=false
                 this.update_recipes()
 
+            },
+            searchGoogle(item){
+
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(item.name)}`)
             }
 
         },

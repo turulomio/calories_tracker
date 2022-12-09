@@ -116,6 +116,7 @@
                     this.show_link=true
                 }
                 if (this.mode=="D") this.show_paste=false
+                this.new_recipes_links.description=this.$store.getters.getObjectPropertyByUrl("recipes_links_types",this.new_recipes_links.type,"localname")
                 this.key=this.key+1
             },
             async acceptDialog(){             
