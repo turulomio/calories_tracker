@@ -16,6 +16,7 @@
             <template v-slot:[`item.guests`]="{ item }"><v-icon small v-if="item.guests" >mdi-check-outline</v-icon></template>   
             <template v-slot:[`item.soon`]="{ item }"><v-icon small v-if="item.soon" >mdi-check-outline</v-icon></template>    
             <template v-slot:[`item.actions`]="{ item }">
+                <v-icon small class="mr-1" @click="addMainPhoto(item)">mdi-camera</v-icon>
                 <v-icon small class="mr-1" @click="viewRecipe(item)">mdi-eye</v-icon>
                 <v-icon small class="mr-1" @click="editRecipe(item)">mdi-pencil</v-icon>
                 <v-icon small @click="deleteRecipe(item)">mdi-delete</v-icon>
@@ -26,7 +27,7 @@
         <!-- DIALOG RECIPES CRUD -->
         <v-dialog v-model="dialog_recipes_crud" width="45%" persistent>
             <v-card class="pa-4">
-                <RecipesCRUD  :recipe="recipe" :mode="recipe_mode" :key="key" @cruded="on_RecipesCRUD_cruded()"></RecipesCRUD>
+                <RecipesCRUD  :recipe="recipe" :mode="recipe_mode" :key="key" @cruded="on_RecipesCRUD_cruded"></RecipesCRUD>
             </v-card>
         </v-dialog>
 
@@ -42,20 +43,31 @@
                 <v-img :src="selected_image" height="700" contain/>
             </v-card>
         </v-dialog>
+
+
+        <!-- DIALOG MAIN PHOTO -->
+        <v-dialog v-model="dialog_main_photo" width="60%" persistent>
+            <v-card class="pa-4">
+                <RecipesLinksCRUD :recipes_links="recipes_links" mode="C" :key="key"  @cruded="on_RecipesLinksCRUD_cruded()"></RecipesLinksCRUD>
+            </v-card>
+        </v-dialog>
+
     </div>
 </template>
 
 <script>
     import axios from 'axios'
-    import { empty_recipes} from '../empty_objects.js'
+    import { empty_recipes,empty_recipes_links} from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import RecipesCRUD from './RecipesCRUD.vue'
     import RecipesView from './RecipesView.vue'
+    import RecipesLinksCRUD from './RecipesLinksCRUD.vue'
     export default {
         components: {
             MyMenuInline,
             RecipesCRUD,
             RecipesView,
+            RecipesLinksCRUD,
         },
         data(){
             return {
@@ -89,10 +101,15 @@
                 // VIEW IMAGE
                 dialog_main_image_view: false,
                 selected_image:null,
+
+                //DIALOG MAIN PHOTO
+                dialog_main_photo: false,
+                recipes_links: null,
             }
         },     
         methods:{
             empty_recipes,
+            empty_recipes_links,
 
             menuinline_items(){
                 let r= [
@@ -157,7 +174,6 @@
             },
             on_RecipesView_cruded(){
                 this.update_recipes()
-                console.log("RECIPES CRUDED")
             },
             editRecipe(item){
                 this.recipe=item
@@ -181,7 +197,6 @@
                     this.recipe=response.data
                     this.recipe.url_full=recipe_full_url
                     this.recipe.url=item.url
-                    console.log(this.recipe)
                     this.key=this.key+1
 
                     this.dialog_recipes_view=true
@@ -222,6 +237,20 @@
             toggleFullscreen(item){
                 this.selected_image=item.main_image
                 this.dialog_main_image_view=true
+
+            },
+            addMainPhoto(item){
+                this.recipes_links=this.empty_recipes_links()
+                this.recipes_links.recipes=item.url
+                this.recipes_links.type=this.$store.getters.getObjectPropertyById("recipes_links_types", 7,"url"), // Main page
+                this.recipes_links.description=this.$t("Main photo")
+                this.key=this.key+1
+                this.dialog_main_photo=true
+
+            },
+            on_RecipesLinksCRUD_cruded(){
+                this.dialog_main_photo=false
+                this.update_recipes()
 
             }
 
