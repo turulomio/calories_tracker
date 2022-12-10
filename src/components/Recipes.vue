@@ -6,8 +6,8 @@
         <v-text-field class="mx-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
     
         <p class="ml-10">{{ $t("{0} recipes found").format(recipes.length)}}</p>
-        <v-data-table dense :headers="recipes_headers" :items="recipes" :sort-by="table_sort_by" :sort-desc="table_sort_desc" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" height="70vh"  fixed-header>
-            <template v-slot:[`item.photo`]="{ item }"><img v-if="item.main_image" :src="item.main_image" style="width: 50px; height: 50px" @click="toggleFullscreen(item)"/></template>
+        <v-data-table dense :headers="recipes_headers" :items="recipes" :sort-by="table_sort_by" :sort-desc="table_sort_desc" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" height="70vh"  fixed-header item-key="content">
+            <template v-slot:[`item.photo`]="{ item}"><v-img  v-if="item.main_image_thumbnail" :src="item.content" style="width: 50px; height: 50px" @click="toggleFullscreen(item)"/></template>
             <template v-slot:[`item.name`]="{ item }"><div v-html="item.name" @click="searchGoogle(item)"></div></template>      
             <template v-slot:[`item.last`]="{ item }">{{localtime(item.last)}}</template>      
             <template v-slot:[`item.categories`]="{ item }">{{show_categories(item)}}</template>      
@@ -86,7 +86,7 @@
 
                 loading:false,
                 key:0,
-                search: ":LAST:25",
+                search: ":LAST:5",
                 table_sort_by:"name",
                 table_sort_desc:"",
 
@@ -229,6 +229,16 @@
                 .then((response) => {
                     console.log(response.data)
                     this.recipes=response.data
+                    this.recipes.forEach(r=>{
+                        r.content
+                        axios.get(r.main_image_content, this.myheaders())
+                        .then((response) => {
+                            r.content=response.data
+                            this.key=this.key+1
+                        }, (error) => {
+                            this.parseResponseError(error)
+                        });
+                    })
                     this.loading=false
                }, (error) => {
                     this.parseResponseError(error)
@@ -264,11 +274,25 @@
             searchGoogle(item){
 
                 window.open(`https://www.google.com/search?q=${encodeURIComponent(item.name)}`)
+            },
+            async get_url(url){
+                console.log(url)
+                if(!url) return ""
+
+                let r
+                await axios.get(url, this.myheaders())
+                .then((response) => {
+                    r=response.data
+               }, (error) => {
+                    this.parseResponseError(error)
+                });
+                return r
             }
 
         },
         mounted(){
             this.update_recipes()
+            console.log(this.get_url("http://localhost:8011/api/files/3129/content/"))
         }
     }
 </script>
