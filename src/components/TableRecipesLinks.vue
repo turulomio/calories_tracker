@@ -1,11 +1,14 @@
 <template>
     <div>
         <v-data-table dense :headers="table_headers" :items="recipe.recipes_links" class="elevation-1" disable-pagination  hide-default-footer sort-by="date" fixed-header :height="$attrs.height" ref="table_recipes_links">
+            <template v-slot:[`item.photo`]="{ item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px"/></template>
             <template v-slot:[`item.type`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('recipes_links_types', item.type,'localname')"></div></template> 
             <template v-slot:[`item.link`]="{ item }"><div @click="on_link_click(item)">{{item.link}}</div></template> 
+            <template v-slot:[`item.mime`]="{ item }">{{ show_mime(item)}}</template> 
+            <template v-slot:[`item.size`]="{ item }">{{ show_size(item)}}</template> 
             
             <template v-slot:[`item.actions`]="{ item }">
-                <v-icon v-if="item.content" small class="mr-2" @click="downloadItem(item)">mdi-download</v-icon>
+                <v-icon v-if="item.files" small class="mr-2" @click="downloadItem(item)">mdi-download</v-icon>
                 <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                 <v-icon small class="mr-2" @click="deleteItem(item)">mdi-delete</v-icon>
             </template>
@@ -19,6 +22,7 @@
     </div>
 </template>
 <script>
+    import axios from 'axios'
     import RecipesLinksCRUD from './RecipesLinksCRUD.vue'
     import {empty_recipes_links} from '../empty_objects.js'
     export default {
@@ -36,10 +40,12 @@
                 recipes_links_crud_mode:null,
 
                 table_headers: [
+                    { text: this.$t('Photo'), value: 'photo', sortable: true,width:"7%"},
                     { text: this.$t('Description'), value: 'description', sortable: true},
                     { text: this.$t('Type'), value: 'type', sortable: false, width:"10%"},
                     { text: this.$t('Link'), value: 'link', sortable: true, width:"40%"},
                     { text: this.$t('Mime'), value: 'mime', sortable: false , width:"15%"},
+                    { text: this.$t('Size'), value: 'size', sortable: false , width:"15%"},
                     { text: this.$t('Actions'), value: 'actions', sortable: false, width: "7%"},
                 ],
                 items:[],
@@ -81,19 +87,38 @@
             on_RecipesLinksCRUD_cruded(){
                 this.key=this.key+1
                 this.recipes_links_crud_dialog=false
-                console.log("CRUDED TABLE RECIPESLINKS")
                 this.$emit("cruded")
             },
 
-            downloadItem(item){
-                const linkSource = `data:${item.mime};base64,${item.content}`
-                const downloadLink = document.createElement("a")
-                downloadLink.href = linkSource
-                downloadLink.download = `CT.RL.${this.recipe.name.slice(0,30)}.${item.id}`
-                downloadLink.click()
+            downloadItem(item){                               
+                console.log(item)
+                axios.get(item.files.url_content, this.myheaders())
+                .then((response) => {
+                    const downloadLink = document.createElement("a")
+                    downloadLink.href = response.data
+                    downloadLink.download = `CT.RL.${this.recipe.name.slice(0,30)}.${item.id}${item.files.extension}`
+                    downloadLink.click()
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
             },
+            show_mime(item){
+                if (item.files){
+                    return item.files.mime
+                }
+                return ""
+
+            },
+            show_size(item){
+                if (item.files){
+                    return item.files.humansize
+                }
+                return ""
+
+            }
         },
         created(){
+            console.log(this.recipe.recipes_links)
         }
     }
 </script>

@@ -6,8 +6,8 @@
         <v-text-field class="mx-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
     
         <p class="ml-10">{{ $t("{0} recipes found").format(recipes.length)}}</p>
-        <v-data-table dense :headers="recipes_headers" :items="recipes" :sort-by="table_sort_by" :sort-desc="table_sort_desc" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" height="70vh"  fixed-header item-key="content">
-            <template v-slot:[`item.photo`]="{ item}"><v-img  v-if="item.main_image_thumbnail" :src="item.content" style="width: 50px; height: 50px" @click="toggleFullscreen(item)"/></template>
+        <v-data-table dense :headers="recipes_headers" :items="recipes" :sort-by="table_sort_by" :sort-desc="table_sort_desc" class="elevation-1" hide-default-footer disable-pagination :loading="loading"  height="70vh"  fixed-header item-key="thumbnail">
+            <template v-slot:[`item.photo`]="{ item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px" @click="toggleFullscreen(item)"/></template>
             <template v-slot:[`item.name`]="{ item }"><div v-html="item.name" @click="searchGoogle(item)"></div></template>      
             <template v-slot:[`item.last`]="{ item }">{{localtime(item.last)}}</template>      
             <template v-slot:[`item.categories`]="{ item }">{{show_categories(item)}}</template>      
@@ -31,15 +31,16 @@
         </v-dialog>
 
         <!-- DIALOG RECIPES VIEW -->
-        <v-dialog v-model="dialog_recipes_view" width="100%">
+        <v-dialog v-model="dialog_recipes_view" width="100%"  @click:outside="update_recipes">
             <v-card class="pa-4">
-                <RecipesView  :recipe="recipe" :key="key" @cruded="on_RecipesView_cruded()"></RecipesView>
+                <RecipesView  :recipe="recipe" :key="key"></RecipesView>
             </v-card>
         </v-dialog>
-        <!-- DIALOG SHO IMAGE VIEW -->
+
+        <!-- DIALOG SHOW IMAGE VIEW -->
         <v-dialog v-model="dialog_main_image_view" width="60%">
             <v-card class="pa-4">
-                <v-img :src="selected_image" height="700" contain/>
+                <v-img :loading="loading_image" :src="selected_image" height="600" contain/>
             </v-card>
         </v-dialog>
 
@@ -86,7 +87,7 @@
 
                 loading:false,
                 key:0,
-                search: ":LAST:5",
+                search: ":LAST:25",
                 table_sort_by:"name",
                 table_sort_desc:"",
 
@@ -105,6 +106,7 @@
                 //DIALOG MAIN PHOTO
                 dialog_main_photo: false,
                 recipes_links: null,
+                loading_image:false,
             }
         },     
         methods:{
@@ -227,26 +229,36 @@
                 this.loading=true
                 axios.get(`${this.$store.state.apiroot}/api/recipes/?search=${this.search}`, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
-                    this.recipes=response.data
-                    this.recipes.forEach(r=>{
-                        r.content
-                        axios.get(r.main_image_content, this.myheaders())
-                        .then((response) => {
-                            r.content=response.data
-                            this.key=this.key+1
-                        }, (error) => {
-                            this.parseResponseError(error)
-                        });
+                    response.data.forEach(r=>{
+                        r.thumbnail=null
+                        r.content_url=null //Needed to select only one rl
+                        r.recipes_links.forEach(rl=>{
+                            if (rl.files && this.id_from_hyperlinked_url(rl.type)==7){//MAIN IMAGE
+                                axios.get(`${rl.files.url_thumbnail}`, this.myheaders())
+                                .then((responsethumbnail) => {
+                                    r.thumbnail=responsethumbnail.data
+                                    r.content_url=rl.files.url_content
+                                }, (error) => {
+                                    this.parseResponseError(error)
+                                });
+                            }
+                        })
                     })
+                    this.recipes=response.data
                     this.loading=false
                }, (error) => {
                     this.parseResponseError(error)
                 });
             },
             toggleFullscreen(item){
-                this.selected_image=item.main_image
+                this.key=this.key+1
                 this.dialog_main_image_view=true
+                axios.get(item.content_url, this.myheaders())
+                .then((response) => {
+                    this.selected_image=response.data
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
 
             },            
             show_categories(item){
@@ -275,24 +287,9 @@
 
                 window.open(`https://www.google.com/search?q=${encodeURIComponent(item.name)}`)
             },
-            async get_url(url){
-                console.log(url)
-                if(!url) return ""
-
-                let r
-                await axios.get(url, this.myheaders())
-                .then((response) => {
-                    r=response.data
-               }, (error) => {
-                    this.parseResponseError(error)
-                });
-                return r
-            }
-
         },
         mounted(){
             this.update_recipes()
-            console.log(this.get_url("http://localhost:8011/api/files/3129/content/"))
         }
     }
 </script>

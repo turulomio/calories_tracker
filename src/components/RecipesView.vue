@@ -95,15 +95,7 @@
                 ]
             },
             on_TableRecipesLinks_cruded(){
-                return axios.get(`${this.$store.state.apiroot}/api/recipes_links/?recipes=${this.new_recipe.url}`, this.myheaders())
-                .then((response) => {
-                    console.log(response.data)
-                    this.new_recipe.recipes_links=response.data
-                    this.$emit("cruded")
-                    this.key=this.key+1
-               }, (error) => {
-                    this.parseResponseError(error)
-                });
+                this.update_recipe()
             },
             on_TableElaborations_cruded(){
                 return axios.get(`${this.$store.state.apiroot}/api/elaborations/?recipes=${this.new_recipe.url}`, this.myheaders())
@@ -111,7 +103,6 @@
                     console.log(response.data)
                     this.new_recipe.elaborations=response.data
                     this.key=this.key+1
-                    this.$emit("cruded")
                }, (error) => {
                     this.parseResponseError(error)
                 });
@@ -122,15 +113,30 @@
                 .then((response) => {
                     console.log(response.data)
                     this.new_recipe=response.data
+                    this.update_thumbnails()
                     this.key=this.key+1
-                    this.$emit("cruded")
                 }, (error) => {
                     this.parseResponseError(error)
                 });
-            }
+            },
+            update_thumbnails(){            
+                this.new_recipe.recipes_links.forEach(r=>{
+                    r.thumbnail=null
+                    if (r.files){// THERE IS A FILES
+                        axios.get(r.files.url_thumbnail, this.myheaders())
+                        .then((responsethumbnail) => {
+                            r.thumbnail=responsethumbnail.data
+                            console.log(this.new_recipe.recipes_links)
+                        }, (error) => {
+                            this.parseResponseError(error)
+                        });
+                    }
+                })
+            },
         },
         created(){
             this.new_recipe=Object.assign({},this.recipe)
+            this.update_thumbnails()
         }
     }
 </script>
