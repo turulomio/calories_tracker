@@ -9,23 +9,29 @@
                 <v-text-field :readonly="mode=='D'" class="ml-5" v-model="new_elaboration.final_amount" :label="$t('Set your final amount')" :placeholder="$t('Set your final amount')" :rules="RulesFloatGZ(10,true,3)" counter="10"/>
                 <v-checkbox readonly v-model="new_elaboration.automatic" :label="$t('Is an automatic elaboration?')"></v-checkbox>
                 <v-textarea :readonly="mode=='D'" v-model="new_elaboration.automatic_adaptation_step" :label="$t('Add your comment for this automatic elaboration')" :placeholder="$t('Add your comment for this automatic elaboration')" :rules="RulesString(2000,false)" counter="2000"/>
-
-
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn> 
             </v-card-actions>
         </v-card>
-
+  
+        <!-- Final amount DIALOG -->
+        <v-dialog v-model="dialog_finalamount" width="70%">
+            <v-card class="pa-3">
+                <ElaborationsFinalAmountFromPot :key="key"  @calculated="on_ElaborationsFinalAmountFromPot_calculated"/>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 <script>
     import axios from 'axios'
     import MyMenuInline from './reusing/MyMenuInline.vue'
+    import ElaborationsFinalAmountFromPot from './ElaborationsFinalAmountFromPot.vue'
     export default {
         components: {
             MyMenuInline,
+            ElaborationsFinalAmountFromPot,
         },
         props: {
             
@@ -43,17 +49,11 @@
                         subheader: this.$t("Recipe options"),
                         children: [
                             {
-                                name: this.$t("Generate PDF"),
-                                icon: "mdi-file-pdf-box",
-                                code: function(this_){
-                                    console.log(this_)
-                                },
-                            },
-                            {
-                                name: this.$t("Show nutritional information"),
+                                name: this.$t("Final amount from full pot"),
                                 icon: "mdi-information",
                                 code: function(this_){
-                                    console.log(this_)
+                                    this_.dialog_finalamount=true
+                                    this_.key=this_.key+1
                                 },
                             },
                         ]
@@ -65,6 +65,9 @@
 
 
                 key:0,
+
+                // FinalamountFromFullPot
+                dialog_finalamount:false,
             }
         },
         methods: {
@@ -110,6 +113,10 @@
                     }
                 }
             },
+            on_ElaborationsFinalAmountFromPot_calculated(final_amount){
+                this.dialog_finalamount=false
+                this.new_elaboration.final_amount=final_amount
+            }
         },
         created(){
             // Guess crud mode

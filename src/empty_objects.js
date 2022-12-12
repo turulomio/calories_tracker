@@ -215,6 +215,7 @@ export function empty_elaborations_products_in(){
         elaborations: null,
         comment: null,
         ni: true,
+        automatic_percentage: 100,
     }
 }
 
