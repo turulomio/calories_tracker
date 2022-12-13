@@ -87,7 +87,7 @@
 
                 loading:false,
                 key:0,
-                search: ":LAST:25",
+                search: ":LAST:20",
                 table_sort_by:"name",
                 table_sort_desc:"",
 
@@ -159,7 +159,7 @@
                                 name: this.$t("Show last edited recipes"),
                                 icon: "mdi-account-group",
                                 code: function(this_){
-                                    this_.search=":LAST:50"
+                                    this_.search=":LAST:20"
                                     this_.on_search_change()
                                     this_.key=this_.key+1
                                 },

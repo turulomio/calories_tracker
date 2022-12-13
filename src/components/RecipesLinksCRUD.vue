@@ -5,7 +5,7 @@
             <v-form ref="form" v-model="form_valid" lazy-validation>                
                 <v-text-field :readonly="mode=='D'" v-model="new_recipes_links.description" :label="$t('Set description')" :placeholder="$t('Set description')" :rules="RulesString(200,true)" counter="200"/>
                 <v-autocomplete :readonly="mode=='D'" :items="$store.state.recipes_links_types" v-model="new_recipes_links.type" :label="$t('Select type')" item-text="localname" item-value="url" :rules="RulesSelection(true)" @change="on_type_change"></v-autocomplete>
-                <v-text-field  v-if="show_link" :readonly="mode=='D'" v-model="new_recipes_links.link" :label="$t('Set an Internet link')" :placeholder="$t('Set an Internet link')" :rules="RulesString(2000,false)" counter="2000"/>
+                <v-text-field  v-if="show_link" :readonly="mode=='D'" v-model="new_recipes_links.link" :label="$t('Set an Internet link')" :placeholder="$t('Set an Internet link')" :rules="RulesString(2000,false)" counter="2000" autofocus/>
                 <v-file-input v-if="show_fileinput" show-size v-model="document" :label="$t('Select a document')" @change="on_fileinput_change" />
                 <PasteImage v-if="show_paste" v-model="pasted_image" :rules="RulesSelection(true)" :key="key"  @change="on_paste_change" />
             </v-form>

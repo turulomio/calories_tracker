@@ -60,10 +60,10 @@
                 window.open(item.link, '_blank').focus()
             },
 
-            on_new_click(){
+            on_new_click(type=3){
                 this.recipes_links=this.empty_recipes_links()
                 this.recipes_links.recipes=this.recipe.url
-                this.recipes_links.type=this.$store.getters.getObjectPropertyById("recipes_links_types", 3,"url"), // Web page link
+                this.recipes_links.type=this.$store.getters.getObjectPropertyById("recipes_links_types", type,"url"), // Web page link
                 console.log(this.recipes_links)
                 this.recipes_links_crud_mode="C"
                 this.key=this.key+1

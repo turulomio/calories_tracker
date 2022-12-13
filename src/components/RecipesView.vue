@@ -54,10 +54,22 @@
                             {
                                 name:this.$t('New recipe link'),
                                 code: async function(this_){
-                                    console.log(this_.$refs)
-                                    this_.tab=0
-                                    await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
+                                    if (this_.tab!=0){
+                                        this_.tab=0
+                                        await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
+                                    }
                                     this_.$refs.table_links.on_new_click()
+                                },
+                                icon: "mdi-pencil",
+                            },
+                            {
+                                name:this.$t('New recipe main photo'),
+                                code: async function(this_){
+                                    if (this_.tab!=0){
+                                        this_.tab=0
+                                        await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
+                                    }
+                                    this_.$refs.table_links.on_new_click(7)
                                 },
                                 icon: "mdi-pencil",
                             },
