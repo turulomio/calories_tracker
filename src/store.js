@@ -151,7 +151,7 @@ export const store = new Vuex.Store({
             var start=new Date()
             return axios.get(`${store.state.apiroot}/api/activities/`, store.$app.myheaders())
             .then((response) => {
-                context.commit('updateActivities', sortObjectsArray(response.data, "name"))
+                context.commit('updateActivities', sortObjectsArray(response.data, "localname"))
                 console.log(`Updated ${response.data.length} activities in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
@@ -161,7 +161,7 @@ export const store = new Vuex.Store({
             var start=new Date()
             return axios.get(`${store.state.apiroot}/api/additive_risks/`, store.$app.myheaders())
             .then((response) => {
-                context.commit('updateAdditiveRisks', sortObjectsArray(response.data, "name"))
+                context.commit('updateAdditiveRisks', sortObjectsArray(response.data, "localname"))
                 console.log(`Updated ${response.data.length} additive risks in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
@@ -201,7 +201,7 @@ export const store = new Vuex.Store({
             var start=new Date()
             return axios.get(`${store.state.apiroot}/api/food_types/`, store.$app.myheaders())
             .then((response) => {
-                context.commit('updateFoodTypes', sortObjectsArray(response.data, "name"))
+                context.commit('updateFoodTypes', sortObjectsArray(response.data, "localname"))
                 console.log(`Updated ${response.data.length} food types in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
@@ -211,7 +211,7 @@ export const store = new Vuex.Store({
             var start=new Date()
             return axios.get(`${store.state.apiroot}/api/formats/`, store.$app.myheaders())
             .then((response) => {
-                context.commit('updateFormats', sortObjectsArray(response.data, "name"))
+                context.commit('updateFormats', sortObjectsArray(response.data, "localname"))
                 console.log(`Updated ${response.data.length} formats in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
@@ -231,7 +231,7 @@ export const store = new Vuex.Store({
             var start=new Date()
             return axios.get(`${store.state.apiroot}/api/products/`, store.$app.myheaders())
             .then((response) => {
-                context.commit('updateProducts', sortObjectsArray(response.data, "name"))
+                context.commit('updateProducts', sortObjectsArray(response.data, "localname"))
                 console.log(`Updated ${response.data.length} products in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
@@ -251,7 +251,7 @@ export const store = new Vuex.Store({
             var start=new Date()
             return axios.get(`${store.state.apiroot}/api/weight_wishes/`, store.$app.myheaders())
             .then((response) => {
-                context.commit('updateWeightWishes', sortObjectsArray(response.data, "name"))
+                context.commit('updateWeightWishes', sortObjectsArray(response.data, "localname"))
                 console.log(`Updated ${response.data.length} weight wishes in ${new Date()-start} ms`)
             }, (error) => {
                 store.$app.parseResponseError(error)
