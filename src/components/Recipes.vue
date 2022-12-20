@@ -52,6 +52,13 @@
             </v-card>
         </v-dialog>
 
+        <!-- DIALOG SHOPPING LIST -->
+        <v-dialog v-model="dialog_shopping_list" width="60%">
+            <v-card class="pa-4">
+                <ShoppingList :key="key"/>
+            </v-card>
+        </v-dialog>
+
     </div>
 </template>
 
@@ -62,12 +69,14 @@
     import RecipesCRUD from './RecipesCRUD.vue'
     import RecipesView from './RecipesView.vue'
     import RecipesLinksCRUD from './RecipesLinksCRUD.vue'
+    import ShoppingList from './ShoppingList.vue'
     export default {
         components: {
             MyMenuInline,
             RecipesCRUD,
             RecipesView,
             RecipesLinksCRUD,
+            ShoppingList,
         },
         data(){
             return {
@@ -107,6 +116,9 @@
                 dialog_main_photo: false,
                 recipes_links: null,
                 loading_image:false,
+
+                //DIALOG SHOPPING LIST
+                dialog_shopping_list:false
             }
         },     
         methods:{
@@ -164,10 +176,23 @@
                                     this_.key=this_.key+1
                                 },
                             },
+
+                        ]
+                    },
+                    {
+                        subheader: this.$t("Other options"),
+                        children: [
+                            {
+                                name: this.$t("Shopping list"),
+                                icon: "mdi-cart",
+                                code: function(this_){
+                                    this_.dialog_shopping_list=true
+                                    this_.key=this_.key+1
+                                },
+                            },
                         ]
                     },
                 ]
-
                 return r
             },
             on_RecipesCRUD_cruded(){
