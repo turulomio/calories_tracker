@@ -7,7 +7,7 @@
                 <v-text-field :readonly="mode=='D'" v-model.number="new_pot.diameter" :label="$t('Set pot diameter (cm)')" :placeholder="$t('Set pot diameter (cm)')" :rules="RulesInteger(10,true)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="new_pot.weight" :label="$t('Set pot weight (g)')" :placeholder="$t('Set pot weight (g)')" :rules="RulesInteger(10,true)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="new_pot.height" :label="$t('Set pot height (cm)')" :placeholder="$t('Set pot height (cm)')" :rules="RulesInteger(10,true)" counter="10"/>
-                <PasteImage v-model="pasted_image" :rules="RulesSelection(true)" />
+                <PasteImage v-model="pasted_image" :rules="RulesSelection(false)" />
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
