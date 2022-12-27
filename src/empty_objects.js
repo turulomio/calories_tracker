@@ -139,6 +139,8 @@ export function empty_pots(){
         name: '',
         weight: 0,
         diameter: 0,
+        height: 0,
+        photo: null, //Base 64 string
     }
 }
 

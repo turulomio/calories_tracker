@@ -5,8 +5,10 @@
         </h1>
         <v-text-field class="ml-10 mr-10 mb-5" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"  v-on:keyup.enter="on_search_change()"></v-text-field>
   
-        <v-data-table dense :headers="pots_headers" :items="pots" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">   
-          <template v-slot:[`item.name`]="{ item }"><v-icon small class="mr-2">mdi-pot</v-icon>{{ item.name }}</template>
+        <v-data-table dense :headers="pots_headers" :key="key" :items="pots" sort-by="name" class="elevation-1" hide-default-footer disable-pagination item-key="item_key" :height="500">   
+            <template v-slot:[`item.photo`]="{ item}"><v-img  :src="item.thumbnail" style="width: 50px; height: 50px" @click="toggleFullscreen(item)" /></template>
+            <template v-slot:[`item.name`]="{ item }">{{ item.name }}</template>
+            <template v-slot:[`item.volume`]="{ item }">{{ my_round(item.volume,0) }}</template>
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="editPot(item)">mdi-pencil</v-icon>
                 <v-icon small @click="deletePot(item)">mdi-delete</v-icon>
@@ -20,10 +22,19 @@
                 <PotsCRUD :pot="pot" :mode="pot_mode" :key="'B'+key" @cruded="on_PotsCRUD_cruded()"></PotsCRUD>
             </v-card>
         </v-dialog>
+
+        <!-- DIALOG SHOW IMAGE VIEW -->
+        <v-dialog v-model="dialog_main_image_view" width="60%">
+            <v-card class="pa-4">
+                <v-img :loading="loading_image" :src="selected_image" height="600" contain/>
+            </v-card>
+        </v-dialog>
+
     </div>
 </template>
 
 <script>
+    import axios from 'axios'
     import { empty_pots } from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import PotsCRUD from './PotsCRUD.vue'
@@ -36,12 +47,14 @@
             return {
                 pots:[],
                 pots_headers: [
+                    { text: this.$t('Photo'), sortable: true, value: 'photo'},
                     { text: this.$t('Name'), sortable: true, value: 'name'},
                     { text: this.$t('Diameter (cm)'), value: 'diameter', align:'right', width:"12%"},
+                    { text: this.$t('Height (g)'), value: 'height', align:'right', width:"12%"},
                     { text: this.$t('Weight (g)'), value: 'weight', align:'right', width:"12%"},
+                    { text: this.$t('Volume (cm³)'), value: 'volume', align:'right', width:"12%"},
                     { text: this.$t('Actions'), value: 'actions', align: 'right', sortable: false, width:"12%"},
                 ],
-                loading:false,
                 key:0,
                 search:"",
 
@@ -49,6 +62,10 @@
                 pot:null,
                 pot_mode:null,
                 dialog_pots_crud:false,
+                //DIALOG MAIN PHOTO
+                dialog_main_image_view: false,
+                loading_image:false,
+                selected_image: null,
             }
         },        
         methods:{
@@ -95,14 +112,44 @@
                 this.update_pots() 
             },
             update_pots(){
-                this.loading=true
-                    return this.$store.dispatch("getPots")
-                    .then(() => {             
-                        this.pots=this.$store.state.pots.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
-                        this.key=this.key+1
-                        this.loading=false
+                this.$store.dispatch("getPots")
+                .then(() => {             
+                    var r=[]
+                    this.$store.state.pots.forEach(p=>{
+                        if (p.name.toLowerCase().includes(this.search.toLowerCase())){
+                            p.thumbnail=require("@/assets/no_image.jpg")
+                            p.item_key=null//Used for table-item key
+                            if (p.photo){
+                                axios.get(`${p.photo.url_thumbnail}`, this.myheaders())
+                                .then((responsethumbnail) => {
+                                    p.thumbnail=responsethumbnail.data
+                                    p.item_key=p.url
+                            r.push(p)
+                                }, (error) => {
+                                    this.parseResponseError(error)
+                                });
+                            } else {
+                            r.push(p)
+
+                            }
+                        }
                     })
+                    this.pots=r
+                    this.key=this.key+1
+                })
             },
+            toggleFullscreen(item){
+                if (item.photo==null) return
+                this.key=this.key+1
+                this.dialog_main_image_view=true
+                axios.get(item.photo.url_content, this.myheaders())
+                .then((response) => {
+                    this.selected_image=response.data
+                }, (error) => {
+                    this.parseResponseError(error)
+                });
+
+            },      
         },
         created(){
             this.update_pots()

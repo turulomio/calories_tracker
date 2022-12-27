@@ -6,6 +6,8 @@
                 <v-text-field :readonly="mode=='D'" v-model="new_pot.name" :label="$t('Set pot name')" :placeholder="$t('Set pot name')" :rules="RulesString(200)" counter="200"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="new_pot.diameter" :label="$t('Set pot diameter (cm)')" :placeholder="$t('Set pot diameter (cm)')" :rules="RulesInteger(10,true)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="new_pot.weight" :label="$t('Set pot weight (g)')" :placeholder="$t('Set pot weight (g)')" :rules="RulesInteger(10,true)" counter="10"/>
+                <v-text-field :readonly="mode=='D'" v-model.number="new_pot.height" :label="$t('Set pot height (cm)')" :placeholder="$t('Set pot height (cm)')" :rules="RulesInteger(10,true)" counter="10"/>
+                <PasteImage v-model="pasted_image" :rules="RulesSelection(true)" />
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -16,7 +18,11 @@
 </template>
 <script>
     import axios from 'axios'
+    import PasteImage from './reusing/PasteImage.vue'
     export default {
+        components: {
+            PasteImage,
+        },
         props: {
             
             pot: { 
@@ -30,6 +36,7 @@
             return{
                 form_valid:false,
                 new_pot: null,
+                pasted_image:null,
             }
         },
         methods: {
@@ -45,6 +52,11 @@
             },
             acceptDialog(){             
                 if( this.$refs.form.validate()==false) return
+                if (this.pasted_image){
+                    this.new_pot.photo_mime=this.pasted_image.mime
+                    this.new_pot.photo_content=this.pasted_image.image
+                }
+                console.log(this.new_pot)
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/pots/`, this.new_pot,  this.myheaders())
                     .then(() => {
