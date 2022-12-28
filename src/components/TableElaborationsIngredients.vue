@@ -60,7 +60,7 @@
             products_in_headers(){
                 var r= [
                     { text: this.$t('Product'), sortable: true, value: 'products'},
-                    { text: this.$t('Comment'), value: 'comment', align:'right'},
+                    { text: this.$t('Comment'), value: 'comment'},
                     { text: this.$t('Amount'), value: 'amount', align:'right', width:"10%"},
                     { text: this.$t('Measure type'), value: 'measures_types', width:"12%"},
                     { text: this.$t('Final grams'), value: 'final_grams', align:'right', width:"10%"},

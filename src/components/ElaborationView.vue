@@ -142,33 +142,25 @@
 
             },
             on_TableElaborationsIngredients_cruded(){
-                return axios.get(`${this.$store.state.apiroot}/api/elaborationsproductsinthrough/?elaboration=${this.new_elaboration.url}`, this.myheaders())
-                .then((response) => {
-                    this.new_elaboration.elaborations_products_in=response.data
-                    this.key=this.key+1
-               }, (error) => {
-                    this.parseResponseError(error)
-                });
+                this.update_elaboration()
             },
             on_TableElaborationsContainers_cruded(){
-                return axios.get(`${this.$store.state.apiroot}/api/elaborations_containers/?elaboration=${this.new_elaboration.url}`, this.myheaders())
+                this.update_elaboration()
+            },
+            on_TableElaborationsExperiences_cruded(){
+                this.update_elaboration()
+            },
+            update_elaboration(){
+                return axios.get(this.new_elaboration.url, this.myheaders())
                 .then((response) => {
-                    this.new_elaboration.elaborations_containers=response.data
+                    this.new_elaboration=response.data
                     this.key=this.key+1
                }, (error) => {
                     this.parseResponseError(error)
                 });
             },
-            on_TableElaborationsExperiences_cruded(){
-                return axios.get(`${this.$store.state.apiroot}/api/elaborations_experiences/?elaboration=${this.new_elaboration.url}`, this.myheaders())
-                .then((response) => {
-                    this.new_elaboration.elaborations_experiences=response.data
-               }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
-            on_TableElaborationsSteps_cruded(nes){
-                this.new_elaboration.elaborations_steps=nes
+            on_TableElaborationsSteps_cruded(){
+                this.update_elaboration()
             },
             createElaboratedProduct(){
                 return axios.post(`${this.new_elaboration.url}create_elaborated_product/`, {}, this.myheaders())
