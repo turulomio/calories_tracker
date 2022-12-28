@@ -5,10 +5,15 @@
             <v-form ref="form" v-model="form_valid" lazy-validation>                
                 <v-text-field :readonly="mode=='D'" v-model="new_item.name" :label="$t('Set name')" :placeholder="$t('Set name')" :rules="RulesString(200)" counter="200"/>
                 <v-checkbox v-model="new_item.can_products_in_step" :label="$t('Can have ingredients?')" />
+                <v-checkbox v-model="new_item.man_products_in_step" :label="$t('Is it mandatory to have ingredients?')" />
                 <v-checkbox v-model="new_item.can_container" :label="$t('Can have container?')" />
+                <v-checkbox v-model="new_item.man_container" :label="$t('Is it mandatory to have container?')" />
                 <v-checkbox v-model="new_item.can_container_to" :label="$t('Can have container to pour?')" />
+                <v-checkbox v-model="new_item.man_container_to" :label="$t('Is it mandatory to have container to pour?')" />
                 <v-checkbox v-model="new_item.can_temperatures" :label="$t('Can have temperatures?')" />
+                <v-checkbox v-model="new_item.man_temperatures" :label="$t('Is it mandatory to have temperatures?')" />
                 <v-checkbox v-model="new_item.can_stir" :label="$t('Can have stir?')" />
+                <v-checkbox v-model="new_item.man_stir" :label="$t('Is it mandatory to have stir?')" />
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>

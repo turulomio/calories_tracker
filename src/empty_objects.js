@@ -256,6 +256,11 @@ export function empty_steps(){
         can_container_to:false,
         can_temperatures:true,
         can_stir:true,
+        man_products_in_step:true,
+        man_container:true,
+        man_container_to:false,
+        man_temperatures:true,
+        man_stir:true,
     }
 }
 
