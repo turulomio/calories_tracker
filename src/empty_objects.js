@@ -251,6 +251,11 @@ export function empty_steps(){
     return {
         url:null,
         name: "",
+        can_products_in_step:true,
+        can_container:true,
+        can_container_to:false,
+        can_temperatures:true,
+        can_stir:true,
     }
 }
 

@@ -7,6 +7,12 @@
 
   
         <v-data-table dense :headers="catalog_table_headers" :items="catalog_table" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" height="70vh">
+            <template v-slot:[`item.can_products_in_step`]="{ item }"><v-icon small v-if="item.can_products_in_step" >mdi-check-outline</v-icon></template>
+            <template v-slot:[`item.can_container`]="{ item }"><v-icon small v-if="item.can_container" >mdi-check-outline</v-icon></template>
+            <template v-slot:[`item.can_container_to`]="{ item }"><v-icon small v-if="item.can_container_to" >mdi-check-outline</v-icon></template>
+            <template v-slot:[`item.can_temperatures`]="{ item }"><v-icon small v-if="item.can_temperatures" >mdi-check-outline</v-icon></template>
+            <template v-slot:[`item.can_stir`]="{ item }"><v-icon small v-if="item.can_stir" >mdi-check-outline</v-icon></template>   
+
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-1" @click="viewItem(item)">mdi-eye</v-icon>
                 <v-icon small class="mr-1" @click="editItem(item)">mdi-pencil</v-icon>
@@ -40,10 +46,25 @@
                 <NameCRUD  :item="register" :mode="register_mode" apiname="temperatures_types" :key="key" @cruded="on_CRUD_cruded()"></NameCRUD>
             </v-card>
         </v-dialog>
+        
         <!-- DIALOG MEASURES TYPES CRUD -->
         <v-dialog v-model="dialog_measures_types" width="45%" persistent>
             <v-card class="pa-4">
                 <NameCRUD  :item="register" :mode="register_mode" apiname="measures_types" :key="key" @cruded="on_CRUD_cruded()"></NameCRUD>
+            </v-card>
+        </v-dialog>
+
+        <!-- DIALOG STEPS CRUD -->
+        <v-dialog v-model="dialog_steps" width="45%" persistent>
+            <v-card class="pa-4">
+                <StepsCRUD  :item="register" :mode="register_mode" :key="key" @cruded="on_CRUD_cruded()" />
+            </v-card>
+        </v-dialog>
+
+        <!-- DIALOG STEPS COMBINATIONS -->
+        <v-dialog v-model="dialog_steps_combinations" width="100%">
+            <v-card class="pa-4">
+                <StepsCombinations :step="register" :key="key" />
             </v-card>
         </v-dialog>
     </div>
@@ -59,10 +80,14 @@
     } from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import NameCRUD from './NameCrud.vue'
+    import StepsCRUD from './StepsCRUD.vue'
+    import StepsCombinations from './StepsCombinations.vue'
     export default {
         components: {
             MyMenuInline,
             NameCRUD,
+            StepsCRUD,
+            StepsCombinations
         },
         data(){
             return {
@@ -87,6 +112,7 @@
                 dialog_recipes_categories:false,
                 dialog_recipes_links_types:false,
                 dialog_steps:false,
+                dialog_steps_combinations:false,
                 dialog_stir_types:false,
                 dialog_temperatures_types:false,
                 dialog_measures_types:false,
@@ -139,9 +165,14 @@
             },
             viewItem(item){
                 this.register=item
-                this.register_mode="R"
-                this.key=this.key+1
-                this.$data[this.table.dialog]=true  //Invoca una variable de data por su nombrre
+                if (this.table.value=="steps"){
+                    this.key=this.key+1
+                    this.dialog_steps_combinations=true
+                } else {
+                    this.register_mode="R"
+                    this.key=this.key+1
+                    this.$data[this.table.dialog]=true  //Invoca una variable de data por su nombrre
+                }
             },
             on_table_change(){
                 if (    this.table.value=="recipes_links_types" || 
@@ -156,6 +187,20 @@
                         { text: this.$t('Local name'), sortable: true, value: 'localname'},
                         { text: this.$t('Actions'), value: 'actions', sortable: false, width: "10%"},
                     ]
+                }
+                else if ( this.table.value=="steps"){
+                    this.catalog_table_headers= [
+                        { text: this.$t('Id'), sortable: true, value: 'id', width:"10%"},
+                        { text: this.$t('Name'), sortable: true, value: 'name'},
+                        { text: this.$t('Local name'), sortable: true, value: 'localname'},
+                        { text: this.$t('Ingredients'), sortable: true, value: 'can_products_in_step'},
+                        { text: this.$t('Container'), sortable: true, value: 'can_container'},
+                        { text: this.$t('Container to'), sortable: true, value: 'can_container_to'},
+                        { text: this.$t('Temperatures'), sortable: true, value: 'can_temperatures'},
+                        { text: this.$t('Stir'), sortable: true, value: 'can_stir'},
+                        { text: this.$t('Actions'), value: 'actions', sortable: false, width: "10%"},
+                    ]
+
                 }
                 this.key=this.key+1
 

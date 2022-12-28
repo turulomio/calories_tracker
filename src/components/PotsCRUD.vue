@@ -56,7 +56,6 @@
                     this.new_pot.photo_mime=this.pasted_image.mime
                     this.new_pot.photo_content=this.pasted_image.image
                 }
-                console.log(this.new_pot)
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/pots/`, this.new_pot,  this.myheaders())
                     .then(() => {
