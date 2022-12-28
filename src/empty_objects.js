@@ -96,7 +96,7 @@ export function empty_system_products(){
 export function empty_formats(){
     return {
         formats: null,
-        amount: false,
+        amount: 0,
     }
 }
 
