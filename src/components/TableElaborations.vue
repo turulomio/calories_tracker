@@ -1,10 +1,9 @@
 <template>
     <div>
-        <v-data-table dense :headers="table_headers" :items="recipe.elaborations" class="elevation-1" disable-pagination  hide-default-footer sort-by="diners" fixed-header :height="$attrs.height" ref="table_elaborations">
+        <v-data-table dense :headers="table_headers" :items="recipe.elaborations" class="elevation-1" disable-pagination  hide-default-footer sort-by="diners" fixed-header :height="$attrs.height" ref="table_elaborations" @click:row="viewItem" style="cursor: pointer">
             <template v-slot:[`item.automatic`]="{ item }"><v-icon small v-if="item.automatic" >mdi-check-outline</v-icon></template>
 
             <template v-slot:[`item.actions`]="{ item }">
-                <v-icon small class="mr-2" @click="viewItem(item)">mdi-eye</v-icon>
                 <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                 <v-icon small class="mr-2" @click="deleteItem(item)">mdi-delete</v-icon>      
                 <v-icon v-if="!item.automatic" small class="mr-2" @click="createAutomaticElaboration(item)">mdi-file-cog-outline</v-icon>

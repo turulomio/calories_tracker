@@ -24,7 +24,7 @@
 
 
         <!-- DIALOG RECIPES CRUD -->
-        <v-dialog v-model="dialog_recipes_crud" width="45%" persistent>
+        <v-dialog v-model="dialog_recipes_crud" width="45%">
             <v-card class="pa-4">
                 <RecipesCRUD  :recipe="recipe" :mode="recipe_mode" :key="key" @cruded="on_RecipesCRUD_cruded"></RecipesCRUD>
             </v-card>

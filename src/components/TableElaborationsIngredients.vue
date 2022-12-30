@@ -12,7 +12,7 @@
             <template v-slot:[`body.append`]="{headers}" v-if="elaboration.elaborations_products_in.length>0">
                 <tr style="background-color: WhiteSmoke">
                     <td v-for="(header,i) in headers" :key="i">
-                        <div v-if="header.value=='products'">{{ $t("Total {0} products):").format(elaboration.elaborations_products_in.length) }}</div>
+                        <div v-if="header.value=='products'">{{ $t("Total ({0} products):").format(elaboration.elaborations_products_in.length) }}</div>
                         <div v-if="header.value == 'final_grams'" class="d-flex justify-end" v-html="listobjects_sum(elaboration.elaborations_products_in,'final_grams')"></div>
                     </td>
                 </tr>
