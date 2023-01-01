@@ -286,7 +286,7 @@
                 this.update_all(true)
             },
             linkProduct(item){
-                axios.post(`${this.$store.state.apiroot}/system_products_to_products/`, {system_products: item.url}, this.myheaders())
+                axios.get(`${item.url}create_product/`, this.myheaders())
                 .then(() => {
                     this.update_all(true)
                }, (error) => {
