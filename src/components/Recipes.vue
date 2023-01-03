@@ -140,8 +140,14 @@
                                     this_.dialog_recipes_crud=true
                                 },
                             },
+
+                        ]
+                    },
+                    {
+                        subheader: this.$t("Recipes queries"),
+                        children: [
                             {
-                                name: this.$t("Show guests recipes"),
+                                name: this.$t("Guests recipes"),
                                 icon: "mdi-account-group",
                                 code: function(this_){
                                     this_.search=":GUESTS"
@@ -150,8 +156,8 @@
                                 },
                             },
                             {
-                                name: this.$t("Show recipes to elaborate soon"),
-                                icon: "mdi-account-group",
+                                name: this.$t("To elaborate soon"),
+                                icon: "mdi-clock-outline",
                                 code: function(this_){
                                     this_.search=":SOON"
                                     this_.on_search_change()
@@ -159,8 +165,8 @@
                                 },
                             },
                             {
-                                name: this.$t("Show evaluated recipes"),
-                                icon: "mdi-account-group",
+                                name: this.$t("Evaluated"),
+                                icon: "mdi-star-outline",
                                 code: function(this_){
                                     this_.search=":VALORATION"
                                     this_.on_search_change()
@@ -168,15 +174,23 @@
                                 },
                             },
                             {
-                                name: this.$t("Show last edited recipes"),
-                                icon: "mdi-account-group",
+                                name: this.$t("Last edited"),
+                                icon: "mdi-note-edit-outline",
                                 code: function(this_){
                                     this_.search=":LAST:20"
                                     this_.on_search_change()
                                     this_.key=this_.key+1
                                 },
                             },
-
+                            {
+                                name: this.$t("With elaborations"),
+                                icon: "mdi-cog-outline",
+                                code: function(this_){
+                                    this_.search=":WITH_ELABORATIONS"
+                                    this_.on_search_change()
+                                    this_.key=this_.key+1
+                                },
+                            },
                         ]
                     },
                     {
