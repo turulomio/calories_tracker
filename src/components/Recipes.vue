@@ -7,13 +7,7 @@
     
         <p class="ml-10">{{ $t("{0} recipes found").format(recipes.length)}}</p>
         <v-data-table dense :options.sync="options" :headers="recipes_headers" :items="recipes" :sort-by="table_sort_by" :sort-desc="table_sort_desc" 
-        class="elevation-1"    
-        :items-per-page="5" 
-        :server-items-length="options.count"  
-        
-        :footer-props="{'disable-items-per-page': true,}"
-        @update:page="update_recipes"
-        :loading="loading"  height="70vh"  fixed-header item-key="content_url">
+        class="elevation-1" :server-items-length="options.count" :footer-props="{'disable-items-per-page': true,}" @update:page="update_recipes"       :loading="loading" item-key="content_url">
             <template v-slot:[`item.photo`]="{ item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px" @click="toggleFullscreen(item)" /></template>
             <template v-slot:[`item.name`]="{ item }"><div v-html="item.name" @click="searchGoogle(item)"></div></template>      
             <template v-slot:[`item.last`]="{ item }">{{localtime(item.last)}}</template>      
@@ -104,9 +98,10 @@
 
                 loading:false,
                 key:0,
-                search: ":LAST:20",
+                search: ":LAST",
                 table_sort_by:"name",
                 table_sort_desc:"",
+                current_page:1,
 
                 // RECIPE VIEW
                 dialog_recipes_view:false,
@@ -185,7 +180,7 @@
                                 name: this.$t("Last edited"),
                                 icon: "mdi-note-edit-outline",
                                 code: function(this_){
-                                    this_.search=":LAST:20"
+                                    this_.search=":LAST"
                                     this_.on_search_change()
                                     this_.key=this_.key+1
                                 },
@@ -228,10 +223,10 @@
             },
             on_RecipesCRUD_cruded(){
                 this.dialog_recipes_crud=false
-                this.update_recipes()
+                this.update_recipes(this.current_page)
             },
             on_RecipesView_cruded(){
-                this.update_recipes()
+                this.update_recipes(this.current_page)
             },
             editRecipe(item){
                 this.recipe=item
@@ -268,7 +263,6 @@
                 this.update_recipes(1)
             },
             update_recipes(page){
-                console.log(page)
                 if (this.search==":SOON" || this.search.startsWith(":LAST")){
                     this.table_sort_by="last"
                     this.table_sort_desc=["last"]
@@ -280,13 +274,13 @@
                     this.table_sort_desc=[]
 
                 }
+                this.current_page=page
                 
 
                 this.loading=true
                 axios.get(`${this.$store.state.apiroot}/api/recipes/?page=${page}&search=${this.search}`, this.myheaders())
                 .then((response) => {
                     this.options=response.data
-                    console.log(response.data)
                     response.data.results.forEach(r=>{
                         r.thumbnail=require("@/assets/no_image.jpg")
                         r.content_url=null //Needed to select only one rl
@@ -339,7 +333,7 @@
             },
             on_RecipesLinksCRUD_cruded(){
                 this.dialog_main_photo=false
-                this.update_recipes()
+                this.update_recipes(this.current_page)
 
             },
             searchGoogle(item){
@@ -348,7 +342,7 @@
             },
         },
         created(){
-            this.update_recipes(1,5)
+            this.update_recipes(1)
         }
     }
 </script>
