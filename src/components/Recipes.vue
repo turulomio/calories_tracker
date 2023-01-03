@@ -191,6 +191,15 @@
                                     this_.key=this_.key+1
                                 },
                             },
+                            {
+                                name: this.$t("Without main photo"),
+                                icon: "mdi-image-off-outline",
+                                code: function(this_){
+                                    this_.search=":WITHOUT_MAINPHOTO"
+                                    this_.on_search_change()
+                                    this_.key=this_.key+1
+                                },
+                            },
                         ]
                     },
                     {
