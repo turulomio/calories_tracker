@@ -1,12 +1,9 @@
 <template>
     <div>    
-        <h1>{{ title() }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
-        </h1>           
+        <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-4">
             <v-form ref="form" v-model="form_valid" lazy-validation>          
                 <v-text-field :readonly="(mode=='D' || new_elaboration.automatic )" v-model.number="new_elaboration.diners" :label="$t('Set the number of diners')" :placeholder="$t('Set the number of diners')" :rules="RulesInteger(5,true)" counter="200"/>
-                <v-text-field :readonly="mode=='D'" class="ml-5" v-model="new_elaboration.final_amount" :label="$t('Set your final amount')" :placeholder="$t('Set your final amount')" :rules="RulesFloatGZ(10,true,3)" counter="10"/>
                 <v-checkbox readonly v-model="new_elaboration.automatic" :label="$t('Is an automatic elaboration?')"></v-checkbox>
                 <v-textarea :readonly="mode=='D'" v-model="new_elaboration.automatic_adaptation_step" :label="$t('Add your comment for this automatic elaboration')" :placeholder="$t('Add your comment for this automatic elaboration')" :rules="RulesString(2000,false)" counter="2000"/>
             </v-form>
@@ -16,22 +13,12 @@
             </v-card-actions>
         </v-card>
   
-        <!-- Final amount DIALOG -->
-        <v-dialog v-model="dialog_finalamount" width="70%">
-            <v-card class="pa-3">
-                <ElaborationsFinalAmountFromPot :key="key"  @calculated="on_ElaborationsFinalAmountFromPot_calculated"/>
-            </v-card>
-        </v-dialog>
     </div>
 </template>
 <script>
     import axios from 'axios'
-    import MyMenuInline from './reusing/MyMenuInline.vue'
-    import ElaborationsFinalAmountFromPot from './ElaborationsFinalAmountFromPot.vue'
     export default {
         components: {
-            MyMenuInline,
-            ElaborationsFinalAmountFromPot,
         },
         props: {
             
@@ -44,21 +31,6 @@
         },
         data(){ 
             return{
-                menuinline_items: [
-                    {
-                        subheader: this.$t("Recipe options"),
-                        children: [
-                            {
-                                name: this.$t("Final amount from full pot"),
-                                icon: "mdi-information",
-                                code: function(this_){
-                                    this_.dialog_finalamount=true
-                                    this_.key=this_.key+1
-                                },
-                            },
-                        ]
-                    },
-                ],
                 form_valid:false,
                 new_elaboration: null,
                 tab: 2,
@@ -66,8 +38,6 @@
 
                 key:0,
 
-                // FinalamountFromFullPot
-                dialog_finalamount:false,
             }
         },
         methods: {
@@ -113,10 +83,6 @@
                     }
                 }
             },
-            on_ElaborationsFinalAmountFromPot_calculated(final_amount){
-                this.dialog_finalamount=false
-                this.new_elaboration.final_amount=final_amount
-            }
         },
         created(){
             // Guess crud mode

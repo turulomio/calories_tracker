@@ -2,8 +2,10 @@
     <div>    
         <h1>{{ $t("Elaboration for {0} diners").format(new_elaboration.diners) }}
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
-        </h1>           
-        <p class="my-2 bold d-flex justify-center">{{$t("Final amount: {0} g").format(new_elaboration.final_amount)}}</p>
+            <br>
+            <v-btn class="" :color="(new_elaboration.final_amount)? '': 'primary'" :disabled="elaboration.automatic" @click="setFinalAmount()" >{{ (new_elaboration.final_amount==null) ? $t("Final amount wasn't set") : $t("Final amount: {0} g").format(new_elaboration.final_amount)}}</v-btn>
+
+    </h1>           
         <v-alert v-if="elaboration.automatic" type="error" dense text><div v-html="automatic_adaptation_text()"></div></v-alert>
         <v-card class="pa-8 mt-4">
             <v-form ref="form" v-model="form_valid" lazy-validation>          
@@ -48,7 +50,7 @@
                 </v-card>
             </v-form>
             <v-card-actions>                
-                <v-btn color="error" @click="createElaboratedProduct()" >{{ $t("Create an elaborated product") }}</v-btn>
+                <v-btn color="error" :disabled="new_elaboration.final_amount==null" @click="createElaboratedProduct()" >{{ $t("Create an elaborated product") }}</v-btn>
                 <v-btn color="error" @click="generate_pdf()" >{{ $t("Generate PDF") }}</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" :disabled="elaboration.automatic" @click="addIngredient()" >{{ $t("Add an ingredient") }}</v-btn>
@@ -57,6 +59,13 @@
                 <v-btn color="primary" :disabled="elaboration.automatic" @click="addExperience()" >{{ $t("Add a experience") }}</v-btn>
             </v-card-actions>
         </v-card>
+
+        <!-- Final amount DIALOG -->
+        <v-dialog v-model="dialog_finalamount" width="70%">
+            <v-card class="pa-3">
+                <ElaborationsFinalAmountFromPot :elaboration="new_elaboration" :key="key"  @cruded="on_ElaborationsFinalAmountFromPot_cruded"/>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 <script>
@@ -69,8 +78,10 @@
     import TableElaborationsExperiences from './TableElaborationsExperiences.vue'
     import TableElaborationsIngredients from './TableElaborationsIngredients.vue'
     import TableElaborationsIngredientsNI from './TableElaborationsIngredientsNI.vue'
+    import ElaborationsFinalAmountFromPot from './ElaborationsFinalAmountFromPot.vue'
     export default {
         components: {
+            ElaborationsFinalAmountFromPot,
             TableElaborationsIngredients,
             MyMenuInline,
             TableElaborationsContainers,
@@ -105,6 +116,8 @@
                 tab: 3,
 
                 key:0,
+                // FinalamountFromFullPot
+                dialog_finalamount:false,
             }
         },
         methods: {
@@ -192,7 +205,15 @@
             automatic_adaptation_text(){
                 let text=(this.elaboration.automatic_adaptation_step) ? this.elaboration.automatic_adaptation_step : ""
                 return this.$t("This is an automatic elaboration.") + "<p></p>" + text
-            }
+            },
+            setFinalAmount(){
+                this.dialog_finalamount=true
+                this.key=this.key+1
+            },
+            on_ElaborationsFinalAmountFromPot_cruded(){
+                this.dialog_finalamount=false
+                this.update_elaboration()
+            },
         },
         created(){
             this.new_elaboration=Object.assign({},this.elaboration)

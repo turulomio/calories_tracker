@@ -41,7 +41,7 @@
                             <div v-if="header.value == 'saturated_fat'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'saturated_fat'),0)"></div>
                         </td>
                     </tr>
-                    <tr style="background-color: WhiteSmoke">
+                    <tr style="background-color: WhiteSmoke" v-if="elaboration.final_amount">
                         <td v-for="(header,i) in headers" :key="i">
                             <div v-if="header.value == 'products'">{{ $t(`Nutritional information in 100 g:`)}}</div>
                             <div v-if="header.value == 'amount'" class="d-flex justify-end" v-html="100"></div>

@@ -286,7 +286,7 @@
                 this.update_all(true)
             },
             linkProduct(item){
-                axios.get(`${item.url}create_product/`, this.myheaders())
+                axios.post(`${item.url}create_product/`, {}, this.myheaders())
                 .then(() => {
                     this.update_all(true)
                }, (error) => {

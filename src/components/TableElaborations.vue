@@ -47,7 +47,6 @@
 
                 table_headers: [
                     { text: this.$t('Diners'), value: 'diners', sortable: true, width:"7%"},
-                    { text: this.$t('Final amount'), value: 'final_amount', sortable: false, width:"10%"},
                     { text: this.$t('Automatic'), value: 'automatic', sortable: false, width:"10%"},
                     { text: this.$t('Automatic adaptation text'), value: 'automatic_adaptation_step', sortable: false},
                     { text: this.$t('Actions'), value: 'actions', sortable: false, width: "7%"},

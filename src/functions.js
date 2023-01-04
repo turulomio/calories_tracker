@@ -58,3 +58,4 @@ export function additives_html_fullname(additives_object){
     let icon=`<span title="${additive_risks_object.localname}" class="mdi mdi-checkbox-blank-circle" style="color:${risk_color};" color="${risk_color}"></span>`
     return `${icon} ${additives_object.fullname}</span>`
 }
+

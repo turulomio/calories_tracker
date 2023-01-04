@@ -31,7 +31,7 @@
         </v-dialog>
 
         <!-- DIALOG RECIPES VIEW -->
-        <v-dialog v-model="dialog_recipes_view" width="100%"  @click:outside="update_recipes">
+        <v-dialog v-model="dialog_recipes_view" width="100%"  @click:outside="update_recipes(current_page)">
             <v-card class="pa-4">
                 <RecipesView  :recipe="recipe" :key="key"></RecipesView>
             </v-card>
@@ -80,7 +80,7 @@
         },
         data(){
             return {
-                paginated_recipes:[],
+                paginated_recipes:{},
                 recipes_headers: [
                     { text: this.$t('Photo'), sortable: true, value: 'photo', width:"5%"},    
                     { text: this.$t('Name'), sortable: true, value: 'name'},    
@@ -293,8 +293,7 @@
                             }
                         })
                     })
-                    this.paginated_recipes=response.data.results
-
+                    this.paginated_recipes=response.data
                     this.loading=false
                }, (error) => {
                     this.parseResponseError(error)
@@ -340,7 +339,7 @@
             },
         },
         created(){
-            this.update_recipes(1)
+            this.update_recipes(this.current_page)
         }
     }
 </script>

@@ -88,7 +88,20 @@ export const store = new Vuex.Store({
             state.formats=payload
         },
         updatePots: (state, payload) =>{
-            state.pots=payload
+            state.pots=payload                
+            state.pots.forEach(r=>{
+                if ("thumbnail" in r==false){ //Chequea que pot tiene la propiedad thumbnail
+                    r.thumbnail=require("@/assets/no_image.jpg")
+                    if (r.photo){
+                        axios.get(r.photo.url_thumbnail, store.$app.myheaders())
+                        .then((responsethumbnail) => {
+                            r.thumbnail=responsethumbnail.data
+                        }, (error) => {
+                            this.parseResponseError(error)
+                        });
+                    }
+                } 
+            })
         },
         updateProducts: (state, payload) =>{
             state.products=payload
