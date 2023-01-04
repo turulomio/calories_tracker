@@ -5,8 +5,8 @@
         </h1>
         <v-text-field class="mx-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
     
-        <v-data-table dense :options.sync="options" :headers="recipes_headers" :items="recipes" :sort-by="table_sort_by" :sort-desc="table_sort_desc" 
-        class="elevation-1" :server-items-length="options.count" :footer-props="{'disable-items-per-page': true,}" @update:page="update_recipes" :loading="loading" item-key="content_url">
+        <v-data-table dense :options.sync="paginated_recipes" :headers="recipes_headers" :items="paginated_recipes.results" :sort-by="table_sort_by" :sort-desc="table_sort_desc" 
+        class="elevation-1" :server-items-length="paginated_recipes.count" :footer-props="{'disable-items-per-page': true,}" @update:page="update_recipes" :loading="loading" item-key="content_url">
             <template v-slot:[`item.photo`]="{ item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px" @click="toggleFullscreen(item)" /></template>
             <template v-slot:[`item.name`]="{ item }"><div v-html="item.name" @click="searchGoogle(item)"></div></template>      
             <template v-slot:[`item.last`]="{ item }">{{localtime(item.last)}}</template>      
@@ -80,8 +80,7 @@
         },
         data(){
             return {
-                options:{},
-                recipes:[],
+                paginated_recipes:[],
                 recipes_headers: [
                     { text: this.$t('Photo'), sortable: true, value: 'photo', width:"5%"},    
                     { text: this.$t('Name'), sortable: true, value: 'name'},    
@@ -294,8 +293,7 @@
                             }
                         })
                     })
-                    this.options=response.data
-                    this.recipes=response.data.results
+                    this.paginated_recipes=response.data.results
 
                     this.loading=false
                }, (error) => {

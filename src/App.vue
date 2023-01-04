@@ -73,9 +73,6 @@
                         <v-list-item link router :to="{ name: 'products_datatransfer'}">
                             <v-list-item-title>{{ $t("Products data transfer") }}</v-list-item-title>
                         </v-list-item>
-                        <v-list-item link router :to="{ name: 'maintenance_catalogs_update'}">
-                            <v-list-item-title>{{ $t("Catalogs update") }}</v-list-item-title>
-                        </v-list-item>
                     </v-list-group>    
 <!--                     HELP -->
                     <v-list-group :value="false" prepend-icon="mdi-lifebuoy">

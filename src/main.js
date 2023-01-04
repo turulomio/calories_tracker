@@ -29,7 +29,6 @@ import Pots from './components/Pots.vue'
 import Products from './components/Products.vue'
 import ProductsDataTransfer from './components/ProductsDataTransfer.vue'
 import Recipes from './components/Recipes.vue'
-import MaintenanceCatalogsUpdate from './components/MaintenanceCatalogsUpdate.vue'
 
 
 
@@ -52,7 +51,6 @@ const router = new VueRouter({
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/home/`, name: 'home', component: Home },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/settings/`, name: 'settings', component: Settings },
     { path: `${process.env.VUE_APP_PUBLIC_PATH}/statistics/`, name: 'statistics', component: Statistics },
-    { path: `${process.env.VUE_APP_PUBLIC_PATH}/maintenance/catalogs/update/`, name: 'maintenance_catalogs_update', component: MaintenanceCatalogsUpdate },
   ]
 });
 
