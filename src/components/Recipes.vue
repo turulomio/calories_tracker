@@ -6,7 +6,7 @@
         <v-text-field class="mx-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
     
         <v-data-table dense :options.sync="options" :headers="recipes_headers" :items="recipes" :sort-by="table_sort_by" :sort-desc="table_sort_desc" 
-        class="elevation-1" :server-items-length="options.count" :footer-props="{'disable-items-per-page': true,}" @update:page="update_recipes"       :loading="loading" item-key="content_url">
+        class="elevation-1" :server-items-length="options.count" :footer-props="{'disable-items-per-page': true,}" @update:page="update_recipes" :loading="loading" item-key="content_url">
             <template v-slot:[`item.photo`]="{ item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px" @click="toggleFullscreen(item)" /></template>
             <template v-slot:[`item.name`]="{ item }"><div v-html="item.name" @click="searchGoogle(item)"></div></template>      
             <template v-slot:[`item.last`]="{ item }">{{localtime(item.last)}}</template>      
@@ -279,7 +279,6 @@
                 this.loading=true
                 axios.get(`${this.$store.state.apiroot}/api/recipes/?page=${page}&search=${this.search}`, this.myheaders())
                 .then((response) => {
-                    this.options=response.data
                     response.data.results.forEach(r=>{
                         r.thumbnail=require("@/assets/no_image.jpg")
                         r.content_url=null //Needed to select only one rl
@@ -295,7 +294,9 @@
                             }
                         })
                     })
+                    this.options=response.data
                     this.recipes=response.data.results
+
                     this.loading=false
                }, (error) => {
                     this.parseResponseError(error)
