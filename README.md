@@ -16,9 +16,10 @@ pip install -r requirements.txt
 # Edit settings.py if needed and run backend
 python manage.py migrate
 python manage.py createsuperuser
-python manage.py update_catalogs
-python manage.py sqlsequencereset calories_tracker | python manage.py dbshell
+python manage.py loaddata all
 python manage.py runserver
+
+# En /admin/ you can create all users you need
 
 # Clone repository and install node_modules
 git clone https://github.com/turulomio/calories_tracker
