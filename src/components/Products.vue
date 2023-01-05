@@ -399,8 +399,9 @@
             },
             update_system_products(){
                 if (this.search==null)return
-                axios.get(`${this.$store.state.apiroot}/api/system_products/?search=${this.search}`, this.myheaders())
+                return axios.get(`${this.$store.state.apiroot}/api/system_products/?search=${this.search}`, this.myheaders())
                 .then((response) => {
+                    console.log(response.data)
                     this.system_products=response.data
                }, (error) => {
                     this.parseResponseError(error)
