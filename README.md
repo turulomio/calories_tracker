@@ -30,6 +30,30 @@ npm install
 npm run serve
 ```
 
+## Update method
+
+```sh
+
+# Update django_calories_tracker backend
+cd django_calories_tracker
+git pull
+pip install -r requirements.txt
+
+# Edit settings.py if needed and run backend
+python manage.py migrate
+python manage.py loaddata all
+python manage.py runserver
+
+# Update calories_tracker frontend
+cd calories_tracker
+git pull
+npm install
+
+# Run frontend
+npm run serve
+```
+
+
 ## Health links used to develop calories_tracker
 - https://www.weekendbakery.com/cooking-conversions/
 - https://cardiacos.net/sal-y-sodio/
