@@ -38,7 +38,7 @@
                 <template v-slot:[`body.append`]="{headers}" v-if="meals.length>0">
                     <tr style="background-color: WhiteSmoke">
                         <td v-for="(header,i) in headers" :key="i">
-                            <div v-if="header.value == 'products'">{{ $t(`Total (${meals.length} meals):`)}}</div>
+                            <div v-if="header.value == 'products'">{{ $t(`Total ({0} meals):`).format(meals.length)}}</div>
                             <div v-if="header.value == 'amount'" class="d-flex justify-end" v-html="my_round(listobjects_sum(meals,'amount'),0)"></div>
                             <div v-if="header.value == 'calories'" :class="(biometric.bmr>listobjects_sum(meals,'calories')) ? 'boldgreen d-flex justify-end':'boldred d-flex justify-end'" v-html="my_round(listobjects_sum(meals,'calories'),0)"></div>
                             <div v-if="header.value == 'fat'" :class="(biometric.recommended_fat>listobjects_sum(meals,'fat')) ? 'boldgreen d-flex justify-end':'boldred d-flex justify-end'" v-html="my_round(listobjects_sum(meals,'fat'),0)"></div>
@@ -130,7 +130,7 @@
                                 name: this.$t("Delete selected day meals"),
                                 icon: "mdi-plus",
                                 code: function(this_){
-                                    var r = confirm(this_.$t("Do you want to delete select day meals?"))
+                                    var r = confirm(this_.$t("Do you want to delete selected day meals?"))
                                     if(r == true) {
                                         let day_meals=[]
                                         this_.meals.forEach(element => {

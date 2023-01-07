@@ -50,7 +50,7 @@
                     { text: this.$t('Photo'), sortable: true, value: 'photo'},
                     { text: this.$t('Name'), sortable: true, value: 'name'},
                     { text: this.$t('Diameter (cm)'), value: 'diameter', align:'right', width:"12%"},
-                    { text: this.$t('Height (g)'), value: 'height', align:'right', width:"12%"},
+                    { text: this.$t('Height (cm)'), value: 'height', align:'right', width:"12%"},
                     { text: this.$t('Weight (g)'), value: 'weight', align:'right', width:"12%"},
                     { text: this.$t('Volume (cm³)'), value: 'volume', align:'right', width:"12%"},
                     { text: this.$t('Actions'), value: 'actions', align: 'right', sortable: false, width:"12%"},
