@@ -156,6 +156,10 @@ span.vuered{
 }
 
 
+.cursorpointer {
+    cursor: pointer;
+}
+
 .bold{
     color: black;
     font-weight: 900;
