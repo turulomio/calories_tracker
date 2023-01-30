@@ -5,20 +5,19 @@
         </h1>
         <v-text-field class="mx-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
     
-        <v-data-table dense :options.sync="paginated_recipes" :headers="recipes_headers" :items="paginated_recipes.results" :sort-by="table_sort_by" :sort-desc="table_sort_desc" 
-        class="elevation-1" :server-items-length="paginated_recipes.count" :footer-props="{'disable-items-per-page': true,}" @update:page="update_recipes" :loading="loading" item-key="content_url">
-            <template v-slot:[`item.photo`]="{ item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px" @click="toggleFullscreen(item)" /></template>
-            <template v-slot:[`item.name`]="{ item }"><div v-html="item.name" @click="searchGoogle(item)"></div></template>      
+        <v-data-table dense :options.sync="paginated_recipes" :headers="recipes_headers" :items="paginated_recipes.results" :sort-by="table_sort_by" :sort-desc="table_sort_desc" class="elevation-1 cursorpointer" :server-items-length="paginated_recipes.count" :footer-props="{'disable-items-per-page': true,}" @update:page="update_recipes" :loading="loading" item-key="content_url" @click:row="viewRecipe">
+            <template v-slot:[`item.photo`]="{ item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px" @click.stop="toggleFullscreen(item)" /></template>
+            <template v-slot:[`item.name`]="{ item }"><div v-html="item.name"></div></template>      
             <template v-slot:[`item.last`]="{ item }">{{localtime(item.last)}}</template>      
             <template v-slot:[`item.categories`]="{ item }">{{show_categories(item)}}</template>      
             <template v-slot:[`item.food_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('food_types', item.food_types,'localname')"></div></template> 
             <template v-slot:[`item.guests`]="{ item }"><v-icon small v-if="item.guests" >mdi-check-outline</v-icon></template>   
             <template v-slot:[`item.soon`]="{ item }"><v-icon small v-if="item.soon" >mdi-check-outline</v-icon></template>    
             <template v-slot:[`item.actions`]="{ item }">
-                <v-icon small class="mr-1" @click="addMainPhoto(item)">mdi-link-variant</v-icon>
-                <v-icon small class="mr-1" @click="viewRecipe(item)">mdi-eye</v-icon>
-                <v-icon small class="mr-1" @click="editRecipe(item)">mdi-pencil</v-icon>
-                <v-icon small @click="deleteRecipe(item)">mdi-delete</v-icon>
+                <v-icon small class="mr-1" @click.stop="addMainPhoto(item)">mdi-link-variant</v-icon>
+                <v-icon small class="mr-1" @click.stop="searchGoogle(item)">mdi-search-web</v-icon>
+                <v-icon small class="mr-1" @click.stop="editRecipe(item)">mdi-pencil</v-icon>
+                <v-icon small @click.stop="deleteRecipe(item)">mdi-delete</v-icon>
             </template>
         </v-data-table>
 
@@ -137,6 +136,7 @@
                                 code: function(this_){
                                     this_.recipe_mode="C"
                                     this_.recipe=this_.empty_recipes()
+                                    this_.recipe.food_types=this_.$store.getters.getObjectPropertyById("food_types",19,"url")//Homemade food
                                     this_.key=this_.key+1
                                     this_.dialog_recipes_crud=true
                                 },

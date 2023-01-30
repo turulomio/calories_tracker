@@ -3,7 +3,7 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-4">
             <v-form ref="form" v-model="form_valid" lazy-validation>                
-                <v-text-field :readonly="mode=='D'" v-model="new_recipe.name" :label="$t('Set name')" :placeholder="$t('Set name')" :rules="RulesString(200,true)" counter="200"/>
+                <v-text-field :readonly="mode=='D'" v-model="new_recipe.name" :label="$t('Set name')" :placeholder="$t('Set name')" :rules="RulesString(200,true)" counter="200" autofocus/>
                 <v-autocomplete :readonly="mode=='D'" :items="$store.state.food_types" v-model="new_recipe.food_types" :label="$t('Select product food type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-autocomplete :readonly="mode=='D'" :items="$store.state.recipes_categories" v-model="new_recipe.recipes_categories" multiple chips :label="$t('Select recipe categories')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-text-field :readonly="mode=='D'" v-model.number="new_recipe.valoration" :label="$t('Set your valoration')" :placeholder="$t('Set your valoration')" :rules="RulesInteger(10,false)" counter="200"/>
