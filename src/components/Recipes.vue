@@ -3,13 +3,17 @@
         <h1>{{ $t(`Recipes`) }}
             <MyMenuInline :items="menuinline_items()" :context="this"></MyMenuInline>
         </h1>
-        <v-text-field class="mx-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
-    
-        <v-data-table dense :options.sync="paginated_recipes" :headers="recipes_headers" :items="paginated_recipes.results" :sort-by="table_sort_by" :sort-desc="table_sort_desc" class="elevation-1 cursorpointer" :server-items-length="paginated_recipes.count" :footer-props="{'disable-items-per-page': true,}" @update:page="update_recipes" :loading="loading" item-key="content_url" @click:row="viewRecipe">
+        <v-card width="50%" class="mx-auto my-5" flat >
+            <v-row class="mx-5 mb-5">
+                <v-text-field :disabled="loading" class="mb-3"  v-model="search" prepend-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
+                <v-icon dense class="ml-3" small @click="search=''">mdi-backspace</v-icon>
+            </v-row>
+        </v-card>
+        <v-data-table dense :headers="recipes_headers" :items="paginated_recipes.results" class="elevation-1 cursorpointer" :server-items-length="paginated_recipes.count" :footer-props="{'disable-items-per-page': true,}" :options.sync="options"  @update:page="update_recipes" :loading="loading" item-key="content_url" @click:row="viewRecipe">
             <template v-slot:[`item.photo`]="{ item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px" @click.stop="toggleFullscreen(item)" /></template>
             <template v-slot:[`item.name`]="{ item }"><div v-html="item.name"></div></template>      
             <template v-slot:[`item.last`]="{ item }">{{localtime(item.last)}}</template>      
-            <template v-slot:[`item.categories`]="{ item }">{{show_categories(item)}}</template>      
+            <template v-slot:[`item.recipes_categories`]="{ item }">{{show_categories(item)}}</template>      
             <template v-slot:[`item.food_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('food_types', item.food_types,'localname')"></div></template> 
             <template v-slot:[`item.guests`]="{ item }"><v-icon small v-if="item.guests" >mdi-check-outline</v-icon></template>   
             <template v-slot:[`item.soon`]="{ item }"><v-icon small v-if="item.soon" >mdi-check-outline</v-icon></template>    
@@ -30,7 +34,7 @@
         </v-dialog>
 
         <!-- DIALOG RECIPES VIEW -->
-        <v-dialog v-model="dialog_recipes_view" width="100%"  @click:outside="update_recipes(current_page)">
+        <v-dialog v-model="dialog_recipes_view" width="100%"  @click:outside="update_recipes">
             <v-card class="pa-4">
                 <RecipesView  :recipe="recipe" :key="key"></RecipesView>
             </v-card>
@@ -77,14 +81,19 @@
             RecipesLinksCRUD,
             ShoppingList,
         },
+        watch: {
+            options(newValue) {
+                this.update_recipes(newValue)
+            }
+        },
         data(){
             return {
                 paginated_recipes:{},
                 recipes_headers: [
-                    { text: this.$t('Photo'), sortable: true, value: 'photo', width:"5%"},    
+                    { text: this.$t('Photo'), sortable: false, value: 'photo', width:"5%"},    
                     { text: this.$t('Name'), sortable: true, value: 'name'},    
                     { text: this.$t('Food type'), sortable: true, value: 'food_types', width: "15%"},
-                    { text: this.$t('Categories'), sortable: true, value: 'categories', width: "15%"},
+                    { text: this.$t('Categories'), sortable: true, value: 'recipes_categories', width: "15%"},
                     { text: this.$t('Valoration'), sortable: true, value: 'valoration', width: "7%"},
                     { text: this.$t('Guests'), sortable: true, value: 'guests', width: "5%"},
                     { text: this.$t('Soon'), sortable: true, value: 'soon', width: "5%"},
@@ -96,9 +105,6 @@
                 loading:false,
                 key:0,
                 search: ":LAST",
-                table_sort_by:"name",
-                table_sort_desc:"",
-                current_page:1,
 
                 // RECIPE VIEW
                 dialog_recipes_view:false,
@@ -118,7 +124,8 @@
                 loading_image:false,
 
                 //DIALOG SHOPPING LIST
-                dialog_shopping_list:false
+                dialog_shopping_list:false,
+                options: this.empty_options(),
             }
         },
         methods:{
@@ -152,7 +159,10 @@
                                 icon: "mdi-account-group",
                                 code: function(this_){
                                     this_.search=":GUESTS"
-                                    this_.on_search_change()
+                                    this_.options.multiSort=false
+                                    this_.options.sortBy=["last"]
+                                    this_.options.sortDesc=[true]
+                                    this_.update_recipes(this_.options)
                                     this_.key=this_.key+1
                                 },
                             },
@@ -161,7 +171,10 @@
                                 icon: "mdi-clock-outline",
                                 code: function(this_){
                                     this_.search=":SOON"
-                                    this_.on_search_change()
+                                    this_.options.multiSort=false
+                                    this_.options.sortBy=["last"]
+                                    this_.options.sortDesc=[true]
+                                    this_.update_recipes(this_.options)
                                     this_.key=this_.key+1
                                 },
                             },
@@ -170,7 +183,10 @@
                                 icon: "mdi-star-outline",
                                 code: function(this_){
                                     this_.search=":VALORATION"
-                                    this_.on_search_change()
+                                    this_.options.multiSort=true
+                                    this_.options.sortBy=["valoration","last"]
+                                    this_.options.sortDesc=[true,true]
+                                    this_.update_recipes(this_.options)
                                     this_.key=this_.key+1
                                 },
                             },
@@ -179,7 +195,10 @@
                                 icon: "mdi-note-edit-outline",
                                 code: function(this_){
                                     this_.search=":LAST"
-                                    this_.on_search_change()
+                                    this_.options.multiSort=false
+                                    this_.options.sortBy=["last"]
+                                    this_.options.sortDesc=[true]
+                                    this_.update_recipes(this_.options)
                                     this_.key=this_.key+1
                                 },
                             },
@@ -188,7 +207,10 @@
                                 icon: "mdi-cog-outline",
                                 code: function(this_){
                                     this_.search=":WITH_ELABORATIONS"
-                                    this_.on_search_change()
+                                    this_.options.multiSort=false
+                                    this_.options.sortBy=["last"]
+                                    this_.options.sortDesc=[true]
+                                    this_.update_recipes(this_.options)
                                     this_.key=this_.key+1
                                 },
                             },
@@ -197,7 +219,10 @@
                                 icon: "mdi-image-off-outline",
                                 code: function(this_){
                                     this_.search=":WITHOUT_MAINPHOTO"
-                                    this_.on_search_change()
+                                    this_.options.multiSort=false
+                                    this_.options.sortBy=["last"]
+                                    this_.options.sortDesc=[true]
+                                    this_.update_recipes(this_.options)
                                     this_.key=this_.key+1
                                 },
                             },
@@ -221,10 +246,10 @@
             },
             on_RecipesCRUD_cruded(){
                 this.dialog_recipes_crud=false
-                this.update_recipes(this.current_page)
+                this.update_recipes()
             },
             on_RecipesView_cruded(){
-                this.update_recipes(this.current_page)
+                this.update_recipes()
             },
             editRecipe(item){
                 this.recipe=item
@@ -258,25 +283,15 @@
 
             on_search_change(){
                 //Pressing enter
-                this.update_recipes(1)
+                this.options.multiSort=false
+                this.options.sortBy=["last"]
+                this.options.sortDesc=[true]
+                this.update_recipes(this.options)
             },
-            update_recipes(page){
-                if (this.search==":SOON" || this.search.startsWith(":LAST")){
-                    this.table_sort_by="last"
-                    this.table_sort_desc=["last"]
-                } else if (this.search==":GUESTS" || this.search==":VALORATION"){
-                    this.table_sort_by="valoration"
-                    this.table_sort_desc=["valoration"]
-                } else{
-                    this.table_sort_by="name"
-                    this.table_sort_desc=[]
-
-                }
-                this.current_page=page
-                
-
+            update_recipes(options){                
                 this.loading=true
-                axios.get(`${this.$store.state.apiroot}/api/recipes/?page=${page}&search=${this.search}`, this.myheaders())
+                let headers={...this.myheaders(),params: options}
+                axios.get(`${this.$store.state.apiroot}/api/recipes/?search=${this.search}`, headers)
                 .then((response) => {
                     response.data.results.forEach(r=>{
                         r.thumbnail=require("@/assets/no_image.jpg")
@@ -330,16 +345,28 @@
             },
             on_RecipesLinksCRUD_cruded(){
                 this.dialog_main_photo=false
-                this.update_recipes(this.current_page)
+                this.update_recipes()
 
             },
             searchGoogle(item){
 
                 window.open(`https://www.google.com/search?q=${encodeURIComponent(item.name)}`)
             },
+            empty_options(){
+                return {
+                    groupBy: [],
+                    groupDesc: [],
+                    itemsPerPage: 10,
+                    multiSort: false,
+                    mustSort:true,
+                    page:1,
+                    sortBy: ["last"],
+                    sortDesc: [true],
+
+                }
+            },
         },
-        created(){
-            this.update_recipes(this.current_page)
+        mounted(){
         }
     }
 </script>

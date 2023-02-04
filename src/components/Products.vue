@@ -30,9 +30,9 @@
                     <template v-slot:[`item.phosphor`]="{ item }"><div v-html="my_round(item.phosphor,0)"></div></template>  
                     <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon v-if="item.system_products==null && item.elaborated_products==null" small class="mr-1" @click="convertToSystemProduct(item)">mdi-database-arrow-right</v-icon>
-                        <v-icon v-if="item.is_editable" small class="mr-1" @click="editProduct(item)">mdi-pencil</v-icon>
-                        <v-icon v-if="item.is_deletable" small @click="deleteProduct(item)">mdi-delete</v-icon>
+                        <v-icon v-if="item.system_products==null && item.elaborated_products==null" small class="mr-1" @click.stop="convertToSystemProduct(item)">mdi-database-arrow-right</v-icon>
+                        <v-icon v-if="item.is_editable" small class="mr-1" @click.stop="editProduct(item)">mdi-pencil</v-icon>
+                        <v-icon v-if="item.is_deletable" small @click.stop="deleteProduct(item)">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
             </v-tab-item>
@@ -55,8 +55,8 @@
                     <template v-slot:[`item.phosphor`]="{ item }"><div v-html="my_round(item.phosphor,0)"></div></template>  
                     <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon small class="mr-1" @click="editElaboratedProduct(item)">mdi-pencil</v-icon>
-                        <v-icon small v-if="is_product_elaborated_deletable(item)" @click="deleteElaboratedProduct(item)">mdi-delete</v-icon>
+                        <v-icon small class="mr-1" @click.stop="editElaboratedProduct(item)">mdi-pencil</v-icon>
+                        <v-icon small v-if="is_product_elaborated_deletable(item)" @click.stop="deleteElaboratedProduct(item)">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
             </v-tab-item>
@@ -79,9 +79,9 @@
                     <template v-slot:[`item.phosphor`]="{ item }"><div v-html="my_round(item.phosphor,0)"></div></template>  
                     <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
                     <template v-slot:[`item.actions`]="{ item }">
-                        <v-icon small class="mr-1" @click="linkProduct(item)">mdi-link-variant</v-icon>   
-                        <v-icon class="mr-1" small @click="editSystemProduct(item)"  color="#AA0000" v-if="$store.state.catalog_manager">mdi-pencil</v-icon>
-                        <v-icon small @click="deleteSystemProduct(item)" color="#AA0000" v-if="$store.state.catalog_manager">mdi-delete</v-icon>
+                        <v-icon small class="mr-1" @click.stop="linkProduct(item)">mdi-link-variant</v-icon>   
+                        <v-icon class="mr-1" small @click.stop="editSystemProduct(item)"  color="#AA0000" v-if="$store.state.catalog_manager">mdi-pencil</v-icon>
+                        <v-icon small @click.stop="deleteSystemProduct(item)" color="#AA0000" v-if="$store.state.catalog_manager">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
             </v-tab-item>
@@ -149,7 +149,7 @@
                 ],
                 system_products:[],
                 system_products_headers: [ 
-                    { text: this.$t('Name'), sortable: true, value: 'name',width:"30%"},          
+                    { text: this.$t('English name'), sortable: true, value: 'name',width:"30%"},          
                     { text: this.$t('Calories (kcal)'), sortable: true, value: 'calories',align:'right'},
                     { text: this.$t('Fat (g)'), sortable: true, value: 'fat',align:'right'},
                     { text: this.$t('Protein (g)'), sortable: true, value: 'protein',align:'right'},
