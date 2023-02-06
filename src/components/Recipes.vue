@@ -34,7 +34,7 @@
         </v-dialog>
 
         <!-- DIALOG RECIPES VIEW -->
-        <v-dialog v-model="dialog_recipes_view" width="100%"  @click:outside="update_recipes">
+        <v-dialog v-model="dialog_recipes_view" width="100%"  @click:outside="update_recipes(this.options)">
             <v-card class="pa-4">
                 <RecipesView  :recipe="recipe" :key="key"></RecipesView>
             </v-card>
@@ -51,7 +51,7 @@
         <!-- DIALOG MAIN PHOTO -->
         <v-dialog v-model="dialog_main_photo" width="60%" persistent>
             <v-card class="pa-4">
-                <RecipesLinksCRUD :recipes_links="recipes_links" mode="C" :key="key"  @cruded="on_RecipesLinksCRUD_cruded()"></RecipesLinksCRUD>
+                <RecipesLinksCRUD :recipes_links="recipes_links" mode="C" :key="key"  @cruded="on_RecipesLinksCRUD_cruded"></RecipesLinksCRUD>
             </v-card>
         </v-dialog>
 
@@ -246,10 +246,10 @@
             },
             on_RecipesCRUD_cruded(){
                 this.dialog_recipes_crud=false
-                this.update_recipes()
+                this.update_recipes(this.options)
             },
             on_RecipesView_cruded(){
-                this.update_recipes()
+                this.update_recipes(this.options)
             },
             editRecipe(item){
                 this.recipe=item
@@ -345,7 +345,7 @@
             },
             on_RecipesLinksCRUD_cruded(){
                 this.dialog_main_photo=false
-                this.update_recipes()
+                this.update_recipes(this.options)
 
             },
             searchGoogle(item){
