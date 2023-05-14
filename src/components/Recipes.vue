@@ -5,8 +5,8 @@
         </h1>
         <v-card width="50%" class="mx-auto my-5" flat >
             <v-row class="mx-5 mb-5">
-                <v-text-field :disabled="loading" class="mb-3"  v-model="search" prepend-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
-                <v-icon dense class="ml-3" small @click="search=''">mdi-backspace</v-icon>
+                <v-text-field ref="search" :disabled="loading" class="mb-3"  v-model="search" prepend-icon="mdi-magnify" :label="$t('Add a string to filter table')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
+                <v-icon dense class="ml-3" small @click="on_search_clean">mdi-backspace</v-icon>
             </v-row>
         </v-card>
         <v-data-table dense :headers="recipes_headers" :items="paginated_recipes.results" class="elevation-1 cursorpointer" :server-items-length="paginated_recipes.count" :footer-props="{'disable-items-per-page': true,}" :options.sync="options"  @update:page="update_recipes" :loading="loading" item-key="content_url" @click:row="viewRecipe">
@@ -250,6 +250,10 @@
             },
             on_RecipesView_cruded(){
                 this.update_recipes(this.options)
+            },
+            on_search_clean(){
+                this.search=""
+                this.$refs.search.focus()
             },
             editRecipe(item){
                 this.recipe=item
