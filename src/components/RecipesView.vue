@@ -3,7 +3,7 @@
         <h1>{{ recipe.name }}
             <MyMenuInline :items="items"  :context="this"></MyMenuInline>
         </h1>
-        <DisplayValues :items="displayvalues()" :key="key"></DisplayValues>
+        <DisplayValues :items="displayvalues()" :minimized_items="5" :key="key"></DisplayValues>
 
         <v-tabs  background-color="primary" dark  v-model="tab" >
             <v-tab key="documentation">{{ $t('Documentation') }}</v-tab>
@@ -98,6 +98,8 @@
         methods: {        
             displayvalues(){
                 return [
+                    {title:this.$t('Created'), value: this.localtime(this.new_recipe.datetime)},
+                    {title:this.$t('Last update'), value: this.localtime(this.new_recipe.last)},
                     {title:this.$t('Valoration'), value: this.new_recipe.valoration},
                     {title:this.$t('Is a recipe for guests?'), value: this.new_recipe.guests},
                     {title:this.$t('Do you want to make it soon?'), value: this.new_recipe.soon},
@@ -112,7 +114,6 @@
             on_TableElaborations_cruded(){
                 return axios.get(`${this.$store.state.apiroot}/api/elaborations/?recipes=${this.new_recipe.url}`, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
                     this.new_recipe.elaborations=response.data
                     this.key=this.key+1
                }, (error) => {
@@ -123,7 +124,6 @@
 
                 axios.get(this.recipe.url, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
                     this.new_recipe=response.data
                     this.update_thumbnails()
                     this.key=this.key+1
