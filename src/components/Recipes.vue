@@ -9,7 +9,7 @@
                 <v-icon dense class="ml-3" small @click="on_search_clean">mdi-backspace</v-icon>
             </v-row>
         </v-card>
-        <v-data-table dense :headers="recipes_headers" :items="paginated_recipes.results" class="elevation-1 cursorpointer" :server-items-length="paginated_recipes.count" :footer-props="{'disable-items-per-page': true,}" :options.sync="options"  @update:page="update_recipes" :loading="loading" item-key="content_url" @click:row="viewRecipe">
+        <v-data-table dense :headers="recipes_headers" :items="paginated_recipes.results" class="elevation-1 cursorpointer" :server-items-length="paginated_recipes.count" :options.sync="options"  @update:page="update_recipes" :loading="loading" item-key="content_url" @click:row="viewRecipe">
             <template v-slot:[`item.photo`]="{ item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px" @click.stop="toggleFullscreen(item)" /></template>
             <template v-slot:[`item.name`]="{ item }"><div v-html="item.name"></div></template>      
             <template v-slot:[`item.last`]="{ item }">{{localtime(item.last)}}</template>      
