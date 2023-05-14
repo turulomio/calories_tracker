@@ -195,6 +195,7 @@ export function percentage_generic_html(num, locale, decimals=2){
 }
 
 export function listobjects_sum(lo,key){
+    if (lo.length==0) return 0
     return lo.reduce((accum,item) => accum + item[key], 0)
 }
 
@@ -209,9 +210,6 @@ export function listobjects_average_ponderated(lo,key1, key2){
     return prod/total
 }
 
-export function get_current_monthpicker_string(){
-    return `${new Date().getFullYear()}-${(new Date().getMonth()+1).toString().padStart(2,'0')}`
-}
 
 export function ifnullempty(value){
     if (value==null) return ""

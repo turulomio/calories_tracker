@@ -6,10 +6,12 @@
     "serve": "vue-cli-service serve --port 8012 --mode development",
     "build": "vue-cli-service build --mode production",
     "lint": "vue-cli-service lint",
-    "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\" --output npm_i18n_report.json"
+    "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\" --output npm_i18n_report.json",
+    "reusing": "node src/scripts/reusing.js"
   },
   "dependencies": {
     "@intlify/vue-i18n-loader": "^1.1.0",
+    "argparse": "^2.0.1",
     "axios": "^1.3.2",
     "core-js": "^3.27.2",
     "echarts": "^5.4.1",
