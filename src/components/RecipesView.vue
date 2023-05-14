@@ -6,8 +6,8 @@
         <DisplayValues :items="displayvalues()" :minimized_items="5" :key="key"></DisplayValues>
 
         <v-tabs  background-color="primary" dark  v-model="tab" >
-            <v-tab key="documentation">{{ $t('Documentation') }}</v-tab>
-            <v-tab key="elaborations">{{ $t('Elaborations') }}</v-tab>
+            <v-tab key="documentation">{{ $t('Documentation') }}<v-badge color="error" class="ml-2" inline :content="new_recipe.recipes_links.length.toString()"/></v-tab>
+            <v-tab key="elaborations">{{ $t('Elaborations') }}<v-badge color="error" class="ml-2" inline :content="new_recipe.elaborations.length.toString()"/></v-tab>
             <v-tabs-slider color="yellow"></v-tabs-slider>
         </v-tabs>
         <v-tabs-items v-model="tab">
@@ -81,13 +81,6 @@
                                 },
                                 icon: "mdi-pencil",
                             },
-                            {
-                                name:this.$t('Generate PDF'),
-                                code: function(this_){
-                                    console.log(this_)
-                                },
-                                icon: "mdi-pencil",
-                            },
                         ]
                     },
                 ],
@@ -138,7 +131,6 @@
                         axios.get(r.files.url_thumbnail, this.myheaders())
                         .then((responsethumbnail) => {
                             r.thumbnail=responsethumbnail.data
-                            console.log(this.new_recipe.recipes_links)
                         }, (error) => {
                             this.parseResponseError(error)
                         });

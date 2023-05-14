@@ -271,7 +271,6 @@
             },
             viewRecipe(item){            
                 var recipe_full_url=item.url.replace("/recipes/","/recipes_full/")
-                console.log(item.url)
                 axios.get(recipe_full_url, this.myheaders())
                 .then((response) => {
                     this.recipe=response.data

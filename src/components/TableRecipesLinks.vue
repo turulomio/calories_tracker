@@ -64,7 +64,6 @@
                 this.recipes_links=this.empty_recipes_links()
                 this.recipes_links.recipes=this.recipe.url
                 this.recipes_links.type=this.$store.getters.getObjectPropertyById("recipes_links_types", type,"url"), // Web page link
-                console.log(this.recipes_links)
                 this.recipes_links_crud_mode="C"
                 this.key=this.key+1
                 this.recipes_links_crud_dialog=true
@@ -90,8 +89,7 @@
                 this.$emit("cruded")
             },
 
-            downloadItem(item){                               
-                console.log(item)
+            downloadItem(item){
                 axios.get(item.files.url_content, this.myheaders())
                 .then((response) => {
                     const downloadLink = document.createElement("a")
@@ -117,8 +115,5 @@
 
             }
         },
-        created(){
-            console.log(this.recipe.recipes_links)
-        }
     }
 </script>
