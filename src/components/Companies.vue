@@ -182,7 +182,7 @@
                 this.update_all(true) 
             },
             linkCompany(item){
-                axios.post(`${this.$store.state.apiroot}/system_companies_to_companies/`, {system_companies: item.url}, this.myheaders())
+                axios.post(`${item.url}create_company/`, {}, this.myheaders())
                 .then(() => {
                     this.update_all(true)
                }, (error) => {
