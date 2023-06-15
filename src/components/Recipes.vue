@@ -34,7 +34,7 @@
         </v-dialog>
 
         <!-- DIALOG RECIPES VIEW -->
-        <v-dialog v-model="dialog_recipes_view" width="100%"  @click:outside="update_recipes(this.options)">
+        <v-dialog v-model="dialog_recipes_view" width="100%"  @click:outside="update_recipes(options)">
             <v-card class="pa-4">
                 <RecipesView  :recipe="recipe" :key="key"></RecipesView>
             </v-card>
@@ -269,19 +269,23 @@
 
                 this.dialog_recipes_crud=true
             },
-            viewRecipe(item){            
-                var recipe_full_url=item.url.replace("/recipes/","/recipes_full/")
-                axios.get(recipe_full_url, this.myheaders())
-                .then((response) => {
-                    this.recipe=response.data
-                    this.recipe.url_full=recipe_full_url
-                    this.recipe.url=item.url
+            viewRecipe(item){       
+                    this.recipe=item
                     this.key=this.key+1
 
-                    this.dialog_recipes_view=true
-                }, (error) => {
-                    this.parseResponseError(error)
-                })
+                    this.dialog_recipes_view=true     
+                // var recipe_full_url=item.url.replace("/recipes/","/recipes_full/")
+                // axios.get(item.url, this.myheaders())
+                // .then((response) => {
+                //     this.recipe=response.data
+                //     this.recipe.url_full=recipe_full_url
+                //     this.recipe.url=item.url
+                //     this.key=this.key+1
+
+                //     this.dialog_recipes_view=true
+                // }, (error) => {
+                //     this.parseResponseError(error)
+                // })
             },
 
             on_search_change(){

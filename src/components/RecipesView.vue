@@ -140,6 +140,7 @@
         },
         created(){
             this.new_recipe=Object.assign({},this.recipe)
+            console.log("Recipe",this.new_recipe)
             this.update_thumbnails()
         }
     }
