@@ -4,9 +4,9 @@
             <template v-slot:[`item.automatic`]="{ item }"><v-icon small v-if="item.automatic" >mdi-check-outline</v-icon></template>
 
             <template v-slot:[`item.actions`]="{ item }">
-                <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" @click="deleteItem(item)">mdi-delete</v-icon>      
-                <v-icon v-if="!item.automatic" small class="mr-2" @click="createAutomaticElaboration(item)">mdi-file-cog-outline</v-icon>
+                <v-icon small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
+                <v-icon small class="mr-2" @click.stop="deleteItem(item)">mdi-delete</v-icon>      
+                <v-icon v-if="!item.automatic" small class="mr-2" @click.stop="createAutomaticElaboration(item)">mdi-file-cog-outline</v-icon>
 
             </template>
         </v-data-table>   
@@ -92,6 +92,7 @@
                 this.$emit("cruded")
             },
             on_ElaborationsView_cruded(){
+                console.log("view_cruded")
                 this.key=this.key+1
                 this.$emit("cruded")
             },

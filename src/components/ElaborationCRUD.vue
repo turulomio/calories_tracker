@@ -54,6 +54,7 @@
             },
             acceptDialog(cruded=true){             
                 if( this.$refs.form.validate()==false) return   
+                console.log(this.new_elaboration)
 
                 if (this.mode=="C"){
                     axios.post(`${this.$store.state.apiroot}/api/elaborations/`, this.new_elaboration,  this.myheaders())

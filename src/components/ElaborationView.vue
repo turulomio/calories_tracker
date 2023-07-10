@@ -14,6 +14,7 @@
                         <v-tab key="ingredients"><v-icon left>mdi-apple</v-icon>{{ $t('Ingredients') }}<v-badge v-if="new_elaboration.elaborations_products_in.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_products_in.length"/></v-tab>
                         <v-tab key="nutritional"><v-icon left>mdi-apple</v-icon>{{ $t('Nutritional information') }}<v-badge v-if="new_elaboration.elaborations_products_in.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_products_in.length"/></v-tab>
                         <v-tab key="containers"><v-icon left>mdi-apple</v-icon>{{ $t('Containers') }}<v-badge v-if="new_elaboration.elaborations_containers.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_containers.length"/></v-tab>
+                        <v-tab key="text"><v-icon left>mdi-apple</v-icon>{{ $t('Text') }}<v-badge v-if="new_elaboration.text?.length>0" color="error" class="ml-2" content="1"/></v-tab>
                         <v-tab key="steps"><v-icon left>mdi-apple</v-icon>{{ $t('Steps') }}<v-badge v-if="new_elaboration.elaborations_steps.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_steps.length"/></v-tab>
                         <v-tab key="experiences"  v-if="!elaboration.automatic"><v-icon left>mdi-apple</v-icon>{{ $t('Experiences') }}<v-badge v-if="new_elaboration.elaborations_experiences.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_experiences.length"/></v-tab>
                         <v-tabs-slider color="yellow"></v-tabs-slider>
@@ -34,6 +35,11 @@
                         <v-tab-item key="containers">      
                             <v-card outlined>         
                                 <TableElaborationsContainers ref="table_elaborations_containers" :elaboration="new_elaboration" :key="key" @cruded="on_TableElaborationsContainers_cruded()"></TableElaborationsContainers>
+                            </v-card>
+                        </v-tab-item>
+                        <v-tab-item key="text">      
+                            <v-card outlined>         
+                                <ElaborationText elaboration="new_elaboration" :key="key" @cruded="on_ElaborationText_cruded" />
                             </v-card>
                         </v-tab-item>
                         <v-tab-item key="steps">  
@@ -79,9 +85,11 @@
     import TableElaborationsIngredients from './TableElaborationsIngredients.vue'
     import TableElaborationsIngredientsNI from './TableElaborationsIngredientsNI.vue'
     import ElaborationsFinalAmountFromPot from './ElaborationsFinalAmountFromPot.vue'
+    import ElaborationText from './ElaborationText.vue'
     export default {
         components: {
             ElaborationsFinalAmountFromPot,
+            ElaborationText,
             TableElaborationsIngredients,
             MyMenuInline,
             TableElaborationsContainers,
@@ -212,8 +220,11 @@
             },
             on_ElaborationsFinalAmountFromPot_cruded(){
                 this.dialog_finalamount=false
-                this.update_elaboration()
             },
+
+            on_ElaborationText_cruded(){
+                this.update_elaboration()
+            }
         },
         created(){
             this.new_elaboration=Object.assign({},this.elaboration)

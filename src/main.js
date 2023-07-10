@@ -9,7 +9,12 @@ import "echarts";
 import ECharts from 'vue-echarts'
 Vue.component('v-chart', ECharts)
 
+// MAvon editor
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+Vue.use(mavonEditor)
 
+//Flag-icons
 import 'flag-icons/css/flag-icons.min.css'
 
 Vue.use(VueRouter);

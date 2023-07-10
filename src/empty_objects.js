@@ -209,6 +209,14 @@ export function empty_elaborations(){
     }
 }
 
+export function empty_elaborations_texts(){
+    return {
+        elaboration:null,
+        text: "",
+    }
+}
+
+
 export function empty_elaborations_products_in(){
     return {
         products: null,
