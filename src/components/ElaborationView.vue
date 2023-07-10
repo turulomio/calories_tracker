@@ -39,7 +39,7 @@
                         </v-tab-item>
                         <v-tab-item key="text">      
                             <v-card outlined>         
-                                <ElaborationText elaboration="new_elaboration" :key="key" @cruded="on_ElaborationText_cruded" />
+                                <ElaborationText :elaboration="new_elaboration" :key="key" @cruded="on_ElaborationText_cruded" />
                             </v-card>
                         </v-tab-item>
                         <v-tab-item key="steps">  
@@ -174,6 +174,7 @@
             update_elaboration(){
                 return axios.get(this.new_elaboration.url, this.myheaders())
                 .then((response) => {
+                    console.log("UPDATE_ELABORTATIN" , response.data)
                     this.new_elaboration=response.data
                     this.key=this.key+1
                }, (error) => {
@@ -222,8 +223,8 @@
                 this.dialog_finalamount=false
             },
 
-            on_ElaborationText_cruded(){
-                this.update_elaboration()
+            async on_ElaborationText_cruded(){
+                await this.$emit("cruded")
             }
         },
         created(){

@@ -101,20 +101,14 @@
 
                 ]
             },
-            on_TableRecipesLinks_cruded(){
-                this.update_recipe()
+            async on_TableRecipesLinks_cruded(){
+                await this.update_recipe()
             },
-            on_TableElaborations_cruded(){
-                return axios.get(`${this.$store.state.apiroot}/api/elaborations/?recipes=${this.new_recipe.url}`, this.myheaders())
-                .then((response) => {
-                    this.new_recipe.elaborations=response.data
-                    this.key=this.key+1
-               }, (error) => {
-                    this.parseResponseError(error)
-                });
+            async on_TableElaborations_cruded(){
+                await this.update_recipe()
+                console.log("actualizada")
             },
             update_recipe(){
-
                 axios.get(this.recipe.url, this.myheaders())
                 .then((response) => {
                     this.new_recipe=response.data

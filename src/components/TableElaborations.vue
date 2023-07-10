@@ -17,9 +17,9 @@
             </v-card>
         </v-dialog> 
         <!-- Item VIEW DIALOG -->
-        <v-dialog v-model="elaboration_view_dialog" width="100%">
+        <v-dialog v-model="elaboration_view_dialog" width="100%"  @click:outside="on_ElaborationsView_clickoutside">
             <v-card class="pa-3">
-                <ElaborationView :elaboration="elaboration" :key="key"  @cruded="on_ElaborationsView_cruded()"></ElaborationView>
+                <ElaborationView :elaboration="elaboration" :key="key" ></ElaborationView>
             </v-card>
         </v-dialog>
     </div>
@@ -91,10 +91,9 @@
                 this.key=this.key+1
                 this.$emit("cruded")
             },
-            on_ElaborationsView_cruded(){
-                console.log("view_cruded")
-                this.key=this.key+1
-                this.$emit("cruded")
+            async on_ElaborationsView_clickoutside(){
+                console.log("Elaborations View CLICKOUTSIDE")
+                await this.$emit("cruded")
             },
             createAutomaticElaboration(item){
 
