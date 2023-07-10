@@ -41,13 +41,6 @@
                         aria-hidden="true"
                         :title="$t('Save')"
                     ></button>
-                    <button
-                        type="button"
-                        @click="on_btn_add_text('HOLA')"
-                        class="mdi-eye"
-                        aria-hidden="true"
-                        :title="$t('Add text')"
-                    ></button>
                 </template>
             </mavon-editor>
         </v-card>
@@ -144,7 +137,13 @@
                 this.on_btn_add_text(item.fullname)
             },
             on_container_click(item){
-                this.on_btn_add_text(item.name)
+                let insert_text = {
+                    prefix: "<span style='color: red;'>",
+                    subfix: '</span>',
+                    str: item.name,
+                };
+                this.$refs.me.insertText(this.$refs.me.getTextareaDom(), insert_text)
+                this.$refs.me.getTextareaDom().selectionStart=this.$refs.me.getTextareaDom().selectionEnd
             },
         },
         created(){
