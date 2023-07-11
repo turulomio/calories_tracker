@@ -1,4 +1,5 @@
 <template>
+    <div>
     <div class="d-flex" >
 
         <v-card width="20%" 
@@ -45,6 +46,13 @@
             </mavon-editor>
         </v-card>
     </div>
+        <p v-html="$refs.me?.d_value"></p>
+        <p> VALUE {{ $refs.me?.d_value }}</p>
+        <p> HTMLCODE: {{ $refs.me?.d_words.htmlcode}}</p>
+        <p> RENDER: {{ $refs.me?.d_render}}</p>
+        TEXT<p v-html="text"></p>
+        POSTprocess<p v-html="pp_text"></p>
+    </div>
 </template>
 <script>
     import axios from 'axios'
@@ -61,6 +69,7 @@
         data(){ 
             return{
                 text:"",
+                pp_text:"",
                 key:0,
 
                 toolbars: {
@@ -123,28 +132,27 @@
                     })
                 }
             },
-            on_btn_add_text(text){
-                console.dir(this.$refs.me)
+            on_ingredient_click(item){
                 let insert_text = {
                     prefix: "",
                     subfix: '',
-                    str: text,
+                    str: "[Ingredient#"+item.id+  "#"  + item.fullname + "]",
                 };
                 this.$refs.me.insertText(this.$refs.me.getTextareaDom(), insert_text)
                 this.$refs.me.getTextareaDom().selectionStart=this.$refs.me.getTextareaDom().selectionEnd
-            },
-            on_ingredient_click(item){
-                this.on_btn_add_text(item.fullname)
             },
             on_container_click(item){
                 let insert_text = {
-                    prefix: "<span style='color: red;'>",
-                    subfix: '</span>',
-                    str: item.name,
+                    prefix: "",
+                    subfix: '',
+                    str: "[Container#"+item.id+  "#"  + item.name + "]",
                 };
                 this.$refs.me.insertText(this.$refs.me.getTextareaDom(), insert_text)
                 this.$refs.me.getTextareaDom().selectionStart=this.$refs.me.getTextareaDom().selectionEnd
             },
+            post_process(){
+
+            }
         },
         created(){
             if (this.elaboration.elaborations_texts){
