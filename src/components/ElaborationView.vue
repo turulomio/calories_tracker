@@ -69,7 +69,7 @@
         <!-- Final amount DIALOG -->
         <v-dialog v-model="dialog_finalamount" width="70%">
             <v-card class="pa-3">
-                <ElaborationsFinalAmountFromPot :elaboration="new_elaboration" :key="key"  @cruded="on_ElaborationsFinalAmountFromPot_cruded"/>
+                <ElaborationsFinalAmount :elaboration="new_elaboration" :key="key"  @cruded="on_ElaborationsFinalAmount_cruded"/>
             </v-card>
         </v-dialog>
     </div>
@@ -84,11 +84,11 @@
     import TableElaborationsExperiences from './TableElaborationsExperiences.vue'
     import TableElaborationsIngredients from './TableElaborationsIngredients.vue'
     import TableElaborationsIngredientsNI from './TableElaborationsIngredientsNI.vue'
-    import ElaborationsFinalAmountFromPot from './ElaborationsFinalAmountFromPot.vue'
+    import ElaborationsFinalAmount from './ElaborationsFinalAmount.vue'
     import ElaborationText from './ElaborationText.vue'
     export default {
         components: {
-            ElaborationsFinalAmountFromPot,
+            ElaborationsFinalAmount,
             ElaborationText,
             TableElaborationsIngredients,
             MyMenuInline,
@@ -219,8 +219,9 @@
                 this.dialog_finalamount=true
                 this.key=this.key+1
             },
-            on_ElaborationsFinalAmountFromPot_cruded(){
+            on_ElaborationsFinalAmount_cruded(){
                 this.dialog_finalamount=false
+                this.update_elaboration()
             },
 
             async on_ElaborationText_cruded(){
