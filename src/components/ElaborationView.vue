@@ -15,6 +15,7 @@
                         <v-tab key="nutritional"><v-icon left>mdi-apple</v-icon>{{ $t('Nutritional information') }}<v-badge v-if="new_elaboration.elaborations_products_in.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_products_in.length"/></v-tab>
                         <v-tab key="containers"><v-icon left>mdi-apple</v-icon>{{ $t('Containers') }}<v-badge v-if="new_elaboration.elaborations_containers.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_containers.length"/></v-tab>
                         <v-tab key="text"><v-icon left>mdi-apple</v-icon>{{ $t('Text') }}<v-badge v-if="new_elaboration.text?.length>0" color="error" class="ml-2" content="1"/></v-tab>
+                        <v-tab key="tiptap"><v-icon left>mdi-apple</v-icon>{{ $t('TipTap') }}<v-badge v-if="new_elaboration.text?.length>0" color="error" class="ml-2" content="1"/></v-tab>
                         <v-tab key="steps"><v-icon left>mdi-apple</v-icon>{{ $t('Steps') }}<v-badge v-if="new_elaboration.elaborations_steps.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_steps.length"/></v-tab>
                         <v-tab key="experiences"  v-if="!elaboration.automatic"><v-icon left>mdi-apple</v-icon>{{ $t('Experiences') }}<v-badge v-if="new_elaboration.elaborations_experiences.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_experiences.length"/></v-tab>
                         <v-tabs-slider color="yellow"></v-tabs-slider>
@@ -40,6 +41,11 @@
                         <v-tab-item key="text">      
                             <v-card outlined>         
                                 <ElaborationText :elaboration="new_elaboration" :key="key" @cruded="on_ElaborationText_cruded" />
+                            </v-card>
+                        </v-tab-item>
+                        <v-tab-item key="tiptap">      
+                            <v-card outlined>         
+                                <ElaborationTextTipTap :elaboration="new_elaboration" :key="key" @cruded="on_ElaborationText_cruded" />
                             </v-card>
                         </v-tab-item>
                         <v-tab-item key="steps">  
@@ -86,6 +92,7 @@
     import TableElaborationsIngredientsNI from './TableElaborationsIngredientsNI.vue'
     import ElaborationsFinalAmount from './ElaborationsFinalAmount.vue'
     import ElaborationText from './ElaborationText.vue'
+    import ElaborationTextTipTap from './ElaborationTextTipTap.vue'
     export default {
         components: {
             ElaborationsFinalAmount,
@@ -96,6 +103,7 @@
             TableElaborationsSteps,
             TableElaborationsExperiences,
             TableElaborationsIngredientsNI,
+            ElaborationTextTipTap,
         },
         props: {
             

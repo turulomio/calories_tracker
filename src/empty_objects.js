@@ -211,7 +211,7 @@ export function empty_elaborations(){
 
 export function empty_elaborations_texts(){
     return {
-        elaboration:null,
+        elaborations:null,
         text: "",
     }
 }

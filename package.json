@@ -11,6 +11,11 @@
   },
   "dependencies": {
     "@intlify/vue-i18n-loader": "^1.1.0",
+    "@tiptap/extension-color": "^2.0.3",
+    "@tiptap/extension-text-style": "^2.0.3",
+    "@tiptap/pm": "^2.0.3",
+    "@tiptap/starter-kit": "^2.0.3",
+    "@tiptap/vue-2": "^2.0.3",
     "argparse": "^2.0.1",
     "axios": "^1.4.0",
     "core-js": "^3.31.1",

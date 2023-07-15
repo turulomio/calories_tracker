@@ -113,7 +113,7 @@
             on_btn_save_click(a,b,c){ 
                 console.log(a,b,c)
                 var elaboration_text={
-                    elaboration: this.elaboration.url,
+                    elaborations_text: this.elaboration.url,
                     text: this.text
                 }
                 console.log(elaboration_text)
