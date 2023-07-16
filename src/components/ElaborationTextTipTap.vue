@@ -101,8 +101,11 @@
     <v-btn @click="on_btn_save_click" >
       save
     </v-btn>
+    <v-btn @click="print" >
+      Print
+    </v-btn>
   </div>
-            <editor-content ref="me" :editor="editor" :key="key"  >
+            <editor-content id="editor" ref="me" :editor="editor" :key="key"  >
             </editor-content>
         </v-card>
     </div>
@@ -133,6 +136,7 @@ import TextStyle from "@tiptap/extension-text-style";
             return{
                 editor:null,
                 key:0,
+                html_code:"",
 
             }
         },
@@ -168,7 +172,10 @@ import TextStyle from "@tiptap/extension-text-style";
             },
             post_process(){
 
-            }
+            },
+            async print () {
+              await this.$htmlToPaper("editor");
+            },
         },
         created(){
             if (this.elaboration.elaborations_texts){

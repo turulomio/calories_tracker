@@ -28,6 +28,7 @@
     "vue": "^2.7.14",
     "vue-cli-plugin-vuetify": "^2.5.8",
     "vue-echarts": "^6.6.0",
+    "vue-html-to-paper": "^1.4.5",
     "vue-i18n": "^8.27.2",
     "vue-router": "^3.5.3",
     "vuetify": "^2.6.14",
