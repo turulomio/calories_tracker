@@ -144,7 +144,7 @@ import TextStyle from "@tiptap/extension-text-style";
             on_btn_save_click(a,b,c){ 
                 console.log(a,b,c)
                 var elaboration_text={
-                    elaborations_text: this.elaboration.url,
+                    elaborations: this.elaboration.url,
                     text: this.editor.getHTML()
                 }
                 console.log(elaboration_text)
@@ -181,10 +181,9 @@ import TextStyle from "@tiptap/extension-text-style";
             if (this.elaboration.elaborations_texts){
                 this.text=this.elaboration.elaborations_texts.text
             }
-            console.log(this.elaboration.elaborations_containers)
 
             this.editor = new Editor({
-                content: '',
+                content: this.text,
                 extensions: [
                     StarterKit, Color,TextStyle
                 ],

@@ -22,7 +22,6 @@
     "echarts": "^5.4.2",
     "flag-icons": "^6.7.0",
     "fraction.js": "^4.2.0",
-    "mavon-editor": "^2.10.4",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",
     "vue": "^2.7.14",
