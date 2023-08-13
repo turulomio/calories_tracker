@@ -13,9 +13,9 @@
                         <v-list-item-icon>
                             <v-icon >mdi-eye</v-icon>
                         </v-list-item-icon>
-                        <v-list-item-content>
+                        
                             <v-list-item-title >{{ item.fullname }}</v-list-item-title>
-                        </v-list-item-content>
+                        
                     </v-list-item>
                 </v-list-item-group>
                 <v-subheader>{{ $t("Containers") }}</v-subheader>
@@ -25,9 +25,9 @@
                         <v-list-item-icon>
                             <v-icon >mdi-eye</v-icon>
                         </v-list-item-icon>
-                        <v-list-item-content>
+                        
                             <v-list-item-title >{{ item.name }}</v-list-item-title>
-                        </v-list-item-content>
+                        
                     </v-list-item>
                 </v-list-item-group>
             </v-list>

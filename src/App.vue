@@ -5,51 +5,30 @@
                 <v-list>
                 
                     <v-list-item>
-                        <v-list-item-content>
+                        
                             <v-list-item-title class="title">Calories Tracker</v-list-item-title>
                             <v-list-item-subtitle>{{ store().version }} ({{ store().versiondate.toISOString().slice(0,10)}})</v-list-item-subtitle>
                             <!-- <v-list-item-subtitle>{{ store().settings.first_name }} {{store().settings.last_name}}</v-list-item-subtitle> -->
                             <v-list-item-subtitle class="boldred" v-if="store().catalog_manager"><span class="vuered">{{ $t("With catalog manager role") }}</span></v-list-item-subtitle>
-                        </v-list-item-content>
+                        
                     </v-list-item>
 
                     <v-divider></v-divider>
 
 <!--                     HOME -->
-                    <v-list-item link router :to="{ name: 'home'}">
-                        <v-list-item-icon><v-icon color="#757575;">mdi-home</v-icon></v-list-item-icon>
-                        <v-list-item-title>Home</v-list-item-title>
-                    </v-list-item>
+                    <v-list-item link router :to="{ name: 'home'}" prepend-icon="mdi-home" :title="$t('Home')" />
 <!--                    BIOMETRICS -->
-                    <v-list-item link router :to="{ name: 'biometrics'}" v-if="store().logged">
-                        <v-list-item-icon><v-icon color="#757575;">mdi-human-male-height</v-icon></v-list-item-icon>
-                        <v-list-item-title>{{ $t("Biometrics")}}</v-list-item-title>
-                    </v-list-item>
+                    <v-list-item link router :to="{ name: 'biometrics'}" v-if="store().logged"  prepend-icon="mdi-human-male-height" :title="$t('Biometrics')" />
 <!--                    COMPANIES -->
-                    <v-list-item link router :to="{ name: 'companies'}" v-if="store().logged">
-                        <v-list-item-icon><v-icon color="#757575;">mdi-domain</v-icon></v-list-item-icon>
-                        <v-list-item-title>{{ $t("Companies")}}</v-list-item-title>
-                    </v-list-item>
+                    <v-list-item link router :to="{ name: 'companies'}" v-if="store().logged" prepend-icon="mdi-domain" :title="$t('Companies')" />
 <!--                    PRODUCTS -->
-                    <v-list-item link router :to="{ name: 'products'}" v-if="store().logged">
-                        <v-list-item-icon><v-icon color="#757575;">mdi-apple</v-icon></v-list-item-icon>
-                        <v-list-item-title>{{ $t("Products")}}</v-list-item-title>
-                    </v-list-item>
+                    <v-list-item link router :to="{ name: 'products'}" v-if="store().logged" prepend-icon="mdi-apple" :title="$t('Products')" />
 <!--                    MEALS -->
-                    <v-list-item link router :to="{ name: 'meals'}" v-if="store().logged">
-                        <v-list-item-icon><v-icon color="#757575;">mdi-food-turkey</v-icon></v-list-item-icon>
-                        <v-list-item-title>{{ $t("Meals")}}</v-list-item-title>
-                    </v-list-item>
+                    <v-list-item link router :to="{ name: 'meals'}" v-if="store().logged" prepend-icon="mdi-food-turkey" :title="$t('Meals')" />
 <!--                    RECIPES -->
-                    <v-list-item link router :to="{ name: 'recipes'}" v-if="store().logged">
-                        <v-list-item-icon><v-icon color="#757575;">mdi-book-open-variant</v-icon></v-list-item-icon>
-                        <v-list-item-title>{{ $t("Recipes")}}</v-list-item-title>
-                    </v-list-item>
+                    <v-list-item link router :to="{ name: 'recipes'}" v-if="store().logged"  prepend-icon="mdi-book-open-variant" :title="$t('Recipes')" />
 <!--                    POTS -->
-                    <v-list-item link router :to="{ name: 'pots'}" v-if="store().logged">
-                        <v-list-item-icon><v-icon color="#757575;">mdi-pot</v-icon></v-list-item-icon>
-                        <v-list-item-title>{{ $t("Pots")}}</v-list-item-title>
-                    </v-list-item>
+                    <v-list-item link router :to="{ name: 'pots'}" v-if="store().logged" prepend-icon="mdi-pot" :title="$t('Pot')" />
 <!--                     REPORTS -->
                     <v-list-group :value="false" prepend-icon="mdi-chart-box-outline"  v-if="store().logged">
                         <template v-slot:activator>
@@ -75,26 +54,14 @@
                         </v-list-item>
                     </v-list-group>    
 <!--                     HELP -->
-                    <v-list-group :value="false" prepend-icon="mdi-lifebuoy">
-                        <template v-slot:activator>
-                            <v-list-item-title>{{ $t("Help") }}</v-list-item-title>
+                    <v-list-group value="Help" >
+                        <template v-slot:activator="{ props }">
+                            <v-list-item v-bind="props" prepend-icon="mdi-lifebuoy" :title="$t('Help')"></v-list-item>
                         </template>
-                      
-                        <v-list-item link router :to="{ name: 'about'}">
-                            <v-list-item-title>{{ $t("About")}}</v-list-item-title>
-                        </v-list-item>
-
-                        <v-list-item link router :to="{ name: 'statistics'}" v-if="store().logged">
-                            <v-list-item-title>{{ $t("Statistics")}}</v-list-item-title>
-                        </v-list-item>
-
-                        <v-list-item  href="https://github.com/turulomio/calories_tracker/" target="_blank">
-                            <v-list-item-title>{{ $t('Calories Tracker Github') }}</v-list-item-title>
-                        </v-list-item>
-                        
-                        <v-list-item href="https://github.com/turulomio/django_calories_tracker/" target="_blank">
-                            <v-list-item-title>{{ $t('Django Calories Tracker Github') }}</v-list-item-title>
-                        </v-list-item>
+                        <v-list-item link router :to="{ name: 'about'}" :title="$t('About')" />
+                        <v-list-item  v-if="store().logged" link router :to="{ name: 'statistics'}" :title="$t('Statistics')" />
+                        <v-list-item  href="https://github.com/turulomio/calories_tracker/" target="_blank" :title="$t('Calories Tracker Github')" />
+                        <v-list-item  href="https://github.com/turulomio/django_calories_tracker/" target="_blank" :title="$t('Django Calories Tracker Github')" />
                     </v-list-group>
                 </v-list>
             </v-card>

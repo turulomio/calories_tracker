@@ -15,7 +15,7 @@
             }
         },
         mounted(){
-            this.$refs.github.innerHTML=this.$t("Project main page is located in Github, where you can help me coding or translating to different languages.").replace("Github",'<a href="https://github.com/turulomio/calories_tracker">Github</a>')
+            //this.$refs.github.innerHTML=this.$t("Project main page is located in Github, where you can help me coding or translating to different languages.").replace("Github",'<a href="https://github.com/turulomio/calories_tracker">Github</a>')
         }
     }
 </script>
