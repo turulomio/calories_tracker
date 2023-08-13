@@ -53,7 +53,7 @@
             acceptDialog(){             
                 if( this.$refs.form.validate()==false) return
                 if (this.mode=="C"){
-                    axios.post(`${this.$store.state.apiroot}/api/elaborations_experiences/`, this.new_experience,  this.myheaders())
+                    axios.post(`${this.store().apiroot}/api/elaborations_experiences/`, this.new_experience,  this.myheaders())
                     .then(() => {
                         this.$emit("cruded")
                     }, (error) => {

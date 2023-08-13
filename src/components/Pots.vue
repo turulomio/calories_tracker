@@ -112,10 +112,10 @@
                 this.update_pots() 
             },
             update_pots(){
-                this.$store.dispatch("getPots")
+                this.store().dispatch("getPots")
                 .then(() => {             
                     var r=[]
-                    this.$store.state.pots.forEach(p=>{
+                    this.store().pots.forEach(p=>{
                         if (p.name.toLowerCase().includes(this.search.toLowerCase())){
                             p.thumbnail=require("@/assets/no_image.jpg")
                             p.item_key=null//Used for table-item key

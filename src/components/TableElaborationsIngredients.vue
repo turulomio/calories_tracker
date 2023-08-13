@@ -3,7 +3,7 @@
         <v-data-table dense :headers="products_in_headers()" :items="elaboration.elaborations_products_in" sort-by="final_grams" :sort-desc="['final_grams']" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" height="50vh" fixed-header>
             <template v-slot:[`item.products`]="{ item }"><div v-html="products_html_fullname(item.products,4)"></div></template>
             <template v-slot:[`item.amount`]="{ item }">{{ fraction(item.amount).toFraction(true)}}</template>
-            <template v-slot:[`item.measures_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('measures_types', item.measures_types,'localname')"></div></template> 
+            <template v-slot:[`item.measures_types`]="{ item }"><div v-html="store().getters.getObjectPropertyByUrl('measures_types', item.measures_types,'localname')"></div></template> 
             <template v-slot:[`item.ni`]="{ item }"><v-icon small v-if="item.ni" >mdi-check-outline</v-icon></template>
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="editProductIn(item)">mdi-pencil</v-icon>

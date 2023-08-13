@@ -57,7 +57,7 @@
                     this.new_pot.photo_content=this.pasted_image.image
                 }
                 if (this.mode=="C"){
-                    axios.post(`${this.$store.state.apiroot}/api/pots/`, this.new_pot,  this.myheaders())
+                    axios.post(`${this.store().apiroot}/api/pots/`, this.new_pot,  this.myheaders())
                     .then(() => {
                         this.$emit("cruded")
                     }, (error) => {

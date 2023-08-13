@@ -97,7 +97,7 @@
                     {title:this.$t('Is a recipe for guests?'), value: this.new_recipe.guests},
                     {title:this.$t('Do you want to make it soon?'), value: this.new_recipe.soon},
                     {title:this.$t('Id'), value: this.new_recipe.id},
-                    {title:this.$t('Food type'), value: this.$store.getters.getObjectPropertyByUrl("food_types", this.new_recipe.food_types,"localname")},
+                    {title:this.$t('Food type'), value: this.store().getters.getObjectPropertyByUrl("food_types", this.new_recipe.food_types,"localname")},
 
                 ]
             },

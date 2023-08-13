@@ -3,7 +3,7 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-autocomplete :readonly="mode=='D'" :items="$store.state.steps" v-model="new_elaborations_step.steps" item-text="localname" item-value="url" :label="$t('Select a step')" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="store().steps" v-model="new_elaborations_step.steps" item-text="localname" item-value="url" :label="$t('Select a step')" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-text-field :readonly="mode=='D'" v-model="new_elaborations_step.duration" :label="$t('Set step duration')" :placeholder="$t('Set step duration')" :rules="RulesString(10,true)" counter="10"/>
                 <WidgetTemperatures v-if="step.can_temperatures" :readonly="mode=='D'" v-model="widget_temperatures"/>
                 <WidgetStir v-if="step.can_stir" :readonly="mode=='D'" v-model="widget_stir"/>
@@ -48,7 +48,7 @@
         },        
         computed:{
             step: function(){
-                return this.$store.getters.getObjectByUrl("steps",this.new_elaborations_step.steps)
+                return this.store().getters.getObjectByUrl("steps",this.new_elaborations_step.steps)
             }
         },
         methods: {
@@ -74,7 +74,7 @@
         created(){
             this.new_elaborations_step=Object.assign({},this.elaborations_step)
             if (this.new_elaborations_step.steps == null){
-                this.new_elaborations_step.steps=this.$store.getters.getObjectPropertyById("steps",6,"url")
+                this.new_elaborations_step.steps=this.store().getters.getObjectPropertyById("steps",6,"url")
             }
             console.log(this.new_elaborations_steps)
             this.widget_temperatures={

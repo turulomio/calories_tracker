@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-row>
-            <v-autocomplete :readonly="readonly" :items="$store.state.temperatures_types" v-model="new_value.temperatures_types" :label="$t('Temperature types')" item-text="localname" item-value="url" :rules="RulesSelection(false)" @change="refresh" chips></v-autocomplete>
+            <v-autocomplete :readonly="readonly" :items="store().temperatures_types" v-model="new_value.temperatures_types" :label="$t('Temperature types')" item-text="localname" item-value="url" :rules="RulesSelection(false)" @change="refresh" chips></v-autocomplete>
             <v-text-field v-if="new_value.temperatures_types && show_text_field()" :readonly="readonly" v-model="new_value.temperatures_values" class="ml-4" :label="$t('Set temperature in ºC')" :placeholder="$t('Set temperature in ºC')" :rules="RulesInteger(5,true)" counter="5" @change="refresh"/>
             <v-select v-if="new_value.temperatures_types && !show_text_field()" :readonly="readonly" :items="lmh_items" v-model="new_value.temperatures_values" :label="$t('Select a temperature mode')" :rules="RulesSelection(true)" @change="refresh"></v-select>
         </v-row>

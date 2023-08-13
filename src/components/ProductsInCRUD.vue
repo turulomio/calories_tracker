@@ -3,7 +3,7 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-autocomplete :readonly="mode=='D'" :items="$store.state.products" v-model="newproduct_in.products" item-text="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()">
+                <v-autocomplete :readonly="mode=='D'" :items="store().products" v-model="newproduct_in.products" item-text="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()">
                     <template v-slot:item="{item}" ><div v-html="products_html_fullname(item,2)"></div></template>
                 </v-autocomplete>
                 <v-row class="pa-3">     
@@ -62,10 +62,10 @@
 
             on_products_input(){
                 if (this.newproduct_in.products==null) return
-                let product=this.$store.getters.getObjectByUrl("products",this.newproduct_in.products)
+                let product=this.store().getters.getObjectByUrl("products",this.newproduct_in.products)
                 this.products_formats=[]
                 product.formats.forEach(element => {
-                    this.products_formats.push({name: `${this.$store.getters.getObjectPropertyByUrl("formats",element.formats,"name")} (${element.amount} g)`, amount: element.amount})
+                    this.products_formats.push({name: `${this.store().getters.getObjectPropertyByUrl("formats",element.formats,"name")} (${element.amount} g)`, amount: element.amount})
                     
                 });
             },

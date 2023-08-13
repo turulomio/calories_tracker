@@ -38,7 +38,7 @@
         methods:{
             update(){
                 this.loading=true
-                axios.get(`${this.$store.state.apiroot}/api/meals/ranking/?from_date=${this.from_date}`, this.myheaders())
+                axios.get(`${this.store().apiroot}/api/meals/ranking/?from_date=${this.from_date}`, this.myheaders())
                 .then((response) => {
                     this.ranking=response.data
                     this.key=this.key+1

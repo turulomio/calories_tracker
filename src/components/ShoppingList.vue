@@ -25,7 +25,7 @@
         methods: {
             acceptDialog(){             
                 if( this.$refs.form.validate()==false) return
-                axios.post(`${this.$store.state.apiroot}/shopping_list/`, {elaborations: this.elaborations_selected}, this.myheaders())
+                axios.post(`${this.store().apiroot}/shopping_list/`, {elaborations: this.elaborations_selected}, this.myheaders())
                 .then((response) => {
                     var link = window.document.createElement('a')
                     link.href = `data:${response.data.data.mime};base64,${response.data.data.data}`
@@ -39,7 +39,7 @@
             },
         },
         created(){
-            axios.get(`${this.$store.state.apiroot}/api/elaborations/`, this.myheaders())
+            axios.get(`${this.store().apiroot}/api/elaborations/`, this.myheaders())
             .then((response) => {
                 this.elaborations=response.data
             }, (error) => {

@@ -1,16 +1,24 @@
 import moment from 'moment-timezone'
+import { useStore } from '../../store.js'
 
 
+export function store(){
+    return useStore()    
+}
 
-// Function to use "{0} {1}".format(a, b) style
+
+// Due to problems with translations I made this function to help i18n
+// Function to use "[0] [1]".format(a, b) style
 String.prototype.format = function() {
-    var formatted = this;
+    var formatted = this
     for (var i = 0; i < arguments.length; i++) {
-        var regexp = new RegExp('\\{'+i+'\\}', 'gi');
-        formatted = formatted.replace(regexp, arguments[i]);
+        var search=`[${i}]`
+        var replace=`${arguments[i]}`
+        formatted = formatted.replace(search, replace );
     }
     return formatted;
 };
+
 
 export function my_round(num, decimals = 2) {
     return Math.round(num*Math.pow(10, decimals))/Math.pow(10, decimals)
@@ -32,8 +40,8 @@ export function localtime(value){
 export function myheaders(){
     return {
         headers:{
-            'Authorization': `Token ${this.$store.state.token}`,
-            'Accept-Language': `${this.$i18n.locale}-${this.$i18n.locale}`,
+            'Authorization': `Token ${store().token}`,
+            'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
             'Content-Type':'application/json'
         }
     }
@@ -43,7 +51,7 @@ export function myheaders(){
 export function myheaders_noauth(){
     return {
         headers:{
-            'Accept-Language': `${this.$i18n.locale}-${this.$i18n.locale}`,
+            'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
             'Content-Type':'application/json'
         }
     }
@@ -52,10 +60,72 @@ export function myheaders_noauth(){
 export function myheaders_formdata(){
     return {
         headers:{
-            'Authorization': `Token ${this.$store.state.token}`,
-            'Accept-Language': `${this.$i18n.locale}-${this.$i18n.locale}`,
+            'Authorization': `Token ${store().token}`,
+            'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
             'Content-Type': 'multipart/form-data'
         }
+    }
+}
+
+// returns true if everything is ok
+// return false if there is something wrong
+export function parseResponse(response){
+    if (response.status==200){ //Good connection
+        if (response.data == "Wrong credentials"){
+            this.store().token=null
+            this.store().logged=false
+            alert(this.$t("Wrong credentials"))
+            return false
+        }
+        return true
+    } else if (response.status==201){// Created
+        
+    } else if (response.status==204){// Deleted
+    } else {
+        alert (`${response.status}: ${response.data}`)
+        return false
+    }
+}
+
+export function parseResponseError(error){
+    if (error.response) {
+      // Request made and server responded
+        console.log("made and responded")
+//       console.log(error.response.data);
+//       console.log(error.response.status);
+//       console.log(error.response.headers);
+        if (error.response.status == 401){
+            if (this.store().token==null){ // Not logged yet
+                alert(this.$t("Wrong credentials"))
+            } else {
+                alert (this.$t("You aren't authorized to do this request"))
+                this.store().token=null;
+                this.store().logged=false;
+                if (this.$router.currentRoute.name != "about") this.$router.push("about")
+                console.log(error.response)
+            }
+        } else if (error.response.status == 400){ // Used for developer or app errors
+            alert (this.$t("Something wrong with your request"))
+            console.log(error.response)
+        } else if (error.response.status == 403){ // Used for developer or app errors
+            alert (this.$t("You've done something forbidden"))
+            this.store().token=null;
+            this.store().logged=false;
+            if (this.$router.currentRoute.name != "about") this.$router.push("about")
+            console.log(error.response)
+        } else if (error.response.status == 500){
+            alert (this.$t("There is a server error"))
+            console.log(error.response)
+        }
+    } else if (error.request) {
+        console.log("The request was made but no response was received")
+        alert (this.$t("Server couldn't answer this request"))
+      // The request was made but no response was received
+      console.log(error.request);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+        console.log("OTROS")
+        console.log('Error', error.message);
     }
 }
 
@@ -97,58 +167,6 @@ export function sortObjectsArray(objectsArray, sortKey)
     return retVal;
 }
 
-// returns true if everything is ok
-// return false if there is something wrong
-export function parseResponse(response){
-    if (response.status==200){ //Good connection
-        if (response.data == "Wrong credentials"){
-            this.$store.state.token=null
-            this.$store.state.logged=false
-            alert(this.$t("Wrong credentials"))
-            return false
-        }
-        return true
-    } else if (response.status==201){// Created
-        
-    } else if (response.status==204){// Deleted
-    } else {
-        alert (`${response.status}: ${response.data}`)
-        return false
-    }
-}
-
-export function parseResponseError(error){
-    if (error.response) {
-      // Request made and server responded
-        console.log("made and responded")
-//       console.log(error.response.data);
-//       console.log(error.response.status);
-//       console.log(error.response.headers);
-        if (error.response.status == 401){
-            alert (this.$t("You aren't authorized to do this request"))
-            this.$store.state.token=null;
-            this.$store.state.logged=false;
-            if (this.$router.currentRoute.name != "home") this.$router.push("home")
-            console.log(error.response)
-        } else if (error.response.status == 400){ // Used for developer or app errors
-            alert (this.$t("Something wrong with your request"))
-            console.log(error.response)
-        } else if (error.response.status == 500){
-            alert (this.$t("There is a server error"))
-            console.log(error.response)
-        }
-        
-    } else if (error.request) {
-        console.log("The request was made but no response was received")
-        alert (this.$t("Server couldn't answer this request"))
-      // The request was made but no response was received
-      console.log(error.request);
-    } else {
-      // Something happened in setting up the request that triggered an Error
-        console.log("OTROS")
-        console.log('Error', error.message);
-    }
-}
 
 export function arrayobjects_to_stringofstrings(l, key){
     var s=""
@@ -219,7 +237,7 @@ export function ifnullempty(value){
 
 // Generate a hyperlinked_url (DRF hyperlinked url) from model and id uses $sotre for apiroot
 export function hyperlinked_url(model,id){
-    return `${this.$store.state.apiroot}/api/${model}/${id}/`
+    return `${store().apiroot}/api/${model}/${id}/`
 }
 
 //Gets id (integer) from an hyperlinked_url(DRF hyperlinked ul)
@@ -250,4 +268,101 @@ export function getBase64(file) {
         // Calls reader function
         reader.readAsDataURL(file);
     })
+}
+
+
+
+
+/// OLD GETTERS
+
+export function getConceptsForDividends() { 
+    return getArrayFromMap(store().concepts).filter( o => [39,50,59,62,63,65,66,68,70,72,75,76,77].includes(o.id))
+}
+
+export function getInvestmentsActive() { 
+    return getArrayFromMap(store().investments).filter(o => o.active==true)
+}
+export function getInvestmentsByProduct(product) { 
+    return getArrayFromMap(store().investments).filter(o => o.products==product)
+}
+
+export function getOperationstypesForNewConcepts() { 
+    return getArrayFromMap(store().operationstypes).filter( o => [1,2].includes(o.id))
+}
+
+export function getOperationstypesForInvestmentsOperations() { 
+    return getArrayFromMap(store().operationstypes).filter( o => [4,5,6,8,9,10].includes(o.id))
+}
+
+
+export function getMapObjectById(catalog,id) { 
+    // If id doesn't exists return undefined
+    var url=hyperlinked_url(catalog,id)
+    var r= store()[catalog].get(url)
+    return r
+}
+
+export function getArrayFromMap(catalog){
+    //Catalog is a map
+    return Array.from(catalog).map(([,value]) => (value))
+    
+}
+
+export function getCurrencyByCode(code,default_=null) {
+    var r=store()['currencies'].find(o => o.code==code)
+    if (r==null){
+        return default_
+    } else {
+        return r
+    }
+}
+export function getCurrencyPropertyByCode(code,property,default_="???") {
+    var r=getCurrencyByCode(code)
+    if (r==null){
+        if (code=='u') return "u"
+        return default_
+    } else {
+        return r[property]
+    }
+}
+export function currency_generic_string(num, currency, locale, decimals=2){
+    if (num ==null){
+        return `- - - ${getCurrencyPropertyByCode(currency,"symbol_native")}`
+    } else {
+        return `${my_round(num,decimals).toLocaleString(locale, { minimumFractionDigits: decimals,  })} ${getCurrencyPropertyByCode(currency,"symbol_native")}`
+    }
+}
+export function currency_generic_html(num, currency, locale, decimals=2){
+    if (num<0){
+        return `<span class='vuered'>${currency_generic_string(num, currency, locale, decimals)}</span>`
+    } else {
+        return currency_generic_string(num, currency, locale, decimals)
+    }
+}
+export function getCountryNameByCode(code) { 
+    var r=store()['countries'].find(o => o.code==code)
+    if (r==null){
+        return ""
+    } else {
+        return r.name
+    }
+}
+  
+export function currency_string(num, currency, decimals=2){
+    return currency_generic_string(num, currency, localStorage.locale,decimals )
+}
+export function currency_html(num, currency, decimals=2){
+    return currency_generic_html(num, currency, localStorage.locale,decimals )
+}
+export function percentage_string(num, decimals=2){
+    return percentage_generic_string(num,localStorage.locale,decimals )
+}
+export function percentage_html(num, decimals=2){
+    return percentage_generic_html(num,localStorage.locale,decimals )
+}
+export function localcurrency_string(num, decimals=2){
+    return currency_generic_string(num, store().profile.currency, localStorage.locale,decimals )
+}
+export function localcurrency_html(num, decimals=2){
+    return currency_generic_html(num, store().profile.currency, localStorage.locale,decimals )
 }

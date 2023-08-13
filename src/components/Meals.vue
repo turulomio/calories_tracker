@@ -137,7 +137,7 @@
                                             day_meals.push(element.url)
                                         })
 
-                                        axios.post(`${this_.$store.state.apiroot}/api/meals/delete_several/`, {meals:day_meals},  this_.myheaders())
+                                        axios.post(`${this_.store().apiroot}/api/meals/delete_several/`, {meals:day_meals},  this_.myheaders())
                                         .then(() => {
                                             this_.update_all()
                                         }, (error) => {
@@ -202,8 +202,8 @@
             update_all(){
                 this.loading=true
                 axios.all([
-                    axios.get(`${this.$store.state.apiroot}/api/biometrics/?day=${this.day}`, this.myheaders()),
-                    axios.get(`${this.$store.state.apiroot}/api/meals/?day=${this.day}`, this.myheaders())
+                    axios.get(`${this.store().apiroot}/api/biometrics/?day=${this.day}`, this.myheaders()),
+                    axios.get(`${this.store().apiroot}/api/meals/?day=${this.day}`, this.myheaders())
                 ])
                 .then(([resBiometric,resMeals]) => {
                     this.meals=resMeals.data
@@ -257,11 +257,11 @@
                 return  this.my_round(sum_sodium+salt*396,0)
             },
             on_product_click(item){
-                var product=this.$store.getters.getObjectByUrl("products",item.products)
+                var product=this.store().getters.getObjectByUrl("products",item.products)
                 this.key=this.key+1
                 if (product.elaborated_products!=null){ //ELABORATED PRODUCT
                     this.elaborated_product_crud_mode="R"
-                    this.elaborated_product=this.$store.getters.getObjectByUrl("elaborated_products",product.elaborated_products)
+                    this.elaborated_product=this.store().getters.getObjectByUrl("elaborated_products",product.elaborated_products)
                     this.elaborated_product_crud_dialog=true
                 } else { // SYSTEM PRODUCTS AND PRODUCTS
                     this.product_crud_mode="R"

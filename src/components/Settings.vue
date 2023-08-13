@@ -1,5 +1,5 @@
 <template>
-    <div v-show="this.$store.state.logged">
+    <div v-show="this.store().logged">
         <div >
             <h1 class="mb-2">{{ $t("Settings") }}</h1>
             
@@ -41,12 +41,12 @@
             save_settings(){
                 if (this.$refs.form.validate()==false) return
 
-                axios.post(`${this.$store.state.apiroot}/settings/`, this.new_settings, this.myheaders())
+                axios.post(`${this.store().apiroot}/settings/`, this.new_settings, this.myheaders())
                 .then((response) => {
                     console.log(response.data)
                     if (response.data==true) {
                         alert(this.$t("Settings saved"))
-                        this.$store.dispatch("getSettings")
+                        this.store().dispatch("getSettings")
                      } else {
                           alert(this.$t("There was a problem saving settings"))
                      }
@@ -57,7 +57,7 @@
             },
         },
         created(){
-            this.new_settings=Object.assign({},this.$store.state.settings)
+            this.new_settings=Object.assign({},this.store().settings)
         }
     }
 </script>

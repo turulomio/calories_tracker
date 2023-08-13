@@ -14,7 +14,7 @@
             <template v-slot:[`item.name`]="{ item }"><div v-html="item.name"></div></template>      
             <template v-slot:[`item.last`]="{ item }">{{localtime(item.last)}}</template>      
             <template v-slot:[`item.recipes_categories`]="{ item }">{{show_categories(item)}}</template>      
-            <template v-slot:[`item.food_types`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('food_types', item.food_types,'localname')"></div></template> 
+            <template v-slot:[`item.food_types`]="{ item }"><div v-html="store().getters.getObjectPropertyByUrl('food_types', item.food_types,'localname')"></div></template> 
             <template v-slot:[`item.guests`]="{ item }"><v-icon small v-if="item.guests" >mdi-check-outline</v-icon></template>   
             <template v-slot:[`item.soon`]="{ item }"><v-icon small v-if="item.soon" >mdi-check-outline</v-icon></template>    
             <template v-slot:[`item.actions`]="{ item }">
@@ -143,7 +143,7 @@
                                 code: function(this_){
                                     this_.recipe_mode="C"
                                     this_.recipe=this_.empty_recipes()
-                                    this_.recipe.food_types=this_.$store.getters.getObjectPropertyById("food_types",19,"url")//Homemade food
+                                    this_.recipe.food_types=this_.store().getters.getObjectPropertyById("food_types",19,"url")//Homemade food
                                     this_.key=this_.key+1
                                     this_.dialog_recipes_crud=true
                                 },
@@ -298,7 +298,7 @@
             update_recipes(options){                
                 this.loading=true
                 let headers={...this.myheaders(),params: options}
-                axios.get(`${this.$store.state.apiroot}/api/recipes/?search=${this.search}`, headers)
+                axios.get(`${this.store().apiroot}/api/recipes/?search=${this.search}`, headers)
                 .then((response) => {
                     response.data.results.forEach(r=>{
                         r.thumbnail=require("@/assets/no_image.jpg")
@@ -336,7 +336,7 @@
             show_categories(item){
                 var r=""
                 item.recipes_categories.forEach(o=>{
-                    var categorie=this.$store.getters.getObjectByUrl("recipes_categories",o)
+                    var categorie=this.store().getters.getObjectByUrl("recipes_categories",o)
                         r=r+ categorie.localname + ", "
                 })
                 return r.slice(0,-2)
@@ -344,7 +344,7 @@
             addMainPhoto(item){
                 this.recipes_links=this.empty_recipes_links()
                 this.recipes_links.recipes=item.url
-                this.recipes_links.type=this.$store.getters.getObjectPropertyById("recipes_links_types", 7,"url"), // Main page
+                this.recipes_links.type=this.store().getters.getObjectPropertyById("recipes_links_types", 7,"url"), // Main page
                 this.recipes_links.description=this.$t("Main photo")
                 this.key=this.key+1
                 this.dialog_main_photo=true

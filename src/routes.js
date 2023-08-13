@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 
-import About from './components/about'
+import About from './components/About'
 import Home from './components/Home'
 import Settings from './components/Settings'
 import Statistics from './components/Statistics'
@@ -19,7 +19,7 @@ import Recipes from './components/Recipes.vue'
 
 
 export const router = createRouter({
-  mode: createWebHistory(),
+  history: createWebHistory(),
   routes: [
     { path: `${import.meta.env.BASE_URL}/`, redirect: `${import.meta.env.BASE_URL}/home/` }, 
     { path: `${import.meta.env.BASE_URL}/about/`, name: 'about', component: About },
@@ -37,4 +37,4 @@ export const router = createRouter({
     { path: `${import.meta.env.BASE_URL}/settings/`, name: 'settings', component: Settings },
     { path: `${import.meta.env.BASE_URL}/statistics/`, name: 'statistics', component: Statistics },
   ]
-});
+})

@@ -3,10 +3,10 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-autocomplete :readonly="mode=='D'" :items="$store.state.products" v-model="new_product_in.products" item-text="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()">
+                <v-autocomplete :readonly="mode=='D'" :items="store().products" v-model="new_product_in.products" item-text="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()">
                     <template v-slot:item="{item}" ><div v-html="products_html_fullname(item,2)"></div></template>
                 </v-autocomplete>
-                <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="$store.state.measures_types" v-model="new_product_in.measures_types" :label="$t('Select your measure type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="store().measures_types" v-model="new_product_in.measures_types" :label="$t('Select your measure type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
 
                 <v-row class="pa-3">     
                     <v-text-field :readonly="mode=='D'" v-model.number="new_product_in.amount" :label="$t('Set product amount')" :placeholder="$t('Set product amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
@@ -65,7 +65,7 @@
             acceptDialog(){             
                 if( this.$refs.form.validate()==false) return
                 if (this.mode=="C"){
-                    axios.post(`${this.$store.state.apiroot}/api/elaborationsproductsinthrough/`, this.new_product_in,  this.myheaders())
+                    axios.post(`${this.store().apiroot}/api/elaborationsproductsinthrough/`, this.new_product_in,  this.myheaders())
                     .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
@@ -95,10 +95,10 @@
 
             on_products_input(){
                 if (this.new_product_in.products==null) return
-                let product=this.$store.getters.getObjectByUrl("products",this.new_product_in.products)
+                let product=this.store().getters.getObjectByUrl("products",this.new_product_in.products)
                 this.products_formats=[]
                 product.formats.forEach(element => {
-                    this.products_formats.push({name: `${this.$store.getters.getObjectPropertyByUrl("formats",element.formats,"name")} (${element.amount} g)`, amount: element.amount})
+                    this.products_formats.push({name: `${this.store().getters.getObjectPropertyByUrl("formats",element.formats,"name")} (${element.amount} g)`, amount: element.amount})
                     
                 });
             },

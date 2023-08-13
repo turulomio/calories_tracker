@@ -37,8 +37,8 @@
                     </template>
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon small @click="linkCompany(item)">mdi-link-variant</v-icon>   
-                        <v-icon class="mr-1" small @click="editSystemCompany(item)"  color="#AA0000" v-if="$store.state.catalog_manager">mdi-pencil</v-icon>
-                        <v-icon class="mr-1" small @click="deleteSystemCompany(item)" color="#AA0000" v-if="$store.state.catalog_manager">mdi-delete</v-icon>
+                        <v-icon class="mr-1" small @click="editSystemCompany(item)"  color="#AA0000" v-if="store().catalog_manager">mdi-pencil</v-icon>
+                        <v-icon class="mr-1" small @click="deleteSystemCompany(item)" color="#AA0000" v-if="store().catalog_manager">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
             </v-tab-item>
@@ -128,7 +128,7 @@
                         ]
                     },
                 ]
-                if (this.$store.state.catalog_manager) r.push({
+                if (this.store().catalog_manager) r.push({
                         subheader: this.$t("System company options"),
                         children: [
                             {
@@ -191,16 +191,16 @@
             },
             update_companies(with_dispatch){
                 if (with_dispatch){
-                    return this.$store.dispatch("getCompanies")
+                    return this.store().dispatch("getCompanies")
                     .then(() => {             
-                        this.companies=this.$store.state.companies.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
+                        this.companies=this.store().companies.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
                     })
                 } else {                
-                    this.companies=this.$store.state.companies.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
+                    this.companies=this.store().companies.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
                 }
             },
             update_system_companies(){
-                return axios.get(`${this.$store.state.apiroot}/api/system_companies/?search=${this.search}`, this.myheaders())
+                return axios.get(`${this.store().apiroot}/api/system_companies/?search=${this.search}`, this.myheaders())
                 .then((response) => {
                     this.system_companies=response.data
                }, (error) => {

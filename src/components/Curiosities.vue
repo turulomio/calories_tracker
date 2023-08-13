@@ -28,7 +28,7 @@
         },        
         methods:{
             update(){
-                axios.get(`${this.$store.state.apiroot}/curiosities/`, this.myheaders())
+                axios.get(`${this.store().apiroot}/curiosities/`, this.myheaders())
                 .then((response) => {
                     this.curiosities=response.data
                 }, (error) => {

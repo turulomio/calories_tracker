@@ -205,9 +205,9 @@
                 this.key=this.key+1
 
                 this.loading=true
-                this.$store.dispatch(this.table.dispatch)
+                this.store().dispatch(this.table.dispatch)
                 .then(()=>{
-                    this.catalog_table=this.$store.state[this.table.value]
+                    this.catalog_table=this.store()[this.table.value]
                     this.loading=false
                 })
             },

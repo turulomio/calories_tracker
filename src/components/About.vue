@@ -1,18 +1,9 @@
 <template>
     <div class="paragraph">
         <h1>{{ $t(`About Calories Tracker`) }}</h1>
-        <h2>{{ `${$store.state.version} (${$store.state.versiondate.toISOString().slice(0,10)})` }}</h2>
+        <h2>{{ `${store().version} (${store().versiondate.toISOString().slice(0,10)})` }}</h2>
         
-        <v-container  class="paragraph">
-            <p>{{ $t("Calories Tracker is a personal finances application") }}<p>
-            
-            <p class="paragraph" ref="github"></p>
-            <p class="paragraph">{{ $t("Main features:") }}</p>
-            
-            <ul class="paragraph">
-                <li>{{ $t("You can manage your personal accounting.") }}</li>
-        </ul>
-        </v-container>
+            <p>{{ $t("Calories Tracker is a personal finances application") }}</p>
     </div>
 </template>
 

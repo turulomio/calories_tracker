@@ -25,10 +25,10 @@
                             {{localtime(item.datetime)}}
                         </template>             
                         <template v-slot:[`item.activities`]="{ item }">
-                            <div v-html="$store.getters.getObjectPropertyByUrl('activities',item.activities,'localname')"></div>
+                            <div v-html="store().getters.getObjectPropertyByUrl('activities',item.activities,'localname')"></div>
                         </template>         
                         <template v-slot:[`item.weight_wishes`]="{ item }">
-                            <div v-html="$store.getters.getObjectPropertyByUrl('weight_wishes',item.weight_wishes,'localname')"></div>
+                            <div v-html="store().getters.getObjectPropertyByUrl('weight_wishes',item.weight_wishes,'localname')"></div>
                         </template>     
 
 
@@ -136,9 +136,9 @@
                     r.push({title:this.$t('Date and time'), value: this.localtime(this.biometric_last.datetime)})
                     r.push({title:this.$t('Weight'), value: this.biometric_last.weight})
                     r.push({title:this.$t('Height'), value: this.biometric_last.height})
-                    r.push({title:this.$t('Weight wish'), value: this.$store.getters.getObjectPropertyByUrl("weight_wishes",this.biometric_last.weight_wishes,"localname")})
+                    r.push({title:this.$t('Weight wish'), value: this.store().getters.getObjectPropertyByUrl("weight_wishes",this.biometric_last.weight_wishes,"localname")})
                     r.push({title:this.$t('IMC status'), value: this.biometric_last.imc_comment})
-                    r.push({title:this.$t('Activity'), value: this.$store.getters.getObjectPropertyByUrl("activities",this.biometric_last.activities,"localname")})
+                    r.push({title:this.$t('Activity'), value: this.store().getters.getObjectPropertyByUrl("activities",this.biometric_last.activities,"localname")})
 
                 }
                 return r
@@ -149,7 +149,7 @@
             },
             update_biometrics(){
                 this.loading=true
-                axios.get(`${this.$store.state.apiroot}/api/biometrics/`, this.myheaders())
+                axios.get(`${this.store().apiroot}/api/biometrics/`, this.myheaders())
                 .then((response) => {
                     this.biometrics=response.data
                     if (this.biometrics.length>0) this.biometric_last=this.biometrics[this.biometrics.length - 1]

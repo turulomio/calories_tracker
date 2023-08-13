@@ -12,7 +12,7 @@
             <v-tab-item key="frompot" >
                 <v-card>
                     <v-form ref="form" v-model="form_valid" lazy-validation>
-                        <v-autocomplete :items="$store.state.pots" v-model="pot" item-text="name" item-value="url" :label="$t('Select a pot')" return-object :rules="RulesSelection(true)">
+                        <v-autocomplete :items="store().pots" v-model="pot" item-text="name" item-value="url" :label="$t('Select a pot')" return-object :rules="RulesSelection(true)">
                             <template v-slot:item="{item}" ><div v-html="pots_html(item)"></div></template>
                         </v-autocomplete>
                         <v-text-field v-model.number="weight_with_pot" :label="$t('Weight of the full pot')" :placeholder="$t('Weight of the full pot')" :rules="RulesFloatGZ(10,true,2)" counter="10"/>

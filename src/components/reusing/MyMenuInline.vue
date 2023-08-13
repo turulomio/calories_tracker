@@ -13,9 +13,9 @@ type puede ser redirection or command
                             {
                                 name:"Add a new bank",
                                 icon: "mdi-pencil",
-                                code: function(this_){
-                                    alert(this_.showActive)
-                                },
+                                code: function(){
+                                    alert(this.showActive)
+                                }.bind(this),
                             },
                         ]
                     },
@@ -29,20 +29,15 @@ type puede ser redirection or command
 
 <template>
     <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn text dark v-bind="attrs" v-on="on" style="color:darkgrey;">
+        <template  v-slot:activator="{ props }">
+            <v-btn text dark v-bind="props" style="color:darkgrey" class="elevation-0">
                 <v-icon>mdi-menu</v-icon>
             </v-btn>
         </template>
-        <v-list dense subheader >
+        <v-list density="compact" subheader >
             <div v-for="(subheader,indexsubheader) in items" :key="indexsubheader" inset>
-                <v-subheader inset>{{ subheader.subheader }}</v-subheader>
-                <v-list-item v-for="(item, index) in subheader.children" :key="index" @click="on_item_click(item)">
-                <v-list-item-icon>
-                    <v-icon>{{item.icon}}</v-icon>
-                </v-list-item-icon>
-                    {{ item.name }}
-                </v-list-item>
+                <v-list-subheader inset>{{ subheader.subheader }}</v-list-subheader>
+                <v-list-item v-for="(item, index) in subheader.children" :key="index" @click="on_item_click(item)" :prepend-icon="item.icon" :title="item.name" />
                 <v-divider></v-divider>
             </div>
         </v-list>
@@ -64,7 +59,7 @@ type puede ser redirection or command
         },
         methods: {
             on_item_click(item){
-                item.code(this.context)
+                item.code()
             },
         },
     }

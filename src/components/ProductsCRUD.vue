@@ -4,9 +4,9 @@
         <v-card class="pa-6 mt-4" style="overflow-y: scroll" :height="600" >
             <v-form ref="form" v-model="form_valid" lazy-validation >
                 <v-text-field :readonly="mode=='D'" v-model="newproduct.name" :label="$t('Set product name')" :placeholder="$t('Set product name')" :rules="RulesString(200)" counter="200"/>
-                <AutoCompleteApiIdName v-model="newproduct.companies" :url="`${this.$store.state.apiroot}/api/companies/`" :label="$t('Select a company')"></AutoCompleteApiIdName>
-                <v-autocomplete :readonly="mode=='D'" :items="$store.state.food_types" v-model="newproduct.food_types" :label="$t('Select product food type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-autocomplete :readonly="mode=='D'" :items="$store.state.additives" v-model="newproduct.additives" multiple :label="$t('Select product additives')" item-text="fullname" item-value="url" :rules="RulesSelection(true)">
+                <AutoCompleteApiIdName v-model="newproduct.companies" :url="`${this.store().apiroot}/api/companies/`" :label="$t('Select a company')"></AutoCompleteApiIdName>
+                <v-autocomplete :readonly="mode=='D'" :items="store().food_types" v-model="newproduct.food_types" :label="$t('Select product food type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="store().additives" v-model="newproduct.additives" multiple :label="$t('Select product additives')" item-text="fullname" item-value="url" :rules="RulesSelection(true)">
                     <template v-slot:item="{item}" ><div v-html="additives_html_fullname(item)"></div></template>
                 </v-autocomplete>
 
@@ -29,12 +29,12 @@
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.calcium" :label="$t('Set product calcium (mg)')" :placeholder="$t('Set product calcium (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-checkbox v-model="newproduct.glutenfree" :label="$t('Is gluten free?')"></v-checkbox>
 
-                <AutoCompleteApiIdName v-model="newproduct.version_parent" :url="`${this.$store.state.apiroot}/api/products/`" :label="$t('Select parent product')"></AutoCompleteApiIdName>
+                <AutoCompleteApiIdName v-model="newproduct.version_parent" :url="`${this.store().apiroot}/api/products/`" :label="$t('Select parent product')"></AutoCompleteApiIdName>
                 <v-text-field :readonly="mode=='D'" v-model="newproduct.version_description" :label="$t('Set product version description')" :placeholder="$t('Set product version description')" :rules="RulesString(200,false)" counter="200"/>
                 <v-checkbox v-model="newproduct.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
                 <v-card class="mt-4">
                     <v-data-table dense :headers="formats_headers" :items="newproduct.formats" sort-by="formats" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250">
-                        <template v-slot:[`item.formats`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('formats', item.formats,'name')"></div></template> 
+                        <template v-slot:[`item.formats`]="{ item }"><div v-html="store().getters.getObjectPropertyByUrl('formats', item.formats,'name')"></div></template> 
                         <template v-slot:[`item.actions`]="{ item }">
                             <v-icon small class="mr-2" @click="editFormat(item)">mdi-pencil</v-icon>
                             <v-icon small @click="deleteFormat(item)">mdi-delete</v-icon>
@@ -116,7 +116,7 @@
             acceptDialog(){             
                 if( this.$refs.form.validate()==false) return   
                 if (this.mode=="C"){
-                    axios.post(`${this.$store.state.apiroot}/api/products/`, this.newproduct,  this.myheaders())
+                    axios.post(`${this.store().apiroot}/api/products/`, this.newproduct,  this.myheaders())
                     .then((response) => {
                         console.log(response.data)
                         this.$emit("cruded")

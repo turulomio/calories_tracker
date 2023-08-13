@@ -188,8 +188,8 @@
                 return axios.post(`${this.new_elaboration.url}create_elaborated_product/`, {}, this.myheaders())
                 .then(() => {
                     Promise.all([
-                        this.$store.dispatch("getProducts"),
-                        this.$store.dispatch("getElaboratedProducts")
+                        this.store().dispatch("getProducts"),
+                        this.store().dispatch("getElaboratedProducts")
                         ])
                         .then(() => {
                             alert(this.$t("Elaborated product created correctly. Now you can use it to track calories in your meals"))

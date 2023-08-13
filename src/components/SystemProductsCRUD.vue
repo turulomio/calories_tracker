@@ -4,9 +4,9 @@
         <v-card class="pa-6 mt-4" style="overflow-y: scroll" :height="600" >
             <v-form ref="form" v-model="form_valid" lazy-validation >
                 <v-text-field :readonly="mode=='D'" v-model="new_system_product.name" :label="$t('Set system product name')" :placeholder="$t('Set system product name')" :rules="RulesString(200)" counter="200"/>
-                <AutoCompleteApiIdName v-model="new_system_product.system_companies" :url="`${this.$store.state.apiroot}/api/system_companies/`" :label="$t('Select a system company')"></AutoCompleteApiIdName>
-                <v-autocomplete :readonly="mode=='D'" :items="$store.state.food_types" v-model="new_system_product.food_types" :label="$t('Select system product food type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-autocomplete :readonly="mode=='D'" :items="$store.state.additives" v-model="new_system_product.additives" multiple :label="$t('Select system product additives')" item-text="fullname" item-value="url" :rules="RulesSelection(true)">
+                <AutoCompleteApiIdName v-model="new_system_product.system_companies" :url="`${this.store().apiroot}/api/system_companies/`" :label="$t('Select a system company')"></AutoCompleteApiIdName>
+                <v-autocomplete :readonly="mode=='D'" :items="store().food_types" v-model="new_system_product.food_types" :label="$t('Select system product food type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="store().additives" v-model="new_system_product.additives" multiple :label="$t('Select system product additives')" item-text="fullname" item-value="url" :rules="RulesSelection(true)">
                     <template v-slot:item="{item}" ><div v-html="additives_html_fullname(item)"></div></template>
                 </v-autocomplete>
                 <v-text-field :readonly="mode=='D'" v-model.number="new_system_product.amount" :label="$t('Set system product amount (gr)')" :placeholder="$t('Set system product amount (gr)')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
@@ -27,12 +27,12 @@
                 <v-text-field :readonly="mode=='D'" v-model.number="new_system_product.phosphor" :label="$t('Set system product phosphor (mg)')" :placeholder="$t('Set system product phosphor (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="new_system_product.calcium" :label="$t('Set system product calcium (mg)')" :placeholder="$t('Set system product calcium (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-checkbox v-model="new_system_product.glutenfree" :label="$t('Is gluten free?')"></v-checkbox>
-                <AutoCompleteApiIdName v-model="new_system_product.version_parent" :url="`${this.$store.state.apiroot}/api/products/`" :label="$t('Select parent system product')"></AutoCompleteApiIdName>
+                <AutoCompleteApiIdName v-model="new_system_product.version_parent" :url="`${this.store().apiroot}/api/products/`" :label="$t('Select parent system product')"></AutoCompleteApiIdName>
                 <v-text-field :readonly="mode=='D'" v-model="new_system_product.version_description" :label="$t('Set system product version description')" :placeholder="$t('Set system product version description')" :rules="RulesString(200,false)" counter="200"/>
                 <v-checkbox v-model="new_system_product.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
                 <v-card class="mt-4">
                     <v-data-table dense :headers="formats_headers" :items="new_system_product.formats" sort-by="formats" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250">
-                        <template v-slot:[`item.formats`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('formats', item.formats,'name')"></div></template> 
+                        <template v-slot:[`item.formats`]="{ item }"><div v-html="store().getters.getObjectPropertyByUrl('formats', item.formats,'name')"></div></template> 
                         <template v-slot:[`item.actions`]="{ item }">
                             <v-icon small class="mr-2" @click="editFormat(item)">mdi-pencil</v-icon>
                             <v-icon small @click="deleteFormat(item)">mdi-delete</v-icon>
@@ -114,7 +114,7 @@
             acceptDialog(){             
                 if( this.$refs.form.validate()==false) return   
                 if (this.mode=="C"){
-                    axios.post(`${this.$store.state.apiroot}/api/system_products/`, this.new_system_product,  this.myheaders())
+                    axios.post(`${this.store().apiroot}/api/system_products/`, this.new_system_product,  this.myheaders())
                     .then((response) => {
                         console.log(response.data)
                         this.$emit("cruded")

@@ -57,7 +57,7 @@
                 console.log(this.new_elaboration)
 
                 if (this.mode=="C"){
-                    axios.post(`${this.$store.state.apiroot}/api/elaborations/`, this.new_elaboration,  this.myheaders())
+                    axios.post(`${this.store().apiroot}/api/elaborations/`, this.new_elaboration,  this.myheaders())
                     .then(() => {
                         if (cruded==true) this.$emit("cruded")
                     }, (error) => {

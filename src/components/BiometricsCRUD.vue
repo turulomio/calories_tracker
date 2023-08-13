@@ -4,8 +4,8 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <MyDateTimePicker :readonly="deleting" v-model="newbiometric.datetime" :label="$t('Set date and time')"></MyDateTimePicker>
-                <v-autocomplete :readonly="deleting" :items="$store.state.activities" v-model="newbiometric.activities" :label="$t('Select your activity level')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-autocomplete :readonly="deleting" :items="$store.state.weight_wishes" v-model="newbiometric.weight_wishes" :label="$t('Select your weight wish')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="deleting" :items="store().activities" v-model="newbiometric.activities" :label="$t('Select your activity level')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="deleting" :items="store().weight_wishes" v-model="newbiometric.weight_wishes" :label="$t('Select your weight wish')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-text-field :readonly="deleting" v-model="newbiometric.height" :label="$t('Set your height')" :placeholder="$t('Set your height')" :rules="RulesFloatGEZ(10,true,2)" counter="10"/>
                 <v-text-field :readonly="deleting" v-model="newbiometric.weight" :label="$t('Set your weight')" :placeholder="$t('Set your weight')" :rules="RulesFloatGEZ(10,true,2)" counter="10"/>
             </v-form>
@@ -55,7 +55,7 @@
                 if( this.$refs.form.validate()==false) return   
 
                 if (this.mode=="C"){
-                    axios.post(`${this.$store.state.apiroot}/api/biometrics/`, this.newbiometric,  this.myheaders())
+                    axios.post(`${this.store().apiroot}/api/biometrics/`, this.newbiometric,  this.myheaders())
                     .then(() => {
                         this.$emit("cruded")
                     }, (error) => {

@@ -14,7 +14,6 @@ import {
     parseNumber,
     myheaders_formdata,
     my_round,
-    store,
     percentage_string,
     percentage_generic_html,
     percentage_generic_string, 
@@ -35,8 +34,11 @@ import {
     RulesFloatGZ, 
     RulesFloatGEZ, 
     RulesFloatLEZ, 
-} from './rules.js'
+} from './components/reusing/rules.js'
 
+import {
+    store,
+} from './functions.js'
 
 
 const mixin = {
@@ -58,6 +60,7 @@ const mixin = {
         parseNumber,
         parseResponse,
         parseResponseError,
+        store,
         listobjects_average_ponderated,
         listobjects_sum,
         RulesDate,

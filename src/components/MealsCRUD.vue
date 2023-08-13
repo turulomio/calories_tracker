@@ -4,7 +4,7 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <MyDateTimePicker :readonly="mode=='D'" v-model="newmeal.datetime" :label="$t('Set transfer date and time')"></MyDateTimePicker>
-                <v-autocomplete :readonly="mode=='D'" :items="$store.state.products" v-model="newmeal.products" item-text="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()">
+                <v-autocomplete :readonly="mode=='D'" :items="store().products" v-model="newmeal.products" item-text="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()">
                     <template v-slot:item="{item}" ><div v-html="products_html_fullname(item,2)"></div></template>
                 </v-autocomplete>
                 <v-row class="pa-3">     
@@ -66,7 +66,7 @@
                 if( this.$refs.form.validate()==false) return
 
                 if (this.mode=="C"){
-                    axios.post(`${this.$store.state.apiroot}/api/meals/`, this.newmeal,  this.myheaders())
+                    axios.post(`${this.store().apiroot}/api/meals/`, this.newmeal,  this.myheaders())
                     .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
@@ -96,9 +96,9 @@
             on_products_input(){
                 if (this.newmeal.products==null) return
                 this.products_formats=[]
-                let product=this.$store.getters.getObjectByUrl("products",this.newmeal.products)
+                let product=this.store().getters.getObjectByUrl("products",this.newmeal.products)
                 product.formats.forEach(element => {
-                    this.products_formats.push({name: `${this.$store.getters.getObjectPropertyByUrl("formats",element.formats,"name")} (${element.amount} g)`, amount: element.amount})
+                    this.products_formats.push({name: `${this.store().getters.getObjectPropertyByUrl("formats",element.formats,"name")} (${element.amount} g)`, amount: element.amount})
                     
                 });
             },

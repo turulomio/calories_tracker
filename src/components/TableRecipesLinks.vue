@@ -2,7 +2,7 @@
     <div>
         <v-data-table dense :headers="table_headers" :items="recipe.recipes_links" class="elevation-1" disable-pagination  hide-default-footer sort-by="date" fixed-header :height="$attrs.height" ref="table_recipes_links">
             <template v-slot:[`item.photo`]="{ item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px"/></template>
-            <template v-slot:[`item.type`]="{ item }"><div v-html="$store.getters.getObjectPropertyByUrl('recipes_links_types', item.type,'localname')"></div></template> 
+            <template v-slot:[`item.type`]="{ item }"><div v-html="store().getters.getObjectPropertyByUrl('recipes_links_types', item.type,'localname')"></div></template> 
             <template v-slot:[`item.link`]="{ item }"><div @click="on_link_click(item)">{{item.link}}</div></template> 
             <template v-slot:[`item.mime`]="{ item }">{{ show_mime(item)}}</template> 
             <template v-slot:[`item.size`]="{ item }">{{ show_size(item)}}</template> 
@@ -63,7 +63,7 @@
             on_new_click(type=3){
                 this.recipes_links=this.empty_recipes_links()
                 this.recipes_links.recipes=this.recipe.url
-                this.recipes_links.type=this.$store.getters.getObjectPropertyById("recipes_links_types", type,"url"), // Web page link
+                this.recipes_links.type=this.store().getters.getObjectPropertyById("recipes_links_types", type,"url"), // Web page link
                 this.recipes_links_crud_mode="C"
                 this.key=this.key+1
                 this.recipes_links_crud_dialog=true

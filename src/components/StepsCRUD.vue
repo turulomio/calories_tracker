@@ -59,7 +59,7 @@
                 if( this.$refs.form.validate()==false) return
 
                 if (this.mode=="C"){
-                    axios.post(`${this.$store.state.apiroot}/api/steps/`, this.new_item,  this.myheaders())
+                    axios.post(`${this.store().apiroot}/api/steps/`, this.new_item,  this.myheaders())
                     .then(() => {
                         this.$emit("cruded")
                     }, (error) => {

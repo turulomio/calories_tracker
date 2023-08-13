@@ -14,12 +14,12 @@ export function product_risk_color(additive_risks_url){
 // type: 1:system_product, 2:product, 3:elaborated products, 4: meals (item is product_url)
 export function products_html_fullname(item,type_){
     if (type_==4) {
-        item=this.$store.getters.getObjectByUrl("products",item)
+        item=this.store().getters.getObjectByUrl("products",item)
         type_=2
     }
 
 
-    let additive_risks_object=this.$store.getters.getObjectById("additive_risks",item.additives_risk)
+    let additive_risks_object=this.store().getters.getObjectById("additive_risks",item.additives_risk)
     let obsolete=(item.obsolete)? 'text-decoration-line-through' : ''
     let risk_color=product_risk_color(additive_risks_object.url)
     let type_icon
@@ -51,7 +51,7 @@ export function products_html_fullname(item,type_){
 
 // item is an object of additives. additives_object.additive_risks is an url
 export function additives_html_fullname(additives_object){
-    let additive_risks_object=this.$store.getters.getObjectByUrl("additive_risks",additives_object.additive_risks)
+    let additive_risks_object=this.store().getters.getObjectByUrl("additive_risks",additives_object.additive_risks)
 
     let risk_color=product_risk_color(additive_risks_object.url)
 
@@ -59,3 +59,7 @@ export function additives_html_fullname(additives_object){
     return `${icon} ${additives_object.fullname}</span>`
 }
 
+import { useStore } from './store.js'
+export function store(){
+    return useStore()    
+}

@@ -80,8 +80,8 @@
                     <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
                     <template v-slot:[`item.actions`]="{ item }">
                         <v-icon small class="mr-1" @click.stop="linkProduct(item)">mdi-link-variant</v-icon>   
-                        <v-icon class="mr-1" small @click.stop="editSystemProduct(item)"  color="#AA0000" v-if="$store.state.catalog_manager">mdi-pencil</v-icon>
-                        <v-icon small @click.stop="deleteSystemProduct(item)" color="#AA0000" v-if="$store.state.catalog_manager">mdi-delete</v-icon>
+                        <v-icon class="mr-1" small @click.stop="editSystemProduct(item)"  color="#AA0000" v-if="store().catalog_manager">mdi-pencil</v-icon>
+                        <v-icon small @click.stop="deleteSystemProduct(item)" color="#AA0000" v-if="store().catalog_manager">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
             </v-tab-item>
@@ -251,7 +251,7 @@
                         ]
                     },
                 ]
-                if (this.$store.state.catalog_manager){
+                if (this.store().catalog_manager){
                     r.push({
                         subheader: this.$t("System product options"),
                         children: [
@@ -335,7 +335,7 @@
             },
             convertToSystemProduct(item){
 
-                axios.post(`${this.$store.state.apiroot}/products_to_system_products/`, {product: item.url}, this.myheaders())
+                axios.post(`${this.store().apiroot}/products_to_system_products/`, {product: item.url}, this.myheaders())
                 .then((response) => {
                     console.log(response.data)
                     this.update_all(true)
@@ -376,27 +376,27 @@
             },
             update_products(with_dispatch){
                 if (with_dispatch){
-                    return this.$store.dispatch("getProducts")
+                    return this.store().dispatch("getProducts")
                     .then(() => {             
-                        this.products=this.$store.state.products.filter(o=> o.fullname.toLowerCase().includes(this.search.toLowerCase()))
+                        this.products=this.store().products.filter(o=> o.fullname.toLowerCase().includes(this.search.toLowerCase()))
                     })
                 } else {                
-                    this.products=this.$store.state.products.filter(o=> o.fullname.toLowerCase().includes(this.search.toLowerCase()))
+                    this.products=this.store().products.filter(o=> o.fullname.toLowerCase().includes(this.search.toLowerCase()))
                 }
             },
             update_elaborated_products(with_dispatch){
                 if (with_dispatch){
-                    return this.$store.dispatch("getElaboratedProducts")
+                    return this.store().dispatch("getElaboratedProducts")
                     .then(() => {             
-                       this.elaborated_products=this.$store.state.elaborated_products.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
+                       this.elaborated_products=this.store().elaborated_products.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
                     })
                 } else {                
-                    this.elaborated_products=this.$store.state.elaborated_products.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
+                    this.elaborated_products=this.store().elaborated_products.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
                 }
             },
             update_system_products(){
                 if (this.search==null)return
-                return axios.get(`${this.$store.state.apiroot}/api/system_products/?search=${this.search}`, this.myheaders())
+                return axios.get(`${this.store().apiroot}/api/system_products/?search=${this.search}`, this.myheaders())
                 .then((response) => {
                     console.log(response.data)
                     this.system_products=response.data
@@ -416,7 +416,7 @@
             },
             is_product_elaborated_deletable(item){
                 let product
-                this.$store.state.products.forEach(element => {
+                this.store().products.forEach(element => {
                     if (element.elaborated_products==item.url) product=element
                 });
                 if (product==null) return true

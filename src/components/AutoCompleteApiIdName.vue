@@ -1,6 +1,6 @@
 /* 
     This Component needs to use hyperlinked drf models
-    Must be defined as `${this.$store.state.apiroot}/api/id/` for
+    Must be defined as `${this.store().apiroot}/api/id/` for
     This path can get search=name, url with returnobject=false or {url:} with returnobject with try
 */
 
