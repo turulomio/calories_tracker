@@ -1,24 +1,24 @@
 <!-- // INFORMACION NUTRICIONAL -->
 <template>
     <div>    
-        <v-data-table density="compact" :headers="products_in_headers" :items="items" sort-by="amount" :sort-desc="['amount']" class="elevation-1" hide-default-footer :items-per-page="10000" :key="'T'+key" height="50vh" fixed-header>
-            <template v-slot:[`item.products`]="{ item }"><div v-html="products_html_fullname(item.products,4)"></div></template>                       
-                <template v-slot:[`item.amount`]="{ item }"><div v-html="my_round(item.amount,0)"></div></template>                  
-                <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
-                <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
-                <template v-slot:[`item.protein`]="{ item }"><div v-html="my_round(item.protein,0)"></div></template>  
-                <template v-slot:[`item.carbohydrate`]="{ item }"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
-                <template v-slot:[`item.salt`]="{ item }"><div v-html="my_round(item.salt,0)"></div></template>  
-                <template v-slot:[`item.fiber`]="{ item }"><div v-html="my_round(item.fiber,0)"></div></template>  
-                <template v-slot:[`item.sugars`]="{ item }"><div v-html="my_round(item.sugars,0)"></div></template>  
-                <template v-slot:[`item.saturated_fat`]="{ item }"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
-                <template v-slot:[`item.cholesterol`]="{ item }"><div v-html="my_round(item.cholesterol,0)"></div></template>  
-                <template v-slot:[`item.sodium`]="{ item }"><div v-html="my_round(item.sodium,0)"></div></template>  
-                <template v-slot:[`item.potassium`]="{ item }"><div v-html="my_round(item.potassium,0)"></div></template>  
-                <template v-slot:[`item.ferrum`]="{ item }"><div v-html="my_round(item.ferrum,0)"></div></template>  
-                <template v-slot:[`item.magnesium`]="{ item }"><div v-html="my_round(item.magnesium,0)"></div></template>  
-                <template v-slot:[`item.phosphor`]="{ item }"><div v-html="my_round(item.phosphor,0)"></div></template>  
-                <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
+        <v-data-table density="compact" :headers="products_in_headers" :items="items" :sort-by="[{key:'amount',order:'desc'}]"  class="elevation-1" hide-default-footer :items-per-page="10000" :key="'T'+key" height="50vh" fixed-header>
+            <template #item.products="{item}"><div v-html="products_html_fullname(item.products,4)"></div></template>                       
+                <template #item.amount="{item}"><div v-html="my_round(item.amount,0)"></div></template>                  
+                <template #item.calories="{item}"><div v-html="my_round(item.calories,0)"></div></template>  
+                <template #item.fat="{item}"><div v-html="my_round(item.fat,0)"></div></template>  
+                <template #item.protein="{item}"><div v-html="my_round(item.protein,0)"></div></template>  
+                <template #item.carbohydrate="{item}"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
+                <template #item.salt="{item}"><div v-html="my_round(item.salt,0)"></div></template>  
+                <template #item.fiber="{item}"><div v-html="my_round(item.fiber,0)"></div></template>  
+                <template #item.sugars="{item}"><div v-html="my_round(item.sugars,0)"></div></template>  
+                <template #item.saturated_fat="{item}"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
+                <template #item.cholesterol="{item}"><div v-html="my_round(item.cholesterol,0)"></div></template>  
+                <template #item.sodium="{item}"><div v-html="my_round(item.sodium,0)"></div></template>  
+                <template #item.potassium="{item}"><div v-html="my_round(item.potassium,0)"></div></template>  
+                <template #item.ferrum="{item}"><div v-html="my_round(item.ferrum,0)"></div></template>  
+                <template #item.magnesium="{item}"><div v-html="my_round(item.magnesium,0)"></div></template>  
+                <template #item.phosphor="{item}"><div v-html="my_round(item.phosphor,0)"></div></template>  
+                <template #item.calcium="{item}"><div v-html="my_round(item.calcium,0)"></div></template>  
                 <template v-slot:[`body.append`]="{headers}" v-if="items.length>0">
                     <tr style="background-color: WhiteSmoke">
                         <td v-for="(header,i) in headers" :key="i">

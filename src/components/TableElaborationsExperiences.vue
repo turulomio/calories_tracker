@@ -1,7 +1,7 @@
 <template>
     <div>
-        <v-data-table density="compact" :headers="table_headers()" :items="elaboration.elaborations_experiences" class="elevation-1" :items-per-page="10000"  hide-default-footer sort-by="date" fixed-header height="50vh" ref="table_elaborations_experiences">
-            <template v-slot:[`item.datetime`]="{ item }">{{localtime(item.datetime)}}</template>      
+        <v-data-table density="compact" :headers="table_headers()" :items="elaboration.elaborations_experiences" class="elevation-1" :items-per-page="10000"  hide-default-footer :sort-by="[{key:'date',order:'asc'}]"  fixed-header height="50vh" ref="table_elaborations_experiences">
+            <template #item.datetime="{item}">{{localtime(item.datetime)}}</template>      
             <template #item.actions="{item}">
                 <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                 <v-icon small class="mr-2" @click="deleteItem(item)">mdi-delete</v-icon>

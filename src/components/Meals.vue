@@ -9,33 +9,33 @@
             </v-card>
 
 
-            <v-data-table density="compact" class="mt-4 elevation-1" :headers="meals_headers" :items="meals" sort-by="name" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key">
-                <template v-slot:[`item.datetime`]="{ item }">
-                    {{localtime(item.datetime).slice(10)}}
+            <v-data-table density="compact" class="mt-4 elevation-1" :headers="meals_headers" :items="meals" :sort-by="[{key:'name',order:'asc'}]"  hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key">
+                <template #item.datetime="{item}">
+                    {{localtime(item.raw.datetime).slice(10)}}
                 </template>          
-                <template v-slot:[`item.products`]="{ item }"><div v-html="products_html_fullname(item.products,4)" @click="on_product_click(item)"></div></template>                       
-                <template v-slot:[`item.amount`]="{ item }"><div v-html="my_round(item.amount,0)"></div></template>                  
-                <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
-                <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
-                <template v-slot:[`item.protein`]="{ item }"><div v-html="my_round(item.protein,0)"></div></template>  
-                <template v-slot:[`item.carbohydrate`]="{ item }"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
-                <template v-slot:[`item.salt`]="{ item }"><div v-html="my_round(item.salt,0)"></div></template>  
-                <template v-slot:[`item.fiber`]="{ item }"><div v-html="my_round(item.fiber,0)"></div></template>  
-                <template v-slot:[`item.sugars`]="{ item }"><div v-html="my_round(item.sugars,0)"></div></template>  
-                <template v-slot:[`item.saturated_fat`]="{ item }"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
-                <template v-slot:[`item.cholesterol`]="{ item }"><div v-html="my_round(item.cholesterol,0)"></div></template>  
-                <template v-slot:[`item.sodium`]="{ item }"><div v-html="my_round(item.sodium,0)"></div></template>  
-                <template v-slot:[`item.potassium`]="{ item }"><div v-html="my_round(item.potassium,0)"></div></template>  
-                <template v-slot:[`item.ferrum`]="{ item }"><div v-html="my_round(item.ferrum,0)"></div></template>  
-                <template v-slot:[`item.magnesium`]="{ item }"><div v-html="my_round(item.magnesium,0)"></div></template>  
-                <template v-slot:[`item.phosphor`]="{ item }"><div v-html="my_round(item.phosphor,0)"></div></template>  
-                <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
+                <template #item.products="{item}"><div v-html="products_html_fullname(item.raw.products,4)" @click="on_product_click(item)"></div></template>                       
+                <template #item.amount="{item}"><div v-html="my_round(item.raw.amount,0)"></div></template>                  
+                <template #item.calories="{item}"><div v-html="my_round(item.raw.calories,0)"></div></template>  
+                <template #item.fat="{item}"><div v-html="my_round(item.raw.fat,0)"></div></template>  
+                <template #item.protein="{item}"><div v-html="my_round(item.raw.protein,0)"></div></template>  
+                <template #item.carbohydrate="{item}"><div v-html="my_round(item.raw.carbohydrate,0)"></div></template>  
+                <template #item.salt="{item}"><div v-html="my_round(item.raw.salt,0)"></div></template>  
+                <template #item.fiber="{item}"><div v-html="my_round(item.raw.fiber,0)"></div></template>  
+                <template #item.sugars="{item}"><div v-html="my_round(item.raw.sugars,0)"></div></template>  
+                <template #item.saturated_fat="{item}"><div v-html="my_round(item.raw.saturated_fat,0)"></div></template>  
+                <template #item.cholesterol="{item}"><div v-html="my_round(item.raw.cholesterol,0)"></div></template>  
+                <template #item.sodium="{item}"><div v-html="my_round(item.raw.sodium,0)"></div></template>  
+                <template #item.potassium="{item}"><div v-html="my_round(item.raw.potassium,0)"></div></template>  
+                <template #item.ferrum="{item}"><div v-html="my_round(item.raw.ferrum,0)"></div></template>  
+                <template #item.magnesium="{item}"><div v-html="my_round(item.raw.magnesium,0)"></div></template>  
+                <template #item.phosphor="{item}"><div v-html="my_round(item.raw.phosphor,0)"></div></template>  
+                <template #item.calcium="{item}"><div v-html="my_round(item.raw.calcium,0)"></div></template>  
                 <template #item.actions="{item}">
-                    <v-icon small class="mr-1" @click="copyMeal(item)">mdi-content-copy</v-icon>
-                    <v-icon small class="mr-1" @click="editMeal(item)">mdi-pencil</v-icon>
-                    <v-icon small class="mr-1" @click="deleteMeal(item)">mdi-delete</v-icon>
+                    <v-icon small class="mr-1" @click="copyMeal(item.raw)">mdi-content-copy</v-icon>
+                    <v-icon small class="mr-1" @click="editMeal(item.raw)">mdi-pencil</v-icon>
+                    <v-icon small class="mr-1" @click="deleteMeal(item.raw)">mdi-delete</v-icon>
                 </template>            
-                <template v-slot:[`body.append`]="{headers}" v-if="meals.length>0">
+                <!-- <template v-slot:[`body.append`]="{headers}" v-if="meals.length>0">
                     <tr style="background-color: WhiteSmoke">
                         <td v-for="(header,i) in headers" :key="i">
                             <div v-if="header.value == 'products'">{{ $t(`Total ({0} meals):`).format(meals.length)}}</div>
@@ -71,7 +71,7 @@
 
                         </td>
                     </tr>
-                </template>
+                </template> -->
             </v-data-table>
         <!-- DIALOG MEALS CRUD -->
         <v-dialog v-model="meals_crud_dialog" width="45%">
@@ -153,25 +153,25 @@
                 meals:[],
                 biometric: null,
                 meals_headers: [
-                    { text: this.$t('Time'), sortable: true, value: 'datetime'},
-                    { text: this.$t('Product'), sortable: true, value: 'products',width:"30%"},
-                    { text: this.$t('Amount (g)'), sortable: true, value: 'amount',align:'right'},
-                    { text: this.$t('Calories (kcal)'), sortable: true, value: 'calories',align:'right'},
-                    { text: this.$t('Fat (g)'), sortable: true, value: 'fat',align:'right'},
-                    { text: this.$t('Protein (g)'), sortable: true, value: 'protein',align:'right'},
-                    { text: this.$t('Carbohydrate (g)'), sortable: true, value: 'carbohydrate',align:'right'},
-                    { text: this.$t('Salt (g)'), sortable: true, value: 'salt',align:'right'},
-                    { text: this.$t('Fiber (g)'), sortable: true, value: 'fiber',align:'right'},
-                    { text: this.$t('Sugars (g)'), sortable: true, value: 'sugars',align:'right'},
-                    { text: this.$t('Saturated fat (g)'), sortable: true, value: 'saturated_fat',align:'right'},
-                    { text: this.$t('Cholesterol (g)'), sortable: true, value: 'cholesterol',align:'right'},
-                    { text: this.$t('Sodium (mg)'), sortable: true, value: 'sodium',align:'right'},
-                    { text: this.$t('Potassium (mg)'), sortable: true, value: 'potassium',align:'right'},
-                    { text: this.$t('Ferrum (mg)'), sortable: true, value: 'ferrum',align:'right'},
-                    { text: this.$t('Magnesium (mg)'), sortable: true, value: 'magnesium',align:'right'},
-                    { text: this.$t('Phosphor (mg)'), sortable: true, value: 'phosphor',align:'right'},
-                    { text: this.$t('Calcium (mg)'), sortable: true, value: 'calcium',align:'right'},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false,width:"6%"},
+                    { title: this.$t('Time'), sortable: true, key: 'datetime'},
+                    { title: this.$t('Product'), sortable: true, key: 'products',width:"30%"},
+                    { title: this.$t('Amount (g)'), sortable: true, key: 'amount',align:'right'},
+                    { title: this.$t('Calories (kcal)'), sortable: true, key: 'calories',align:'right'},
+                    { title: this.$t('Fat (g)'), sortable: true, key: 'fat',align:'right'},
+                    { title: this.$t('Protein (g)'), sortable: true, key: 'protein',align:'right'},
+                    { title: this.$t('Carbohydrate (g)'), sortable: true, key: 'carbohydrate',align:'right'},
+                    { title: this.$t('Salt (g)'), sortable: true, key: 'salt',align:'right'},
+                    { title: this.$t('Fiber (g)'), sortable: true, key: 'fiber',align:'right'},
+                    { title: this.$t('Sugars (g)'), sortable: true, key: 'sugars',align:'right'},
+                    { title: this.$t('Saturated fat (g)'), sortable: true, key: 'saturated_fat',align:'right'},
+                    { title: this.$t('Cholesterol (g)'), sortable: true, key: 'cholesterol',align:'right'},
+                    { title: this.$t('Sodium (mg)'), sortable: true, key: 'sodium',align:'right'},
+                    { title: this.$t('Potassium (mg)'), sortable: true, key: 'potassium',align:'right'},
+                    { title: this.$t('Ferrum (mg)'), sortable: true, key: 'ferrum',align:'right'},
+                    { title: this.$t('Magnesium (mg)'), sortable: true, key: 'magnesium',align:'right'},
+                    { title: this.$t('Phosphor (mg)'), sortable: true, key: 'phosphor',align:'right'},
+                    { title: this.$t('Calcium (mg)'), sortable: true, key: 'calcium',align:'right'},
+                    { title: this.$t('Actions'), key: 'actions', sortable: false,width:"6%"},
 
                 ],
                 loading:false,

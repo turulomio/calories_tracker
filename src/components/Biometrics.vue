@@ -20,7 +20,7 @@
             <v-window-item key="registers" >  
                 <v-card v-if="!loading">
 
-                    <v-data-table density="compact" :headers="biometrics_headers" :items="biometrics" sort-by="datetime" :sort-desc="['datetime']" class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500">
+                    <v-data-table density="compact" :headers="biometrics_headers" :items="biometrics" :sort-by="[{key:'datetime',order:'desc'}]"  class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500">
                         <template #item.datetime="{item}">
                             {{localtime(item.raw.datetime)}}
                         </template>             
