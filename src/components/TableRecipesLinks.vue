@@ -1,16 +1,16 @@
 <template>
     <div>
         <v-data-table density="compact" :headers="table_headers" :items="recipe.recipes_links" class="elevation-1" :items-per-page="10000"  hide-default-footer sort-by="date" fixed-header :height="$attrs.height" ref="table_recipes_links">
-            <template v-slot:[`item.photo`]="{ item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px"/></template>
-            <template v-slot:[`item.type`]="{ item }"><div v-html="store().getters.getObjectPropertyByUrl('recipes_links_types', item.type,'localname')"></div></template> 
-            <template v-slot:[`item.link`]="{ item }"><div @click="on_link_click(item)">{{item.link}}</div></template> 
-            <template v-slot:[`item.mime`]="{ item }">{{ show_mime(item)}}</template> 
-            <template v-slot:[`item.size`]="{ item }">{{ show_size(item)}}</template> 
+            <template v-slot:[`item.photo`]="{ item}"><v-img  v-if="item.thumbnail" :src="item.raw.thumbnail" style="width: 50px; height: 50px"/></template>
+            <template v-slot:[`item.type`]="{ item }"><div v-html="store().getters.getObjectPropertyByUrl('recipes_links_types', item.raw.type,'localname')"></div></template> 
+            <template v-slot:[`item.link`]="{ item }"><div @click="on_link_click(item.raw)">{{item.raw.link}}</div></template> 
+            <template v-slot:[`item.mime`]="{ item }">{{ show_mime(item.raw)}}</template> 
+            <template v-slot:[`item.size`]="{ item }">{{ show_size(item.raw)}}</template> 
             
             <template #item.actions="{item}">
-                <v-icon v-if="item.files" small class="mr-2" @click="downloadItem(item)">mdi-download</v-icon>
-                <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" @click="deleteItem(item)">mdi-delete</v-icon>
+                <v-icon v-if="item.files" small class="mr-2" @click="downloadItem(item.raw)">mdi-download</v-icon>
+                <v-icon small class="mr-2" @click="editItem(item.raw)">mdi-pencil</v-icon>
+                <v-icon small class="mr-2" @click="deleteItem(item.raw)">mdi-delete</v-icon>
             </template>
         </v-data-table>   
         <!-- ItemCRUD DIALOG -->

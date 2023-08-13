@@ -13,7 +13,7 @@
                 <template #item.datetime="{item}">
                     {{localtime(item.raw.datetime).slice(10)}}
                 </template>          
-                <template #item.products="{item}"><div v-html="products_html_fullname(item.raw.products,4)" @click="on_product_click(item)"></div></template>                       
+                <template #item.products="{item}"><div v-html="products_html_fullname(item.raw.products,4)" @click="on_product_click(item.raw)"></div></template>                       
                 <template #item.amount="{item}"><div v-html="my_round(item.raw.amount,0)"></div></template>                  
                 <template #item.calories="{item}"><div v-html="my_round(item.raw.calories,0)"></div></template>  
                 <template #item.fat="{item}"><div v-html="my_round(item.raw.fat,0)"></div></template>  
