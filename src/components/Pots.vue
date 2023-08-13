@@ -111,32 +111,29 @@
                 //Pressing enter
                 this.update_pots() 
             },
-            update_pots(){
-                this.store().dispatch("getPots")
-                .then(() => {             
-                    var r=[]
-                    this.store().pots.forEach(p=>{
-                        if (p.name.toLowerCase().includes(this.search.toLowerCase())){
-                            p.thumbnail=require("@/assets/no_image.jpg")
-                            p.item_key=null//Used for table-item key
-                            if (p.photo){
-                                axios.get(`${p.photo.url_thumbnail}`, this.myheaders())
-                                .then((responsethumbnail) => {
-                                    p.thumbnail=responsethumbnail.data
-                                    p.item_key=p.url
-                            r.push(p)
-                                }, (error) => {
-                                    this.parseResponseError(error)
-                                });
-                            } else {
-                            r.push(p)
+            update_pots(){          
+                var r=[]
+                this.getArrayFromMap(this.store().pots).forEach(p=>{
+                    if (p.name.toLowerCase().includes(this.search.toLowerCase())){
+                        p.thumbnail=require("@/assets/no_image.jpg")
+                        p.item_key=null//Used for table-item key
+                        if (p.photo){
+                            axios.get(`${p.photo.url_thumbnail}`, this.myheaders())
+                            .then((responsethumbnail) => {
+                                p.thumbnail=responsethumbnail.data
+                                p.item_key=p.url
+                        r.push(p)
+                            }, (error) => {
+                                this.parseResponseError(error)
+                            });
+                        } else {
+                        r.push(p)
 
-                            }
                         }
-                    })
-                    this.pots=r
-                    this.key=this.key+1
+                    }
                 })
+                this.pots=r
+                this.key=this.key+1
             },
             toggleFullscreen(item){
                 if (item.photo==null) return
