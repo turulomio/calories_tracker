@@ -14,31 +14,34 @@
                 <v-data-table density="compact" :headers="companies_headers" :items="companies" sort-by="name" class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500">
                     <template v-slot:[`item.last`]="{ item }">
                         {{localtime(item.last)}}
-                    </template>        
-                    <template v-slot:[`item.system_companies`]="{ item }">
-                        <v-icon small v-if="item.system_companies" >mdi-check-outline</v-icon>
+
+                    </template>
+                    <template #item.system_companies="{item}">
+                        <v-icon small v-if="item.raw.system_companies" >mdi-check-outline</v-icon>
                     </template>               
-                    <template v-slot:[`item.obsolete`]="{ item }">
-                            <v-icon small v-if="item.obsolete" >mdi-check-outline</v-icon>           
+
+                    <template #item.obsolete="{item}">
+                            <v-icon small v-if="item.raw.obsolete" >mdi-check-outline</v-icon>           
                     </template>
                     <template #item.actions="{item}">
-                        <v-icon v-if="item.is_editable" small class="mr-2" @click="editCompany(item)">mdi-pencil</v-icon>
-                        <v-icon v-if="item.is_deletable" small @click="deleteCompany(item)">mdi-delete</v-icon>
+                        <v-icon v-if="item.is_editable" small class="mr-2" @click="editCompany(item.raw)">mdi-pencil</v-icon>
+                        <v-icon v-if="item.is_deletable" small @click="deleteCompany(item.raw)">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
             </v-window-item>
             <v-window-item key="system_companies" >                 
                 <v-data-table density="compact" :headers="system_companies_headers" :items="system_companies" sort-by="name" class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500">
-                    <template v-slot:[`item.last`]="{ item }">
-                        {{localtime(item.last)}}
+
+                    <template #item.last="{item}">
+                        {{localtime(item.raw.last)}}
                     </template>             
-                    <template v-slot:[`item.obsolete`]="{ item }">
+                    <template #item.obsolete="{item}">
                             <v-icon small v-if="item.obsolete" >mdi-check-outline</v-icon>           
                     </template>
                     <template #item.actions="{item}">
-                        <v-icon small @click="linkCompany(item)">mdi-link-variant</v-icon>   
-                        <v-icon class="mr-1" small @click="editSystemCompany(item)"  color="#AA0000" v-if="store().catalog_manager">mdi-pencil</v-icon>
-                        <v-icon class="mr-1" small @click="deleteSystemCompany(item)" color="#AA0000" v-if="store().catalog_manager">mdi-delete</v-icon>
+                        <v-icon small @click="linkCompany(item.raw)">mdi-link-variant</v-icon>   
+                        <v-icon class="mr-1" small @click="editSystemCompany(item.raw)"  color="#AA0000" v-if="store().catalog_manager">mdi-pencil</v-icon>
+                        <v-icon class="mr-1" small @click="deleteSystemCompany(item.raw)" color="#AA0000" v-if="store().catalog_manager">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
             </v-window-item>
