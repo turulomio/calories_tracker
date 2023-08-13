@@ -1,311 +1,290 @@
-export function empty_account(){
+export function empty_biometrics(){
     return {
-        name: "",
-        active: true,
-        number: "",
-        currency: "EUR",    
-        banks:null,
         url:null,
-        decimals:2,
-    }
-}
-
-export function empty_account_operation(){
-    return {
         datetime: new Date().toISOString(),
-        concepts: null,
-        // operationstypes:null,
-        amount: 0,
-        comment: "",    
-        accounts: null,
-        url: null,
+        height:0,
+        weight:0,
+        weight_wishes:null,
+        activities:null,
     }
 }
 
-export function empty_account_transfer(){
+export function empty_companies(){
     return {
-        datetime: new Date().toISOString(),
-        account_origin: null,
-        account_destiny: null,
-        ao_origin:null,
-        ao_destiny:null,
-        ao_commission:null,
-        amount: 0,
-        commission:0,
-    }
-}
-
-export function empty_bank(){
-    return {
-        name: "",
-        active: true,
-    }
-}
-
-export function empty_concept(){
-    return {
-        name: "",
-        editable: true,
-        operationstypes: null,
-    }
-}
-export function empty_credit_card(){
-    return {
-        name: "",
-        number: "",
-        deferred: false,
-        maximumbalance: 0,
-        active: true,   
-        accounts: null,
-        url: null,
-    }
-}
-
-export function empty_dps(){
-    return {
-        date: new Date().toISOString().slice(0,10),
-        paydate: new Date().toISOString().slice(0,10),
-        gross: 0,
-        products: null,
-        url: null,
-    }
-}
-
-export function empty_estimation_dps(){
-    return {
-        year: new Date().getFullYear(),
-        estimation: 0,
-        products: null,
-    }
-}
-
-
-export function empty_investment_operation(){
-    return {
-        datetime: new Date(),
-        operationstypes: `${this.store().apiroot}/api/operationstypes/4/`,
-        shares:0,
-        taxes:0,
-        commission:0,
-        price:0,
-        comment:"",
-        currency_conversion:1,
-        investments: null,
-        url: null,
-    }
-}
-
-      
-export function empty_order(){
-    return {
-        date: new Date().toISOString().split("T")[0],
-        executed: null,
-        expiration: null,
-        investments: null,
-        price: 0,
-        shares: 0,
-        url: null,
-    }
-}
-
-export function empty_product(){
-    return {
-        url: null,
+        url:null,
         name: null,
-        isin: null,
-        currency:null,
-        productstypes:null,
-        agrupations:null,
-        web:null,
-        address:null,
-        phone:null,
-        mail:null,
-        pci:'c',
-        leverages:`${this.store().apiroot}/api/leverages/1/`,
-        percentage:100,
-        stockmarkets: null,
-        comment: null,
-        decimals: 2,
         obsolete: false,
-        ticker_yahoo: null,
-        ticker_morningstar: null,
-        ticker_google: null,
-        ticker_quefondos: null,
-        ticker_investingcom: null,
+        system_companies: null,
     }
 }
-
-export function empty_products_comparation(){
+export function empty_system_companies(){
     return {
-        url: null,
+        last: new Date().toISOString(),
+        url:null,
         name: null,
-        a:null,
-        b:null,
+        obsolete: false,
     }
 }
-
-export function empty_cco(){
+export function empty_products(){
     return {
-        datetime: new Date(),
-        concepts: null,
-        operationstypes:null,
+        url:null,
+        name: null,
+        amount:null,
+        fat:null,
+        protein:null,
+        carbohydrate:null,
+        calories:null,
+        salt:null,
+        cholesterol:null,
+        sodium:null,
+        potassium:null,
+        fiber:null,
+        sugars:null,
+        saturated_fat:null,
+        ferrum:null,
+        magnesium:null,
+        phosphor:null,
+        glutenfree:false,
+        calcium:null,
+        obsolete: false,
+        system_products: null,
+        elaborated_products:null,
+        food_types:null,
+        additives:[],
+        formats:[],
+        density: null,
+        companies:null,
+        version_parent:null,
+        version_description:null
+
+    }    
+}
+export function empty_system_products(){
+    return {
+        url:null,
+        name: null,
+        amount:null,
+        fat:null,
+        protein:null,
+        carbohydrate:null,
+        calories:null,
+        salt:null,
+        cholesterol:null,
+        sodium:null,
+        potassium:null,
+        fiber:null,
+        sugars:null,
+        saturated_fat:null,
+        ferrum:null,
+        magnesium:null,
+        phosphor:null,
+        glutenfree:false,
+        calcium:null,
+        obsolete: false,
+        food_types:null,
+        additives:[],
+        formats:[],
+        density: null,
+        system_companies:null,
+        version: new Date().toISOString(),
+        version_parent:null,
+        version_description:null
+
+    }    
+}
+
+export function empty_formats(){
+    return {
+        formats: null,
         amount: 0,
-        comment: "",    
-        creditcards: null,
-        paid:false,
-        paid_datetime:null,
     }
 }
 
-export function empty_quote(){
+
+export function empty_meals(){
     return {
         url: null,
         datetime: new Date().toISOString(),
-        quote: 0,
-        products: null
-    }
-}
-
-export function empty_products_ranges(){
-    return {
-        product: null, //Integer not url
-        totalized_operations: true,
-        percentage_between_ranges: 2500,
-        percentage_gains: 2500,
-        amount_to_invest: 10000,
-        recomendation_methods: 1,
-        investments: [], // List of integers. In db is strategy einvestmeents is a string of integers
-        additional_ranges: 3,
-    }
-}
-
-
-export function empty_ios(){
-    return {
-        datetime: new Date().toISOString(), 
-        classmethod_str: "from_ids", 
-        investments: [],//Array of ids 
-        mode:1, 
-        currency: "EUR", 
-        simulation:[], //Array of empty_ios_simulation_operation
-    }
-}
-
-
-
-export function empty_ios_simulation_operation(){
-    return {
-        datetime: new Date(),
-        operationstypes_id: 4,
-        shares:0,
-        taxes:0,
-        commission:0,
-        price:0,
-        comment:"",
-        currency_conversion:1,
-        investments_id: null,
-        id: -1
-    }
-}
-
-
-
-
-
-
-
-
-
-export function empty_strategy_simulation(){
-    return {
-        strategy: null, //strategy url
-        dt:null, //If null dt_end is dt_for_comparation
-        operations:[],//Empty io must specifi investments_id
-    }
-}
-
-export function empty_investments_chart(){
-    return {
-        ohcls:[],
-        ios_id: null, //ios_id
-        limitlines:[],//empty_investments_chart_limit_line
-    }
-}
-export function empty_investments_chart_limit_line(){
-    return {
-        buy:null,
-        average: null, 
-        sell:null,
-    }
-}
-
-
-export function empty_dividend(){
-    return {
-        datetime: new Date().toISOString(),
-        gross: 0,
-        net:0,
-        taxes: 0,
-        commission: 0,
-        dps: 0,
-        investments: null,
-        accountsoperations: null,
-        concepts: null,
-        currency_conversion:1,
-        url: null,
-    }
-}
-
-export function empty_investment(){
-    return {
-        name: "",
-        active: true,
-        daily_adjustment: false,
-        selling_price: 0,
         products: null,
-        selling_expiration: null,
-        balance_percentage: 100,
-        accounts: null,
+        amount: 0,
+    }
+}
+export function empty_elaborated_products(){
+    return {
         url: null,
-        decimals: 2,
+        final_amount: null,
+        food_types:null,
+        last: new Date().toISOString(),
+        name: null,
+        obsolete: false,
+        products_in: [],
+    }
+}
+export function empty_products_in(){
+    return {
+        products: null,
+        amount: null,
     }
 }
 
-export function empty_strategy(){
+export function empty_products_data_transfer(){
     return {
-        dt_from: new Date().toISOString(),
-        dt_to: null,
-        investments: "",
+        product_from: null,
+        product_to: null
+    }
+}
+
+export function empty_pots(){
+    return {
+        name: '',
+        weight: 0,
+        diameter: 0,
+        height: 0,
+        photo: null, //Base 64 string
+    }
+}
+
+export function empty_recipes(){
+    return {
+        url:null,
+        name: '',
+        last: new Date().toISOString(),
+        food_types:null,
+        obsolete:false,
+        comment:'',
+        valoration:null,
+        guests:false,
+        soon:false,
+    }
+}
+
+export function empty_recipes_categories(){
+    return {
+        url:null,
         name: "",
-        type: 3,
-        comment: "",
-        additional1: null,
-        additional2: null,
-        additional3: null,
-        additional4: null,
-        additional5: null,
-        additional6: null,
-        additional7: null,
-        additional8: null,
-        additional9: null,
-        additional10: null,
     }
 }
 
-
-export function empty_chart_scatter_pair_prices(){
-    return{
-        product_a: null, //Object with url, name, currency
-        product_b: null, //Object with url, name, currency
-        prices: [], //Array of price_a, price_b values
-    }
-}
-
-export function empty_fast_operations_coverage(){
+export function empty_recipes_links_types(){
     return {
-        datetime:new Date(),
-        investments: null,
-        amount:0,
-        comment:""
+        url:null,
+        name: "",
+    }
+}
+
+export function empty_stir_types(){
+    return {
+        url:null,
+        name: "",
+    }
+}
+
+export function empty_temperatures_types(){
+    return {
+        url:null,
+        name: "",
+    }
+}
+
+export function empty_recipes_links(){
+    return {
+        url:null,
+        description: "",
+        type: null,
+        link:null,
+        content: null, //Base 64 string
+        recipes: null,
+        mime: null,
+    }
+}
+
+export function empty_elaborations(){
+    return {
+        url: null,
+        final_amount: null,
+        diners:null,
+        elaborations_products_in: [],
+        recipes: null,
+        elaborations_steps: [],
+    }
+}
+
+export function empty_elaborations_texts(){
+    return {
+        elaborations:null,
+        text: "",
+    }
+}
+
+
+export function empty_elaborations_products_in(){
+    return {
+        products: null,
+        amount: null,
+        measures_types: null,
+        elaborations: null,
+        comment: null,
+        ni: true,
+        automatic_percentage: 100,
+    }
+}
+
+export function empty_elaborations_steps(){
+    return {
+        order: 0,
+        elaborations: null,
+        steps: null,
+        duration: "00:01:00",
+        temperatures_types: null,
+        temperatures_values:null,
+        stir_types:null,
+        stir_values:null,
+        comment: null,
+        products_in_step: [],
+        container: null,
+        container_to: null,
+    }
+}
+
+
+export function empty_measures_types(){
+    return {
+        url:null,
+        name: "",
+    }
+}
+
+
+export function empty_steps(){
+    return {
+        url:null,
+        name: "",
+        can_products_in_step:true,
+        can_container:true,
+        can_container_to:false,
+        can_temperatures:true,
+        can_stir:true,
+        man_products_in_step:true,
+        man_container:true,
+        man_container_to:false,
+        man_temperatures:true,
+        man_stir:true,
+    }
+}
+
+export function empty_elaborations_containers(){
+    return {
+        url: null,
+        name: "",
+        elaborations: null,
+    }
+}
+
+export function empty_elaborations_experiences(){
+    return {
+        url: null,
+        datetime: new Date().toISOString(),
+        elaborations: null,
+        experience: ""
     }
 }

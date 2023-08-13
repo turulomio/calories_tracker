@@ -3,120 +3,113 @@
         <v-navigation-drawer v-model="drawer" absolute temporary app class="blue-grey lighten-5 " style="position:fixed; top:0; left:0" width="350">
             <v-card class="mx-auto" >
                 <v-list>
+                
                     <v-list-item>
-                            <v-list-item-title class="title">Money Money</v-list-item-title>
-                            <v-list-item-subtitle>{{ store().version }} ({{ store().versiondate.toISOString().slice(0,10)}})</v-list-item-subtitle>
-                            <v-list-item-subtitle class="boldred" v-if="store().catalog_manager"><span class="vuered">{{ $t("With catalog manager role") }}</span></v-list-item-subtitle>
+                        <v-list-item-content>
+                            <v-list-item-title class="title">Calories Tracker</v-list-item-title>
+                            <v-list-item-subtitle>{{ $store.state.version }} ({{ $store.state.versiondate.toISOString().slice(0,10)}})</v-list-item-subtitle>
+                            <v-list-item-subtitle>{{ $store.state.settings.first_name }} {{$store.state.settings.last_name}}</v-list-item-subtitle>
+                            <v-list-item-subtitle class="boldred" v-if="$store.state.catalog_manager"><span class="vuered">{{ $t("With catalog manager role") }}</span></v-list-item-subtitle>
+                        </v-list-item-content>
                     </v-list-item>
-
 
                     <v-divider></v-divider>
 
-<!--                     BANKS -->
-                    <v-list-item link router :to="{ name: 'banks_list'}" v-if="store().logged" prepend-icon="mdi-bank" :title="$t('Banks')" />
-<!--                     ACCOUNTS -->
-                    <v-list-item link router :to="{ name: 'accounts_list'}"  v-if="store().logged" prepend-icon="mdi-calculator" :title="$t('Accounts')" />
-<!--                     INVESTMENTS -->
-                    <v-list-item link router :to="{ name: 'investments_list'}" v-if="store().logged" prepend-icon="mdi-finance" :title="$t('Investments')" />
-
-<!--                     ORDERS -->
-                    <v-list-item link router :to="{ name: 'orders_list'}" v-if="store().logged" prepend-icon="mdi-cart" :title="$t('Orders')" />
-
-<!--                     PRODUCTS -->
-                    <v-list-group value="Products"  v-if="store().logged">
-                        <template v-slot:activator="{ props }">
-                            <v-list-item v-bind="props" prepend-icon="mdi-account-circle" :title="$t('Products')"></v-list-item>
-                        </template>
-                        <v-list-item link router :to="{ name: 'products_update'}" :title="$t('Update')" />
-                        <v-list-item link router :to="{ name: 'products_search'}" :title="$t('Search')" />
-                        <v-list-item link router :to="{ name: 'products_comparation_list'}" :title="$t('Comparation')" />
-                    </v-list-group>        
-            
+<!--                     HOME -->
+                    <v-list-item link router :to="{ name: 'home'}">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-home</v-icon></v-list-item-icon>
+                        <v-list-item-title>Home</v-list-item-title>
+                    </v-list-item>
+<!--                    BIOMETRICS -->
+                    <v-list-item link router :to="{ name: 'biometrics'}" v-if="$store.state.logged">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-human-male-height</v-icon></v-list-item-icon>
+                        <v-list-item-title>{{ $t("Biometrics")}}</v-list-item-title>
+                    </v-list-item>
+<!--                    COMPANIES -->
+                    <v-list-item link router :to="{ name: 'companies'}" v-if="$store.state.logged">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-domain</v-icon></v-list-item-icon>
+                        <v-list-item-title>{{ $t("Companies")}}</v-list-item-title>
+                    </v-list-item>
+<!--                    PRODUCTS -->
+                    <v-list-item link router :to="{ name: 'products'}" v-if="$store.state.logged">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-apple</v-icon></v-list-item-icon>
+                        <v-list-item-title>{{ $t("Products")}}</v-list-item-title>
+                    </v-list-item>
+<!--                    MEALS -->
+                    <v-list-item link router :to="{ name: 'meals'}" v-if="$store.state.logged">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-food-turkey</v-icon></v-list-item-icon>
+                        <v-list-item-title>{{ $t("Meals")}}</v-list-item-title>
+                    </v-list-item>
+<!--                    RECIPES -->
+                    <v-list-item link router :to="{ name: 'recipes'}" v-if="$store.state.logged">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-book-open-variant</v-icon></v-list-item-icon>
+                        <v-list-item-title>{{ $t("Recipes")}}</v-list-item-title>
+                    </v-list-item>
+<!--                    POTS -->
+                    <v-list-item link router :to="{ name: 'pots'}" v-if="$store.state.logged">
+                        <v-list-item-icon><v-icon color="#757575;">mdi-pot</v-icon></v-list-item-icon>
+                        <v-list-item-title>{{ $t("Pots")}}</v-list-item-title>
+                    </v-list-item>
 <!--                     REPORTS -->
-                    <v-list-group value="Reports"  v-if="store().logged">
-                        <template v-slot:activator="{ props }">
-                            <v-list-item v-bind="props" prepend-icon="mdi-file-chart-outline" :title="$t('Reports')"></v-list-item>
+                    <v-list-group :value="false" prepend-icon="mdi-chart-box-outline"  v-if="$store.state.logged">
+                        <template v-slot:activator>
+                            <v-list-item-title>{{ $t("Reports") }}</v-list-item-title>
                         </template>
-                        
-                        <v-list-item link router :to="{ name: 'reports_annual'}">
-                            <v-list-item-title>{{ $t("Annual") }}</v-list-item-title>
+                        <v-list-item link router :to="{ name: 'meals_ranking'}">
+                            <v-list-item-title>{{ $t("Meals ranking") }}</v-list-item-title>
                         </v-list-item>
-                        <v-list-item link router :to="{ name: 'reports_evolution'}">
-                            <v-list-item-title>{{ $t("Evolution") }}</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item link router :to="{ name: 'reports_evolution_chart'}">
-                            <v-list-item-title>{{ $t("Evolution chart") }}</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item link router :to="{ name: 'reports_concepts'}">
-                            <v-list-item-title>{{ $t("Concepts") }}</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item link router :to="{ name: 'reports_derivatives'}">
-                            <v-list-item-title>{{ $t("Derivatives") }}</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item link router :to="{ name: 'reports_ranking'}">
-                            <v-list-item-title>{{ $t("Ranking") }}</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item link router :to="{ name: 'reports_investmentsoperations_current'}">
-                            <v-list-item-title>{{ $t("Current investments operations") }}</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item link router :to="{ name: 'reports_lastoperation'}">
-                            <v-list-item-title>{{ $t("Investments last operation") }}</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item link router :to="{ name: 'products_ranges'}">
-                            <v-list-item-title>{{ $t("Product ranges") }}</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item link router :to="{ name: 'reports_dividends'}">
-                            <v-list-item-title>{{ $t("Dividends") }}</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item link router :to="{ name: 'reports_investments_classes'}">
-                            <v-list-item-title>{{ $t("Investments classes") }}</v-list-item-title>
-                        </v-list-item>
-                    </v-list-group>
-            
-<!--                     STRATEGIES -->
-                    <v-list-item link router :to="{ name: 'strategies_list'}" v-if="store().logged" prepend-icon="mdi-strategy" :title="$t('Strategies')" />
-<!--                     ADMINISTRATION -->
-                    <v-list-group value="Administration"  v-if="store().logged">
-                        <template v-slot:activator="{ props }">
-                            <v-list-item v-bind="props" prepend-icon="mdi-file-chart-outline" :title="$t('Administration')"></v-list-item>
-                        </template>
-
-                        <v-list-item link router :to="{ name: 'products_catalog_update'}">
-                            <v-list-item-title>{{ $t("Products catalog update") }}</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item link router :to="{ name: 'concepts_catalog'}">
-                            <v-list-item-title>{{ $t("Concepts catalog") }}</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item link router :to="{ name: 'maintenance_quotes'}">
-                            <v-list-item-title>{{ $t("Quotes maintenance") }}</v-list-item-title>
+                        <v-list-item link router :to="{ name: 'curiosities'}">
+                            <v-list-item-title>{{ $t("Curiosities") }}</v-list-item-title>
                         </v-list-item>
                     </v-list-group>    
-
-<!--                     HELP -->
-                    <v-list-group value="Help"  v-if="store().logged">
-                        <template v-slot:activator="{ props }">
-                            <v-list-item v-bind="props" prepend-icon="mdi-lifebuoy" :title="$t('Help')"></v-list-item>
+<!--                     ADMINISTRATION -->
+                    <v-list-group :value="false" prepend-icon="mdi-cogs"  v-if="$store.state.logged">
+                        <template v-slot:activator>
+                            <v-list-item-title>{{ $t("Administration") }}</v-list-item-title>
                         </template>
-                        <v-list-item link router :to="{ name: 'about'}" :title="$t('About')" />
-                        <v-list-item link router :to="{ name: 'statistics'}" :title="$t('Statistics')" />
-                        <v-list-item  href="https://github.com/turulomio/moneymoney3o/" target="_blank" :title="$t('Money Money Github')" />
-                    </v-list-group>     
+                        <v-list-item link router :to="{ name: 'catalog_tables'}" v-if="$store.state.catalog_manager">
+                            <v-list-item-title>{{ $t("Catalog tables") }}</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item link router :to="{ name: 'products_datatransfer'}">
+                            <v-list-item-title>{{ $t("Products data transfer") }}</v-list-item-title>
+                        </v-list-item>
+                    </v-list-group>    
+<!--                     HELP -->
+                    <v-list-group :value="false" prepend-icon="mdi-lifebuoy">
+                        <template v-slot:activator>
+                            <v-list-item-title>{{ $t("Help") }}</v-list-item-title>
+                        </template>
+                      
+                        <v-list-item link router :to="{ name: 'about'}">
+                            <v-list-item-title>{{ $t("About")}}</v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item link router :to="{ name: 'statistics'}" v-if="$store.state.logged">
+                            <v-list-item-title>{{ $t("Statistics")}}</v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item  href="https://github.com/turulomio/calories_tracker/" target="_blank">
+                            <v-list-item-title>{{ $t('Calories Tracker Github') }}</v-list-item-title>
+                        </v-list-item>
+                        
+                        <v-list-item href="https://github.com/turulomio/django_calories_tracker/" target="_blank">
+                            <v-list-item-title>{{ $t('Django Calories Tracker Github') }}</v-list-item-title>
+                        </v-list-item>
+                    </v-list-group>
                 </v-list>
             </v-card>
         </v-navigation-drawer>
         
         <v-app-bar color="primary" dark  fixed fill-height app >
             <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-            <v-btn :to="{ name: 'home'}"><v-icon icon="mdi-home" dark></v-icon></v-btn>
-            <v-btn :to="{ name: 'settings'}" v-if="store().logged"><v-icon icon="mdi-wrench" dark></v-icon></v-btn> 
-            <v-btn :to="{ name: 'assetsreport'}" v-if="store().logged"><v-icon icon="mdi-book" dark></v-icon></v-btn>
+            <v-btn color="primary" :to="{ name: 'home'}"><v-icon dark>mdi-home</v-icon></v-btn>
+            <v-btn color="primary" :to="{ name: 'settings'}" v-if="$store.state.logged"><v-icon dark>mdi-wrench</v-icon></v-btn>
             <v-spacer />
-            <h1 class="font-weight-black text-no-wrap text-truncate" >{{ $t("Money Money. Another way to manage your finances") }}</h1>
-            <v-spacer />            
-            <v-btn :to="{ name: 'currencies'}" v-if="store().logged"><v-icon icon="mdi-currency-eur" dark></v-icon></v-btn>
-            <BtnSwitchLanguages />
-            <BtnLogIn v-show="!store().logged" class="mr-4"/>
-            <BtnLogOut v-show="store().logged" class="mr-4"/>
+            <h1 class="font-weight-black text-no-wrap text-truncate" >{{ $t("Calories Tracker. Another way to manage your diet") }}</h1>
+            <v-spacer />
+            <SwitchLanguages />
+            <btnLogIn v-show="!this.$store.state.logged"/>
+            <btnLogOut v-show="this.$store.state.logged"/>
 
         </v-app-bar>
         <v-main>   
@@ -126,19 +119,15 @@
 </template>
 
 <script>
-
-
-import imgAccount from '@/assets/account.svg'
-import imgInvestment from '@/assets/investment.svg'
-import BtnLogIn from './components/BtnLogIn';
-import BtnLogOut from './components/BtnLogOut';
-import BtnSwitchLanguages from './components/BtnSwitchLanguages.vue';
+import btnLogIn from './components/reusing/btnLogIn';
+import btnLogOut from './components/reusing/btnLogOut';
+import SwitchLanguages from './components/reusing/SwitchLanguages.vue';
 export default {
     name: 'App',
     components: {
-        BtnLogIn,
-        BtnLogOut,
-        BtnSwitchLanguages,
+        btnLogIn,
+        btnLogOut,
+        SwitchLanguages,
     },
     data () {
         return {
@@ -146,15 +135,8 @@ export default {
             drawer: false,
             height:22,
             width:22,
-            open_products:false,
-            open_reports:false,
-            imgAccount:imgAccount,
-            imgInvestment:imgInvestment,
         }
     },
-    mounted(){
-
-    }
 };
 </script>
 <style >
@@ -162,16 +144,6 @@ h1   {
     text-align: center;
     font-weight: bold;
     padding-top: 6px;
-}
-
-h2 {
-    text-align: center;
-    font-weight: normal;
-}
-
-paragraph{
-    text-align:justify;
-    padding: 30px;
 }
 
 .v-card__title {
@@ -183,46 +155,35 @@ span.vuered{
     color:red;
 }
 
+
 .cursorpointer {
     cursor: pointer;
 }
 
-
+.bold{
+    color: black;
+    font-weight: 900;
+}
 .boldred{
     color: red;
     font-weight: 900;
 }
-
 .boldgreen{
     color: Green;
     font-weight: 900;
 }
-
-.bold{
-    font-weight: 900;
-}
-.boldcenter{
-    font-weight: 900;
-    text-align: center;
-}
-
 .v-application .inform {
     margin-bottom: 1px;
     background-color: white !important;
 }
 
-.totalrow{
-    background-color: whitesmoke;
-    font-weight: 600;
+
+/*SLIM MONTHPICKER*/
+.v-date-picker-table--month td {
+    height: unset;
 }
 
-.totalrow > td{
-    padding-left: 16px;
-    padding-right: 16px;
-    padding-top: 6px;
-    padding-bottom: 6px;
-
+.v-date-picker-table {
+    height: unset;
 }
-
-
 </style>
