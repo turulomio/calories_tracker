@@ -10,18 +10,18 @@
             <v-tab key="elaborations">{{ $t('Elaborations') }}<v-badge color="error" class="ml-2" inline :content="new_recipe.elaborations.length.toString()"/></v-tab>
             <v-tabs-slider color="yellow"></v-tabs-slider>
         </v-tabs>
-        <v-tabs-items v-model="tab">
-            <v-tab-item key="documentation">      
+        <v-window v-model="tab">
+            <v-window-item key="documentation">      
                 <v-card outlined>
                     <TableRecipesLinks ref="table_links" :recipe="new_recipe" :key="key" @cruded="on_TableRecipesLinks_cruded()"></TableRecipesLinks>
                 </v-card>
-            </v-tab-item>
-            <v-tab-item key="elaborations">  
+            </v-window-item>
+            <v-window-item key="elaborations">  
                 <v-card outlined>
                     <TableElaborations ref="table_elaborations" :recipe="new_recipe" :key="key" @cruded="on_TableElaborations_cruded()"></TableElaborations>
                 </v-card>
-            </v-tab-item>
-        </v-tabs-items>
+            </v-window-item>
+        </v-window>
     </div>  
 </template>
 <script>

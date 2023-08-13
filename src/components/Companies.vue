@@ -9,9 +9,9 @@
             <v-tab key="companies">{{ $t('Companies') }}<v-badge v-if="companies.length>0" color="error" class="ml-2" :content="companies.length"/></v-tab>
             <v-tab key="system_companies">{{ $t('System companies') }}<v-badge v-if="system_companies.length>0" color="error" class="ml-2" :content="system_companies.length"/></v-tab>
         </v-tabs>
-        <v-tabs-items v-model="tab" class="ma-5">
-            <v-tab-item key="companies" >
-                <v-data-table density="compact" :headers="companies_headers" :items="companies" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+        <v-window v-model="tab" class="ma-5">
+            <v-window-item key="companies" >
+                <v-data-table density="compact" :headers="companies_headers" :items="companies" sort-by="name" class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500">
                     <template v-slot:[`item.last`]="{ item }">
                         {{localtime(item.last)}}
                     </template>        
@@ -21,28 +21,28 @@
                     <template v-slot:[`item.obsolete`]="{ item }">
                             <v-icon small v-if="item.obsolete" >mdi-check-outline</v-icon>           
                     </template>
-                    <template v-slot:[`item.actions`]="{ item }">
+                    <template #item.actions="{item}">
                         <v-icon v-if="item.is_editable" small class="mr-2" @click="editCompany(item)">mdi-pencil</v-icon>
                         <v-icon v-if="item.is_deletable" small @click="deleteCompany(item)">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
-            </v-tab-item>
-            <v-tab-item key="system_companies" >                 
-                <v-data-table density="compact" :headers="system_companies_headers" :items="system_companies" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+            </v-window-item>
+            <v-window-item key="system_companies" >                 
+                <v-data-table density="compact" :headers="system_companies_headers" :items="system_companies" sort-by="name" class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500">
                     <template v-slot:[`item.last`]="{ item }">
                         {{localtime(item.last)}}
                     </template>             
                     <template v-slot:[`item.obsolete`]="{ item }">
                             <v-icon small v-if="item.obsolete" >mdi-check-outline</v-icon>           
                     </template>
-                    <template v-slot:[`item.actions`]="{ item }">
+                    <template #item.actions="{item}">
                         <v-icon small @click="linkCompany(item)">mdi-link-variant</v-icon>   
                         <v-icon class="mr-1" small @click="editSystemCompany(item)"  color="#AA0000" v-if="store().catalog_manager">mdi-pencil</v-icon>
                         <v-icon class="mr-1" small @click="deleteSystemCompany(item)" color="#AA0000" v-if="store().catalog_manager">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
-            </v-tab-item>
-        </v-tabs-items>
+            </v-window-item>
+        </v-window>
 
 
 

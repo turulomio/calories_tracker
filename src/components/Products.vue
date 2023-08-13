@@ -10,9 +10,9 @@
             <v-tab key="elaborated_products"><v-icon left>mdi-food-takeout-box</v-icon>{{ $t('Elaborated products') }}<v-badge v-if="elaborated_products.length>0" color="error" class="ml-2" :content="elaborated_products.length"/></v-tab>
             <v-tab key="system_products"><v-icon left>mdi-database</v-icon>{{ $t('System products') }}<v-badge v-if="system_products.length>0" color="error" class="ml-2" :content="system_products.length"/></v-tab>
         </v-tabs>
-        <v-tabs-items v-model="tab" class="ma-5">
-            <v-tab-item key="products" >
-                <v-data-table density="compact" :headers="products_headers" :items="products" sort-by="fullname" class="elevation-1 cursorpointer" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" @click:row="viewProduct">
+        <v-window v-model="tab" class="ma-5">
+            <v-window-item key="products" >
+                <v-data-table density="compact" :headers="products_headers" :items="products" sort-by="fullname" class="elevation-1 cursorpointer" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500" @click:row="viewProduct">
                     <template v-slot:[`item.fullname`]="{ item }"><div v-html="products_html_fullname(item,2)"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
@@ -29,15 +29,15 @@
                     <template v-slot:[`item.magnesium`]="{ item }"><div v-html="my_round(item.magnesium,0)"></div></template>  
                     <template v-slot:[`item.phosphor`]="{ item }"><div v-html="my_round(item.phosphor,0)"></div></template>  
                     <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
-                    <template v-slot:[`item.actions`]="{ item }">
+                    <template #item.actions="{item}">
                         <v-icon v-if="item.system_products==null && item.elaborated_products==null" small class="mr-1" @click.stop="convertToSystemProduct(item)">mdi-database-arrow-right</v-icon>
                         <v-icon v-if="item.is_editable" small class="mr-1" @click.stop="editProduct(item)">mdi-pencil</v-icon>
                         <v-icon v-if="item.is_deletable" small @click.stop="deleteProduct(item)">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
-            </v-tab-item>
-            <v-tab-item key="elaborated_products">
-                <v-data-table density="compact" :headers="elaborated_products_headers" :items="elaborated_products" sort-by="name" class="elevation-1 cursorpointer" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" @click:row="viewElaboratedProduct">
+            </v-window-item>
+            <v-window-item key="elaborated_products">
+                <v-data-table density="compact" :headers="elaborated_products_headers" :items="elaborated_products" sort-by="name" class="elevation-1 cursorpointer" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500" @click:row="viewElaboratedProduct">
                     <template v-slot:[`item.fullname`]="{ item }"><div v-html="products_html_fullname(item,3)"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
@@ -54,14 +54,14 @@
                     <template v-slot:[`item.magnesium`]="{ item }"><div v-html="my_round(item.magnesium,0)"></div></template>  
                     <template v-slot:[`item.phosphor`]="{ item }"><div v-html="my_round(item.phosphor,0)"></div></template>  
                     <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
-                    <template v-slot:[`item.actions`]="{ item }">
+                    <template #item.actions="{item}">
                         <v-icon small class="mr-1" @click.stop="editElaboratedProduct(item)">mdi-pencil</v-icon>
                         <v-icon small v-if="is_product_elaborated_deletable(item)" @click.stop="deleteElaboratedProduct(item)">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
-            </v-tab-item>
-            <v-tab-item key="system_products" >                 
-                <v-data-table density="compact" :headers="system_products_headers" :items="system_products" sort-by="fullname" class="elevation-1 cursorpointer" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" @click:row="viewSystemProduct">
+            </v-window-item>
+            <v-window-item key="system_products" >                 
+                <v-data-table density="compact" :headers="system_products_headers" :items="system_products" sort-by="fullname" class="elevation-1 cursorpointer" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500" @click:row="viewSystemProduct">
                     <template v-slot:[`item.fullname`]="{ item }"><div v-html="products_html_fullname(item,1)"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
@@ -78,14 +78,14 @@
                     <template v-slot:[`item.magnesium`]="{ item }"><div v-html="my_round(item.magnesium,0)"></div></template>  
                     <template v-slot:[`item.phosphor`]="{ item }"><div v-html="my_round(item.phosphor,0)"></div></template>  
                     <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
-                    <template v-slot:[`item.actions`]="{ item }">
+                    <template #item.actions="{item}">
                         <v-icon small class="mr-1" @click.stop="linkProduct(item)">mdi-link-variant</v-icon>   
                         <v-icon class="mr-1" small @click.stop="editSystemProduct(item)"  color="#AA0000" v-if="store().catalog_manager">mdi-pencil</v-icon>
                         <v-icon small @click.stop="deleteSystemProduct(item)" color="#AA0000" v-if="store().catalog_manager">mdi-delete</v-icon>
                     </template>
                 </v-data-table>
-            </v-tab-item>
-        </v-tabs-items>
+            </v-window-item>
+        </v-window>
 
 
 

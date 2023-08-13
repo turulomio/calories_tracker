@@ -17,7 +17,7 @@
             <template v-slot:[`item.food_types`]="{ item }"><div v-html="store().getters.getObjectPropertyByUrl('food_types', item.food_types,'localname')"></div></template> 
             <template v-slot:[`item.guests`]="{ item }"><v-icon small v-if="item.guests" >mdi-check-outline</v-icon></template>   
             <template v-slot:[`item.soon`]="{ item }"><v-icon small v-if="item.soon" >mdi-check-outline</v-icon></template>    
-            <template v-slot:[`item.actions`]="{ item }">
+            <template #item.actions="{item}">
                 <v-icon small class="mr-1" @click.stop="addMainPhoto(item)">mdi-link-variant</v-icon>
                 <v-icon small class="mr-1" @click.stop="searchGoogle(item)">mdi-search-web</v-icon>
                 <v-icon small class="mr-1" @click.stop="editRecipe(item)">mdi-pencil</v-icon>

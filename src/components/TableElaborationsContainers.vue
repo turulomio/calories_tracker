@@ -1,7 +1,7 @@
 <template>
     <div>
-        <v-data-table density="compact" :headers="table_headers()" :items="elaboration.elaborations_containers" class="elevation-1" disable-pagination  hide-default-footer sort-by="date" fixed-header height="50vh" ref="table_elaborations_containers">
-            <template v-slot:[`item.actions`]="{ item }">
+        <v-data-table density="compact" :headers="table_headers()" :items="elaboration.elaborations_containers" class="elevation-1" :items-per-page="10000"  hide-default-footer sort-by="date" fixed-header height="50vh" ref="table_elaborations_containers">
+            <template #item.actions="{item}">
                 <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
                 <v-icon small class="mr-2" @click="deleteItem(item)">mdi-delete</v-icon>
             </template>

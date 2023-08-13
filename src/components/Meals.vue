@@ -9,7 +9,7 @@
             </v-card>
 
 
-            <v-data-table density="compact" class="mt-4 elevation-1" :headers="meals_headers" :items="meals" sort-by="name" hide-default-footer disable-pagination :loading="loading" :key="'T'+key">
+            <v-data-table density="compact" class="mt-4 elevation-1" :headers="meals_headers" :items="meals" sort-by="name" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key">
                 <template v-slot:[`item.datetime`]="{ item }">
                     {{localtime(item.datetime).slice(10)}}
                 </template>          
@@ -30,7 +30,7 @@
                 <template v-slot:[`item.magnesium`]="{ item }"><div v-html="my_round(item.magnesium,0)"></div></template>  
                 <template v-slot:[`item.phosphor`]="{ item }"><div v-html="my_round(item.phosphor,0)"></div></template>  
                 <template v-slot:[`item.calcium`]="{ item }"><div v-html="my_round(item.calcium,0)"></div></template>  
-                <template v-slot:[`item.actions`]="{ item }">
+                <template #item.actions="{item}">
                     <v-icon small class="mr-1" @click="copyMeal(item)">mdi-content-copy</v-icon>
                     <v-icon small class="mr-1" @click="editMeal(item)">mdi-pencil</v-icon>
                     <v-icon small class="mr-1" @click="deleteMeal(item)">mdi-delete</v-icon>

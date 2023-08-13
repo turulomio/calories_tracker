@@ -6,14 +6,14 @@
         <v-select :items="tables" v-model="table" :label="$t('Select a catalog table')" return-object @change="on_table_change()"/>
 
   
-        <v-data-table density="compact" :headers="catalog_table_headers" :items="catalog_table" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" height="70vh">
+        <v-data-table density="compact" :headers="catalog_table_headers" :items="catalog_table" sort-by="name" class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" height="70vh">
             <template v-slot:[`item.can_products_in_step`]="{ item }"><v-icon small v-if="item.can_products_in_step" >mdi-check-outline</v-icon><v-icon small color="red" v-if="item.man_products_in_step" >mdi-check-outline</v-icon></template>
             <template v-slot:[`item.can_container`]="{ item }"><v-icon small v-if="item.can_container" >mdi-check-outline</v-icon><v-icon small color="red" v-if="item.man_container" >mdi-check-outline</v-icon></template>
             <template v-slot:[`item.can_container_to`]="{ item }"><v-icon small v-if="item.can_container_to" >mdi-check-outline</v-icon><v-icon small color="red" v-if="item.man_container_to" >mdi-check-outline</v-icon></template>
             <template v-slot:[`item.can_temperatures`]="{ item }"><v-icon small v-if="item.can_temperatures" >mdi-check-outline</v-icon><v-icon small color="red" v-if="item.man_temperatures" >mdi-check-outline</v-icon></template>
             <template v-slot:[`item.can_stir`]="{ item }"><v-icon small v-if="item.can_stir" >mdi-check-outline</v-icon><v-icon small color="red" v-if="item.man_stir" >mdi-check-outline</v-icon></template>   
 
-            <template v-slot:[`item.actions`]="{ item }">
+            <template #item.actions="{item}">
                 <v-icon small class="mr-1" @click="viewItem(item)">mdi-eye</v-icon>
                 <v-icon small class="mr-1" @click="editItem(item)">mdi-pencil</v-icon>
                 <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>

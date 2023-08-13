@@ -10,33 +10,33 @@
             <v-tab key="weight">{{ $t('Weight chart') }}</v-tab>
             <v-tab key="registers">{{ $t('Registers') }}</v-tab>
         </v-tabs>
-        <v-tabs-items v-model="tab" class="ma-5">
-            <v-tab-item key="height" >
+        <v-window v-model="tab" class="ma-5">
+            <v-window-item key="height" >
                 <ChartHeight v-if="!loading" :data="chart_height_data"></ChartHeight>
-            </v-tab-item>
-            <v-tab-item key="weight" >  
+            </v-window-item>
+            <v-window-item key="weight" >  
                 <ChartWeight  v-if="!loading" :data="chart_weight_data"></ChartWeight>
-            </v-tab-item>
-            <v-tab-item key="registers" >  
+            </v-window-item>
+            <v-window-item key="registers" >  
                 <v-card v-if="!loading">
 
-                    <v-data-table density="compact" :headers="biometrics_headers" :items="biometrics" sort-by="datetime" :sort-desc="['datetime']" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
-                        <template v-slot:[`item.datetime`]="{ item }">
-                            {{localtime(item.datetime)}}
+                    <v-data-table density="compact" :headers="biometrics_headers" :items="biometrics" sort-by="datetime" :sort-desc="['datetime']" class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500">
+                        <template #item.datetime="{item}">
+                            {{localtime(item.raw.datetime)}}
                         </template>             
-                        <template v-slot:[`item.activities`]="{ item }">
-                            <div v-html="store().getters.getObjectPropertyByUrl('activities',item.activities,'localname')"></div>
+                        <template #item.activities="{item}">
+                            <div v-html="store().getters.getObjectPropertyByUrl('activities',item.raw.activities,'localname')"></div>
                         </template>         
-                        <template v-slot:[`item.weight_wishes`]="{ item }">
-                            <div v-html="store().getters.getObjectPropertyByUrl('weight_wishes',item.weight_wishes,'localname')"></div>
+                        <template #item.weight_wishes="{item}">
+                            <div v-html="store().getters.getObjectPropertyByUrl('weight_wishes',item.raw.weight_wishes,'localname')"></div>
                         </template>     
 
 
-                        <template v-slot:[`item.actions`]="{ item }">
-                            <v-icon small class="mr-2" @click="editBiometric(item)">mdi-pencil</v-icon>
-                            <v-icon small @click="deleteBiometric(item)">mdi-delete</v-icon>
-                        </template>                  
-                        <template v-slot:[`body.append`]="{headers}">
+                        <template #item.actions="{item}">
+                            <v-icon small class="mr-2" @click="editBiometric(item.raw)">mdi-pencil</v-icon>
+                            <v-icon small @click="deleteBiometric(item.raw)">mdi-delete</v-icon>
+                        </template>                  1
+                        <!-- <template v-slot:[`body.append`]="{headers}">
                             <tr style="background-color: WhiteSmoke">
                                 <td v-for="(header,i) in headers" :key="'Foot'+i">
                                     <div v-if="header.value == 'localname'">
@@ -46,11 +46,11 @@
                                     </div>
                                 </td>
                             </tr>
-                        </template>
+                        </template> -->
                     </v-data-table>
                 </v-card>
-            </v-tab-item>
-        </v-tabs-items> 
+            </v-window-item>
+        </v-window> 
 
 
 

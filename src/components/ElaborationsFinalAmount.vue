@@ -8,8 +8,8 @@
             <v-tab key="fromingredients">{{ $t('Ingredients sum') }}</v-tab>
             <v-tab key="fromyourweight">{{ $t('Your weight') }}</v-tab>
         </v-tabs>
-        <v-tabs-items v-model="tab" class="ma-5">
-            <v-tab-item key="frompot" >
+        <v-window v-model="tab" class="ma-5">
+            <v-window-item key="frompot" >
                 <v-card>
                     <v-form ref="form" v-model="form_valid" lazy-validation>
                         <v-autocomplete :items="store().pots" v-model="pot" item-text="name" item-value="url" :label="$t('Select a pot')" return-object :rules="RulesSelection(true)">
@@ -18,18 +18,18 @@
                         <v-text-field v-model.number="weight_with_pot" :label="$t('Weight of the full pot')" :placeholder="$t('Weight of the full pot')" :rules="RulesFloatGZ(10,true,2)" counter="10"/>
                     </v-form>
                 </v-card>
-            </v-tab-item>
-            <v-tab-item key="ingredients_sum" >
+            </v-window-item>
+            <v-window-item key="ingredients_sum" >
                 <v-card>
                     <v-text-field v-model.number="final_amount" readonly :label="$t('Sum of ingredients')"  counter="10"/>
                 </v-card>
-            </v-tab-item>
-            <v-tab-item key="fromyourweight" >
+            </v-window-item>
+            <v-window-item key="fromyourweight" >
                 <v-card>
                     <v-text-field v-model.number="your_weight" :label="$t('Your weight')" :placeholder="$t('Your weight')" :rules="RulesFloatGZ(10,true,2)" counter="10"/>
                 </v-card>
-            </v-tab-item>
-        </v-tabs-items> 
+            </v-window-item>
+        </v-window> 
 
         <v-card class="pa-8 mt-2" flat>
             <v-card-actions>

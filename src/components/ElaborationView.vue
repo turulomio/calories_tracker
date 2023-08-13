@@ -19,40 +19,40 @@
                         <v-tab key="experiences"  v-if="!elaboration.automatic"><v-icon left>mdi-apple</v-icon>{{ $t('Experiences') }}<v-badge v-if="new_elaboration.elaborations_experiences.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_experiences.length"/></v-tab>
                         <v-tabs-slider color="yellow"></v-tabs-slider>
                     </v-tabs>
-                    <v-tabs-items v-model="tab">
-                        <v-tab-item key="ingredients">      
+                    <v-window v-model="tab">
+                        <v-window-item key="ingredients">      
                             <v-card outlined>
                                 <TableElaborationsIngredients ref="table_elaborations_ingredients" :elaboration="new_elaboration" :key="key" @cruded="on_TableElaborationsIngredients_cruded()"></TableElaborationsIngredients>
 
                             </v-card>
-                        </v-tab-item>
-                        <v-tab-item key="nutritional">      
+                        </v-window-item>
+                        <v-window-item key="nutritional">      
                             <v-card outlined>
                                 <TableElaborationsIngredientsNI :elaboration="new_elaboration" :key="key" @cruded="on_TableElaborationsIngredientsNI_cruded()"></TableElaborationsIngredientsNI>
 
                             </v-card>
-                        </v-tab-item>
-                        <v-tab-item key="containers">      
+                        </v-window-item>
+                        <v-window-item key="containers">      
                             <v-card outlined>         
                                 <TableElaborationsContainers ref="table_elaborations_containers" :elaboration="new_elaboration" :key="key" @cruded="on_TableElaborationsContainers_cruded()"></TableElaborationsContainers>
                             </v-card>
-                        </v-tab-item>
-                        <v-tab-item key="tiptap">      
+                        </v-window-item>
+                        <v-window-item key="tiptap">      
                             <v-card outlined>         
                                 <ElaborationTextTipTap :elaboration="new_elaboration" :key="key" @cruded="on_ElaborationText_cruded" />
                             </v-card>
-                        </v-tab-item>
-                        <v-tab-item key="steps">  
+                        </v-window-item>
+                        <v-window-item key="steps">  
                             <v-card outlined>
                                 <TableElaborationsSteps ref="table_elaborations_steps" :elaboration="new_elaboration" :key="key" @cruded="on_TableElaborationsSteps_cruded"></TableElaborationsSteps>
                             </v-card>
-                        </v-tab-item>
-                        <v-tab-item key="experiences" v-if="!elaboration.automatic">      
+                        </v-window-item>
+                        <v-window-item key="experiences" v-if="!elaboration.automatic">      
                             <v-card outlined>
                                 <TableElaborationsExperiences ref="table_elaborations_experiences" :elaboration="new_elaboration" :key="key" @cruded="on_TableElaborationsExperiences_cruded"></TableElaborationsExperiences>
                             </v-card>
-                        </v-tab-item>
-                    </v-tabs-items>
+                        </v-window-item>
+                    </v-window>
                 </v-card>
             </v-form>
             <v-card-actions>                

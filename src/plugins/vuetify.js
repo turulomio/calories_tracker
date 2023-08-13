@@ -6,21 +6,38 @@
 
 // Styles
 import '@mdi/font/css/materialdesignicons.css'
+import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import 'vuetify/styles'
+import * as labs from 'vuetify/labs/components'
 
 // Composables
 import { createVuetify } from 'vuetify'
+// Vuetify
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
-export default createVuetify({
+const vuetify = createVuetify({
+  components: {
+    ...labs,
+  },
+  icons: {
+    defaultSet: 'mdi',
+    aliases,
+    sets: {
+      mdi,
+    }
+  },
   theme: {
     themes: {
       light: {
         colors: {
-          primary: '#1867C0',
-          secondary: '#5CBBF6',
+          primary: '#ef6060',
+          secondary: '#b0bec5',
+          accent: '#8c9eff',
+          error: '#b71c1c',
         },
       },
     },
   },
 })
+
+export default vuetify;

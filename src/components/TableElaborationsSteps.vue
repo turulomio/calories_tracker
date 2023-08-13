@@ -1,6 +1,6 @@
 <template>
     <div>    
-        <v-data-table  density="compact" :headers="steps_headers()" :items="new_elaborations_steps" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" height="50vh" fixed-header>
+        <v-data-table  density="compact" :headers="steps_headers()" :items="new_elaborations_steps" class="elevation-1" hide-default-footer :items-per-page="10000" :key="'T'+key" height="50vh" fixed-header>
             <template v-slot:[`item.steps`]="{ item }"><div v-html="store().getters.getObjectPropertyByUrl('steps', item.steps,'localname')"></div></template> 
             <template v-slot:[`item.products_in_step`]="{ item }"><div v-html="show_products_in_step(item)"></div></template> 
             <template v-slot:[`item.temperature`]="{ item }"><div v-html="show_temperature(item)"></div></template> 
