@@ -1,13 +1,13 @@
 <template>
     <div>    
         <v-data-table  density="compact" :headers="steps_headers()" :items="new_elaborations_steps" class="elevation-1" hide-default-footer :items-per-page="10000" :key="'T'+key" height="50vh" fixed-header>
-            <template v-slot:[`item.steps`]="{ item }"><div v-html="store().getters.getObjectPropertyByUrl('steps', item.raw.steps,'localname')"></div></template> 
-            <template v-slot:[`item.products_in_step`]="{ item }"><div v-html="show_products_in_step(item.raw)"></div></template> 
-            <template v-slot:[`item.temperature`]="{ item }"><div v-html="show_temperature(item.raw)"></div></template> 
-            <template v-slot:[`item.stir`]="{ item }"><div v-html="show_stir(item.raw)"></div></template> 
-            <template v-slot:[`item.container`]="{ item }"><div v-html="show_container_name(item.raw.container)"></div></template> 
-            <template v-slot:[`item.container_to`]="{ item }">{{ show_container_name(item.raw.container_to) }}</template> 
-            <template v-slot:[`item.actions`]="{ item,index }">                     
+            <template #item.steps="{item}"><div v-html="store().getters.getObjectPropertyByUrl('steps', item.raw.steps,'localname')"></div></template> 
+            <template #item.products_in_step="{item}"><div v-html="show_products_in_step(item.raw)"></div></template> 
+            <template #item.temperature="{item}"><div v-html="show_temperature(item.raw)"></div></template> 
+            <template #item.stir="{item}"><div v-html="show_stir(item.raw)"></div></template> 
+            <template #item.container="{item}"><div v-html="show_container_name(item.raw.container)"></div></template> 
+            <template #item.container_to="{item}">{{ show_container_name(item.raw.container_to) }}</template> 
+            <template #item.actions="{item}">                     
                 <v-icon :disabled="(index==0 || can_crud==false)" small class="mr-2" @click="setOneUp(item.raw)">mdi-arrow-up-bold</v-icon>
                 <v-icon :disabled="(index==new_elaborations_steps.length-1 || can_crud==false)" small class="mr-2" @click="setOneDown(item.raw)">mdi-arrow-down-bold</v-icon>
                 <v-icon small :disabled="can_crud==false" class="mr-2" @click="editElaborationStep(item.raw)">mdi-pencil</v-icon>

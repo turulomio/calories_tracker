@@ -12,7 +12,7 @@
         <v-window v-model="tab" class="ma-5">
             <v-window-item key="companies" >
                 <v-data-table density="compact" :headers="companies_headers" :items="companies" :sort-by="[{key:'name',order:'asc'}]"  class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500">
-                    <template v-slot:[`item.last`]="{ item }">
+                    <template #item.last="{item}">
                         {{localtime(item.last)}}
 
                     </template>

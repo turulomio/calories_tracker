@@ -6,8 +6,8 @@
             </v-card>
 
         <v-data-table density="compact" :headers="ranking_headers" :items="ranking" :sort-by="[{key:'position',order:'asc'}]"  class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="key" fixed-header height="500">
-            <template v-slot:[`item.position`]="{ index }">{{index+1}}</template>    
-            <template v-slot:[`item.product`]="{ item }"><div v-html="products_html_fullname(item.product,4)"></div></template>            
+            <!-- <template v-slot:[`item.position`]="{ index }">{{index+1}}</template>     -->
+            <template #item.product="{item}"><div v-html="products_html_fullname(item.product,4)"></div></template>            
             <template #item.amount="{item}">{{ my_round(item.amount,0)}}</template>
         </v-data-table>
     </div>

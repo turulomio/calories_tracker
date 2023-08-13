@@ -8,12 +8,12 @@
         {{ $t("Temperatures")+": " }} <v-icon small v-if="step.can_temperatures" >mdi-check-outline</v-icon><v-icon small color="red" v-if="step.man_temperatures" >mdi-check-outline</v-icon>
         {{ $t("Stir")+": " }} <v-icon small v-if="step.can_stir" >mdi-check-outline</v-icon><v-icon small color="red" v-if="step.man_stir" >mdi-check-outline</v-icon></p>
         <v-data-table density="compact" :headers="items_headers" :items="items" class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" height="70vh">
-            <template v-slot:[`item.can_products_in_step`]="{ item }"><v-icon small v-if="item.can_products_in_step" >mdi-check-outline</v-icon></template>
-            <template v-slot:[`item.can_container`]="{ item }"><v-icon small v-if="item.can_container" >mdi-check-outline</v-icon></template>
-            <template v-slot:[`item.can_container_to`]="{ item }"><v-icon small v-if="item.can_container_to" >mdi-check-outline</v-icon></template>
-            <template v-slot:[`item.can_temperatures`]="{ item }"><v-icon small v-if="item.can_temperatures" >mdi-check-outline</v-icon></template>
-            <template v-slot:[`item.can_stir`]="{ item }"><v-icon small v-if="item.can_stir" >mdi-check-outline</v-icon></template>
-            <template v-slot:[`item.has_comment`]="{ item }"><v-icon small v-if="item.has_comment" >mdi-check-outline</v-icon></template>   
+            <template #item.can_products_in_step="{item}"><v-icon small v-if="item.raw.can_products_in_step" >mdi-check-outline</v-icon></template>
+            <template #item.can_container="{item}"><v-icon small v-if="item.raw.can_container" >mdi-check-outline</v-icon></template>
+            <template #item.can_container_to="{item}"><v-icon small v-if="item.raw.can_container_to" >mdi-check-outline</v-icon></template>
+            <template #item.can_temperatures="{item}"><v-icon small v-if="item.raw.can_temperatures" >mdi-check-outline</v-icon></template>
+            <template #item.can_stir="{item}"><v-icon small v-if="item.raw.can_stir" >mdi-check-outline</v-icon></template>
+            <template #item.has_comment="{item}"><v-icon small v-if="item.raw.has_comment" >mdi-check-outline</v-icon></template>   
         </v-data-table>
     </div>
 </template>

@@ -13,7 +13,7 @@
         <v-window v-model="tab" class="ma-5">
             <v-window-item key="products" >
                 <v-data-table density="compact" :headers="products_headers" :items="products" :sort-by="[{key:'fullname',order:'asc'}]"  class="elevation-1 cursorpointer" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500" @click:row="viewProduct">
-                    <template v-slot:[`item.fullname`]="{ item }"><div v-html="products_html_fullname(item.raw,2)"></div></template>
+                    <template #item.fullname="{item}"><div v-html="products_html_fullname(item.raw,2)"></div></template>
                     <template #item.calories="{item}"><div v-html="my_round(item.raw.calories,0)"></div></template>  
                     <template #item.fat="{item}"><div v-html="my_round(item.raw.fat,0)"></div></template>  
                     <template #item.protein="{item}"><div v-html="my_round(item.raw.protein,0)"></div></template>  
@@ -38,7 +38,7 @@
             </v-window-item>
             <v-window-item key="elaborated_products">
                 <v-data-table density="compact" :headers="elaborated_products_headers" :items="elaborated_products" :sort-by="[{key:'name',order:'asc'}]"  class="elevation-1 cursorpointer" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500" @click:row="viewElaboratedProduct">
-                    <template v-slot:[`item.fullname`]="{ item }"><div v-html="products_html_fullname(item.raw,3)"></div></template>
+                    <template #item.fullname="{item}"><div v-html="products_html_fullname(item.raw,3)"></div></template>
                     <template #item.calories="{item}"><div v-html="my_round(item.raw.calories,0)"></div></template>  
                     <template #item.fat="{item}"><div v-html="my_round(item.raw.fat,0)"></div></template>  
                     <template #item.protein="{item}"><div v-html="my_round(item.raw.protein,0)"></div></template>  
@@ -62,7 +62,7 @@
             </v-window-item>
             <v-window-item key="system_products" >                 
                 <v-data-table density="compact" :headers="system_products_headers" :items="system_products" :sort-by="[{key:'fullname',order:'asc'}]" class="elevation-1 cursorpointer" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500" @click:row="viewSystemProduct">
-                    <template v-slot:[`item.fullname`]="{ item }"><div v-html="products_html_fullname(item.raw,1)"></div></template>
+                    <template #item.fullname="{item}"><div v-html="products_html_fullname(item.raw,1)"></div></template>
                     <template #item.calories="{item}"><div v-html="my_round(item.raw.calories,0)"></div></template>  
                     <template #item.fat="{item}"><div v-html="my_round(item.raw.fat,0)"></div></template>  
                     <template #item.protein="{item}"><div v-html="my_round(item.raw.protein,0)"></div></template>  

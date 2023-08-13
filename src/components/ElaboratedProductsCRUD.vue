@@ -16,14 +16,14 @@
                             <v-icon v-if="['C','U'].includes(mode)" small class="mr-2" @click="editProductIn(item.raw)">mdi-pencil</v-icon>
                             <v-icon v-if="['C','U'].includes(mode)" small @click="deleteProductIn(item.raw)">mdi-delete</v-icon>
                         </template>
-                        <template v-slot:[`body.append`]="{headers}" v-if="newep.products_in.length>0">
+                        <!-- <template v-slot:[`body.append`]="{headers}" v-if="newep.products_in.length>0">
                             <tr style="background-color: WhiteSmoke">
                                 <td v-for="(header,i) in headers" :key="i">
                                     <div v-if="header.value=='products'">{{ $t("Total ({0} products):").format(newep.products_in.length) }}</div>
                                     <div v-if="header.value == 'amount'" class="d-flex justify-end" v-html="listobjects_sum(newep.products_in,'amount')"></div>
                                 </td>
                             </tr>
-                        </template>
+                        </template> -->
                     </v-data-table>
                 </v-card>
             </v-form>

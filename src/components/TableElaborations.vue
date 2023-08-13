@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-data-table density="compact" :headers="table_headers" :items="recipe.elaborations" class="elevation-1" :items-per-page="10000"  hide-default-footer :sort-by="[{key:'diners',order:'asc'}]"  fixed-header :height="$attrs.height" ref="table_elaborations" @click:row="viewItem" style="cursor: pointer">
-            <template v-slot:[`item.automatic`]="{ item }"><v-icon small v-if="item.raw.automatic" >mdi-check-outline</v-icon></template>
+            <template #item.automatic="{item}"><v-icon small v-if="item.raw.automatic" >mdi-check-outline</v-icon></template>
 
             <template #item.actions="{item}">
                 <v-icon small class="mr-2" @click.stop="editItem(item.raw)">mdi-pencil</v-icon>

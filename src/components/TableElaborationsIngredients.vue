@@ -3,20 +3,20 @@
         <v-data-table density="compact" :headers="products_in_headers()" :items="elaboration.elaborations_products_in" :sort-by="[{key:'final_grams',order:'desc'}]" class="elevation-1" hide-default-footer :items-per-page="10000" :key="'T'+key" height="50vh" fixed-header>
             <template #item.products="{item}"><div v-html="products_html_fullname(item.raw.products,4)"></div></template>
             <template #item.amount="{item}">{{ fraction(item.raw.amount).toFraction(true)}}</template>
-            <template v-slot:[`item.measures_types`]="{ item }"><div v-html="store().getters.getObjectPropertyByUrl('measures_types', item.raw.measures_types,'localname')"></div></template> 
-            <template v-slot:[`item.ni`]="{ item }"><v-icon small v-if="item.raw.ni" >mdi-check-outline</v-icon></template>
+            <template #item.measures_types="{item}"><div v-html="store().getters.getObjectPropertyByUrl('measures_types', item.raw.measures_types,'localname')"></div></template> 
+            <template #item.ni="{item}"><v-icon small v-if="item.raw.ni" >mdi-check-outline</v-icon></template>
             <template #item.actions="{item}">
                 <v-icon small class="mr-2" @click="editProductIn(item.raw)">mdi-pencil</v-icon>
                 <v-icon small @click="deleteProductIn(item.raw)">mdi-delete</v-icon>
             </template>
-            <template v-slot:[`body.append`]="{headers}" v-if="elaboration.elaborations_products_in.length>0">
+            <!-- <template v-slot:[`body.append`]="{headers}" v-if="elaboration.elaborations_products_in.length>0">
                 <tr style="background-color: WhiteSmoke">
                     <td v-for="(header,i) in headers" :key="i">
                         <div v-if="header.value=='products'">{{ $t("Total ({0} products):").format(elaboration.elaborations_products_in.length) }}</div>
                         <div v-if="header.value == 'final_grams'" class="d-flex justify-end" v-html="listobjects_sum(elaboration.elaborations_products_in,'final_grams')"></div>
                     </td>
                 </tr>
-            </template>
+            </template> -->
         </v-data-table>
 
         <!-- DIALOG PRODUCTS_IN CRUD -->

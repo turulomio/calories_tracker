@@ -19,7 +19,7 @@
                 <template #item.magnesium="{item}"><div v-html="my_round(item.magnesium,0)"></div></template>  
                 <template #item.phosphor="{item}"><div v-html="my_round(item.phosphor,0)"></div></template>  
                 <template #item.calcium="{item}"><div v-html="my_round(item.calcium,0)"></div></template>  
-                <template v-slot:[`body.append`]="{headers}" v-if="items.length>0">
+                <!-- <template v-slot:[`body.append`]="{headers}" v-if="items.length>0">
                     <tr style="background-color: WhiteSmoke">
                         <td v-for="(header,i) in headers" :key="i">
                             <div v-if="header.value == 'products'">{{ $t(`Total ({0} items):`).format(items.length)}}</div>
@@ -62,7 +62,7 @@
                             <div v-if="header.value == 'saturated_fat'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'saturated_fat')/elaboration.final_amount,0)"></div>
                         </td>
                     </tr>
-                </template>
+                </template> -->
         </v-data-table>
     </div>
 </template>
