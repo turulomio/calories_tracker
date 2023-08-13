@@ -30,7 +30,7 @@
                 </v-data-table>
             </v-window-item>
             <v-window-item key="system_companies" >                 
-                <v-data-table density="compact" :headers="system_companies_headers" :items="system_companies" sort-by="name" class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500">
+                <v-data-table density="compact" :headers="system_companies_headers" :items="system_companies" :sort-by="[{key:'name',order:'asc'}]" class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500">
 
                     <template #item.last="{item}">
                         {{localtime(item.raw.last)}}
@@ -192,15 +192,8 @@
                     this.parseResponseError(error)
                 });
             },
-            update_companies(with_dispatch){
-                if (with_dispatch){
-                    return this.store().dispatch("getCompanies")
-                    .then(() => {             
-                        this.companies=this.store().companies.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
-                    })
-                } else {                
-                    this.companies=this.store().companies.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
-                }
+            update_companies(){
+                    this.companies=this.getArrayFromMap(this.store().companies).filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase())) 
             },
             update_system_companies(){
                 return axios.get(`${this.store().apiroot}/api/system_companies/?search=${this.search}`, this.myheaders())
@@ -211,12 +204,12 @@
                 });
 
             },
-            update_all( with_dispatch=false){
+            update_all(){
                 // Refresh companies and system companies
                 // dispatch true refreshes uses
                 if (this.search==null) return
                 this.loading=true
-                Promise.all([this.update_companies(with_dispatch), this.update_system_companies()])
+                Promise.all([this.update_companies(), this.update_system_companies()])
                 .then( ()=> {
                     this.key=this.key+1
                     this.loading=false
