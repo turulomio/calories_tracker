@@ -5,7 +5,7 @@
         </h1>
         <DisplayValues :items="displayvalues()" :key="key" :minimized_items="6" width="30%"></DisplayValues>
 
-        <v-tabs  background-color="primary" dark v-model="tab" >
+        <v-tabs  bg-color="secondary" dark v-model="tab" >
             <v-tab key="height">{{ $t('Height chart') }}</v-tab>
             <v-tab key="weight">{{ $t('Weight chart') }}</v-tab>
             <v-tab key="registers">{{ $t('Registers') }}</v-tab>
