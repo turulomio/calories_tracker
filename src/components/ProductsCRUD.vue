@@ -88,9 +88,9 @@
                 key:0,
                 
                 formats_headers: [
-                    { text: this.$t('Format'), sortable: true, value: 'formats'},
-                    { text: this.$t('Amount'), value: 'amount', align:'right'},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"},
+                    { title: this.$t('Format'), sortable: true, key: 'formats'},
+                    { title: this.$t('Amount'), key: 'amount', align:'right'},
+                    { title: this.$t('Actions'), key: 'actions', sortable: false, width:"8%"},
                 ],
 
                 //Formats crud

@@ -29,9 +29,9 @@
                 from_date:null,
 
                 ranking_headers: [
-                    { text: this.$t('Position'), sortable: false, value: 'position', width:"8%",align:"right"},
-                    { text: this.$t('Product'), sortable: false, value: 'product'},
-                    { text: this.$t('Amount'), sortable: false, value: 'amount',width:"8%",align:"right"},
+                    { title: this.$t('Position'), sortable: false, key: 'position', width:"8%",align:"right"},
+                    { title: this.$t('Product'), sortable: false, key: 'product'},
+                    { title: this.$t('Amount'), sortable: false, key: 'amount',width:"8%",align:"right"},
                 ],
             }
         },        

@@ -32,13 +32,13 @@ import axios from 'axios'
                 key:0,
                 items:[],
                 items_headers: [
-                        { text: this.$t('Ingredients'), sortable: true, value: 'can_products_in_step', width:"5%"},
-                        { text: this.$t('Container'), sortable: true, value: 'can_container', width:"5%"},
-                        { text: this.$t('Container to'), sortable: true, value: 'can_container_to', width:"5%"},
-                        { text: this.$t('Temperatures'), sortable: true, value: 'can_temperatures', width:"5%"},
-                        { text: this.$t('Stir'), sortable: true, value: 'can_stir', width:"5%"},
-                        { text: this.$t('Comment'), sortable: true, value: 'has_comment', width:"5%"},
-                        { text: this.$t('Wording'), sortable: true, value: 'wording'},
+                        { title: this.$t('Ingredients'), sortable: true, key: 'can_products_in_step', width:"5%"},
+                        { title: this.$t('Container'), sortable: true, key: 'can_container', width:"5%"},
+                        { title: this.$t('Container to'), sortable: true, key: 'can_container_to', width:"5%"},
+                        { title: this.$t('Temperatures'), sortable: true, key: 'can_temperatures', width:"5%"},
+                        { title: this.$t('Stir'), sortable: true, key: 'can_stir', width:"5%"},
+                        { title: this.$t('Comment'), sortable: true, key: 'has_comment', width:"5%"},
+                        { title: this.$t('Wording'), sortable: true, key: 'wording'},
                     ]
 
 

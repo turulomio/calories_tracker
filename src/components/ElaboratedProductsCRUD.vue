@@ -69,9 +69,9 @@
 
 
                 products_in_headers: [
-                    { text: this.$t('Product'), sortable: true, value: 'products'},
-                    { text: this.$t('Amount'), value: 'amount', align:'right'},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"},
+                    { title: this.$t('Product'), sortable: true, key: 'products'},
+                    { title: this.$t('Amount'), key: 'amount', align:'right'},
+                    { title: this.$t('Actions'), key: 'actions', sortable: false, width:"8%"},
                 ],
 
                 key:0,

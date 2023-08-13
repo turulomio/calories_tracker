@@ -90,15 +90,15 @@
             return {
                 paginated_recipes:{},
                 recipes_headers: [
-                    { text: this.$t('Photo'), sortable: false, value: 'photo', width:"5%"},    
-                    { text: this.$t('Name'), sortable: true, value: 'name'},    
-                    { text: this.$t('Food type'), sortable: true, value: 'food_types', width: "15%"},
-                    { text: this.$t('Categories'), sortable: true, value: 'recipes_categories', width: "15%"},
-                    { text: this.$t('Valoration'), sortable: true, value: 'valoration', width: "7%"},
-                    { text: this.$t('Guests'), sortable: true, value: 'guests', width: "5%"},
-                    { text: this.$t('Soon'), sortable: true, value: 'soon', width: "5%"},
-                    { text: this.$t('Last'), sortable: true, value: 'last', width: "10%"},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false, width: "8%"},
+                    { title: this.$t('Photo'), sortable: false, key: 'photo', width:"5%"},    
+                    { title: this.$t('Name'), sortable: true, key: 'name'},    
+                    { title: this.$t('Food type'), sortable: true, key: 'food_types', width: "15%"},
+                    { title: this.$t('Categories'), sortable: true, key: 'recipes_categories', width: "15%"},
+                    { title: this.$t('Valoration'), sortable: true, key: 'valoration', width: "7%"},
+                    { title: this.$t('Guests'), sortable: true, key: 'guests', width: "5%"},
+                    { title: this.$t('Soon'), sortable: true, key: 'soon', width: "5%"},
+                    { title: this.$t('Last'), sortable: true, key: 'last', width: "10%"},
+                    { title: this.$t('Actions'), key: 'actions', sortable: false, width: "8%"},
                 ],
 
 

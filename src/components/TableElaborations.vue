@@ -46,10 +46,10 @@
                 elaboration_view_dialog:false,
 
                 table_headers: [
-                    { text: this.$t('Diners'), value: 'diners', sortable: true, width:"7%"},
-                    { text: this.$t('Automatic'), value: 'automatic', sortable: false, width:"10%"},
-                    { text: this.$t('Automatic adaptation text'), value: 'automatic_adaptation_step', sortable: false},
-                    { text: this.$t('Actions'), value: 'actions', sortable: false, width: "7%"},
+                    { title: this.$t('Diners'), key: 'diners', sortable: true, width:"7%"},
+                    { title: this.$t('Automatic'), key: 'automatic', sortable: false, width:"10%"},
+                    { title: this.$t('Automatic adaptation text'), key: 'automatic_adaptation_step', sortable: false},
+                    { title: this.$t('Actions'), key: 'actions', sortable: false, width: "7%"},
                 ],
                 items:[],
                 key: 0,

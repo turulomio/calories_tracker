@@ -6,7 +6,7 @@
         <v-select :items="tables" v-model="table" :label="$t('Select a catalog table')" return-object @change="on_table_change()"/>
 
   
-        <v-data-table density="compact" :headers="catalog_table_headers" :items="catalog_table" :sort-by="[{key:'name',order:'asc'}]"  class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" height="70vh">
+        <v-data-table density="compact" :headers="catalog_table_headers" :items="catalog_table" :sort-by="[{key:'',order:'asc'}]"  class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" height="70vh">
             <template v-slot:[`item.can_products_in_step`]="{ item }"><v-icon small v-if="item.can_products_in_step" >mdi-check-outline</v-icon><v-icon small color="red" v-if="item.man_products_in_step" >mdi-check-outline</v-icon></template>
             <template v-slot:[`item.can_container`]="{ item }"><v-icon small v-if="item.can_container" >mdi-check-outline</v-icon><v-icon small color="red" v-if="item.man_container" >mdi-check-outline</v-icon></template>
             <template v-slot:[`item.can_container_to`]="{ item }"><v-icon small v-if="item.can_container_to" >mdi-check-outline</v-icon><v-icon small color="red" v-if="item.man_container_to" >mdi-check-outline</v-icon></template>
@@ -95,12 +95,12 @@
                 key:0,
             
                 tables:[
-                    {text:this.$t("Recipes categories"), value:"recipes_categories", dialog: "dialog_recipes_categories", empty:"empty_recipes_categories", dispatch:"getRecipesCategories"},
-                    {text:this.$t("Recipes links types"), value:"recipes_links_types", dialog: "dialog_recipes_links_types", empty:"empty_recipes_links_types", dispatch:"getRecipesLinksTypes"},
-                    {text:this.$t("Stir types"), value:"stir_types", dialog: "dialog_stir_types", empty:"empty_stir_types", dispatch:"getStirTypes"},
-                    {text:this.$t("Temperatures types"), value:"temperatures_types", dialog: "dialog_temperatures_types", empty:"empty_temperatures_types", dispatch:"getTemperaturesTypes"},
-                    {text:this.$t("Measures types"), value:"measures_types", dialog: "dialog_measures_types", empty:"empty_measures_types", dispatch:"getMeasuresTypes"},
-                    {text:this.$t("Steps"), value:"steps", dialog: "dialog_steps", empty:"empty_steps", dispatch:"getSteps"},
+                    {title:this.$t("Recipes categories"), value:"recipes_categories", dialog: "dialog_recipes_categories", empty:"empty_recipes_categories", dispatch:"getRecipesCategories"},
+                    {title:this.$t("Recipes links types"), value:"recipes_links_types", dialog: "dialog_recipes_links_types", empty:"empty_recipes_links_types", dispatch:"getRecipesLinksTypes"},
+                    {title:this.$t("Stir types"), value:"stir_types", dialog: "dialog_stir_types", empty:"empty_stir_types", dispatch:"getStirTypes"},
+                    {title:this.$t("Temperatures types"), value:"temperatures_types", dialog: "dialog_temperatures_types", empty:"empty_temperatures_types", dispatch:"getTemperaturesTypes"},
+                    {title:this.$t("Measures types"), value:"measures_types", dialog: "dialog_measures_types", empty:"empty_measures_types", dispatch:"getMeasuresTypes"},
+                    {title:this.$t("Steps"), value:"steps", dialog: "dialog_steps", empty:"empty_steps", dispatch:"getSteps"},
                 ],
                 table: null,
                 catalog_table_headers:[],
@@ -182,23 +182,23 @@
                         this.table.value=="measures_types"
                 ){
                     this.catalog_table_headers= [
-                        { text: this.$t('Id'), sortable: true, value: 'id', width:"10%"},
-                        { text: this.$t('Name'), sortable: true, value: 'name'},
-                        { text: this.$t('Local name'), sortable: true, value: 'localname'},
-                        { text: this.$t('Actions'), value: 'actions', sortable: false, width: "10%"},
+                        { title: this.$t('Id'), sortable: true, key: 'id', width:"10%"},
+                        { title: this.$t('Name'), sortable: true, key: 'name'},
+                        { title: this.$t('Local name'), sortable: true, key: 'localname'},
+                        { title: this.$t('Actions'), key: 'actions', sortable: false, width: "10%"},
                     ]
                 }
                 else if ( this.table.value=="steps"){
                     this.catalog_table_headers= [
-                        { text: this.$t('Id'), sortable: true, value: 'id', width:"10%"},
-                        { text: this.$t('Name'), sortable: true, value: 'name'},
-                        { text: this.$t('Local name'), sortable: true, value: 'localname'},
-                        { text: this.$t('Ingredients'), sortable: true, value: 'can_products_in_step'},
-                        { text: this.$t('Container'), sortable: true, value: 'can_container'},
-                        { text: this.$t('Container to'), sortable: true, value: 'can_container_to'},
-                        { text: this.$t('Temperatures'), sortable: true, value: 'can_temperatures'},
-                        { text: this.$t('Stir'), sortable: true, value: 'can_stir'},
-                        { text: this.$t('Actions'), value: 'actions', sortable: false, width: "10%"},
+                        { title: this.$t('Id'), sortable: true, key: 'id', width:"10%"},
+                        { title: this.$t('Name'), sortable: true, key: 'name'},
+                        { title: this.$t('Local name'), sortable: true, key: 'localname'},
+                        { title: this.$t('Ingredients'), sortable: true, key: 'can_products_in_step'},
+                        { title: this.$t('Container'), sortable: true, key: 'can_container'},
+                        { title: this.$t('Container to'), sortable: true, key: 'can_container_to'},
+                        { title: this.$t('Temperatures'), sortable: true, key: 'can_temperatures'},
+                        { title: this.$t('Stir'), sortable: true, key: 'can_stir'},
+                        { title: this.$t('Actions'), key: 'actions', sortable: false, width: "10%"},
                     ]
 
                 }
