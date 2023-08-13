@@ -38,6 +38,7 @@ import {
 
 import {
     store,
+    products_html_fullname,
 } from './functions.js'
 
 
@@ -79,6 +80,7 @@ const mixin = {
         percentage_generic_html,
         percentage_generic_string, 
         percentage_html,
+        products_html_fullname,
         getMapObjectById,
         getArrayFromMap,
     }

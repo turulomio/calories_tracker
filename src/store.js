@@ -68,6 +68,84 @@ export const useStore = defineStore('global', {
           console.log(error)
       });
     },
+    updateAdditives() {
+        var start=new Date()
+        return axios.get(`${this.apiroot}/api/additives/`, myheaders())
+        .then((response)=>{
+          this.additives.clear()
+          response.data.forEach(o=>{
+            this.additives.set(o.url, o)
+          })  
+          console.log(`Updated ${response.data.length} additives in ${new Date()-start} ms`)
+        }, (error) => {
+          console.log(error)
+      });
+    },
+    updateCompanies() {
+        var start=new Date()
+        return axios.get(`${this.apiroot}/api/companies/`, myheaders())
+        .then((response)=>{
+          this.companies.clear()
+          response.data.forEach(o=>{
+            this.companies.set(o.url, o)
+          })  
+          console.log(`Updated ${response.data.length} companies in ${new Date()-start} ms`)
+        }, (error) => {
+          console.log(error)
+      });
+    },
+    updateFoodTypes() {
+        var start=new Date()
+        return axios.get(`${this.apiroot}/api/food_types/`, myheaders())
+        .then((response)=>{
+          this.food_types.clear()
+          response.data.forEach(o=>{
+            this.food_types.set(o.url, o)
+          })  
+          console.log(`Updated ${response.data.length} food_types in ${new Date()-start} ms`)
+        }, (error) => {
+          console.log(error)
+      });
+    },
+    updateFormats() {
+        var start=new Date()
+        return axios.get(`${this.apiroot}/api/formats/`, myheaders())
+        .then((response)=>{
+          this.formats.clear()
+          response.data.forEach(o=>{
+            this.formats.set(o.url, o)
+          })  
+          console.log(`Updated ${response.data.length} formats in ${new Date()-start} ms`)
+        }, (error) => {
+          console.log(error)
+      });
+    },
+    updatePots() {
+        var start=new Date()
+        return axios.get(`${this.apiroot}/api/pots/`, myheaders())
+        .then((response)=>{
+          this.pots.clear()
+          response.data.forEach(o=>{
+            this.pots.set(o.url, o)
+          })  
+          console.log(`Updated ${response.data.length} pots in ${new Date()-start} ms`)
+        }, (error) => {
+          console.log(error)
+      });
+    },
+    updateElaboratedProducts() {
+        var start=new Date()
+        return axios.get(`${this.apiroot}/api/elaborated_products/`, myheaders())
+        .then((response)=>{
+          this.elaborated_products.clear()
+          response.data.forEach(o=>{
+            this.elaborated_products.set(o.url, o)
+          })  
+          console.log(`Updated ${response.data.length} elaborated_products in ${new Date()-start} ms`)
+        }, (error) => {
+          console.log(error)
+      });
+    },
     updateProducts() {
         var start=new Date()
         return axios.get(`${this.apiroot}/api/products/`, myheaders())
@@ -81,12 +159,116 @@ export const useStore = defineStore('global', {
           console.log(error)
       });
     },
+    updateWeightWishes() {
+        var start=new Date()
+        return axios.get(`${this.apiroot}/api/weight_wishes/`, myheaders())
+        .then((response)=>{
+          this.weight_wishes.clear()
+          response.data.forEach(o=>{
+            this.weight_wishes.set(o.url, o)
+          })  
+          console.log(`Updated ${response.data.length} weight_wishes in ${new Date()-start} ms`)
+        }, (error) => {
+          console.log(error)
+      });
+    },
+    updateRecipesLinksTypes() {
+        var start=new Date()
+        return axios.get(`${this.apiroot}/api/recipes_links_types/`, myheaders())
+        .then((response)=>{
+          this.recipes_links_types.clear()
+          response.data.forEach(o=>{
+            this.recipes_links_types.set(o.url, o)
+          })  
+          console.log(`Updated ${response.data.length} recipes_links_types in ${new Date()-start} ms`)
+        }, (error) => {
+          console.log(error)
+      });
+    },
+    updateStirTypes() {
+        var start=new Date()
+        return axios.get(`${this.apiroot}/api/stir_types/`, myheaders())
+        .then((response)=>{
+          this.stir_types.clear()
+          response.data.forEach(o=>{
+            this.stir_types.set(o.url, o)
+          })  
+          console.log(`Updated ${response.data.length} stir_types in ${new Date()-start} ms`)
+        }, (error) => {
+          console.log(error)
+      });
+    },
+    updateTemperaturesTypes() {
+        var start=new Date()
+        return axios.get(`${this.apiroot}/api/temperatures_types/`, myheaders())
+        .then((response)=>{
+          this.temperatures_types.clear()
+          response.data.forEach(o=>{
+            this.temperatures_types.set(o.url, o)
+          })  
+          console.log(`Updated ${response.data.length} temperatures_types in ${new Date()-start} ms`)
+        }, (error) => {
+          console.log(error)
+      });
+    },
+    updateSteps() {
+        var start=new Date()
+        return axios.get(`${this.apiroot}/api/steps/`, myheaders())
+        .then((response)=>{
+          this.steps.clear()
+          response.data.forEach(o=>{
+            this.steps.set(o.url, o)
+          })  
+          console.log(`Updated ${response.data.length} steps in ${new Date()-start} ms`)
+        }, (error) => {
+          console.log(error)
+      });
+    },
+    updateRecipesCategories() {
+        var start=new Date()
+        return axios.get(`${this.apiroot}/api/recipes_categories/`, myheaders())
+        .then((response)=>{
+          this.recipes_categories.clear()
+          response.data.forEach(o=>{
+            this.recipes_categories.set(o.url, o)
+          })  
+          console.log(`Updated ${response.data.length} recipes_categories in ${new Date()-start} ms`)
+        }, (error) => {
+          console.log(error)
+      });
+    },
+    updateMeasuresTypes() {
+        var start=new Date()
+        return axios.get(`${this.apiroot}/api/measures_types/`, myheaders())
+        .then((response)=>{
+          this.measures_types.clear()
+          response.data.forEach(o=>{
+            this.measures_types.set(o.url, o)
+          })  
+          console.log(`Updated ${response.data.length} measures_types in ${new Date()-start} ms`)
+        }, (error) => {
+          console.log(error)
+      });
+    },
 
     updateAll(){
       return Promise.all([
         this.updateActivities(),
         this.updateAdditiveRisks(),
+        this.updateAdditives(),
+        this.updateCompanies(),
+        this.updateElaboratedProducts(),
+        this.updateFoodTypes(),
+        this.updateFormats(),
+        this.updatePots(),
         this.updateProducts(),
+        this.updateWeightWishes(),
+        this.updateRecipesLinksTypes(),
+        this.updateStirTypes(),
+        this.updateTemperaturesTypes(),
+        this.updateSteps(),
+        this.updateRecipesCategories(),
+        this.updateMeasuresTypes(),
       ])
     },
   }

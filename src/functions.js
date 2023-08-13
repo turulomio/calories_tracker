@@ -1,6 +1,6 @@
 import {id_from_hyperlinked_url} from './components/reusing/my_commons.js'
 
-// item is an additives_risk url
+// item is an additive_risks url
 export function product_risk_color(additive_risks_url){
     let id=id_from_hyperlinked_url(additive_risks_url)
     if (id==0) return "green"
@@ -10,16 +10,17 @@ export function product_risk_color(additive_risks_url){
     if (id==100) return "gray"
 }
 
-// item is an object with additives_risk parameters as integer,glutenfree
+// item is an object with additive_risks parameters as integer,glutenfree
 // type: 1:system_product, 2:product, 3:elaborated products, 4: meals (item is product_url)
 export function products_html_fullname(item,type_){
     if (type_==4) {
-        item=this.store().getters.getObjectByUrl("products",item)
+        item=this.store().products.get(item)
         type_=2
     }
 
-
-    let additive_risks_object=this.store().getters.getObjectById("additive_risks",item.additives_risk)
+    console.log(item.additives_risk,this.getMapObjectById("additive_risks", item.additives_risk))
+    let additive_risks_object=this.getMapObjectById("additive_risks", item.additives_risk)
+    console.log(additive_risks_object)
     let obsolete=(item.obsolete)? 'text-decoration-line-through' : ''
     let risk_color=product_risk_color(additive_risks_object.url)
     let type_icon
