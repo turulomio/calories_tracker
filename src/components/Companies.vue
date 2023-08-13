@@ -11,7 +11,7 @@
         </v-tabs>
         <v-tabs-items v-model="tab" class="ma-5">
             <v-tab-item key="companies" >
-                <v-data-table dense :headers="companies_headers" :items="companies" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+                <v-data-table density="compact" :headers="companies_headers" :items="companies" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
                     <template v-slot:[`item.last`]="{ item }">
                         {{localtime(item.last)}}
                     </template>        
@@ -28,7 +28,7 @@
                 </v-data-table>
             </v-tab-item>
             <v-tab-item key="system_companies" >                 
-                <v-data-table dense :headers="system_companies_headers" :items="system_companies" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
+                <v-data-table density="compact" :headers="system_companies_headers" :items="system_companies" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500">
                     <template v-slot:[`item.last`]="{ item }">
                         {{localtime(item.last)}}
                     </template>             

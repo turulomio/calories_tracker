@@ -10,7 +10,7 @@
                     <v-text-field v-model="new_settings.last_name" :label="$t('Set your last name')" :placeholder="$t('Set your last name')" :rules="RulesString(200,true)" counter="200"/>
                     <v-text-field v-model="new_settings.email" :label="$t('Set your email')" :placeholder="$t('Set your email')" :rules="RulesEmail(true)" counter="200"/>
 
-                    <MyDatePicker :label="$t('Set your birthday')" dense no-title v-model="new_settings.birthday"></MyDatePicker>
+                    <MyDatePicker :label="$t('Set your birthday')" density="compact" no-title v-model="new_settings.birthday"></MyDatePicker>
                     <v-checkbox v-model="new_settings.male" :label="$t('Are you a male?')"></v-checkbox>
                 </v-card>
 

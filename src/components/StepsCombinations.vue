@@ -7,7 +7,7 @@
         {{ $t("Container to")+": " }} <v-icon small v-if="step.can_container_to" >mdi-check-outline</v-icon><v-icon small color="red" v-if="step.man_container_to" >mdi-check-outline</v-icon>
         {{ $t("Temperatures")+": " }} <v-icon small v-if="step.can_temperatures" >mdi-check-outline</v-icon><v-icon small color="red" v-if="step.man_temperatures" >mdi-check-outline</v-icon>
         {{ $t("Stir")+": " }} <v-icon small v-if="step.can_stir" >mdi-check-outline</v-icon><v-icon small color="red" v-if="step.man_stir" >mdi-check-outline</v-icon></p>
-        <v-data-table dense :headers="items_headers" :items="items" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" height="70vh">
+        <v-data-table density="compact" :headers="items_headers" :items="items" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" height="70vh">
             <template v-slot:[`item.can_products_in_step`]="{ item }"><v-icon small v-if="item.can_products_in_step" >mdi-check-outline</v-icon></template>
             <template v-slot:[`item.can_container`]="{ item }"><v-icon small v-if="item.can_container" >mdi-check-outline</v-icon></template>
             <template v-slot:[`item.can_container_to`]="{ item }"><v-icon small v-if="item.can_container_to" >mdi-check-outline</v-icon></template>

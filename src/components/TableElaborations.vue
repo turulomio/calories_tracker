@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table dense :headers="table_headers" :items="recipe.elaborations" class="elevation-1" disable-pagination  hide-default-footer sort-by="diners" fixed-header :height="$attrs.height" ref="table_elaborations" @click:row="viewItem" style="cursor: pointer">
+        <v-data-table density="compact" :headers="table_headers" :items="recipe.elaborations" class="elevation-1" disable-pagination  hide-default-footer sort-by="diners" fixed-header :height="$attrs.height" ref="table_elaborations" @click:row="viewItem" style="cursor: pointer">
             <template v-slot:[`item.automatic`]="{ item }"><v-icon small v-if="item.automatic" >mdi-check-outline</v-icon></template>
 
             <template v-slot:[`item.actions`]="{ item }">

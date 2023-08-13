@@ -6,7 +6,7 @@
             <v-btn class="" :color="(new_elaboration.final_amount)? '': 'primary'" :disabled="elaboration.automatic" @click="setFinalAmount()" >{{ (new_elaboration.final_amount==null) ? $t("Final amount wasn't set") : $t("Final amount: {0} g").format(new_elaboration.final_amount)}}</v-btn>
 
     </h1>           
-        <v-alert v-if="elaboration.automatic" type="error" dense text><div v-html="automatic_adaptation_text()"></div></v-alert>
+        <v-alert v-if="elaboration.automatic" type="error" density="compact" text><div v-html="automatic_adaptation_text()"></div></v-alert>
         <v-card class="pa-8 mt-4">
             <v-form ref="form" v-model="form_valid" lazy-validation>          
                 <v-card class="mt-4">

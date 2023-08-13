@@ -7,10 +7,10 @@
                 <v-autocomplete :readonly="mode=='D'" :items="store().food_types" v-model="new_recipe.food_types" :label="$t('Select product food type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-autocomplete :readonly="mode=='D'" :items="store().recipes_categories" v-model="new_recipe.recipes_categories" multiple chips :label="$t('Select recipe categories')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-text-field :readonly="mode=='D'" v-model.number="new_recipe.valoration" :label="$t('Set your valoration')" :placeholder="$t('Set your valoration')" :rules="RulesInteger(10,false)" counter="200"/>
-                <v-checkbox dense :readonly="mode=='D'" v-model="new_recipe.guests" :label="$t('Is a recipe for guests?')"></v-checkbox>                
-                <v-checkbox dense :readonly="mode=='D'" v-model="new_recipe.soon" :label="$t('Do you want to make it soon?')"></v-checkbox>                     
-                <v-checkbox dense :readonly="mode=='D'" v-model="new_recipe.obsolete" :label="$t('Is obsolete?')"></v-checkbox>    
-                <v-textarea dense :readonly="mode=='D'" v-model="new_recipe.comment" :label="$t('Set your comment')" :placeholder="$t('Set your comment')" :rules="RulesString(2000,false)" counter="2000"/>
+                <v-checkbox density="compact" :readonly="mode=='D'" v-model="new_recipe.guests" :label="$t('Is a recipe for guests?')"></v-checkbox>                
+                <v-checkbox density="compact" :readonly="mode=='D'" v-model="new_recipe.soon" :label="$t('Do you want to make it soon?')"></v-checkbox>                     
+                <v-checkbox density="compact" :readonly="mode=='D'" v-model="new_recipe.obsolete" :label="$t('Is obsolete?')"></v-checkbox>    
+                <v-textarea density="compact" :readonly="mode=='D'" v-model="new_recipe.comment" :label="$t('Set your comment')" :placeholder="$t('Set your comment')" :rules="RulesString(2000,false)" counter="2000"/>
         
             </v-form>
             <v-card-actions>

@@ -29,10 +29,10 @@
                     <v-list-item link router :to="{ name: 'recipes'}" v-if="store().logged"  prepend-icon="mdi-book-open-variant" :title="$t('Recipes')" />
 <!--                    POTS -->
                     <v-list-item link router :to="{ name: 'pots'}" v-if="store().logged" prepend-icon="mdi-pot" :title="$t('Pot')" />
-<!--                     REPORTS -->
-                    <v-list-group :value="false" prepend-icon="mdi-chart-box-outline"  v-if="store().logged">
-                        <template v-slot:activator>
-                            <v-list-item-title>{{ $t("Reports") }}</v-list-item-title>
+<!--                     REPORTS -->                   
+                    <v-list-group value="Help"  v-if="store().logged">
+                        <template v-slot:activator="{ props }">
+                            <v-list-item v-bind="props" prepend-icon="mdi-chart-box-outline" :title="$t('Reports')"></v-list-item>
                         </template>
                         <v-list-item link router :to="{ name: 'meals_ranking'}">
                             <v-list-item-title>{{ $t("Meals ranking") }}</v-list-item-title>
@@ -41,11 +41,12 @@
                             <v-list-item-title>{{ $t("Curiosities") }}</v-list-item-title>
                         </v-list-item>
                     </v-list-group>    
-<!--                     ADMINISTRATION -->
-                    <v-list-group :value="false" prepend-icon="mdi-cogs"  v-if="store().logged">
-                        <template v-slot:activator>
-                            <v-list-item-title>{{ $t("Administration") }}</v-list-item-title>
+<!--                     ADMINISTRATION -->                    
+                    <v-list-group value="Help"  v-if="store().logged">
+                        <template v-slot:activator="{ props }">
+                            <v-list-item v-bind="props" prepend-icon="mdi-cogs" :title="$t('Administration')"></v-list-item>
                         </template>
+
                         <v-list-item link router :to="{ name: 'catalog_tables'}" v-if="store().catalog_manager">
                             <v-list-item-title>{{ $t("Catalog tables") }}</v-list-item-title>
                         </v-list-item>

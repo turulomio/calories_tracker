@@ -5,11 +5,11 @@
         </h1>
 
             <v-card width="20%" class="pa-5 mx-auto" outlined>
-                <MyDatePicker dense :label="$t('Select a date')" v-model="day" hidenullicon @input="on_day_input()"></MyDatePicker>
+                <MyDatePicker density="compact" :label="$t('Select a date')" v-model="day" hidenullicon @input="on_day_input()"></MyDatePicker>
             </v-card>
 
 
-            <v-data-table dense class="mt-4 elevation-1" :headers="meals_headers" :items="meals" sort-by="name" hide-default-footer disable-pagination :loading="loading" :key="'T'+key">
+            <v-data-table density="compact" class="mt-4 elevation-1" :headers="meals_headers" :items="meals" sort-by="name" hide-default-footer disable-pagination :loading="loading" :key="'T'+key">
                 <template v-slot:[`item.datetime`]="{ item }">
                     {{localtime(item.datetime).slice(10)}}
                 </template>          

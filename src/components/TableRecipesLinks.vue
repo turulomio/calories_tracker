@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table dense :headers="table_headers" :items="recipe.recipes_links" class="elevation-1" disable-pagination  hide-default-footer sort-by="date" fixed-header :height="$attrs.height" ref="table_recipes_links">
+        <v-data-table density="compact" :headers="table_headers" :items="recipe.recipes_links" class="elevation-1" disable-pagination  hide-default-footer sort-by="date" fixed-header :height="$attrs.height" ref="table_recipes_links">
             <template v-slot:[`item.photo`]="{ item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px"/></template>
             <template v-slot:[`item.type`]="{ item }"><div v-html="store().getters.getObjectPropertyByUrl('recipes_links_types', item.type,'localname')"></div></template> 
             <template v-slot:[`item.link`]="{ item }"><div @click="on_link_click(item)">{{item.link}}</div></template> 

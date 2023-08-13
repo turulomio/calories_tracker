@@ -2,10 +2,10 @@
     <div class="ma-4">
         <h1 class="mb-4">{{ $t(`Meals ranking`) }}</h1>
             <v-card width="30%" class="pa-5 mx-auto" outlined>
-                <MyDatePicker dense :label="$t('Report from selected date')" v-model="from_date" @input="on_day_input()"></MyDatePicker>
+                <MyDatePicker density="compact" :label="$t('Report from selected date')" v-model="from_date" @input="on_day_input()"></MyDatePicker>
             </v-card>
 
-        <v-data-table dense :headers="ranking_headers" :items="ranking" sort-by="position" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="key" fixed-header height="500">
+        <v-data-table density="compact" :headers="ranking_headers" :items="ranking" sort-by="position" class="elevation-1" hide-default-footer disable-pagination :loading="loading" :key="key" fixed-header height="500">
             <template v-slot:[`item.position`]="{ index }">{{index+1}}</template>    
             <template v-slot:[`item.product`]="{ item }"><div v-html="products_html_fullname(item.product,4)"></div></template>            
             <template v-slot:[`item.amount`]="{ item }">{{ my_round(item.amount,0)}}</template>

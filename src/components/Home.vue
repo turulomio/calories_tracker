@@ -7,7 +7,6 @@
     </div>
 </template>
 <script>
-    import axios from 'axios'
     import imgUrl from '@/assets/calories_tracker.png'
     export default {
         components:{

@@ -17,6 +17,7 @@ export default defineConfig({
       autoImport: true,
     }),
   ],
+  base: '/calories_tracker',
   define: { 'process.env': {} },
   resolve: {
     alias: {

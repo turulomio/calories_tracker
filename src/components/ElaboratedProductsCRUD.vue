@@ -8,7 +8,7 @@
                 <v-text-field :readonly="mode=='D'" v-model="newep.final_amount" :label="$t('Set your final amount')" :placeholder="$t('Set your final amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
                 <v-checkbox v-model="newep.obsolete" :label="$t('Is obsolete?')"></v-checkbox>                
                 <v-card class="mt-4">
-                    <v-data-table dense :headers="products_in_headers" :items="newep.products_in" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250" fixed-header>
+                    <v-data-table density="compact" :headers="products_in_headers" :items="newep.products_in" sort-by="name" class="elevation-1" hide-default-footer disable-pagination :key="'T'+key" :height="250" fixed-header>
                         <template v-slot:[`item.products`]="{ item }">
                             <div v-html="products_html_fullname(item.products,4)"></div>
                         </template>

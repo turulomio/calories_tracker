@@ -12,7 +12,7 @@
         </v-tabs>
         <v-tabs-items v-model="tab" class="ma-5">
             <v-tab-item key="products" >
-                <v-data-table dense :headers="products_headers" :items="products" sort-by="fullname" class="elevation-1 cursorpointer" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" @click:row="viewProduct">
+                <v-data-table density="compact" :headers="products_headers" :items="products" sort-by="fullname" class="elevation-1 cursorpointer" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" @click:row="viewProduct">
                     <template v-slot:[`item.fullname`]="{ item }"><div v-html="products_html_fullname(item,2)"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
@@ -37,7 +37,7 @@
                 </v-data-table>
             </v-tab-item>
             <v-tab-item key="elaborated_products">
-                <v-data-table dense :headers="elaborated_products_headers" :items="elaborated_products" sort-by="name" class="elevation-1 cursorpointer" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" @click:row="viewElaboratedProduct">
+                <v-data-table density="compact" :headers="elaborated_products_headers" :items="elaborated_products" sort-by="name" class="elevation-1 cursorpointer" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" @click:row="viewElaboratedProduct">
                     <template v-slot:[`item.fullname`]="{ item }"><div v-html="products_html_fullname(item,3)"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
@@ -61,7 +61,7 @@
                 </v-data-table>
             </v-tab-item>
             <v-tab-item key="system_products" >                 
-                <v-data-table dense :headers="system_products_headers" :items="system_products" sort-by="fullname" class="elevation-1 cursorpointer" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" @click:row="viewSystemProduct">
+                <v-data-table density="compact" :headers="system_products_headers" :items="system_products" sort-by="fullname" class="elevation-1 cursorpointer" hide-default-footer disable-pagination :loading="loading" :key="'T'+key" :height="500" @click:row="viewSystemProduct">
                     <template v-slot:[`item.fullname`]="{ item }"><div v-html="products_html_fullname(item,1)"></div></template>
                     <template v-slot:[`item.calories`]="{ item }"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template v-slot:[`item.fat`]="{ item }"><div v-html="my_round(item.fat,0)"></div></template>  
