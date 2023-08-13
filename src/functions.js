@@ -17,10 +17,7 @@ export function products_html_fullname(item,type_){
         item=this.store().products.get(item)
         type_=2
     }
-
-    console.log(item.additives_risk,this.getMapObjectById("additive_risks", item.additives_risk))
     let additive_risks_object=this.getMapObjectById("additive_risks", item.additives_risk)
-    console.log(additive_risks_object)
     let obsolete=(item.obsolete)? 'text-decoration-line-through' : ''
     let risk_color=product_risk_color(additive_risks_object.url)
     let type_icon
