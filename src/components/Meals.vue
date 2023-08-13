@@ -34,7 +34,8 @@
                     <v-icon small class="mr-1" @click="copyMeal(item.raw)">mdi-content-copy</v-icon>
                     <v-icon small class="mr-1" @click="editMeal(item.raw)">mdi-pencil</v-icon>
                     <v-icon small class="mr-1" @click="deleteMeal(item.raw)">mdi-delete</v-icon>
-                </template>            
+                </template>       
+                <template #bottom ></template>        
                 <!-- <template v-slot:[`body.append`]="{headers}" v-if="meals.length>0">
                     <tr style="background-color: WhiteSmoke">
                         <td v-for="(header,i) in headers" :key="i">
