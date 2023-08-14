@@ -78,12 +78,12 @@
                             {
                                 name: this.$t("Add a pot"),
                                 icon: "mdi-plus",
-                                code: function(this_){
-                                    this_.pot_mode="C"
-                                    this_.pot=this_.empty_pots()
-                                    this_.key=this_.key+1
-                                    this_.dialog_pots_crud=true
-                                },
+                                code: function(){
+                                    this.pot_mode="C"
+                                    this.pot=this.empty_pots()
+                                    this.key=this.key+1
+                                    this.dialog_pots_crud=true
+                                }.bind(this),
                             },
                         ]
                     },

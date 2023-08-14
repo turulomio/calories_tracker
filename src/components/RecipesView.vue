@@ -53,32 +53,32 @@
                         children: [
                             {
                                 name:this.$t('New recipe link'),
-                                code: async function(this_){
-                                    if (this_.tab!=0){
-                                        this_.tab=0
+                                code: async function(){
+                                    if (this.tab!=0){
+                                        this.tab=0
                                         await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
                                     }
-                                    this_.$refs.table_links.on_new_click()
-                                },
+                                    this.$refs.table_links.on_new_click()
+                                }.bind(this),
                                 icon: "mdi-pencil",
                             },
                             {
                                 name:this.$t('New recipe main photo'),
-                                code: async function(this_){
-                                    if (this_.tab!=0){
-                                        this_.tab=0
+                                code: async function(){
+                                    if (this.tab!=0){
+                                        this.tab=0
                                         await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
                                     }
-                                    this_.$refs.table_links.on_new_click(7)
-                                },
+                                    this.$refs.table_links.on_new_click(7)
+                                }.bind(this),
                                 icon: "mdi-pencil",
                             },
                             {
                                 name:this.$t('New elaboration'),
-                                code: function(this_){
-                                    this_.tab=1
-                                    this_.$refs.table_elaborations.on_new_click()
-                                },
+                                code: function(){
+                                    this.tab=1
+                                    this.$refs.table_elaborations.on_new_click()
+                                }.bind(this),
                                 icon: "mdi-pencil",
                             },
                         ]

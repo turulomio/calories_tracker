@@ -89,15 +89,15 @@
                             {
                                 name: this.$t("Add biometrics"),
                                 icon: "mdi-plus",
-                                code: function(this_){
-                                    this_.biometric_deleting=false
-                                    this_.biometric=this_.empty_biometrics()
-                                    this_.biometric.height=this_.biometric_last?.height
-                                    this_.biometric.weight=this_.biometric_last?.weight
-                                    this_.biometric.weight_wishes=this_.biometric_last?.weight_wishes
-                                    this_.biometric.activities=this_.biometric_last?.activities
-                                    this_.key=this_.key+1
-                                    this_.dialog_biometrics_crud=true
+                                code: function(this){
+                                    this.biometric_deleting=false
+                                    this.biometric=this.empty_biometrics()
+                                    this.biometric.height=this.biometric_last?.height
+                                    this.biometric.weight=this.biometric_last?.weight
+                                    this.biometric.weight_wishes=this.biometric_last?.weight_wishes
+                                    this.biometric.activities=this.biometric_last?.activities
+                                    this.key=this.key+1
+                                    this.dialog_biometrics_crud=true
                                 },
                             },
                         ]

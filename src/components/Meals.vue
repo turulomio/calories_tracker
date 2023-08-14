@@ -120,33 +120,33 @@
                             {
                                 name: this.$t("Add meal"),
                                 icon: "mdi-plus",
-                                code: function(this_){
-                                    this_.meals_crud_mode="C"
-                                    this_.meal=this_.empty_meals()
-                                    this_.key=this_.key+1
-                                    this_.meals_crud_dialog=true
-                                },
+                                code: function(){
+                                    this.meals_crud_mode="C"
+                                    this.meal=this.empty_meals()
+                                    this.key=this.key+1
+                                    this.meals_crud_dialog=true
+                                }.bind(this),
                             },
                             {
                                 name: this.$t("Delete selected day meals"),
                                 icon: "mdi-plus",
-                                code: function(this_){
-                                    var r = confirm(this_.$t("Do you want to delete selected day meals?"))
+                                code: function(){
+                                    var r = confirm(this.$t("Do you want to delete selected day meals?"))
                                     if(r == true) {
                                         let day_meals=[]
-                                        this_.meals.forEach(element => {
+                                        this.meals.forEach(element => {
                                             day_meals.push(element.url)
                                         })
 
-                                        axios.post(`${this_.store().apiroot}/api/meals/delete_several/`, {meals:day_meals},  this_.myheaders())
+                                        axios.post(`${this.store().apiroot}/api/meals/delete_several/`, {meals:day_meals},  this.myheaders())
                                         .then(() => {
-                                            this_.update_all()
+                                            this.update_all()
                                         }, (error) => {
-                                            this_.parseResponseError(error)
+                                            this.parseResponseError(error)
                                         })
                                     }
                                 
-                                },
+                                }.bind(this),
                             },
                         ]
                     },

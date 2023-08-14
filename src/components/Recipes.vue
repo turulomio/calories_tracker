@@ -140,13 +140,13 @@
                             {
                                 name: this.$t("Add a new recipe"),
                                 icon: "mdi-plus",
-                                code: function(this_){
-                                    this_.recipe_mode="C"
-                                    this_.recipe=this_.empty_recipes()
-                                    this_.recipe.food_types=this_.store().getters.getObjectPropertyById("food_types",19,"url")//Homemade food
-                                    this_.key=this_.key+1
-                                    this_.dialog_recipes_crud=true
-                                },
+                                code: function(){
+                                    this.recipe_mode="C"
+                                    this.recipe=this.empty_recipes()
+                                    this.recipe.food_types=this.store().getters.getObjectPropertyById("food_types",19,"url")//Homemade food
+                                    this.key=this.key+1
+                                    this.dialog_recipes_crud=true
+                                }.bind(this),
                             },
 
                         ]
@@ -157,74 +157,74 @@
                             {
                                 name: this.$t("Guests recipes"),
                                 icon: "mdi-account-group",
-                                code: function(this_){
-                                    this_.search=":GUESTS"
-                                    this_.options.multiSort=false
-                                    this_.options.sortBy=["last"]
-                                    this_.options.sortDesc=[true]
-                                    this_.update_recipes(this_.options)
-                                    this_.key=this_.key+1
-                                },
+                                code: function(){
+                                    this.search=":GUESTS"
+                                    this.options.multiSort=false
+                                    this.options.sortBy=["last"]
+                                    this.options.sortDesc=[true]
+                                    this.update_recipes(this.options)
+                                    this.key=this.key+1
+                                }.bind(this),
                             },
                             {
                                 name: this.$t("To elaborate soon"),
                                 icon: "mdi-clock-outline",
-                                code: function(this_){
-                                    this_.search=":SOON"
-                                    this_.options.multiSort=false
-                                    this_.options.sortBy=["last"]
-                                    this_.options.sortDesc=[true]
-                                    this_.update_recipes(this_.options)
-                                    this_.key=this_.key+1
-                                },
+                                code: function(){
+                                    this.search=":SOON"
+                                    this.options.multiSort=false
+                                    this.options.sortBy=["last"]
+                                    this.options.sortDesc=[true]
+                                    this.update_recipes(this.options)
+                                    this.key=this.key+1
+                                }.bind(this),
                             },
                             {
                                 name: this.$t("Evaluated"),
                                 icon: "mdi-star-outline",
-                                code: function(this_){
-                                    this_.search=":VALORATION"
-                                    this_.options.multiSort=true
-                                    this_.options.sortBy=["valoration","last"]
-                                    this_.options.sortDesc=[true,true]
-                                    this_.update_recipes(this_.options)
-                                    this_.key=this_.key+1
-                                },
+                                code: function(){
+                                    this.search=":VALORATION"
+                                    this.options.multiSort=true
+                                    this.options.sortBy=["valoration","last"]
+                                    this.options.sortDesc=[true,true]
+                                    this.update_recipes(this.options)
+                                    this.key=this.key+1
+                                }.bind(this),
                             },
                             {
                                 name: this.$t("Last edited"),
                                 icon: "mdi-note-edit-outline",
-                                code: function(this_){
-                                    this_.search=":LAST"
-                                    this_.options.multiSort=false
-                                    this_.options.sortBy=["last"]
-                                    this_.options.sortDesc=[true]
-                                    this_.update_recipes(this_.options)
-                                    this_.key=this_.key+1
-                                },
+                                code: function(){
+                                    this.search=":LAST"
+                                    this.options.multiSort=false
+                                    this.options.sortBy=["last"]
+                                    this.options.sortDesc=[true]
+                                    this.update_recipes(this.options)
+                                    this.key=this.key+1
+                                }.bind(this),
                             },
                             {
                                 name: this.$t("With elaborations"),
                                 icon: "mdi-cog-outline",
-                                code: function(this_){
-                                    this_.search=":WITH_ELABORATIONS"
-                                    this_.options.multiSort=false
-                                    this_.options.sortBy=["last"]
-                                    this_.options.sortDesc=[true]
-                                    this_.update_recipes(this_.options)
-                                    this_.key=this_.key+1
-                                },
+                                code: function(){
+                                    this.search=":WITH_ELABORATIONS"
+                                    this.options.multiSort=false
+                                    this.options.sortBy=["last"]
+                                    this.options.sortDesc=[true]
+                                    this.update_recipes(this.options)
+                                    this.key=this.key+1
+                                }.bind(this),
                             },
                             {
                                 name: this.$t("Without main photo"),
                                 icon: "mdi-image-off-outline",
-                                code: function(this_){
-                                    this_.search=":WITHOUT_MAINPHOTO"
-                                    this_.options.multiSort=false
-                                    this_.options.sortBy=["last"]
-                                    this_.options.sortDesc=[true]
-                                    this_.update_recipes(this_.options)
-                                    this_.key=this_.key+1
-                                },
+                                code: function(){
+                                    this.search=":WITHOUT_MAINPHOTO"
+                                    this.options.multiSort=false
+                                    this.options.sortBy=["last"]
+                                    this.options.sortDesc=[true]
+                                    this.update_recipes(this.options)
+                                    this.key=this.key+1
+                                }.bind(this),
                             },
                         ]
                     },
@@ -234,10 +234,10 @@
                             {
                                 name: this.$t("Shopping list"),
                                 icon: "mdi-cart",
-                                code: function(this_){
-                                    this_.dialog_shopping_list=true
-                                    this_.key=this_.key+1
-                                },
+                                code: function(){
+                                    this.dialog_shopping_list=true
+                                    this.key=this.key+1
+                                }.bind(this),
                             },
                         ]
                     },
