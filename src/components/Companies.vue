@@ -5,7 +5,7 @@
         </h1>
         <v-text-field class="ml-10 mr-10 mb-5" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"  v-on:keyup.enter="on_search_change()"></v-text-field>
     
-        <v-tabs  bg-color="secondary" dark v-model="tab" >
+        <v-tabs bg-color="primary" v-model="tab" >
             <v-tab key="companies">{{ $t('Companies') }}<v-badge inline v-if="companies.length>0" color="error" class="ml-2" :content="companies.length"/></v-tab>
             <v-tab key="system_companies">{{ $t('System companies') }}<v-badge inline v-if="system_companies.length>0" color="error" class="ml-2" :content="system_companies.length"/></v-tab>
         </v-tabs>
@@ -122,12 +122,12 @@
                             {
                                 name: this.$t("Add a company"),
                                 icon: "mdi-plus",
-                                code: function(this_){
-                                    this_.company_mode="C"
-                                    this_.company=this_.empty_companies()
-                                    this_.key=this_.key+1
-                                    this_.dialog_companies_crud=true
-                                },
+                                code: function(){
+                                    this.company_mode="C"
+                                    this.company=this.empty_companies()
+                                    this.key=this.key+1
+                                    this.dialog_companies_crud=true
+                                }.bind(this),
                             },
                         ]
                     },
@@ -138,12 +138,12 @@
                             {
                                 name: this.$t("Add a system company"),
                                 icon: "mdi-plus",
-                                code: function(this_){
-                                    this_.system_company_mode="C"
-                                    this_.system_company=this_.empty_system_companies()
-                                    this_.key=this_.key+1
-                                    this_.dialog_system_companies_crud=true
-                                },
+                                code: function(){
+                                    this.system_company_mode="C"
+                                    this.system_company=this.empty_system_companies()
+                                    this.key=this.key+1
+                                    this.dialog_system_companies_crud=true
+                                }.bind(this),
                             },
                         ]
                 })
