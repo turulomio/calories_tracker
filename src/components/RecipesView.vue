@@ -5,7 +5,7 @@
         </h1>
         <DisplayValues :items="displayvalues()" :minimized_items="5" :key="key"></DisplayValues>
 
-        <v-tabs  bg-color="secondary" dark  v-model="tab" >
+        <v-tabs  bg-color="primary" dark  v-model="tab" >
             <v-tab key="documentation">{{ $t('Documentation') }}<v-badge color="error" class="ml-2" inline :content="new_recipe.recipes_links.length.toString()"/></v-tab>
             <v-tab key="elaborations">{{ $t('Elaborations') }}<v-badge color="error" class="ml-2" inline :content="new_recipe.elaborations.length.toString()"/></v-tab>
             <v-tabs-slider color="yellow"></v-tabs-slider>

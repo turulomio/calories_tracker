@@ -1,10 +1,10 @@
 
 <template>
     <div>
-        <v-card outlined class="ma-4 pa-4" :height="$attrs.height ? $attrs.height: 500" :width="($attrs.width)? $attrs.width: '100%'">
+        <v-card outlined class="ma-4 pa-4" :height="height">
             <v-chart
                 ref="chart"
-                :option="chart_option()"
+                :option="chart_option"
                 autoresize
                 :loading="loading"
             />
@@ -18,15 +18,13 @@
             data:{ //Must be an array [(date, float)]
                 required:true,
             },
-        },
-        data(){ 
-            return{
-                loading:false,
-                tuple_closes:[],
-
+            height:{
+                type: Number,
+                required:false,
+                default: 500,
             }
         },
-        methods: {
+        computed:{
             chart_option(){
                 return {
                     legend: {
@@ -78,7 +76,16 @@
                     }],
                     series: this.series()
                 }
-            },
+            }
+        },
+        data(){ 
+            return{
+                loading:false,
+                tuple_closes:[],
+
+            }
+        },
+        methods: {
             series(){
                 var r=[]
                 r.push({
@@ -90,6 +97,8 @@
                 return r
             },
         },
+        created(){
+        }
     }
 
 

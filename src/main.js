@@ -12,7 +12,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 
 
 
-// import * as echarts from 'echarts';
+import * as echarts from 'echarts';
 import ECharts from 'vue-echarts'
 
 document.title=import.meta.env.VITE_APP_TITLE

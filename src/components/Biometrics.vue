@@ -5,7 +5,7 @@
         </h1>
         <DisplayValues :items="displayvalues()" :key="key" :minimized_items="6" width="30%"></DisplayValues>
 
-        <v-tabs  bg-color="secondary" dark v-model="tab" >
+        <v-tabs  bg-color="primary" dark v-model="tab" >
             <v-tab key="height">{{ $t('Height chart') }}</v-tab>
             <v-tab key="weight">{{ $t('Weight chart') }}</v-tab>
             <v-tab key="registers">{{ $t('Registers') }}</v-tab>
@@ -18,12 +18,11 @@
                 <ChartWeight  v-if="!loading" :data="chart_weight_data"></ChartWeight>
             </v-window-item>
             <v-window-item key="registers" >  
-                <v-card v-if="!loading">
-
-                    <v-data-table density="compact" :headers="biometrics_headers" :items="biometrics" :sort-by="[{key:'datetime',order:'desc'}]"  class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500">
+                <v-card >
+                    <v-data-table density="compact" :headers="biometrics_headers" :items="biometrics" :sort-by="[{key:'datetime',order:'desc'}]"  class="elevation-1" :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500">
                         <template #item.datetime="{item}">
                             {{localtime(item.raw.datetime)}}
-                        </template>             
+                        </template>              
                         <template #item.activities="{item}">
                             <div v-html="store().activities.get(item.raw.activities).localname"></div>
                         </template>         
@@ -35,7 +34,7 @@
                         <template #item.actions="{item}">
                             <v-icon small class="mr-2" @click="editBiometric(item.raw)">mdi-pencil</v-icon>
                             <v-icon small @click="deleteBiometric(item.raw)">mdi-delete</v-icon>
-                        </template>                  1
+                        </template>
                         <!-- <template v-slot:[`body.append`]="{headers}">
                             <tr style="background-color: WhiteSmoke">
                                 <td v-for="(header,i) in headers" :key="'Foot'+i">
@@ -47,6 +46,7 @@
                                 </td>
                             </tr>
                         </template> -->
+                        <template #bottom></template>
                     </v-data-table>
                 </v-card>
             </v-window-item>
