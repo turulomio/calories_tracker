@@ -10,7 +10,7 @@
         <v-card class="pa-8 mt-4">
             <v-form ref="form" v-model="form_valid" lazy-validation>          
                 <v-card class="mt-4">
-                    <v-tabs bg-color="secondary" dark  v-model="tab" >
+                    <v-tabs bg-color="primary" dark  v-model="tab" >
                         <v-tab key="ingredients"><v-icon left>mdi-apple</v-icon>{{ $t('Ingredients') }}<v-badge v-if="new_elaboration.elaborations_products_in.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_products_in.length"/></v-tab>
                         <v-tab key="nutritional"><v-icon left>mdi-apple</v-icon>{{ $t('Nutritional information') }}<v-badge v-if="new_elaboration.elaborations_products_in.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_products_in.length"/></v-tab>
                         <v-tab key="containers"><v-icon left>mdi-apple</v-icon>{{ $t('Containers') }}<v-badge v-if="new_elaboration.elaborations_containers.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_containers.length"/></v-tab>
@@ -112,9 +112,9 @@
                             {
                                 name: this.$t("Generate PDF"),
                                 icon: "mdi-file-pdf-box",
-                                code: function(this_){                
-                                    this_.generate_pdf()
-                                },
+                                code: function(){                
+                                    this.generate_pdf()
+                                }.bind(this),
                             },
                         ]
                     },
