@@ -188,9 +188,6 @@ export function parseResponseError(error){
     }
 }
 
-export function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
 
 export function parseNumber(strg){
     strg = strg.toString().replace(',', '.');
@@ -276,16 +273,6 @@ export function listobjects_sum(lo,key){
     return lo.reduce((accum,item) => accum + item[key], 0)
 }
 
-export function listobjects_average_ponderated(lo,key1, key2){
-    var prod=0;
-    var total=0;
-    var i;
-    for (i = 0; i < lo.length; i++) {
-        prod=prod+lo[i][key1]*lo[i][key2]
-        total=total+lo[i][key2]
-    } 
-    return prod/total
-}
 
 
 export function ifnullempty(value){
@@ -330,30 +317,6 @@ export function getBase64(file) {
 }
 
 
-
-
-/// OLD GETTERS
-
-export function getConceptsForDividends() { 
-    return getArrayFromMap(store().concepts).filter( o => [39,50,59,62,63,65,66,68,70,72,75,76,77].includes(o.id))
-}
-
-export function getInvestmentsActive() { 
-    return getArrayFromMap(store().investments).filter(o => o.active==true)
-}
-export function getInvestmentsByProduct(product) { 
-    return getArrayFromMap(store().investments).filter(o => o.products==product)
-}
-
-export function getOperationstypesForNewConcepts() { 
-    return getArrayFromMap(store().operationstypes).filter( o => [1,2].includes(o.id))
-}
-
-export function getOperationstypesForInvestmentsOperations() { 
-    return getArrayFromMap(store().operationstypes).filter( o => [4,5,6,8,9,10].includes(o.id))
-}
-
-
 export function getMapObjectById(catalog,id) { 
     // If id doesn't exists return undefined
     var url=hyperlinked_url(catalog,id)
@@ -367,61 +330,10 @@ export function getArrayFromMap(catalog){
     
 }
 
-export function getCurrencyByCode(code,default_=null) {
-    var r=store()['currencies'].find(o => o.code==code)
-    if (r==null){
-        return default_
-    } else {
-        return r
-    }
-}
-export function getCurrencyPropertyByCode(code,property,default_="???") {
-    var r=getCurrencyByCode(code)
-    if (r==null){
-        if (code=='u') return "u"
-        return default_
-    } else {
-        return r[property]
-    }
-}
-export function currency_generic_string(num, currency, locale, decimals=2){
-    if (num ==null){
-        return `- - - ${getCurrencyPropertyByCode(currency,"symbol_native")}`
-    } else {
-        return `${my_round(num,decimals).toLocaleString(locale, { minimumFractionDigits: decimals,  })} ${getCurrencyPropertyByCode(currency,"symbol_native")}`
-    }
-}
-export function currency_generic_html(num, currency, locale, decimals=2){
-    if (num<0){
-        return `<span class='vuered'>${currency_generic_string(num, currency, locale, decimals)}</span>`
-    } else {
-        return currency_generic_string(num, currency, locale, decimals)
-    }
-}
-export function getCountryNameByCode(code) { 
-    var r=store()['countries'].find(o => o.code==code)
-    if (r==null){
-        return ""
-    } else {
-        return r.name
-    }
-}
-  
-export function currency_string(num, currency, decimals=2){
-    return currency_generic_string(num, currency, localStorage.locale,decimals )
-}
-export function currency_html(num, currency, decimals=2){
-    return currency_generic_html(num, currency, localStorage.locale,decimals )
-}
+
 export function percentage_string(num, decimals=2){
     return percentage_generic_string(num,localStorage.locale,decimals )
 }
 export function percentage_html(num, decimals=2){
     return percentage_generic_html(num,localStorage.locale,decimals )
-}
-export function localcurrency_string(num, decimals=2){
-    return currency_generic_string(num, store().profile.currency, localStorage.locale,decimals )
-}
-export function localcurrency_html(num, decimals=2){
-    return currency_generic_html(num, store().profile.currency, localStorage.locale,decimals )
 }
