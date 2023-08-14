@@ -48,7 +48,7 @@
         },        
         computed:{
             step: function(){
-                return this.store().getters.getObjectByUrl("steps",this.new_elaborations_step.steps)
+                return this.store().steps.get(this.new_elaborations_step.steps)
             }
         },
         methods: {

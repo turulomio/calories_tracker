@@ -111,7 +111,7 @@
             },
             refresh(){
                 this.elaboration.elaborations_products_in.forEach(o => {
-                    var product=this.store().getters.getObjectByUrl("products",o.products)
+                    var product=this.store().products.get(o.products)
                     if (o.ni){
                         var item={}
                         item.products=o.products

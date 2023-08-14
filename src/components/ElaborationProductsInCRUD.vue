@@ -95,10 +95,10 @@
 
             on_products_input(){
                 if (this.new_product_in.products==null) return
-                let product=this.store().getters.getObjectByUrl("products",this.new_product_in.products)
+                let product=this.store().products.get(this.new_product_in.products)
                 this.products_formats=[]
                 product.formats.forEach(element => {
-                    this.products_formats.push({name: `${this.store().getters.getObjectPropertyByUrl("formats",element.formats,"name")} (${element.amount} g)`, amount: element.amount})
+                    this.products_formats.push({name: `${this.store().formats.get(element.formats).name} (${element.amount} g)`, amount: element.amount})
                     
                 });
             },

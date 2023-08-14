@@ -14,7 +14,7 @@
             <template #item.name="{item}"><div v-html="item.raw.name"></div></template>      
             <template #item.last="{item}">{{localtime(item.raw.last)}}</template>      
             <template #item.recipes_categories="{item}">{{show_categories(item.raw)}}</template>      
-            <template #item.food_types="{item}"><div v-html="store().getters.getObjectPropertyByUrl('food_types', item.raw.food_types,'localname')"></div></template> 
+            <template #item.food_types="{item}"><div v-html="store().food_types.get(item.raw.food_types).localname"></div></template> 
             <template #item.guests="{item}"><v-icon small v-if="item.raw.guests" >mdi-check-outline</v-icon></template>   
             <template #item.soon="{item}"><v-icon small v-if="item.raw.soon" >mdi-check-outline</v-icon></template>    
             <template #item.actions="{item}">
@@ -336,7 +336,7 @@
             show_categories(item){
                 var r=""
                 item.recipes_categories.forEach(o=>{
-                    var categorie=this.store().getters.getObjectByUrl("recipes_categories",o)
+                    var categorie=this.store().recipes_categories.get(o)
                         r=r+ categorie.localname + ", "
                 })
                 return r.slice(0,-2)

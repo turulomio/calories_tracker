@@ -258,11 +258,11 @@
                 return  this.my_round(sum_sodium+salt*396,0)
             },
             on_product_click(item){
-                var product=this.store().getters.getObjectByUrl("products",item.products)
+                var product=this.store().products.get(item.products)
                 this.key=this.key+1
                 if (product.elaborated_products!=null){ //ELABORATED PRODUCT
                     this.elaborated_product_crud_mode="R"
-                    this.elaborated_product=this.store().getters.getObjectByUrl("elaborated_products",product.elaborated_products)
+                    this.elaborated_product=this.store().elaborated_product.get(product.elaborated_products)
                     this.elaborated_product_crud_dialog=true
                 } else { // SYSTEM PRODUCTS AND PRODUCTS
                     this.product_crud_mode="R"

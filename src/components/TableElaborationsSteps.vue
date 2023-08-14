@@ -1,7 +1,7 @@
 <template>
     <div>    
         <v-data-table  density="compact" :headers="steps_headers()" :items="new_elaborations_steps" class="elevation-1" hide-default-footer :items-per-page="10000" :key="'T'+key" height="50vh" fixed-header>
-            <template #item.steps="{item}"><div v-html="store().getters.getObjectPropertyByUrl('steps', item.raw.steps,'localname')"></div></template> 
+            <template #item.steps="{item}"><div v-html="store().steps.get(item.raw.steps).localname"></div></template> 
             <template #item.products_in_step="{item}"><div v-html="show_products_in_step(item.raw)"></div></template> 
             <template #item.temperature="{item}"><div v-html="show_temperature(item.raw)"></div></template> 
             <template #item.stir="{item}"><div v-html="show_stir(item.raw)"></div></template> 
@@ -215,7 +215,7 @@
                 } else if (st==3){//Stir each minutoes
                     return this.$t("Every {0} minutes").format(item.stir_values)
                 } else {
-                    return this.store().getters.getObjectPropertyByUrl("stir_types", item.stir_types, "localname")
+                    return this.store().stir_types.get( item.stir_types).localname
                 }
             },
 

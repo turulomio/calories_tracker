@@ -49,7 +49,7 @@ export function products_html_fullname(item,type_){
 
 // item is an object of additives. additives_object.additive_risks is an url
 export function additives_html_fullname(additives_object){
-    let additive_risks_object=this.store().getters.getObjectByUrl("additive_risks",additives_object.additive_risks)
+    let additive_risks_object=this.store().additive_risks.get(additives_object.additive_risks)
 
     let risk_color=product_risk_color(additive_risks_object.url)
 

@@ -25,10 +25,10 @@
                             {{localtime(item.raw.datetime)}}
                         </template>             
                         <template #item.activities="{item}">
-                            <div v-html="store().getters.getObjectPropertyByUrl('activities',item.raw.activities,'localname')"></div>
+                            <div v-html="store().activities.get(item.raw.activities).localname"></div>
                         </template>         
                         <template #item.weight_wishes="{item}">
-                            <div v-html="store().getters.getObjectPropertyByUrl('weight_wishes',item.raw.weight_wishes,'localname')"></div>
+                            <div v-html="store().weight_wishes.get(item.raw.weight_wishes).localname"></div>
                         </template>     
 
 
@@ -136,9 +136,9 @@
                     r.push({title:this.$t('Date and time'), value: this.localtime(this.biometric_last.datetime)})
                     r.push({title:this.$t('Weight'), value: this.biometric_last.weight})
                     r.push({title:this.$t('Height'), value: this.biometric_last.height})
-                    r.push({title:this.$t('Weight wish'), value: this.store().getters.getObjectPropertyByUrl("weight_wishes",this.biometric_last.weight_wishes,"localname")})
+                    r.push({title:this.$t('Weight wish'), value: this.store().weight_wishes.get(this.biometric_last.weight_wishes).localname})
                     r.push({title:this.$t('IMC status'), value: this.biometric_last.imc_comment})
-                    r.push({title:this.$t('Activity'), value: this.store().getters.getObjectPropertyByUrl("activities",this.biometric_last.activities,"localname")})
+                    r.push({title:this.$t('Activity'), value: this.store().activities.get(this.biometric_last.activities).localname})
 
                 }
                 return r
