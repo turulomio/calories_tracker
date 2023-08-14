@@ -1,3 +1,18 @@
+  
+import {
+    RulesFloat,
+    RulesDate,
+    RulesDatetime,
+    RulesEmail,
+    RulesInteger,
+    RulesPassword,
+    RulesString,
+    RulesSelection, 
+    RulesFloatGZ, 
+    RulesFloatGEZ, 
+    RulesFloatLEZ, 
+} from './components/reusing/rules.js'
+
 import {
     arrayofintegers_to_stringofintegers,
     arrayobjects_to_array,
@@ -20,23 +35,6 @@ import {
     percentage_html,
     getMapObjectById,
     getArrayFromMap,
-} from './my_commons.js'
-  
-import {
-    RulesFloat,
-    RulesDate,
-    RulesDatetime,
-    RulesEmail,
-    RulesInteger,
-    RulesPassword,
-    RulesString,
-    RulesSelection, 
-    RulesFloatGZ, 
-    RulesFloatGEZ, 
-    RulesFloatLEZ, 
-} from './components/reusing/rules.js'
-
-import {
     store,
     products_html_fullname,
 } from './functions.js'

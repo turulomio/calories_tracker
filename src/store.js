@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import { myheaders, capitalizeFirstLetter} from './my_commons.js'
+import { myheaders} from './functions.js'
 
 
 export const useStore = defineStore('global', {

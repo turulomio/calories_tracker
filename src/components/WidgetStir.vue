@@ -8,7 +8,6 @@
     </div>
 </template>
 <script>
-import { id_from_hyperlinked_url } from './reusing/my_commons'
     export default {    
         props: {
             value: {
@@ -25,7 +24,6 @@ import { id_from_hyperlinked_url } from './reusing/my_commons'
             }
         },
         methods: {
-            id_from_hyperlinked_url,
             empty_value(){
                 return {
                     "stir_types": null,
