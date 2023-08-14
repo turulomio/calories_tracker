@@ -5,7 +5,7 @@
         </h1>
           <v-text-field class="ml-10 mr-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
     
-        <v-tabs  bg-color="secondary" dark v-model="tab" >
+        <v-tabs  bg-color="primary" dark v-model="tab" >
             <v-tab key="products"><v-icon left>mdi-apple</v-icon>{{ $t('Products') }}<v-badge v-if="products.length>0" color="error" class="ml-2" :content="products.length"/></v-tab>
             <v-tab key="elaborated_products"><v-icon left>mdi-food-takeout-box</v-icon>{{ $t('Elaborated products') }}<v-badge v-if="elaborated_products.length>0" color="error" class="ml-2" :content="elaborated_products.length"/></v-tab>
             <v-tab key="system_products"><v-icon left>mdi-database</v-icon>{{ $t('System products') }}<v-badge v-if="system_products.length>0" color="error" class="ml-2" :content="system_products.length"/></v-tab>
@@ -226,12 +226,12 @@
                             {
                                 name: this.$t("Add product"),
                                 icon: "mdi-plus",
-                                code: function(this_){
-                                    this_.product_cu_mode="C"
-                                    this_.product=this_.empty_products()
-                                    this_.key=this_.key+1
-                                    this_.dialog_products_crud=true
-                                },
+                                code: function(){
+                                    this.product_cu_mode="C"
+                                    this.product=this.empty_products()
+                                    this.key=this.key+1
+                                    this.dialog_products_crud=true
+                                }.bind(this),
                             },
                         ]
                     },
@@ -241,12 +241,12 @@
                             {
                                 name: this.$t("Add a elaborated product"),
                                 icon: "mdi-plus",
-                                code: function(this_){
-                                    this_.elaborated_product_mode='C'
-                                    this_.elaborated_product=this_.empty_elaborated_products()
-                                    this_.key=this_.key+1
-                                    this_.dialog_elaborated_products_crud=true
-                                },
+                                code: function(){
+                                    this.elaborated_product_mode='C'
+                                    this.elaborated_product=this.empty_elaborated_products()
+                                    this.key=this.key+1
+                                    this.dialog_elaborated_products_crud=true
+                                }.bind(this),
                             },
                         ]
                     },
@@ -258,12 +258,12 @@
                             {
                                 name: this.$t("Add system product"),
                                 icon: "mdi-plus",
-                                code: function(this_){
-                                    this_.system_product_cu_mode="C"
-                                    this_.system_product=this_.empty_system_products()
-                                    this_.key=this_.key+1
-                                    this_.dialog_system_products_crud=true
-                                },
+                                code: function(){
+                                    this.system_product_cu_mode="C"
+                                    this.system_product=this.empty_system_products()
+                                    this.key=this.key+1
+                                    this.dialog_system_products_crud=true
+                                }.bind(this),
                             },
                         ]
                     })
@@ -272,20 +272,20 @@
             },
             on_ProductsCRUD_cruded(){
                 this.dialog_products_crud=false
-                this.update_all(true)
+                this.update_all()
             },
             on_SystemProductsCRUD_cruded(){
                 this.dialog_system_products_crud=false
-                this.update_all(true)
+                this.update_all()
             },
             on_ElaboratedProductsCRUD_cruded(){
                 this.dialog_elaborated_products_crud=false
-                this.update_all(true)
+                this.update_all()
             },
             linkProduct(item){
                 axios.post(`${item.url}create_product/`, {}, this.myheaders())
                 .then(() => {
-                    this.update_all(true)
+                    this.update_all()
                }, (error) => {
                     this.parseResponseError(error)
                 });
@@ -338,7 +338,7 @@
                 axios.post(`${this.store().apiroot}/products_to_system_products/`, {product: item.url}, this.myheaders())
                 .then((response) => {
                     console.log(response.data)
-                    this.update_all(true)
+                    this.update_all()
                }, (error) => {
                     this.parseResponseError(error)
                 });
@@ -372,27 +372,13 @@
             },
             on_search_change(){
                 //Pressing enter
-                this.update_all(true)
+                this.update_all()
             },
-            update_products(with_dispatch){
-                if (with_dispatch){
-                    return this.store().dispatch("getProducts")
-                    .then(() => {             
-                        this.products=this.store().products.filter(o=> o.fullname.toLowerCase().includes(this.search.toLowerCase()))
-                    })
-                } else {                
-                    this.products=this.store().products.filter(o=> o.fullname.toLowerCase().includes(this.search.toLowerCase()))
-                }
+            update_products(){
+                this.products=this.getArrayFromMap(this.store().products).filter(o=> o.fullname.toLowerCase().includes(this.search.toLowerCase()))
             },
-            update_elaborated_products(with_dispatch){
-                if (with_dispatch){
-                    return this.store().dispatch("getElaboratedProducts")
-                    .then(() => {             
-                       this.elaborated_products=this.store().elaborated_products.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
-                    })
-                } else {                
-                    this.elaborated_products=this.store().elaborated_products.filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
-                }
+            update_elaborated_products(){
+                this.elaborated_products=this.getArrayFromMap(this.store().elaborated_products).filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
             },
             update_system_products(){
                 if (this.search==null)return
@@ -404,11 +390,11 @@
                     this.parseResponseError(error)
                 })
             },
-            update_all( with_dispatch=false){
+            update_all(){
                 // Refresh products and elaborated products filtering products and elaborated products
                 // Refresh system products making a query
                 this.loading=true
-                Promise.all([this.update_products(with_dispatch), this.update_elaborated_products(with_dispatch), this.update_system_products()])        
+                Promise.all([this.update_products(), this.update_elaborated_products(), this.update_system_products()])        
                 .then( ()=> {
                     this.loading=false
                     this.key=this.key+1

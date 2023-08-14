@@ -134,12 +134,12 @@
                             {
                                 name: this.$t("Add a new register"),
                                 icon: "mdi-plus",
-                                code: function(this_){
-                                    this_.register=this[this_.table.empty]
-                                    this_.$data[this_.table.dialog]=true
-                                    this_.register_mode="C"
-                                    this_.key=this_.key+1
-                                },
+                                code: function(){
+                                    this.register=this[this.table.empty]
+                                    this.$data[this.table.dialog]=true
+                                    this.register_mode="C"
+                                    this.key=this.key+1
+                                }.bind(this),
                             },
                         ]
                     },

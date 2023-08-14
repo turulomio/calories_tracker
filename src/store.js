@@ -42,6 +42,16 @@ export const useStore = defineStore('global', {
         this.logged=false
       }
     },
+    updateCatalogManager(){
+      var start=new Date()
+      return axios.get(`${this.apiroot}/catalog_manager/`, myheaders())
+      .then((response) => {
+          this.catalog_manager=response.data
+          console.log(`Updated catalog manager in ${new Date()-start} ms`)
+      }, (error) => {
+          this.$app.parseResponseError(error)
+      });
+    },
     updateActivities() {
         var start=new Date()
         return axios.get(`${this.apiroot}/api/activities/`, myheaders())
@@ -256,6 +266,7 @@ export const useStore = defineStore('global', {
         this.updateActivities(),
         this.updateAdditiveRisks(),
         this.updateAdditives(),
+        this.updateCatalogManager(),
         this.updateCompanies(),
         this.updateElaboratedProducts(),
         this.updateFoodTypes(),

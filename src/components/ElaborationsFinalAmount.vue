@@ -3,7 +3,7 @@
         <h1>{{ $t("Calculate final amount from full pot") }}</h1>    
         
         
-        <v-tabs  bg-color="secondary" dark v-model="tab" >
+        <v-tabs  bg-color="primary" dark v-model="tab" >
             <v-tab key="frompot">{{ $t('From full container') }}</v-tab>
             <v-tab key="fromingredients">{{ $t('Ingredients sum') }}</v-tab>
             <v-tab key="fromyourweight">{{ $t('Your weight') }}</v-tab>
