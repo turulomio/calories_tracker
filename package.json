@@ -6,7 +6,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "translate": "./node_modules/.bin/vue-i18n-extract",
-    "lint": "eslint . --fix --ignore-path .gitignore"
+    "lint": "eslint . --fix --ignore-path .gitignore",
+    "reusing": "node src/scripts/reusing.js"
   },
   "dependencies": {
     "@mdi/font": "7.2.96",
