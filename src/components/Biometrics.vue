@@ -89,7 +89,7 @@
                             {
                                 name: this.$t("Add biometrics"),
                                 icon: "mdi-plus",
-                                code: function(this){
+                                code: function(){
                                     this.biometric_deleting=false
                                     this.biometric=this.empty_biometrics()
                                     this.biometric.height=this.biometric_last?.height
@@ -98,7 +98,7 @@
                                     this.biometric.activities=this.biometric_last?.activities
                                     this.key=this.key+1
                                     this.dialog_biometrics_crud=true
-                                },
+                                }.bind(this),
                             },
                         ]
                     },
