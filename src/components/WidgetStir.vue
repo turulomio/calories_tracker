@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-row>
-            <v-autocomplete :readonly="readonly" :items="store().stir_types" v-model="new_value.stir_types" :label="$t('Stir types')" item-text="localname" item-value="url" :rules="RulesSelection(false)" @change="refresh" chips></v-autocomplete>
+            <v-autocomplete :readonly="readonly" :items="getArrayFromMap(store().stir_types)" v-model="new_value.stir_types" :label="$t('Stir types')" item-title="localname" item-value="url" :rules="RulesSelection(false)" @change="refresh" chips></v-autocomplete>
             <v-text-field v-if="new_value.stir_types && id_from_hyperlinked_url(this.new_value.stir_types)==1" :readonly="readonly" v-model="new_value.stir_values" class="ml-4" :label="$t('Set robot stir velocity')" :placeholder="$t('Set robot stir velocity')" :rules="RulesInteger(5,true)" counter="5" @change="refresh"/>
             <v-text-field v-if="new_value.stir_types && id_from_hyperlinked_url(this.new_value.stir_types)==3" :readonly="readonly" v-model="new_value.stir_values" class="ml-4" :label="$t('Set stir interval in minutes')" :placeholder="$t('Set stir interval in minutes')" :rules="RulesInteger(5,true)" counter="5" @change="refresh"/>
         </v-row>

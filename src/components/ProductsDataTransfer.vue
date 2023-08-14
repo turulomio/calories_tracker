@@ -3,10 +3,10 @@
         <h1>{{ $t("Products data transfer") }}</h1>           
         <v-card class="pa-6 mt-4" style="overflow-y: scroll" :height="600" >
             <v-form ref="form" v-model="form_valid" lazy-validation >
-                <v-autocomplete :items="store().products" v-model="new_pdt.product_from" :label="$t('Select product to move data from')" item-text="fullname" item-value="url" :rules="RulesSelection(true)" @input="get_statistics()">
+                <v-autocomplete :items="getArrayFromMap(store().products)" v-model="new_pdt.product_from" :label="$t('Select product to move data from')" item-title="fullname" item-value="url" :rules="RulesSelection(true)" @input="get_statistics()">
                     <template v-slot:item="{item}" ><div v-html="products_html_fullname(item,2)"></div></template>                
                 </v-autocomplete>
-                <v-autocomplete :items="store().products" v-model="new_pdt.product_to" :label="$t('Select product to move data to')" item-text="fullname" item-value="url" :rules="RulesSelection(true)" @input="get_statistics()">
+                <v-autocomplete :items="getArrayFromMap(store().products)" v-model="new_pdt.product_to" :label="$t('Select product to move data to')" item-title="fullname" item-value="url" :rules="RulesSelection(true)" @input="get_statistics()">
                     <template v-slot:item="{item}" ><div v-html="products_html_fullname(item,2)"></div></template>
                 </v-autocomplete>
             </v-form>

@@ -3,14 +3,14 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-autocomplete :readonly="mode=='D'" :items="store().products" v-model="new_product_in.products" item-text="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()">
+                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().products)" v-model="new_product_in.products" item-title="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()">
                     <template v-slot:item="{item}" ><div v-html="products_html_fullname(item,2)"></div></template>
                 </v-autocomplete>
-                <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="store().measures_types" v-model="new_product_in.measures_types" :label="$t('Select your measure type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="getArrayFromMap(store().measures_types)" v-model="new_product_in.measures_types" :label="$t('Select your measure type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
 
                 <v-row class="pa-3">     
                     <v-text-field :readonly="mode=='D'" v-model.number="new_product_in.amount" :label="$t('Set product amount')" :placeholder="$t('Set product amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
-                    <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-text="name" item-value="amount" :rules="RulesSelection(false)"  @input="on_product_format_input()"></v-autocomplete>
+                    <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-title="name" item-value="amount" :rules="RulesSelection(false)"  @input="on_product_format_input()"></v-autocomplete>
                     <Multiplier v-model="multiplier" :readonly="mode=='D'" @input="on_multiplier_input()"></Multiplier>
                 </v-row>                    
                 <v-checkbox v-model="new_product_in.ni" :label="$t('Used for nutritional information calcs?')"></v-checkbox>

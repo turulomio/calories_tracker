@@ -3,13 +3,13 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-autocomplete :readonly="mode=='D'" :items="store().steps" v-model="new_elaborations_step.steps" item-text="localname" item-value="url" :label="$t('Select a step')" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().steps)" v-model="new_elaborations_step.steps" item-title="localname" item-value="url" :label="$t('Select a step')" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-text-field :readonly="mode=='D'" v-model="new_elaborations_step.duration" :label="$t('Set step duration')" :placeholder="$t('Set step duration')" :rules="RulesString(10,true)" counter="10"/>
                 <WidgetTemperatures v-if="step.can_temperatures" :readonly="mode=='D'" v-model="widget_temperatures"/>
                 <WidgetStir v-if="step.can_stir" :readonly="mode=='D'" v-model="widget_stir"/>
-                <v-autocomplete v-if="step.can_products_in_step" :items="elaboration.elaborations_products_in" v-model="new_elaborations_step.products_in_step" :label="$t('Products in step')" item-text="fullname" item-value="url" multiple :rules="RulesSelection(step.man_products_in_step)" chips ></v-autocomplete>
-                <v-autocomplete  v-if="step.can_container" :readonly="mode=='D'" :items="elaboration.elaborations_containers" v-model="new_elaborations_step.container" item-text="name" item-value="url" :label="$t('Select a container')" :rules="RulesSelection(step.man_container)"></v-autocomplete>
-                <v-autocomplete  v-if="step.can_container_to" :readonly="mode=='D'" :items="elaboration.elaborations_containers" v-model="new_elaborations_step.container_to" item-text="name" item-value="url" :label="$t('Select a container where to pour')" :rules="RulesSelection(step.man_container_to)"></v-autocomplete>
+                <v-autocomplete v-if="step.can_products_in_step" :items="elaboration.elaborations_products_in" v-model="new_elaborations_step.products_in_step" :label="$t('Products in step')" item-title="fullname" item-value="url" multiple :rules="RulesSelection(step.man_products_in_step)" chips ></v-autocomplete>
+                <v-autocomplete  v-if="step.can_container" :readonly="mode=='D'" :items="elaboration.elaborations_containers" v-model="new_elaborations_step.container" item-title="name" item-value="url" :label="$t('Select a container')" :rules="RulesSelection(step.man_container)"></v-autocomplete>
+                <v-autocomplete  v-if="step.can_container_to" :readonly="mode=='D'" :items="elaboration.elaborations_containers" v-model="new_elaborations_step.container_to" item-title="name" item-value="url" :label="$t('Select a container where to pour')" :rules="RulesSelection(step.man_container_to)"></v-autocomplete>
                 <v-textarea :readonly="mode=='D'" v-model="new_elaborations_step.comment" :label="$t('Set a comment')" :placeholder="$t('Set a comment')" :rules="RulesString(200,false)" counter="200"/>
             </v-form>
             <v-card-actions>

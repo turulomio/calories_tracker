@@ -7,7 +7,7 @@
                 <AutocompleteProducts :readonly="mode=='D'" :items="getArrayFromMap(store().products)" v-model="newmeal.products" @input="on_products_input()" />
                 <v-row class="pa-3">     
                     <v-text-field :readonly="mode=='D'" v-model.number="newmeal.amount" :label="$t('Set your amount')" :placeholder="$t('Set your amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
-                    <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-text="name" item-value="amount" :rules="RulesSelection(false)"  @input="on_product_format_input()"></v-autocomplete>
+                    <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-title="name" item-value="amount" :rules="RulesSelection(false)"  @input="on_product_format_input()"></v-autocomplete>
                     <Multiplier v-model="multiplier" :readonly="mode=='D'" @input="on_multiplier_input()"></Multiplier>
                 </v-row>
             </v-form>

@@ -5,8 +5,8 @@
             <v-form ref="form" v-model="form_valid" lazy-validation >
                 <v-text-field :readonly="mode=='D'" v-model="new_system_product.name" :label="$t('Set system product name')" :placeholder="$t('Set system product name')" :rules="RulesString(200)" counter="200"/>
                 <AutoCompleteApiIdName v-model="new_system_product.system_companies" :url="`${this.store().apiroot}/api/system_companies/`" :label="$t('Select a system company')"></AutoCompleteApiIdName>
-                <v-autocomplete :readonly="mode=='D'" :items="store().food_types" v-model="new_system_product.food_types" :label="$t('Select system product food type')" item-text="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-autocomplete :readonly="mode=='D'" :items="store().additives" v-model="new_system_product.additives" multiple :label="$t('Select system product additives')" item-text="fullname" item-value="url" :rules="RulesSelection(true)">
+                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().food_types)" v-model="new_system_product.food_types" :label="$t('Select system product food type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().additives)" v-model="new_system_product.additives" multiple :label="$t('Select system product additives')" item-title="fullname" item-value="url" :rules="RulesSelection(true)">
                     <template v-slot:item="{item}" ><div v-html="additives_html_fullname(item)"></div></template>
                 </v-autocomplete>
                 <v-text-field :readonly="mode=='D'" v-model.number="new_system_product.amount" :label="$t('Set system product amount (gr)')" :placeholder="$t('Set system product amount (gr)')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
