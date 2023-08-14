@@ -98,7 +98,8 @@
 
                 if (this.mode=="C"){
                     axios.post(`${this.store().apiroot}/api/elaborated_products/`, this.newep,  this.myheaders())
-                    .then(() => {
+                    .then((response) => {
+                        this.store().elaborated_products.set(response.data.url,response.data)
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -106,7 +107,8 @@
                 }
                 if (this.mode=="U"){
                     axios.put(this.newep.url, this.newep,  this.myheaders())
-                    .then(() => {
+                    .then((response) => {
+                        this.store().elaborated_products.set(response.data.url,response.data)
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -117,6 +119,7 @@
                     if(r == true) {
                         axios.delete(this.newep.url, this.myheaders())
                         .then(() => {
+                            this.store().elaborated_products.delete(this.newep.url)
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)
