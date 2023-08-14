@@ -66,8 +66,8 @@
                     var r = confirm(this.$t("Do you want to delete this company?"))
                     if(r == true) {
                         axios.delete(this.newcompany.url, this.myheaders())
-                        .then((response) => {
-                            this.store().companies.delete(response.data.url,response.data)
+                        .then(() => {
+                            this.store().companies.delete(this.newcompany.url)
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)
