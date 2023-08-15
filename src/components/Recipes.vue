@@ -9,7 +9,7 @@
                 <v-icon density="compact" class="ml-3" small @click="on_search_clean">mdi-backspace</v-icon>
             </v-row>
         </v-card>
-        <v-data-table density="compact" :headers="recipes_headers" :items="paginated_recipes.results" class="elevation-1 cursorpointer" :server-items-length="paginated_recipes.count" :options.sync="options"  @update:page="update_recipes" :loading="loading" item-key="content_url" @click:row="viewRecipe">
+        <v-data-table density="compact" :headers="recipes_headers" :items="paginated_recipes.results" class="elevation-1 cursorpointer" :server-items-length="paginated_recipes.count" :options.sync="options"  @update:page="update_recipes" :loading="loading" item-value="content_url" @click:row="viewRecipe">
             <template #item.photo="{item}"><v-img  v-if="item.raw.thumbnail" :src="item.raw.thumbnail" style="width: 50px; height: 50px" @click.stop="toggleFullscreen(item.raw)" /></template>
             <template #item.name="{item}"><div v-html="item.raw.name"></div></template>      
             <template #item.last="{item}">{{localtime(item.raw.last)}}</template>      
@@ -270,8 +270,8 @@
 
                 this.dialog_recipes_crud=true
             },
-            viewRecipe(item){       
-                    this.recipe=item
+            viewRecipe(event,object){       
+                    this.recipe=object.item.raw
                     this.key=this.key+1
 
                     this.dialog_recipes_view=true     

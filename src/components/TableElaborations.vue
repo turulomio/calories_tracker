@@ -78,8 +78,8 @@
                 this.key=this.key+1
                 this.elaboration_crud_dialog=true
             },
-            viewItem(item){
-                this.elaboration=item
+            viewItem(event,object){
+                this.elaboration=object.item.raw
                 this.key=this.key+1
                 this.elaboration_view_dialog=true
             },

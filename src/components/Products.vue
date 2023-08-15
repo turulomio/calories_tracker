@@ -309,9 +309,9 @@
 
                 this.dialog_products_crud=true
             },
-            viewProduct(item){
-                console.log(item)
-                this.product=item
+            viewProduct(event,object){
+                console.log(object.item.raw)
+                this.product=object.item.raw
                 this.product_cu_mode="R"
                 this.key=this.key+1
 
@@ -327,8 +327,8 @@
                 alert(this.$t("System products never should be deleted. You can set obsolete or rename to REUSABLE when needed."))
             },
 
-            viewSystemProduct(item){
-                this.system_product=item
+            viewSystemProduct(event,object){
+                this.system_product=object.item.raw
                 this.system_product_cu_mode="R"
                 this.key=this.key+1
                 this.dialog_system_products_crud=true
@@ -355,8 +355,8 @@
                 this.key=this.key+1
                 this.dialog_elaborated_products_crud=true
             },
-            viewElaboratedProduct(item){
-                this.elaborated_product=item
+            viewElaboratedProduct(event,object){
+                this.elaborated_product=object.item.raw
                 this.elaborated_product_mode='R'
                 this.key=this.key+1
                 this.dialog_elaborated_products_crud=true
