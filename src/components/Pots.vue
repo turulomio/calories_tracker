@@ -36,6 +36,7 @@
 <script>
     import axios from 'axios'
     import { empty_pots } from '../empty_objects.js'
+    import imgNoImage from "@/assets/no_image.jpg"
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import PotsCRUD from './PotsCRUD.vue'
     export default {
@@ -115,7 +116,7 @@
                 var r=[]
                 this.getArrayFromMap(this.store().pots).forEach(p=>{
                     if (p.name.toLowerCase().includes(this.search.toLowerCase())){
-                        p.thumbnail=require("@/assets/no_image.jpg")
+                        p.thumbnail=imgNoImage
                         p.item_key=null//Used for table-item key
                         if (p.photo){
                             axios.get(`${p.photo.url_thumbnail}`, this.myheaders())

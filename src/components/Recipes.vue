@@ -68,6 +68,7 @@
 <script>
     import axios from 'axios'
     import { empty_recipes,empty_recipes_links} from '../empty_objects.js'
+    import imgNoImage from "@/assets/no_image.jpg"
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import RecipesCRUD from './RecipesCRUD.vue'
     import RecipesView from './RecipesView.vue'
@@ -301,7 +302,7 @@
                 axios.get(`${this.store().apiroot}/api/recipes/?search=${this.search}`, headers)
                 .then((response) => {
                     response.data.results.forEach(r=>{
-                        r.thumbnail=require("@/assets/no_image.jpg")
+                        r.thumbnail=imgNoImage
                         r.content_url=null //Needed to select only one rl
                         r.recipes_links.forEach(rl=>{
                             if (rl.files && this.id_from_hyperlinked_url(rl.type)==7){//MAIN IMAGE
