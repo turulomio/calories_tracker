@@ -23,6 +23,7 @@ export default {
           props,
           editor: props.editor,
         })
+        console.log(component)
 
         if (!props.clientRect) {
           return

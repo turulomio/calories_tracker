@@ -62,6 +62,7 @@
                 <v-btn color="primary" :disabled="elaboration.automatic" @click="addContainer()" >{{ $t("Add a container") }}</v-btn>
                 <v-btn color="primary" :disabled="elaboration.automatic" @click="addElaborationStep()" >{{ $t("Add a step") }}</v-btn>
                 <v-btn color="primary" :disabled="elaboration.automatic" @click="addExperience()" >{{ $t("Add a experience") }}</v-btn>
+                <v-btn color="primary" @click="on_close" >{{ $t("Close") }}</v-btn>
             </v-card-actions>
         </v-card>
 
@@ -169,6 +170,9 @@
             },
             on_TableElaborationsExperiences_cruded(){
                 this.update_elaboration()
+            },
+            on_close(){
+                this.$emit("clickoutside")
             },
             update_elaboration(){
                 return axios.get(this.new_elaboration.url, this.myheaders())

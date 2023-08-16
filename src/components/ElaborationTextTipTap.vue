@@ -89,8 +89,7 @@
       Print
     </v-btn>
   </div>
-            <editor-content id="editor" ref="me" :editor="editor" :key="key"  >
-            </editor-content>
+            <editor-content id="editor" ref="me" :editor="editor" :key="key"></editor-content>
         </v-card>
     </div>
         <p> HTMLCODE {{ html_code }}</p>
@@ -98,12 +97,12 @@
 </template>
 <script>
     import axios from 'axios'
-import { Editor, EditorContent } from '@tiptap/vue-3'
-import StarterKit from '@tiptap/starter-kit'
-import Color from "@tiptap/extension-color";
-import TextStyle from "@tiptap/extension-text-style";
-import Mention from '@tiptap/extension-mention'
-import suggestion from './suggestion.js'
+    import { Editor, EditorContent } from '@tiptap/vue-3'
+    import StarterKit from '@tiptap/starter-kit'
+    import Color from "@tiptap/extension-color";
+    import TextStyle from "@tiptap/extension-text-style";
+    import Mention from '@tiptap/extension-mention'
+    import suggestion from './suggestion.js'
     export default {
         components: {
             EditorContent,
@@ -115,7 +114,7 @@ import suggestion from './suggestion.js'
         },
         watch: {
             editor(value){
-                console.log(value.options.content)
+                //console.log(value.options.content)
             }
         },
         data(){ 
@@ -128,12 +127,12 @@ import suggestion from './suggestion.js'
         },
         methods: {
             on_btn_save_click(a,b,c){ 
-                console.log(a,b,c)
+                // console.log(a,b,c)
                 var elaboration_text={
                     elaborations: this.elaboration.url,
                     text: this.editor.getHTML()
                 }
-                console.log(elaboration_text)
+                // console.log(elaboration_text)
                 if (this.elaboration.elaborations_texts==null){
                     axios.post(`${this.store().apiroot}/api/elaborations_texts/`, elaboration_text,  this.myheaders())
                     .then(() => {
@@ -150,7 +149,7 @@ import suggestion from './suggestion.js'
                 }
             },
             on_ingredient_click(item){
-                console.dir(this.editor.chain().focus())
+                // console.dir(this.editor.chain().focus())
                 this.editor.chain().focus().setBold().setColor("green").insertContent(item.fullname+", ").unsetColor().unsetBold().run()
             },
             on_container_click(item){
@@ -171,8 +170,9 @@ import suggestion from './suggestion.js'
             this.editor = new Editor({
                 content: this.text,
                 extensions: [
-                    StarterKit, Color,TextStyle,
-
+                    StarterKit, 
+                    Color,
+                    TextStyle,
                     Mention.configure({
                       HTMLAttributes: {
                         class: 'mention',
