@@ -9,8 +9,8 @@ export const useStore = defineStore('global', {
         token:null,
         logged:false,
         count:0,
-        version: "0.0.1",
-        versiondate: new Date(2023, 2, 5, 7, 5),
+        version: "1.0.0",
+        versiondate: new Date(2023, 7, 6, 7, 5), //Month is one less
         apiroot: import.meta.env.VITE_DJANGO_CALORIES_TRACKER_URL,
         catalog_manager: false,
         activities: new Map(),

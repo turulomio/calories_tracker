@@ -1,6 +1,6 @@
 {
   "name": "calories_tracker",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "@mdi/font": "7.2.96",
-    "@vuepic/vue-datepicker": "^5.4.0",
+    "@vuepic/vue-datepicker": "^6.0.0",
     "axios": "^1.4.0",
     "echarts": "^5.4.3",
-    "flag-icons": "^6.9.4",
+    "flag-icons": "^6.9.5",
     "fraction.js": "^4.2.0",
     "moment-timezone": "^0.5.43",
     "npm-check-updates": "^16.11.1",
@@ -25,7 +25,7 @@
     "vue-i18n": "^9.2.2",
     "vue-i18n-extract": "^2.0.7",
     "vue-router": "^4.2.4",
-    "vuetify": "^3.3.12",
+    "vuetify": "^3.3.13",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {

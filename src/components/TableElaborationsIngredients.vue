@@ -1,6 +1,6 @@
 <template>
     <div>    
-        <v-data-table density="compact" :headers="products_in_headers()" :items="elaboration.elaborations_products_in" :sort-by="[{key:'final_grams',order:'desc'}]" class="elevation-1" hide-default-footer :items-per-page="10000" :key="'T'+key" height="50vh" fixed-header>
+        <v-data-table density="compact" :headers="products_in_headers()" :items="elaboration.elaborations_products_in" :sort-by="[{key:'final_grams',order:'desc'}]" class="elevation-1" :items-per-page="10000" :key="'T'+key" height="50vh" fixed-header>
             <template #item.products="{item}"><div v-html="products_html_fullname(item.raw.products,4)"></div></template>
             <template #item.amount="{item}">{{ fraction(item.raw.amount).toFraction(true)}}</template>
             <template #item.measures_types="{item}"><div v-html="store().measures_types.get(item.raw.measures_types).localname"></div></template> 

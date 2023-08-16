@@ -5,7 +5,7 @@
                 <MyDatePicker density="compact" :label="$t('Report from selected date')" v-model="from_date" @input="on_day_input()"></MyDatePicker>
             </v-card>
 
-        <v-data-table density="compact" :headers="ranking_headers" :items="ranking" :sort-by="[{key:'position',order:'asc'}]"  class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="key" fixed-header height="500">
+        <v-data-table density="compact" :headers="ranking_headers" :items="ranking" :sort-by="[{key:'position',order:'asc'}]"  class="elevation-1" :items-per-page="10000" :loading="loading" :key="key" fixed-header height="500">
             <!-- <template v-slot:[`item.position`]="{ index }">{{index+1}}</template>     -->
             <template #item.product="{item}"><div v-html="products_html_fullname(item.product,4)"></div></template>            
             <template #item.amount="{item}">{{ my_round(item.amount,0)}}</template>

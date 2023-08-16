@@ -9,7 +9,7 @@
             </v-card>
 
 
-            <v-data-table density="compact" class="mt-4 elevation-1" :headers="meals_headers" :items="meals" :sort-by="[{key:'name',order:'asc'}]"  hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key">
+            <v-data-table density="compact" class="mt-4 elevation-1" :headers="meals_headers" :items="meals" :sort-by="[{key:'name',order:'asc'}]"  :items-per-page="10000" :loading="loading" :key="'T'+key">
                 <template #item.datetime="{item}">
                     {{localtime(item.raw.datetime).slice(10)}}
                 </template>          

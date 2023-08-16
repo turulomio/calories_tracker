@@ -11,7 +11,7 @@
         </v-tabs>
         <v-window v-model="tab" class="ma-5">
             <v-window-item key="companies" >
-                <v-data-table density="compact" :headers="companies_headers" :items="companies" :sort-by="[{key:'name',order:'asc'}]"  class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key" >
+                <v-data-table density="compact" :headers="companies_headers" :items="companies" :sort-by="[{key:'name',order:'asc'}]"  class="elevation-1" :items-per-page="10000" :loading="loading" :key="'T'+key" >
                     <template #item.last="{item}">
                         {{localtime(item.raw.last)}}
 
@@ -31,7 +31,7 @@
                 </v-data-table>
             </v-window-item>
             <v-window-item key="system_companies" >                 
-                <v-data-table density="compact" :headers="system_companies_headers" :items="system_companies" :sort-by="[{key:'name',order:'asc'}]" class="elevation-1" hide-default-footer :items-per-page="10000" :loading="loading" :key="'T'+key">
+                <v-data-table density="compact" :headers="system_companies_headers" :items="system_companies" :sort-by="[{key:'name',order:'asc'}]" class="elevation-1" :items-per-page="10000" :loading="loading" :key="'T'+key">
                     <template #item.last="{item}">
                         {{localtime(item.raw.last)}}
                     </template>             
