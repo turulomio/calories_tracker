@@ -43,13 +43,9 @@
 
                 axios.post(`${this.store().apiroot}/settings/`, this.new_settings, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
-                    if (response.data==true) {
-                        alert(this.$t("Settings saved"))
-                        this.store().dispatch("getSettings")
-                     } else {
-                          alert(this.$t("There was a problem saving settings"))
-                     }
+                    this.store().settings=response.data
+                    alert(this.$t("Settings saved"))
+
                     this.$router.push("home")
                 }, (error) => {
                     this.parseResponseError(error)

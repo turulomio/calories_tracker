@@ -29,7 +29,7 @@ export const useStore = defineStore('global', {
         steps: new Map(),
         recipes_categories: new Map(),
         measures_types: new Map(),
-        settings: [],
+        settings: null,
     }
   },
 
@@ -260,6 +260,16 @@ export const useStore = defineStore('global', {
           console.log(error)
       });
     },
+    updateSettings() {
+        var start=new Date()
+        return axios.get(`${this.apiroot}/settings/`, myheaders())
+        .then((response)=>{
+          this.settings=response.data
+          console.log(`Updated settings in ${new Date()-start} ms`)
+        }, (error) => {
+          console.log(error)
+      });
+    },
 
     updateAll(){
       return Promise.all([
@@ -275,6 +285,7 @@ export const useStore = defineStore('global', {
         this.updateProducts(),
         this.updateWeightWishes(),
         this.updateRecipesLinksTypes(),
+        this.updateSettings(),
         this.updateStirTypes(),
         this.updateTemperaturesTypes(),
         this.updateSteps(),
