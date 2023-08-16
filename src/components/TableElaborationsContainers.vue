@@ -1,10 +1,11 @@
 <template>
     <div>
-        <v-data-table density="compact" :headers="table_headers()" :items="elaboration.elaborations_containers" class="elevation-1" :items-per-page="10000"  sort-by="date" fixed-header height="50vh" ref="table_elaborations_containers">
+        <v-data-table density="compact" :headers="table_headers()" :items="elaboration.elaborations_containers" class="elevation-1" :items-per-page="10000" :sort-by="[{key:'date',order:'asc'}]" fixed-header height="50vh" ref="table_elaborations_containers">
             <template #item.actions="{item}">
                 <v-icon small class="mr-2" @click="editItem(item.raw)">mdi-pencil</v-icon>
                 <v-icon small class="mr-2" @click="deleteItem(item.raw)">mdi-delete</v-icon>
             </template>
+            <template #bottom></template>
         </v-data-table>   
         <!-- ItemCRUD DIALOG -->
         <v-dialog v-model="dialog" width="100%" persistent>
@@ -42,10 +43,10 @@
             
             table_headers(){
                 var r= [
-                    { text: this.$t('Name'), value: 'name', sortable: true},
+                    { title: this.$t('Name'), key: 'name', sortable: true},
                 ]
                 if (this.elaboration.automatic==false){
-                    r.push({ text: this.$t('Actions'), value: 'actions', sortable: false, width: "10%"})
+                    r.push({ title: this.$t('Actions'), key: 'actions', sortable: false, width: "10%"})
                 }
                 return r
             },

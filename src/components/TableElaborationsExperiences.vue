@@ -42,11 +42,11 @@
             empty_elaborations_experiences,
             table_headers(){
                 var r=[
-                    { text: this.$t('Date and time'), value: 'datetime', sortable: true,width:"10%"},
-                    { text: this.$t('Experience'), value: 'experience', sortable: true},
+                    { title: this.$t('Date and time'), key: 'datetime', sortable: true,width:"10%"},
+                    { title: this.$t('Experience'), key: 'experience', sortable: true},
                 ]
                 if (this.elaboration.automatic==false){
-                    r.push({ text: this.$t('Actions'), value: 'actions', sortable: false, width: "7%"})
+                    r.push({ title: this.$t('Actions'), key: 'actions', sortable: false, width: "7%"})
                 }
                 return r
             },

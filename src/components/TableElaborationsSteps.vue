@@ -59,19 +59,19 @@
 
             steps_headers(){
                 var r= [
-                    { text: this.$t('Order'), sortable: false, value: 'order'},
-                    { text: this.$t('Id'), sortable: false, value: 'id'},
-                    { text: this.$t('Step'), sortable: false, value: 'steps'},
-                    { text: this.$t('Duration'), sortable: false, value: 'duration', align:'right'},
-                    { text: this.$t('Temperature'), value: 'temperature', sortable: false, width:"8%"},
-                    { text: this.$t('Stir'), value: 'stir', sortable: false, width:"8%"},
-                    { text: this.$t('Products in step'), sortable: false, value: 'products_in_step'},
-                    { text: this.$t('Container'), sortable: false, value: 'container'},
-                    { text: this.$t('Container to'), sortable: false, value: 'container_to'},
-                    { text: this.$t('Comment'), sortable: false, value: 'comment', width:"15%"},
+                    { title: this.$t('Order'), sortable: false, key: 'order'},
+                    { title: this.$t('Id'), sortable: false, key: 'id'},
+                    { title: this.$t('Step'), sortable: false, key: 'steps'},
+                    { title: this.$t('Duration'), sortable: false, key: 'duration', align:'right'},
+                    { title: this.$t('Temperature'), key: 'temperature', sortable: false, width:"8%"},
+                    { title: this.$t('Stir'), key: 'stir', sortable: false, width:"8%"},
+                    { title: this.$t('Products in step'), sortable: false, key: 'products_in_step'},
+                    { title: this.$t('Container'), sortable: false, key: 'container'},
+                    { title: this.$t('Container to'), sortable: false, key: 'container_to'},
+                    { title: this.$t('Comment'), sortable: false, key: 'comment', width:"15%"},
                 ]
                 if (this.elaboration.automatic==false){
-                    r.push({ text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"})
+                    r.push({ title: this.$t('Actions'), key: 'actions', sortable: false, width:"8%"})
                 }
                 return r
             },

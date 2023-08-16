@@ -17,6 +17,7 @@
                     </td>
                 </tr>
             </template> -->
+            <template #bottom></template>
         </v-data-table>
 
         <!-- DIALOG PRODUCTS_IN CRUD -->
@@ -59,17 +60,17 @@
 
             products_in_headers(){
                 var r= [
-                    { text: this.$t('Product'), sortable: true, value: 'products'},
-                    { text: this.$t('Comment'), value: 'comment'},
-                    { text: this.$t('Amount'), value: 'amount', align:'right', width:"10%"},
-                    { text: this.$t('Measure type'), value: 'measures_types', width:"12%"},
-                    { text: this.$t('Final grams'), value: 'final_grams', align:'right', width:"10%"},
-                    { text: this.$t('NI'), value: 'ni', align:'right', width:"4%"},
-                    { text: this.$t('Automatic %'), value: 'automatic_percentage', align:'right', width:"8%"},
+                    { title: this.$t('Product'), sortable: true, key: 'products'},
+                    { title: this.$t('Comment'), key: 'comment'},
+                    { title: this.$t('Amount'), key: 'amount', align:'right', width:"10%"},
+                    { title: this.$t('Measure type'), key: 'measures_types', width:"12%"},
+                    { title: this.$t('Final grams'), key: 'final_grams', align:'right', width:"10%"},
+                    { title: this.$t('NI'), key: 'ni', align:'right', width:"4%"},
+                    { title: this.$t('Automatic %'), key: 'automatic_percentage', align:'right', width:"8%"},
                     
                 ]
                 if (this.elaboration.automatic==false){
-                    r.push({ text: this.$t('Actions'), value: 'actions', sortable: false, width:"8%"})
+                    r.push({ title: this.$t('Actions'), key: 'actions', sortable: false, width:"8%"})
                 }
                 return r
             },

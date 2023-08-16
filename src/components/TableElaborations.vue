@@ -9,6 +9,7 @@
                 <v-icon v-if="!item.automatic" small class="mr-2" @click.stop="createAutomaticElaboration(item.raw)">mdi-file-cog-outline</v-icon>
 
             </template>
+            <template #bottom></template>
         </v-data-table>   
         <!-- ItemCRUD DIALOG -->
         <v-dialog v-model="elaboration_crud_dialog" width="50%">

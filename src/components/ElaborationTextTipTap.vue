@@ -1,35 +1,19 @@
 <template>
     <div>
-    <!-- <div class="d-flex" >
+    <div class="d-flex" >
 
         <v-card width="20%" 
        style="max-height: 300px"
        class="overflow-y-auto">
             <v-list >
-                <v-subheader>{{ $t("Ingredients") }}</v-subheader>
+                {{ $t("Ingredients") }}
+                    <v-list-item v-for="(item, i) in elaboration.elaborations_products_in" :key="i" @click="on_ingredient_click(item)" prepend-icon="mdi-eye"  :title="item.fullname">
+                    </v-list-item>
+                {{ $t("Containers") }}
 
-                <v-list-item-group  color="primary" >
-                    <v-list-item v-for="(item, i) in elaboration.elaborations_products_in" :key="i" @click="on_ingredient_click(item)" >
-                        <v-list-item-icon>
-                            <v-icon >mdi-eye</v-icon>
-                        </v-list-item-icon>
-                        
-                            <v-list-item-title >{{ item.fullname }}</v-list-item-title>
+                    <v-list-item v-for="(item, i) in elaboration.elaborations_containers" :key="i" @click="on_container_click(item)" prepend-icon="mdi-eye" :title="item.name" >
                         
                     </v-list-item>
-                </v-list-item-group>
-                <v-subheader>{{ $t("Containers") }}</v-subheader>
-
-                <v-list-item-group  color="primary" >
-                    <v-list-item v-for="(item, i) in elaboration.elaborations_containers" :key="i" @click="on_container_click(item)" >
-                        <v-list-item-icon>
-                            <v-icon >mdi-eye</v-icon>
-                        </v-list-item-icon>
-                        
-                            <v-list-item-title >{{ item.name }}</v-list-item-title>
-                        
-                    </v-list-item>
-                </v-list-item-group>
             </v-list>
         </v-card>
         <v-card width="80%" >
@@ -109,91 +93,100 @@
             </editor-content>
         </v-card>
     </div>
-        <p> HTMLCODE {{ html_code }}</p> -->
+        <p> HTMLCODE {{ html_code }}</p>
     </div>
 </template>
 <script>
-//     import axios from 'axios'
-// import { Editor, EditorContent } from '@tiptap/vue-2'
-// import StarterKit from '@tiptap/starter-kit'
-// import Color from "@tiptap/extension-color";
-// import TextStyle from "@tiptap/extension-text-style";
-//     export default {
-//         components: {
-//             EditorContent,
-//         },
-//         props: {
-//             elaboration: { 
-//                 required: true
-//             },
-//         },
-//         watch: {
-//             editor(value){
-//                 console.log(value.options.content)
-//             }
-//         },
-//         data(){ 
-//             return{
-//                 editor:null,
-//                 key:0,
-//                 html_code:"",
+    import axios from 'axios'
+import { Editor, EditorContent } from '@tiptap/vue-3'
+import StarterKit from '@tiptap/starter-kit'
+import Color from "@tiptap/extension-color";
+import TextStyle from "@tiptap/extension-text-style";
+import Mention from '@tiptap/extension-mention'
+import suggestion from './suggestion.js'
+    export default {
+        components: {
+            EditorContent,
+        },
+        props: {
+            elaboration: { 
+                required: true
+            },
+        },
+        watch: {
+            editor(value){
+                console.log(value.options.content)
+            }
+        },
+        data(){ 
+            return{
+                editor:null,
+                key:0,
+                html_code:"",
 
-//             }
-//         },
-//         methods: {
-//             on_btn_save_click(a,b,c){ 
-//                 console.log(a,b,c)
-//                 var elaboration_text={
-//                     elaborations: this.elaboration.url,
-//                     text: this.editor.getHTML()
-//                 }
-//                 console.log(elaboration_text)
-//                 if (this.elaboration.elaborations_texts==null){
-//                     axios.post(`${this.store().apiroot}/api/elaborations_texts/`, elaboration_text,  this.myheaders())
-//                     .then(() => {
-//                         // this.$emit("cruded")
-//                     }, (error) => {
-//                         this.parseResponseError(error)
-//                     })
-//                 } else {
-//                     axios.put(this.elaboration.elaborations_texts.url, elaboration_text,  this.myheaders())
-//                     .then(() => {
-//                     }, (error) => {
-//                         this.parseResponseError(error)
-//                     })
-//                 }
-//             },
-//             on_ingredient_click(item){
-//                 console.dir(this.editor.chain().focus())
-//                 this.editor.chain().focus().setBold().setColor("green").insertContent(item.fullname+", ").unsetColor().unsetBold().run()
-//             },
-//             on_container_click(item){
-//                 this.editor.chain().focus().setBold().setColor("brown").insertContent(item.name+" ").unsetColor().unsetBold().run()
-//             },
-//             post_process(){
+            }
+        },
+        methods: {
+            on_btn_save_click(a,b,c){ 
+                console.log(a,b,c)
+                var elaboration_text={
+                    elaborations: this.elaboration.url,
+                    text: this.editor.getHTML()
+                }
+                console.log(elaboration_text)
+                if (this.elaboration.elaborations_texts==null){
+                    axios.post(`${this.store().apiroot}/api/elaborations_texts/`, elaboration_text,  this.myheaders())
+                    .then(() => {
+                        // this.$emit("cruded")
+                    }, (error) => {
+                        this.parseResponseError(error)
+                    })
+                } else {
+                    axios.put(this.elaboration.elaborations_texts.url, elaboration_text,  this.myheaders())
+                    .then(() => {
+                    }, (error) => {
+                        this.parseResponseError(error)
+                    })
+                }
+            },
+            on_ingredient_click(item){
+                console.dir(this.editor.chain().focus())
+                this.editor.chain().focus().setBold().setColor("green").insertContent(item.fullname+", ").unsetColor().unsetBold().run()
+            },
+            on_container_click(item){
+                this.editor.chain().focus().setBold().setColor("brown").insertContent(item.name+" ").unsetColor().unsetBold().run()
+            },
+            post_process(){
 
-//             },
-//             async print () {
-//               await this.$htmlToPaper("editor");
-//             },
-//         },
-//         created(){
-//             if (this.elaboration.elaborations_texts){
-//                 this.text=this.elaboration.elaborations_texts.text
-//             }
+            },
+            async print () {
+              await this.$htmlToPaper("editor");
+            },
+        },
+        created(){
+            if (this.elaboration.elaborations_texts){
+                this.text=this.elaboration.elaborations_texts.text
+            }
 
-//             this.editor = new Editor({
-//                 content: this.text,
-//                 extensions: [
-//                     StarterKit, Color,TextStyle
-//                 ],
-//                 onUpdate: ({ editor }) => {
-//                     this.html_code=editor.getHTML()
-//                 },
-//             })
-//         },
-//         beforeDestroy() {
-//             this.editor.destroy()
-//         },
-//     }
+            this.editor = new Editor({
+                content: this.text,
+                extensions: [
+                    StarterKit, Color,TextStyle,
+
+                    Mention.configure({
+                      HTMLAttributes: {
+                        class: 'mention',
+                      },
+                      suggestion,
+                    }),
+                ],
+                onUpdate: ({ editor }) => {
+                    this.html_code=editor.getHTML()
+                },
+            })
+        },
+        beforeDestroy() {
+            this.editor.destroy()
+        },
+    }
 </script>

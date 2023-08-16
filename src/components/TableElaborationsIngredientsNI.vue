@@ -63,6 +63,7 @@
                         </td>
                     </tr>
                 </template> -->
+                <template #bottom></template>
         </v-data-table>
     </div>
 </template>
@@ -79,23 +80,23 @@
         data(){ 
             return{
                 products_in_headers: [
-                    { text: this.$t('Product'), sortable: true, value: 'products',width:"30%"},
-                    { text: this.$t('Amount (g)'), sortable: true, value: 'amount',align:'right'},
-                    { text: this.$t('Calories (kcal)'), sortable: true, value: 'calories',align:'right'},
-                    { text: this.$t('Fat (g)'), sortable: true, value: 'fat',align:'right'},
-                    { text: this.$t('Protein (g)'), sortable: true, value: 'protein',align:'right'},
-                    { text: this.$t('Carbohydrate (g)'), sortable: true, value: 'carbohydrate',align:'right'},
-                    { text: this.$t('Salt (g)'), sortable: true, value: 'salt',align:'right'},
-                    { text: this.$t('Fiber (g)'), sortable: true, value: 'fiber',align:'right'},
-                    { text: this.$t('Sugars (g)'), sortable: true, value: 'sugars',align:'right'},
-                    { text: this.$t('Saturated fat (g)'), sortable: true, value: 'saturated_fat',align:'right'},
-                    { text: this.$t('Cholesterol (g)'), sortable: true, value: 'cholesterol',align:'right'},
-                    { text: this.$t('Sodium (mg)'), sortable: true, value: 'sodium',align:'right'},
-                    { text: this.$t('Potassium (mg)'), sortable: true, value: 'potassium',align:'right'},
-                    { text: this.$t('Ferrum (mg)'), sortable: true, value: 'ferrum',align:'right'},
-                    { text: this.$t('Magnesium (mg)'), sortable: true, value: 'magnesium',align:'right'},
-                    { text: this.$t('Phosphor (mg)'), sortable: true, value: 'phosphor',align:'right'},
-                    { text: this.$t('Calcium (mg)'), sortable: true, value: 'calcium',align:'right'},
+                    { title: this.$t('Product'), sortable: true, key: 'products',width:"30%"},
+                    { title: this.$t('Amount (g)'), sortable: true, key: 'amount',align:'right'},
+                    { title: this.$t('Calories (kcal)'), sortable: true, key: 'calories',align:'right'},
+                    { title: this.$t('Fat (g)'), sortable: true, key: 'fat',align:'right'},
+                    { title: this.$t('Protein (g)'), sortable: true, key: 'protein',align:'right'},
+                    { title: this.$t('Carbohydrate (g)'), sortable: true, key: 'carbohydrate',align:'right'},
+                    { title: this.$t('Salt (g)'), sortable: true, key: 'salt',align:'right'},
+                    { title: this.$t('Fiber (g)'), sortable: true, key: 'fiber',align:'right'},
+                    { title: this.$t('Sugars (g)'), sortable: true, key: 'sugars',align:'right'},
+                    { title: this.$t('Saturated fat (g)'), sortable: true, key: 'saturated_fat',align:'right'},
+                    { title: this.$t('Cholesterol (g)'), sortable: true, key: 'cholesterol',align:'right'},
+                    { title: this.$t('Sodium (mg)'), sortable: true, key: 'sodium',align:'right'},
+                    { title: this.$t('Potassium (mg)'), sortable: true, key: 'potassium',align:'right'},
+                    { title: this.$t('Ferrum (mg)'), sortable: true, key: 'ferrum',align:'right'},
+                    { title: this.$t('Magnesium (mg)'), sortable: true, key: 'magnesium',align:'right'},
+                    { title: this.$t('Phosphor (mg)'), sortable: true, key: 'phosphor',align:'right'},
+                    { title: this.$t('Calcium (mg)'), sortable: true, key: 'calcium',align:'right'},
                 ],
 
                 items:[],
