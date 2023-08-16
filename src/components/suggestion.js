@@ -16,6 +16,7 @@ export default {
 
     return {
       onStart: props => {
+        console.log("onStart")
         component = new VueRenderer(MentionList, {
           // using vue 2:
           // parent: this,
@@ -23,7 +24,6 @@ export default {
           props,
           editor: props.editor,
         })
-        console.log(component)
 
         if (!props.clientRect) {
           return
@@ -41,6 +41,7 @@ export default {
       },
 
       onUpdate(props) {
+        console.log("onUpdate")
         component.updateProps(props)
 
         if (!props.clientRect) {
@@ -53,6 +54,7 @@ export default {
       },
 
       onKeyDown(props) {
+        console.log("onkeydown")
         if (props.event.key === 'Escape') {
           popup[0].hide()
 
@@ -63,8 +65,10 @@ export default {
       },
 
       onExit() {
-        popup[0].destroy()
-        component.destroy()
+
+        console.log("onExit2")
+        // popup[0].destroy()
+        // component.destroy()
       },
     }
   },

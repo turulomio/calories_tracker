@@ -89,7 +89,7 @@
       Print
     </v-btn>
   </div>
-            <editor-content id="editor" ref="me" :editor="editor" :key="key"></editor-content>
+            <editor-content id="editor" ref="me" :editor="editor" ></editor-content>
         </v-card>
     </div>
         <p> HTMLCODE {{ html_code }}</p>
