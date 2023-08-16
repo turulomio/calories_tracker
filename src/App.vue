@@ -30,7 +30,7 @@
 <!--                    POTS -->
                     <v-list-item link router :to="{ name: 'pots'}" v-if="store().logged" prepend-icon="mdi-pot" :title="$t('Pot')" />
 <!--                     REPORTS -->                   
-                    <v-list-group value="Help"  v-if="store().logged">
+                    <v-list-group value="Reports"  v-if="store().logged">
                         <template v-slot:activator="{ props }">
                             <v-list-item v-bind="props" prepend-icon="mdi-chart-box-outline" :title="$t('Reports')"></v-list-item>
                         </template>
@@ -42,7 +42,7 @@
                         </v-list-item>
                     </v-list-group>    
 <!--                     ADMINISTRATION -->                    
-                    <v-list-group value="Help"  v-if="store().logged">
+                    <v-list-group value="Administration"  v-if="store().logged">
                         <template v-slot:activator="{ props }">
                             <v-list-item v-bind="props" prepend-icon="mdi-cogs" :title="$t('Administration')"></v-list-item>
                         </template>

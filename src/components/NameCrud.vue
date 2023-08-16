@@ -54,7 +54,8 @@
 
                 if (this.mode=="C"){
                     axios.post(`${this.store().apiroot}/api/${this.apiname}/`, this.new_item,  this.myheaders())
-                    .then(() => {
+                    .then((response) => {
+                        this.store()[this.apiname].set(response.data.url,response.data)
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -62,7 +63,8 @@
                 }
                 if (this.mode=="U"){
                     axios.put(this.new_item.url, this.new_item,  this.myheaders())
-                    .then(() => {
+                    .then((response) => {
+                        this.store()[this.apiname].set(response.data.url,response.data)
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -73,6 +75,7 @@
                     if(r == true) {
                         axios.delete(this.new_item.url, this.myheaders())
                         .then(() => {
+                            this.store()[this.apiname].delete(this.new_item.url)
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)

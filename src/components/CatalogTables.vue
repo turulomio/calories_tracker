@@ -3,7 +3,7 @@
         <h1>{{ $t(`Catalog tables`) }}
             <MyMenuInline :items="menuinline_items()" :context="this"></MyMenuInline>
         </h1>
-        <v-select :items="tables" v-model="table" :label="$t('Select a catalog table')" return-object @change="on_table_change()"/>
+        <v-select class="mt-4" density="compact" :items="tables" v-model="table" :label="$t('Select a catalog table')" return-object />
 
   
         <v-data-table density="compact" :headers="catalog_table_headers" :items="catalog_table" :sort-by="[{key:'',order:'asc'}]"  class="elevation-1" :items-per-page="10000" :loading="loading" :key="'T'+key" height="70vh">
@@ -18,6 +18,7 @@
                 <v-icon small class="mr-1" @click="editItem(item.raw)">mdi-pencil</v-icon>
                 <v-icon small @click="deleteItem(item.raw)">mdi-delete</v-icon>
             </template>
+            <template #bottom ></template>  
         </v-data-table>
 
 
@@ -95,12 +96,12 @@
                 key:0,
             
                 tables:[
-                    {title:this.$t("Recipes categories"), value:"recipes_categories", dialog: "dialog_recipes_categories", empty:"empty_recipes_categories", dispatch:"getRecipesCategories"},
-                    {title:this.$t("Recipes links types"), value:"recipes_links_types", dialog: "dialog_recipes_links_types", empty:"empty_recipes_links_types", dispatch:"getRecipesLinksTypes"},
-                    {title:this.$t("Stir types"), value:"stir_types", dialog: "dialog_stir_types", empty:"empty_stir_types", dispatch:"getStirTypes"},
-                    {title:this.$t("Temperatures types"), value:"temperatures_types", dialog: "dialog_temperatures_types", empty:"empty_temperatures_types", dispatch:"getTemperaturesTypes"},
-                    {title:this.$t("Measures types"), value:"measures_types", dialog: "dialog_measures_types", empty:"empty_measures_types", dispatch:"getMeasuresTypes"},
-                    {title:this.$t("Steps"), value:"steps", dialog: "dialog_steps", empty:"empty_steps", dispatch:"getSteps"},
+                    {title:this.$t("Recipes categories"), value:"recipes_categories", dialog: "dialog_recipes_categories", empty:"empty_recipes_categories"},
+                    {title:this.$t("Recipes links types"), value:"recipes_links_types", dialog: "dialog_recipes_links_types", empty:"empty_recipes_links_types"},
+                    {title:this.$t("Stir types"), value:"stir_types", dialog: "dialog_stir_types", empty:"empty_stir_types"},
+                    {title:this.$t("Temperatures types"), value:"temperatures_types", dialog: "dialog_temperatures_types", empty:"empty_temperatures_types"},
+                    {title:this.$t("Measures types"), value:"measures_types", dialog: "dialog_measures_types", empty:"empty_measures_types"},
+                    {title:this.$t("Steps"), value:"steps", dialog: "dialog_steps", empty:"empty_steps"},
                 ],
                 table: null,
                 catalog_table_headers:[],
@@ -116,6 +117,11 @@
                 dialog_stir_types:false,
                 dialog_temperatures_types:false,
                 dialog_measures_types:false,
+            }
+        },
+        watch: {
+            table(){
+                this.update_table()
             }
         },
         methods:{
@@ -149,7 +155,7 @@
             },
             on_CRUD_cruded(){
                 this.$data[this.table.dialog]=false  //Invoca una variable de data por su nombrre
-                this.on_table_change()
+                this.update_table()
             },
             editItem(item){
                 this.register=item
@@ -174,7 +180,7 @@
                     this.$data[this.table.dialog]=true  //Invoca una variable de data por su nombrre
                 }
             },
-            on_table_change(){
+            update_table(){
                 if (    this.table.value=="recipes_links_types" || 
                         this.table.value=="stir_types" || 
                         this.table.value=="temperatures_types" || 
@@ -202,19 +208,16 @@
                     ]
 
                 }
+                this.loading=true
+                this.catalog_table=this.getArrayFromMap(this.store()[this.table.value])
+                this.loading=false
                 this.key=this.key+1
 
-                this.loading=true
-                this.store().dispatch(this.table.dispatch)
-                .then(()=>{
-                    this.catalog_table=this.store()[this.table.value]
-                    this.loading=false
-                })
             },
         },
         created(){
             this.table=this.tables[0]
-            this.on_table_change()
+            this.update_table()
         }
     }
 </script>
