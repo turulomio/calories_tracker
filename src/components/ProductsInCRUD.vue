@@ -14,7 +14,7 @@
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn>
+                <v-btn color="primary" @click="acceptDialog()">{{ button() }}</v-btn>
             </v-card-actions>
         </v-card>
     </div>
@@ -55,8 +55,11 @@
                 if (this.mode=="U") return this.$t('Update this product')
                 if (this.mode=="D") return this.$t('Delete this product')
             },
-            acceptDialog(){             
-                if( this.$refs.form.validate()==false) return
+            acceptDialog(){                    
+                if (this.form_valid!=true) {
+                    this.$refs.form.validate()
+                    return
+                }
                 this.$emit("cruded",this.mode,this.newproduct_in,this.product_in)
             },
 

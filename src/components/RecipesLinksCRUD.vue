@@ -11,7 +11,7 @@
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn> 
+                <v-btn color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()">{{ button() }}</v-btn> 
                 <v-btn color="error" @click="$emit('cruded')" >{{ $t("Cancel") }}</v-btn>
             </v-card-actions>
         </v-card>
@@ -119,8 +119,11 @@
                 this.new_recipes_links.description=this.store().recipes_links_types.get(this.new_recipes_links.type).localname
                 this.key=this.key+1
             },
-            async acceptDialog(){             
-                if( this.$refs.form.validate()==false) return
+            async acceptDialog(){       
+                if (this.form_valid!=true) {
+                    this.$refs.form.validate()
+                    return
+                }
 
 
                 if (this.document){

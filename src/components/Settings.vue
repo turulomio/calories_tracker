@@ -16,7 +16,7 @@
 
 
                 <div class="mx-auto pa-5" align="center">
-                    <v-btn color="error" @click="save_settings()" :disabled="!form_valid">{{ $t("Save settings")}}</v-btn>
+                    <v-btn color="error" @click="save_settings()">{{ $t("Save settings")}}</v-btn>
                 </div>
             </v-form>
             
@@ -38,8 +38,11 @@
             }
         },
         methods: {
-            save_settings(){
-                if (this.$refs.form.validate()==false) return
+            save_settings(){       
+                if (this.form_valid!=true) {
+                    this.$refs.form.validate()
+                    return
+                }
 
                 axios.post(`${this.store().apiroot}/settings/`, this.new_settings, this.myheaders())
                 .then((response) => {

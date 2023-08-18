@@ -9,7 +9,7 @@
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn> 
+                <v-btn color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()">{{ button() }}</v-btn> 
             </v-card-actions>
         </v-card>
   
@@ -52,9 +52,11 @@
                 if (this.mode=="U") return this.$t('Update this elaboration')
                 if (this.mode=="D") return this.$t('Delete this elaboration')
             },
-            acceptDialog(cruded=true){             
-                if( this.$refs.form.validate()==false) return   
-                console.log(this.new_elaboration)
+            acceptDialog(cruded=true){                    
+                if (this.form_valid!=true) {
+                    this.$refs.form.validate()
+                    return
+                }
 
                 if (this.mode=="C"){
                     axios.post(`${this.store().apiroot}/api/elaborations/`, this.new_elaboration,  this.myheaders())

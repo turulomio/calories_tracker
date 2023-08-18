@@ -4,12 +4,9 @@
         <v-card class="pa-6 mt-4" style="overflow-y: scroll" :height="600" >
             <v-form ref="form" v-model="form_valid" lazy-validation >
                 <v-text-field :readonly="mode=='D'" v-model="newproduct.name" :label="$t('Set product name')" :placeholder="$t('Set product name')" :rules="RulesString(200)" counter="200"/>
-                <AutoCompleteApiIdName v-model="newproduct.companies" :url="`${this.store().apiroot}/api/companies/`" :label="$t('Select a company')"></AutoCompleteApiIdName>
+                <v-autocomplete v-model="newproduct.companies" :items="getArrayFromMap(store().companies)" :label="$t('Select a company')" item-title="name" item-value="url" :rules="RulesSelection(true)"/>
                 <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().food_types)" v-model="newproduct.food_types" :label="$t('Select product food type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().additives)" v-model="newproduct.additives" multiple :label="$t('Select product additives')" item-title="fullname" item-value="url" :rules="RulesSelection(true)">
-                    <template v-slot:item="{item}" ><div v-html="additives_html_fullname(item)"></div></template>
-                </v-autocomplete>
-
+                <AutocompleteAdditives :readonly="mode=='D'" :additives="getArrayFromMap(store().additives)" v-model="newproduct.additives" />
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.amount" :label="$t('Set product amount (gr)')" :placeholder="$t('Set product amount (gr)')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.density" :label="$t(`Set product density (gr/ml). Empty if you don't know`)" :placeholder="$t('Set product density(gr/ml)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.fat" :label="$t('Set product fat (gr)')" :placeholder="$t('Set product fat (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
@@ -28,8 +25,8 @@
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.phosphor" :label="$t('Set product phosphor (mg)')" :placeholder="$t('Set product phosphor (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.calcium" :label="$t('Set product calcium (mg)')" :placeholder="$t('Set product calcium (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-checkbox v-model="newproduct.glutenfree" :label="$t('Is gluten free?')"></v-checkbox>
-
-                <AutoCompleteApiIdName v-model="newproduct.version_parent" :url="`${this.store().apiroot}/api/products/`" :label="$t('Select parent product')"></AutoCompleteApiIdName>
+                <AutocompleteProducts :readonly="mode=='D'" :items="getArrayFromMap(store().products)" v-model="newproduct.products"/>
+                <!-- <AutocompleteProducts v-model="newproduct.version_parent" :url="`${this.store().apiroot}/api/products/`" :label="$t('Select parent product')"></AutocompleteProducts> -->
                 <v-text-field :readonly="mode=='D'" v-model="newproduct.version_description" :label="$t('Set product version description')" :placeholder="$t('Set product version description')" :rules="RulesString(200,false)" counter="200"/>
                 <v-checkbox v-model="newproduct.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
                 <v-card class="mt-4">
@@ -46,7 +43,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" v-if="['C','U'].includes(mode)" @click="addFormat()" >{{ $t("Add a format") }}</v-btn>
-                <v-btn color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn> 
+                <v-btn color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()">{{ button() }}</v-btn> 
                 <v-btn color="error" @click="$emit('cruded')" >{{ $t("Close") }}</v-btn>
 
             </v-card-actions>
@@ -63,13 +60,15 @@
 </template>
 <script>
     import axios from 'axios'
-    import AutoCompleteApiIdName from './AutoCompleteApiIdName.vue'
+    import AutocompleteAdditives from './AutocompleteAdditives.vue'
+    import AutocompleteProducts from './AutocompleteProducts.vue'
     import FormatsCRUD from './FormatsCRUD.vue'
     import { empty_formats } from '../empty_objects.js'
     import { additives_html_fullname} from '../functions.js'
     export default {
         components: {
-            AutoCompleteApiIdName,
+            AutocompleteAdditives,
+            AutocompleteProducts,
             FormatsCRUD,
         },
         props: {
@@ -114,7 +113,10 @@
                 if (this.mode=="D") return this.$t('Delete this product')
             },
             acceptDialog(){             
-                if( this.$refs.form.validate()==false) return   
+                if (this.form_valid!=true) {
+                    this.$refs.form.validate()
+                    return
+                }
                 if (this.mode=="C"){
                     axios.post(`${this.store().apiroot}/api/products/`, this.newproduct,  this.myheaders())
                     .then((response) => {

@@ -74,8 +74,11 @@
                 var r=`<img src="${item.thumbnail}" height="150" contain />${item.fullname}`
                 return r
             },
-            acceptDialog(){
-                // if( this.$refs.form.validate()==false) return
+            acceptDialog(){       
+                if (this.form_valid!=true) {
+                    this.$refs.form.validate()
+                    return
+                }
                 this.new_elaboration.final_amount=this.final_amount
 
                 axios.put(this.new_elaboration.url, this.new_elaboration,  this.myheaders())

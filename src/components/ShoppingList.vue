@@ -7,7 +7,7 @@
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="acceptDialog()" :disabled="!form_valid">{{ $t("Get shopping list") }}</v-btn>
+                <v-btn color="primary" @click="acceptDialog()">{{ $t("Get shopping list") }}</v-btn>
             </v-card-actions>
         </v-card>
     </div>
@@ -23,8 +23,11 @@
             }
         },
         methods: {
-            acceptDialog(){             
-                if( this.$refs.form.validate()==false) return
+            acceptDialog(){       
+                if (this.form_valid!=true) {
+                    this.$refs.form.validate()
+                    return
+                }
                 axios.post(`${this.store().apiroot}/shopping_list/`, {elaborations: this.elaborations_selected}, this.myheaders())
                 .then((response) => {
                     var link = window.document.createElement('a')

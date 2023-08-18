@@ -11,7 +11,7 @@
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="acceptDialog()" :disabled="!form_valid">{{ button() }}</v-btn>
+                <v-btn color="primary" @click="acceptDialog()">{{ button() }}</v-btn>
             </v-card-actions>
         </v-card>
     </div>
@@ -50,8 +50,11 @@
                 if (this.mode=="U") return this.$t('Update this pot')
                 if (this.mode=="D") return this.$t('Delete this pot')
             },
-            acceptDialog(){             
-                if( this.$refs.form.validate()==false) return
+            acceptDialog(){       
+                if (this.form_valid!=true) {
+                    this.$refs.form.validate()
+                    return
+                }
                 if (this.pasted_image){
                     this.new_pot.photo_mime=this.pasted_image.mime
                     this.new_pot.photo_content=this.pasted_image.image

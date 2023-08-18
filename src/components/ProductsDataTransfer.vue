@@ -51,8 +51,11 @@
                 if (this.new_pdt.product_from==this.new_pdt.product_to){
                     alert(this.$t("You can transfer the same product"))
                     return false
+                }       
+                if (this.form_valid!=true) {
+                    this.$refs.form.validate()
+                    return
                 }
-                if( this.$refs.form.validate()==false) return false
                 return true
 
             },
