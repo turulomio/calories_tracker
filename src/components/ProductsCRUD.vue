@@ -25,8 +25,7 @@
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.phosphor" :label="$t('Set product phosphor (mg)')" :placeholder="$t('Set product phosphor (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D'" v-model.number="newproduct.calcium" :label="$t('Set product calcium (mg)')" :placeholder="$t('Set product calcium (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-checkbox v-model="newproduct.glutenfree" :label="$t('Is gluten free?')"></v-checkbox>
-                <AutocompleteProducts :readonly="mode=='D'" :items="getArrayFromMap(store().products)" v-model="newproduct.products"/>
-                <!-- <AutocompleteProducts v-model="newproduct.version_parent" :url="`${this.store().apiroot}/api/products/`" :label="$t('Select parent product')"></AutocompleteProducts> -->
+                <AutocompleteProducts :readonly="mode=='D'" :products="getArrayFromMap(store().products)" v-model="newproduct.products"/>
                 <v-text-field :readonly="mode=='D'" v-model="newproduct.version_description" :label="$t('Set product version description')" :placeholder="$t('Set product version description')" :rules="RulesString(200,false)" counter="200"/>
                 <v-checkbox v-model="newproduct.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
                 <v-card class="mt-4">

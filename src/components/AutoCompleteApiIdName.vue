@@ -9,11 +9,11 @@
     <div>
         <v-autocomplete
             v-if="returnobject==false"
-            v-model="localValue"
+            v-model="new_value"
             :items="entries"
             :loading="loading"
-            :search-input.sync="search"
-            item-text="name"
+            @update:search="on_update_search"
+            item-title="name"
             item-value="url"
             no-data-text="You must select a item"
             outlined
@@ -24,11 +24,11 @@
         ></v-autocomplete>
         <v-autocomplete
             v-if="returnobject==true"
-            v-model="localValue"
+            v-model="new_value"
             :items="entries"
             :loading="loading"
-            :search-input.sync="search"
-            item-text="name"
+            @update:search="on_update_search"
+            item-title="name"
             return-object
             no-data-text="You must select a item"
             outlined
@@ -43,7 +43,7 @@
     import axios from 'axios'
     export default {    
         props: {
-            value: {
+            modelValue: {
                 required: true
             },
             url:{
@@ -64,24 +64,27 @@
         },
         data(){ 
             return{
-                descriptionLimit: 60,
                 entries: [],
                 loading: false,
-                search: null,
-                localValue: null
+                new_value: null
             }
         },
         watch: {
-            search (val) {
+            new_value (newValue) {
+                this.$emit('update:modelValue', newValue)
+            },
+        },
+        methods: {
+            on_update_search(search) {
                 // Items have already been loaded
-                if (this.search ==null || this.search==""|| this.search.length<this.minchars) return
+                if (search==null || search==""|| search.length<this.minchars) return
 
                 // Items have already been requested
                 if (this.loading) return
 
                 this.loading = true
 
-                axios.get(`${this.url}?search=${val}`, this.myheaders())
+                axios.get(`${this.url}?search=${search}`, this.myheaders())
                 .then((response) => {
                     this.entries=response.data
                     this.loading = false
@@ -89,41 +92,29 @@
                     this.parseResponseError(error)
                 })
             },
-            localValue (newValue) {
-                this.$emit('input', newValue)
-            },
-            value (newValue) {
-                this.localValue = newValue
-                if (this.returnobject){
-                    console.log(newValue)
-                } else {
-                   console.log(`value changed to ${newValue}`)
-                }
-            },
-        },
-        methods: {
-            forceValue(force){       
-                if (force!=null){
-                    axios.get(force, this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
-                        if (this.returnobject){
-                            this.entries=[response.data]
-                            this.localValue=response.data
-
-                        } else {
-                            this.entries=[response.data]
-                            this.localValue=response.data.url
-                        }
-                        this.loading = false
-                    }, (error) => {
-                        console.log(error)
-                    })
-                }
-            },
         },
         mounted(){
-            this.forceValue(this.value)
+            if (this.new_value){ // Can be url or none
+                this.loading=true
+                axios.get(this.new_value, this.myheaders())
+                .then((response) => {
+                    if (this.returnobject){
+                        this.entries=[response.data]
+                        this.new_value=response.data
+
+                    } else {
+                        this.entries=[response.data]
+                        this.new_value=response.data.url
+                    }
+                    this.new_value=this.modelValue
+
+    
+                    this.loading=false
+               }, (error) => {
+                    this.parseResponseError(error)
+                });
+
+            }
         }
     }
 </script>
