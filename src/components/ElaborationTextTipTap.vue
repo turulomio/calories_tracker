@@ -348,3 +348,17 @@
         },
     }
 </script>
+<style>
+  .mention_containers{
+    color: blue;
+    background-color: aqua;
+  }
+
+
+  .mention_ingredients {
+    color: #A975FF;
+    background-color: rgba(#A975FF, 0.1);
+    border-radius: 0.3rem;
+    padding: 0.1rem 0.3rem;
+  }
+</style>

@@ -90,7 +90,7 @@
   }
   </script>
   
-  <style>
+  <style scoped>
   .items {
     padding: 0.2rem;
     position: relative;
@@ -118,6 +118,18 @@
     /* &.is-selected {
       border-color: #000;
     } */
+  }  
+  
+  .item.is-selected {
+    display: block;
+    margin: 0;
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border-radius: 0.4rem;
+    border: 1px solid transparent;
+    padding: 0.2rem 0.4rem;
+    border-color: #000;
   }
   </style>
   
