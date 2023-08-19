@@ -4,9 +4,9 @@
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
         </h1>
 
-            <v-card width="20%" class="pa-5 mx-auto" outlined>
-                <MyDatePicker density="compact" :label="$t('Select a date')" v-model="day" hidenullicon @input="on_day_input()"></MyDatePicker>
-            </v-card>
+            <div class="d-flex flex-column mx-auto pa-4">    
+                <MyDatePicker density="compact" :label="$t('Select a date')" v-model="day" hidenullicon></MyDatePicker>
+            </div>
 
 
             <v-data-table density="compact" class="mt-4 elevation-1" :headers="meals_headers" :items="meals" :sort-by="[{key:'name',order:'asc'}]"  :items-per-page="10000" :loading="loading" :key="'T'+key">
@@ -197,7 +197,13 @@
                 product_crud_mode:null,
                 product_crud_dialog:false,
             }
-        },        
+        },    
+        watch:{
+            day(){
+
+                this.update_all()
+            }
+        }, 
         methods:{
             empty_meals,
             on_MealsCRUD_cruded(){
@@ -235,9 +241,6 @@
                 this.meals_crud_mode="D"
                 this.key=this.key+1
                 this.meals_crud_dialog=true
-            },
-            on_day_input(){
-                this.update_all()
             },
             on_icon_glutenfree(){
                 alert(this.$t("This meal is gluten free"))
