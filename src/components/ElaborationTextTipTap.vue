@@ -97,6 +97,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { PluginKey } from "prosemirror-state";
     import { Editor, EditorContent,VueRenderer } from '@tiptap/vue-3'
     import StarterKit from '@tiptap/starter-kit'
     import Color from "@tiptap/extension-color";
@@ -104,7 +105,8 @@
     import Mention from '@tiptap/extension-mention'
     import tippy from 'tippy.js'
 
-    import MentionList from './MentionList.vue'
+    import MentionListIngredients from './MentionListIngredients.vue'
+    import MentionListContainers from './MentionListContainers.vue'
     export default {
         components: {
             EditorContent,
@@ -163,8 +165,9 @@
             async print () {
               await this.$htmlToPaper("editor");
             },
-            suggestion(){
+            suggestion_ingredients(){
               return {
+                char: "@",
                 items: ({ query }) => {
                   console.log(this.elaboration.elaborations_products_in)
                   return this.elaboration.elaborations_products_in.filter(item => item.fullname.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
@@ -176,8 +179,78 @@
 
                   return {
                     onStart: props => {
-                      console.log("onStart")
-                      component = new VueRenderer(MentionList, {
+                      console.log("onStart",props)
+                      component = new VueRenderer(MentionListIngredients, {
+                        props,
+                        editor: props.editor,
+                      })
+
+                      if (!props.clientRect) {
+                        return
+                      }
+
+                      popup = tippy('body', {
+                        getReferenceClientRect: props.clientRect,
+                        appendTo: () => document.body,
+                        content: component.element,
+                        showOnCreate: true,
+                        hideOnClick: true,
+                        interactive: true,
+                        trigger: 'manual',
+                        placement: 'bottom-start',
+                      })
+                    },
+
+                    onUpdate(props) {
+                      console.log("onUpdate")
+                      component.updateProps(props)
+
+                      if (!props.clientRect) {
+                        return
+                      }
+
+                      popup[0].setProps({
+                        getReferenceClientRect: props.clientRect,
+                      })
+                    },
+
+                    onKeyDown(props) {
+                      console.log("onkeydown")
+                      if (props.event.key === 'Escape') {
+                        popup[0].hide()
+
+                        return true
+                      }
+
+                      return component.ref?.onKeyDown(props)
+                    },
+
+                    onExit() {
+                      console.log("onExit2")
+                      popup[0].destroy()
+                      component.destroy()
+                    },
+                  }
+                },
+              }
+            },
+
+            suggestion_containers(){
+              return {
+                char: "#",
+                pluginKey: new PluginKey("suggestionContainers"),
+                items: ({ query }) => {
+                  return this.elaboration.elaborations_containers.filter(item => item.name.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
+                },
+
+                render: () => {
+                  let component
+                  let popup
+
+                  return {
+                    onStart: props => {
+                      console.log("onStart",props)
+                      component = new VueRenderer(MentionListContainers, {
                         props,
                         editor: props.editor,
                       })
@@ -247,15 +320,22 @@
                     TextStyle,
                     Mention.configure({
                       HTMLAttributes: {
-                        class: 'mention',
+                        class: 'mention_ingredients',
                       },
-                      suggestion:this.suggestion(),
+                      suggestion:this.suggestion_ingredients(),
+                      // renderLabel({ options, node }) {
 
-                    renderLabel({ options, node }) {
-                      console.log(options,node)
-
-                      return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`
-  }
+                      //   return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`
+                      // }
+                    }),
+                    Mention.extend({name: 'MentionContainers',}).configure({
+                      HTMLAttributes: {
+                        class: 'mention_containers',
+                      },
+                      suggestion:this.suggestion_containers(),
+                      // renderLabel({ options, node }) {
+                      //   return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`
+                      // }
                     }),
                 ],
                 onUpdate: ({ editor }) => {
