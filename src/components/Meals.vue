@@ -31,48 +31,52 @@
                 <template #item.phosphor="{item}"><div v-html="my_round(item.raw.phosphor,0)"></div></template>  
                 <template #item.calcium="{item}"><div v-html="my_round(item.raw.calcium,0)"></div></template>  
                 <template #item.actions="{item}">
-                    <v-icon small class="mr-1" @click="copyMeal(item.raw)">mdi-content-copy</v-icon>
+                    <v-icon size="small" class="mr-1" @click="copyMeal(item.raw)">mdi-content-copy</v-icon>
                     <v-icon small class="mr-1" @click="editMeal(item.raw)">mdi-pencil</v-icon>
                     <v-icon small class="mr-1" @click="deleteMeal(item.raw)">mdi-delete</v-icon>
                 </template>       
                 <template #bottom ></template>        
-                <!-- <template v-slot:[`body.append`]="{headers}" v-if="meals.length>0">
-                    <tr style="background-color: WhiteSmoke">
-                        <td v-for="(header,i) in headers" :key="i">
-                            <div v-if="header.value == 'products'">{{ $t(`Total ([0] meals):`).format(meals.length)}}</div>
-                            <div v-if="header.value == 'amount'" class="d-flex justify-end" v-html="my_round(listobjects_sum(meals,'amount'),0)"></div>
-                            <div v-if="header.value == 'calories'" :class="(biometric.bmr>listobjects_sum(meals,'calories')) ? 'boldgreen d-flex justify-end':'boldred d-flex justify-end'" v-html="my_round(listobjects_sum(meals,'calories'),0)"></div>
-                            <div v-if="header.value == 'fat'" :class="(biometric.recommended_fat>listobjects_sum(meals,'fat')) ? 'boldgreen d-flex justify-end':'boldred d-flex justify-end'" v-html="my_round(listobjects_sum(meals,'fat'),0)"></div>
-                            <div v-if="header.value == 'protein'" :class="(biometric.recommended_protein>listobjects_sum(meals,'protein')) ? 'boldgreen d-flex justify-end':'boldred d-flex justify-end'" v-html="my_round(listobjects_sum(meals,'protein'),0)"></div>
-                            <div v-if="header.value == 'carbohydrate'" :class="(biometric.recommended_carbohydrate>listobjects_sum(meals,'carbohydrate')) ? 'boldgreen d-flex justify-end':'boldred d-flex justify-end'" v-html="my_round(listobjects_sum(meals,'carbohydrate'),0)"></div>
-                            <div v-if="header.value == 'fiber'" :class="(biometric.recommended_fiber<listobjects_sum(meals,'fiber')) ? 'boldgreen d-flex justify-end':'boldred d-flex justify-end'" v-html="my_round(listobjects_sum(meals,'fiber'),0)"></div>
-                            <div v-if="header.value == 'salt'" class="d-flex justify-end" v-html="my_round(listobjects_sum(meals,'salt'),0)"></div>
-                            <div v-if="header.value == 'cholesterol'" class="d-flex justify-end" v-html="my_round(listobjects_sum(meals,'cholesterol'),0)"></div>
-                            <div v-if="header.value == 'sodium'" :class="(biometric.recommended_sodium>total_sodium()) ? 'boldgreen d-flex justify-end':'boldred d-flex justify-end'"  v-html="total_sodium()"></div>
-                            <div v-if="header.value == 'potassium'" class="d-flex justify-end" v-html="my_round(listobjects_sum(meals,'potassium'),0)"></div>
-                            <div v-if="header.value == 'ferrum'" class="d-flex justify-end" v-html="my_round(listobjects_sum(meals,'ferrum'),0)"></div>
-                            <div v-if="header.value == 'magnesium'" class="d-flex justify-end" v-html="my_round(listobjects_sum(meals,'magnesium'),0)"></div>
-                            <div v-if="header.value == 'phosphor'" class="d-flex justify-end" v-html="my_round(listobjects_sum(meals,'phosphor'),0)"></div>
-                            <div v-if="header.value == 'calcium'" class="d-flex justify-end" v-html="my_round(listobjects_sum(meals,'calcium'),0)"></div>
-                            <div v-if="header.value == 'sugars'" :class="(biometric.recommended_sugars>listobjects_sum(meals,'sugars')) ? 'boldgreen d-flex justify-end':'boldred d-flex justify-end'" v-html="my_round(listobjects_sum(meals,'sugars'),0)"></div>
-                            <div v-if="header.value == 'saturated_fat'" class="d-flex justify-end" v-html="my_round(listobjects_sum(meals,'saturated_fat'),0)"></div>
-                        </td>
+                <template #tbody>
+                    <tr class="totalrow">
+                        <td colspan="2">{{ $t(`Total ([0] meals):`).format(meals.length) }} </td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(meals,'amount'),0)"></td>
+                        <td :class="(biometric.bmr>listobjects_sum(meals,'calories')) ? 'boldgreen text-right':'boldred text-right'" v-html="my_round(listobjects_sum(meals,'calories'),0)"></td>
+                        <td :class="(biometric.recommended_fat>listobjects_sum(meals,'fat')) ? 'boldgreen text-right':'boldred text-right'" v-html="my_round(listobjects_sum(meals,'fat'),0)"></td>
+                        <td :class="(biometric.recommended_protein>listobjects_sum(meals,'protein')) ? 'boldgreen text-right':'boldred text-right'" v-html="my_round(listobjects_sum(meals,'protein'),0)"></td>
+                        <td :class="(biometric.recommended_carbohydrate>listobjects_sum(meals,'carbohydrate')) ? 'boldgreen text-right':'boldred text-right'" v-html="my_round(listobjects_sum(meals,'carbohydrate'),0)"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(meals,'salt'),0)"></td>
+                        <td :class="(biometric.recommended_fiber<listobjects_sum(meals,'fiber')) ? 'boldgreen text-right':'boldred text-right'" v-html="my_round(listobjects_sum(meals,'fiber'),0)"></td>
+                        <td :class="(biometric.recommended_sugars>listobjects_sum(meals,'sugars')) ? 'boldgreen text-right':'boldred text-right'" v-html="my_round(listobjects_sum(meals,'sugars'),0)"></td>               
+                        <td class="text-right" v-html="my_round(listobjects_sum(meals,'saturated_fat'),0)"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(meals,'cholesterol'),0)"></td>
+                        <td :class="(biometric.recommended_sodium>total_sodium()) ? 'boldgreen text-right':'boldred text-right'"  v-html="total_sodium()"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(meals,'potassium'),0)"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(meals,'ferrum'),0)"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(meals,'magnesium'),0)"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(meals,'phosphor'),0)"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(meals,'calcium'),0)"></td>   
+                        <td></td>      
                     </tr>
-                    <tr class="bold" style="background-color: WhiteSmoke" v-if="biometric">
-                        <td v-for="(header,i) in headers" :key="i">
-                            <div v-if="header.value == 'products'">{{ $t(`Recomendation for [0] kg and [1] cm`).format(biometric.weight,biometric.height)}}</div>
-                            <div v-if="header.value == 'calories'" class="d-flex justify-end" v-html="my_round(biometric.bmr,0)"></div>
-                            <div v-if="header.value == 'fat'" class="d-flex justify-end" v-html="my_round(biometric.recommended_fat,0)"></div>
-                            <div v-if="header.value == 'protein'" class="d-flex justify-end" v-html="my_round(biometric.recommended_protein,0)"></div>
-                            <div v-if="header.value == 'carbohydrate'" class="d-flex justify-end" v-html="my_round(biometric.recommended_carbohydrate,0)"></div>
-                            <div v-if="header.value == 'fiber'" class="d-flex justify-end" v-html="my_round(biometric.recommended_fiber,0)"></div>
-                            <div v-if="header.value == 'sugars'" class="d-flex justify-end" v-html="my_round(biometric.recommended_sugars,0)"></div>
-                            <div v-if="header.value == 'sodium'" class="d-flex justify-end" v-html="my_round(biometric.recommended_sodium,0)"></div>
-                            <div v-if="header.value == 'salt'" class="d-flex justify-end" @click="on_icon_salt_info()" ><v-icon small >mdi-information-outline</v-icon></div>
-
-                        </td>
+                    <tr class="totalrow" v-if="biometric">
+                        <td colspan="3">{{ $t(`Recomendation for [0] kg and [1] cm`).format(biometric.weight,biometric.height)}}</td>
+                        <td  class="text-right" v-html="my_round(biometric.bmr,0)"></td>
+                        <td class="text-right" v-html="my_round(biometric.recommended_fat,0)"></td>
+                        <td class="text-right" v-html="my_round(biometric.recommended_protein,0)"></td>
+                        <td class="text-right" v-html="my_round(biometric.recommended_carbohydrate,0)"></td>
+                        <td class="text-right" @click="on_icon_salt_info()" ><v-icon size="small" icon="mdi-information-outline" /></td>  
+                        <td class="text-right" v-html="my_round(biometric.recommended_fiber,0)"></td>
+                        <td class="text-right" v-html="my_round(biometric.recommended_sugars,0)"></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right" v-html="my_round(biometric.recommended_sodium,0)"></td>    
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>             
                     </tr>
-                </template> -->
+                </template>
             </v-data-table>
         <!-- DIALOG MEALS CRUD -->
         <v-dialog v-model="meals_crud_dialog" width="45%">
@@ -156,22 +160,22 @@
                 meals_headers: [
                     { title: this.$t('Time'), sortable: true, key: 'datetime'},
                     { title: this.$t('Product'), sortable: true, key: 'products',width:"30%"},
-                    { title: this.$t('Amount (g)'), sortable: true, key: 'amount',align:'right'},
-                    { title: this.$t('Calories (kcal)'), sortable: true, key: 'calories',align:'right'},
-                    { title: this.$t('Fat (g)'), sortable: true, key: 'fat',align:'right'},
-                    { title: this.$t('Protein (g)'), sortable: true, key: 'protein',align:'right'},
-                    { title: this.$t('Carbohydrate (g)'), sortable: true, key: 'carbohydrate',align:'right'},
-                    { title: this.$t('Salt (g)'), sortable: true, key: 'salt',align:'right'},
-                    { title: this.$t('Fiber (g)'), sortable: true, key: 'fiber',align:'right'},
-                    { title: this.$t('Sugars (g)'), sortable: true, key: 'sugars',align:'right'},
-                    { title: this.$t('Saturated fat (g)'), sortable: true, key: 'saturated_fat',align:'right'},
-                    { title: this.$t('Cholesterol (g)'), sortable: true, key: 'cholesterol',align:'right'},
-                    { title: this.$t('Sodium (mg)'), sortable: true, key: 'sodium',align:'right'},
-                    { title: this.$t('Potassium (mg)'), sortable: true, key: 'potassium',align:'right'},
-                    { title: this.$t('Ferrum (mg)'), sortable: true, key: 'ferrum',align:'right'},
-                    { title: this.$t('Magnesium (mg)'), sortable: true, key: 'magnesium',align:'right'},
-                    { title: this.$t('Phosphor (mg)'), sortable: true, key: 'phosphor',align:'right'},
-                    { title: this.$t('Calcium (mg)'), sortable: true, key: 'calcium',align:'right'},
+                    { title: this.$t('Amount (g)'), sortable: true, key: 'amount',align:'end'},
+                    { title: this.$t('Calories (kcal)'), sortable: true, key: 'calories',align:'end'},
+                    { title: this.$t('Fat (g)'), sortable: true, key: 'fat',align:'end'},
+                    { title: this.$t('Protein (g)'), sortable: true, key: 'protein',align:'end'},
+                    { title: this.$t('Carbohydrate (g)'), sortable: true, key: 'carbohydrate',align:'end'},
+                    { title: this.$t('Salt (g)'), sortable: true, key: 'salt',align:'end'},
+                    { title: this.$t('Fiber (g)'), sortable: true, key: 'fiber',align:'end'},
+                    { title: this.$t('Sugars (g)'), sortable: true, key: 'sugars',align:'end'},
+                    { title: this.$t('Saturated fat (g)'), sortable: true, key: 'saturated_fat',align:'end'},
+                    { title: this.$t('Cholesterol (g)'), sortable: true, key: 'cholesterol',align:'end'},
+                    { title: this.$t('Sodium (mg)'), sortable: true, key: 'sodium',align:'end'},
+                    { title: this.$t('Potassium (mg)'), sortable: true, key: 'potassium',align:'end'},
+                    { title: this.$t('Ferrum (mg)'), sortable: true, key: 'ferrum',align:'end'},
+                    { title: this.$t('Magnesium (mg)'), sortable: true, key: 'magnesium',align:'end'},
+                    { title: this.$t('Phosphor (mg)'), sortable: true, key: 'phosphor',align:'end'},
+                    { title: this.$t('Calcium (mg)'), sortable: true, key: 'calcium',align:'end'},
                     { title: this.$t('Actions'), key: 'actions', sortable: false,width:"6%"},
 
                 ],

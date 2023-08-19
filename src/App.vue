@@ -157,4 +157,19 @@ span.vuered{
 .v-date-picker-table {
     height: unset;
 }
+
+
+.totalrow{
+    background-color: whitesmoke;
+    font-weight: 600;
+}
+
+.totalrow > td{
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+
+}
+
 </style>
