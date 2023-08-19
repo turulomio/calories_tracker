@@ -8,7 +8,7 @@
             <template #item.size="{item}">{{ show_size(item.raw)}}</template> 
             
             <template #item.actions="{item}">
-                <v-icon v-if="item.files" small class="mr-2" @click="downloadItem(item.raw)">mdi-download</v-icon>
+                <v-icon v-if="item.raw.files" small class="mr-2" @click="downloadItem(item.raw)">mdi-download</v-icon>
                 <v-icon small class="mr-2" @click="editItem(item.raw)">mdi-pencil</v-icon>
                 <v-icon small class="mr-2" @click="deleteItem(item.raw)">mdi-delete</v-icon>
             </template>
