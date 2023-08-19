@@ -8,7 +8,7 @@
                 <v-text-field clearable :disabled="loading" class="mb-3"  v-model="search" prepend-icon="mdi-magnify" :label="$t('Add a string to filter table')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
             </v-row>
         </v-card>
-        <v-data-table density="compact" :headers="recipes_headers" :items="paginated_recipes.results" class="elevation-1 cursorpointer" :server-items-length="paginated_recipes.count" :options.sync="options"  @update:page="update_recipes" :loading="loading" item-value="content_url" @click:row="viewRecipe">
+        <v-data-table density="compact" :headers="recipes_headers" :items="paginated_recipes.results" class="elevation-1 cursorpointer" :server-items-length="paginated_recipes.count" :options.sync="options"  @update:page="update_recipes" :loading="loading" item-value="content_url" @click:row="viewRecipe" :key="key">
             <template #item.photo="{item}"><v-img  v-if="item.raw.thumbnail" :src="item.raw.thumbnail" style="width: 50px; height: 50px" @click.stop="toggleFullscreen(item.raw)" /></template>
             <template #item.name="{item}"><div v-html="item.raw.name"></div></template>      
             <template #item.last="{item}">{{localtime(item.raw.last)}}</template>      
@@ -269,19 +269,7 @@
                     this.recipe=object.item.raw
                     this.key=this.key+1
 
-                    this.dialog_recipes_view=true     
-                // var recipe_full_url=item.url.replace("/recipes/","/recipes_full/")
-                // axios.get(item.url, this.myheaders())
-                // .then((response) => {
-                //     this.recipe=response.data
-                //     this.recipe.url_full=recipe_full_url
-                //     this.recipe.url=item.url
-                //     this.key=this.key+1
-
-                //     this.dialog_recipes_view=true
-                // }, (error) => {
-                //     this.parseResponseError(error)
-                // })
+                    this.dialog_recipes_view=true
             },
 
             on_search_change(){
@@ -296,6 +284,7 @@
                 let headers={...this.myheaders(),params: options}
                 axios.get(`${this.store().apiroot}/api/recipes/?search=${this.search}`, headers)
                 .then((response) => {
+                    console.log(response.data)
                     response.data.results.forEach(r=>{
                         r.thumbnail=imgNoImage
                         r.content_url=null //Needed to select only one rl
@@ -305,6 +294,7 @@
                                 .then((responsethumbnail) => {
                                     r.thumbnail=responsethumbnail.data
                                     r.content_url=rl.files.url_content
+                                    this.key=this.key+1
                                 }, (error) => {
                                     this.parseResponseError(error)
                                 });
