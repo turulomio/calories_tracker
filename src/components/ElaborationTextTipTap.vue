@@ -114,7 +114,7 @@
         },
         watch: {
             editor(value){
-                //console.log(value.options.content)
+                console.log(value.options.content)
             }
         },
         data(){ 
@@ -185,8 +185,8 @@
                 },
             })
         },
-        beforeDestroy() {
-            this.editor.destroy()
-        },
+        // beforeDestroy() {
+        //     this.editor.destroy()
+        // },
     }
 </script>

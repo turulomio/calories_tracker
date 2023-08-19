@@ -65,10 +65,9 @@ export default {
       },
 
       onExit() {
-
         console.log("onExit2")
-        // popup[0].destroy()
-        // component.destroy()
+        popup[0].destroy()
+        component.destroy()
       },
     }
   },

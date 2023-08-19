@@ -18,7 +18,7 @@
             </v-card>
         </v-dialog> 
         <!-- Item VIEW DIALOG -->
-        <v-dialog v-model="elaboration_view_dialog" width="100%" >
+        <v-dialog v-model="elaboration_view_dialog" width="100%" persistent >
             <v-card class="pa-3">
                 <ElaborationView :elaboration="elaboration" :key="key"  @clickoutside="on_ElaborationsView_clickoutside"></ElaborationView>
             </v-card>
