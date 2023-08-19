@@ -39,7 +39,7 @@
                 <!-- <template v-slot:[`body.append`]="{headers}" v-if="meals.length>0">
                     <tr style="background-color: WhiteSmoke">
                         <td v-for="(header,i) in headers" :key="i">
-                            <div v-if="header.value == 'products'">{{ $t(`Total ({0} meals):`).format(meals.length)}}</div>
+                            <div v-if="header.value == 'products'">{{ $t(`Total ([0] meals):`).format(meals.length)}}</div>
                             <div v-if="header.value == 'amount'" class="d-flex justify-end" v-html="my_round(listobjects_sum(meals,'amount'),0)"></div>
                             <div v-if="header.value == 'calories'" :class="(biometric.bmr>listobjects_sum(meals,'calories')) ? 'boldgreen d-flex justify-end':'boldred d-flex justify-end'" v-html="my_round(listobjects_sum(meals,'calories'),0)"></div>
                             <div v-if="header.value == 'fat'" :class="(biometric.recommended_fat>listobjects_sum(meals,'fat')) ? 'boldgreen d-flex justify-end':'boldred d-flex justify-end'" v-html="my_round(listobjects_sum(meals,'fat'),0)"></div>
@@ -60,7 +60,7 @@
                     </tr>
                     <tr class="bold" style="background-color: WhiteSmoke" v-if="biometric">
                         <td v-for="(header,i) in headers" :key="i">
-                            <div v-if="header.value == 'products'">{{ $t(`Recomendation for {0} kg and {1} cm`).format(biometric.weight,biometric.height)}}</div>
+                            <div v-if="header.value == 'products'">{{ $t(`Recomendation for [0] kg and [1] cm`).format(biometric.weight,biometric.height)}}</div>
                             <div v-if="header.value == 'calories'" class="d-flex justify-end" v-html="my_round(biometric.bmr,0)"></div>
                             <div v-if="header.value == 'fat'" class="d-flex justify-end" v-html="my_round(biometric.recommended_fat,0)"></div>
                             <div v-if="header.value == 'protein'" class="d-flex justify-end" v-html="my_round(biometric.recommended_protein,0)"></div>
@@ -247,9 +247,9 @@
 
 
                 alert(this.$t(`Salt is converted to sodium to calculate recommended daily amount.
-    - Salt amount: {0} g => {1} sodium mg
-    - Sodium amount: {2} mg
-    - Total sodium: {3} mg
+    - Salt amount: [0] g => [1] sodium mg
+    - Sodium amount: [2] mg
+    - Total sodium: [3] mg
                 `).format(this.my_round(salt,2) , this.my_round(salt_as_sodium,0), sodium, this.my_round(total,0)))
             },
             total_sodium(){

@@ -1,9 +1,9 @@
 <template>
     <div>    
-        <h1>{{ $t("Elaboration for {0} diners").format(new_elaboration.diners) }}
+        <h1>{{ $t("Elaboration for [0] diners").format(new_elaboration.diners) }}
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
             <br>
-            <v-btn class="" :color="(new_elaboration.final_amount)? '': 'primary'" :disabled="elaboration.automatic" @click="setFinalAmount()" >{{ (new_elaboration.final_amount==null) ? $t("Final amount wasn't set") : $t("Final amount: {0} g").format(new_elaboration.final_amount)}}</v-btn>
+            <v-btn class="" :color="(new_elaboration.final_amount)? '': 'primary'" :disabled="elaboration.automatic" @click="setFinalAmount()" >{{ (new_elaboration.final_amount==null) ? $t("Final amount wasn't set") : $t("Final amount: [0] g").format(new_elaboration.final_amount)}}</v-btn>
 
     </h1>           
         <v-alert v-if="elaboration.automatic" type="error" density="compact" text><div v-html="automatic_adaptation_text()"></div></v-alert>
@@ -233,6 +233,7 @@
         },
         created(){
             this.new_elaboration=Object.assign({},this.elaboration)
+            console.log(this.new_elaboration)
         }
     }
 </script>

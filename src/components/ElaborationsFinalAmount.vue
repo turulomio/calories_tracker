@@ -34,7 +34,7 @@
         <v-card class="pa-8 mt-2" flat>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="acceptDialog()">{{ $t("Set final amount to {0}g").format(final_amount) }}</v-btn>
+                <v-btn color="primary" @click="acceptDialog()">{{ $t("Set final amount to [0]g").format(final_amount) }}</v-btn>
                 <v-btn color="primary" @click="setNull()">{{ $t("Unset final amount") }}</v-btn>
             </v-card-actions>
         </v-card>

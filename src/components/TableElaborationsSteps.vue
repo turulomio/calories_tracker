@@ -16,8 +16,8 @@
             
 
         </v-data-table>  
-        <p class="my-2 bold d-flex justify-center">{{ $t("Elaboration time: {0}").format(elaboration.final_duration)}}</p>
-        <p v-if="unused_ingredients()" class="my-2 boldred d-flex justify-center">{{ $t("Products unused : {0}").format(unused_ingredients())}}</p>
+        <p class="my-2 bold d-flex justify-center">{{ $t("Elaboration time: [0]").format(elaboration.final_duration)}}</p>
+        <p v-if="unused_ingredients()" class="my-2 boldred d-flex justify-center">{{ $t("Products unused : [0]").format(unused_ingredients())}}</p>
         <!-- STEPCRUD DIALOG -->
         <v-dialog v-model="dialog_elaborations_step_crud" width="100%">
             <v-card class="pa-3">
@@ -196,7 +196,7 @@
                 let tt=this.id_from_hyperlinked_url(item.temperatures_types)
 
                 if(tt==1){//ºC
-                    return this.$t("{0}ºC").format(item.temperatures_values)
+                    return this.$t("[0]ºC").format(item.temperatures_values)
                 } else if (tt==2){//Low Medium High
                     if (item.temperatures_values==-1){
                         return this.$t("Low heat")
@@ -211,9 +211,9 @@
                 if (item.stir_types ==null) return ""
                 let st=this.id_from_hyperlinked_url(item.stir_types)
                 if(st==1){// Robot speed
-                    return this.$t("Robot velocity: {0}").format(item.stir_values)
+                    return this.$t("Robot velocity: [0]").format(item.stir_values)
                 } else if (st==3){//Stir each minutoes
-                    return this.$t("Every {0} minutes").format(item.stir_values)
+                    return this.$t("Every [0] minutes").format(item.stir_values)
                 } else {
                     return this.store().stir_types.get( item.stir_types).localname
                 }

@@ -1,6 +1,6 @@
 <template>
     <div class="ma-4">
-        <h1>{{ $t(`'{0}' combinations`).format(step.localname) }}</h1>  
+        <h1>{{ $t(`'[0]' combinations`).format(step.localname) }}</h1>  
 
         <p style="text-align: center;" >{{ $t("Ingredients")+": " }} <v-icon small v-if="step.can_products_in_step" >mdi-check-outline</v-icon><v-icon small color="red" v-if="step.man_products_in_step" >mdi-check-outline</v-icon>
         {{ $t("Container")+": " }} <v-icon small v-if="step.can_container" >mdi-check-outline</v-icon><v-icon small color="red" v-if="step.man_container" >mdi-check-outline</v-icon>
