@@ -35,17 +35,6 @@
                             <v-icon small class="mr-2" @click="editBiometric(item.raw)">mdi-pencil</v-icon>
                             <v-icon small @click="deleteBiometric(item.raw)">mdi-delete</v-icon>
                         </template>
-                        <!-- <template v-slot:[`body.append`]="{headers}">
-                            <tr style="background-color: WhiteSmoke">
-                                <td v-for="(header,i) in headers" :key="'Foot'+i">
-                                    <div v-if="header.value == 'localname'">
-                                        Total
-                                    </div>
-                                    <div v-if="header.value == 'balance_user'" class="d-flex justify-end" v-html="localcurrency_html(listobjects_sum(accounts_items,'balance_user'))">
-                                    </div>
-                                </td>
-                            </tr>
-                        </template> -->
                         <template #bottom></template>
                     </v-data-table>
                 </v-card>

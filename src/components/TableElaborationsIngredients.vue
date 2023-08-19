@@ -9,7 +9,19 @@
                 <v-icon small class="mr-2" @click="editProductIn(item.raw)">mdi-pencil</v-icon>
                 <v-icon small @click="deleteProductIn(item.raw)">mdi-delete</v-icon>
             </template>
-            <!-- <template v-slot:[`body.append`]="{headers}" v-if="elaboration.elaborations_products_in.length>0">
+            <template #tbody>
+                <tr class="totalrow" v-if="elaboration.elaborations_products_in.length>0">
+                    <td>{{ $t("Total ([0] products):").format(elaboration.elaborations_products_in.length) }} </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right" v-html="listobjects_sum(elaboration.elaborations_products_in,'final_grams')"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </template>
+            <!-- <template v-slot:[`body.append`]="{headers}">
                 <tr style="background-color: WhiteSmoke">
                     <td v-for="(header,i) in headers" :key="i">
                         <div v-if="header.value=='products'">{{ $t("Total ([0] products):").format(elaboration.elaborations_products_in.length) }}</div>
@@ -62,11 +74,11 @@
                 var r= [
                     { title: this.$t('Product'), sortable: true, key: 'products'},
                     { title: this.$t('Comment'), key: 'comment'},
-                    { title: this.$t('Amount'), key: 'amount', align:'right', width:"10%"},
+                    { title: this.$t('Amount'), key: 'amount', align:'end', width:"10%"},
                     { title: this.$t('Measure type'), key: 'measures_types', width:"12%"},
-                    { title: this.$t('Final grams'), key: 'final_grams', align:'right', width:"10%"},
-                    { title: this.$t('NI'), key: 'ni', align:'right', width:"4%"},
-                    { title: this.$t('Automatic %'), key: 'automatic_percentage', align:'right', width:"8%"},
+                    { title: this.$t('Final grams'), key: 'final_grams', align:'end', width:"10%"},
+                    { title: this.$t('NI'), key: 'ni', align:'end', width:"4%"},
+                    { title: this.$t('Automatic %'), key: 'automatic_percentage', align:'end', width:"8%"},
                     
                 ]
                 if (this.elaboration.automatic==false){

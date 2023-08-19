@@ -3,13 +3,12 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().products)" v-model="newproduct_in.products" item-title="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()">
-                    <template v-slot:item="{item}" ><div v-html="products_html_fullname(item,2)"></div></template>
-                </v-autocomplete>
+
+                <AutocompleteProducts :readonly="mode=='D'" :items="getArrayFromMap(store().products)" v-model="newproduct_in.products" />
                 <v-row class="pa-3">     
                     <v-text-field :readonly="mode=='D'" v-model="newproduct_in.amount" :label="$t('Set product amount')" :placeholder="$t('Set product amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
-                    <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-title="name" item-value="amount" :rules="RulesSelection(false)"  @input="on_product_format_input()"></v-autocomplete>
-                    <Multiplier v-model="multiplier" :readonly="mode=='D'" @input="on_multiplier_input()"></Multiplier>
+                    <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-title="name" item-value="amount" :rules="RulesSelection(false)"></v-autocomplete>
+                    <Multiplier v-model="multiplier" :readonly="mode=='D'" />
                 </v-row>
             </v-form>
             <v-card-actions>
@@ -20,9 +19,11 @@
     </div>
 </template>
 <script>
+    import AutocompleteProducts from './AutocompleteProducts.vue'
     import Multiplier from './Multiplier.vue'
     export default {
         components: {
+            AutocompleteProducts,
             Multiplier,
         },
         props: {
@@ -44,6 +45,19 @@
                 multiplier:1,
             }
         },
+        watch: {
+            "newproduct_in.products": function(){
+                this.product_formats_update()
+
+            },
+            product_format(){
+                this.calculate_amount()
+
+            },
+            multiplier(){
+                this.calculate_amount()
+            },
+        },
         methods: {
             button(){
                 if (this.mode=="C") return this.$t('Add')
@@ -63,19 +77,16 @@
                 this.$emit("cruded",this.mode,this.newproduct_in,this.product_in)
             },
 
-            on_products_input(){
+            product_formats_update(){
                 if (this.newproduct_in.products==null) return
-                let product=this.store().products.get(his.newproduct_in.products)
+                let product=this.store().products.get(this.newproduct_in.products)
                 this.products_formats=[]
                 product.formats.forEach(element => {
                     this.products_formats.push({name: `${this.store().formats.get(element.formats).name} (${element.amount} g)`, amount: element.amount})
                     
                 });
             },
-            on_product_format_input(){
-                this.on_multiplier_input()
-            },
-            on_multiplier_input(){
+            calculate_amount(){
                 if (this.product_format) this.newproduct_in.amount=this.my_round(this.multiplier*this.product_format,3)
             }
         },

@@ -37,7 +37,7 @@
                 </template>       
                 <template #bottom ></template>        
                 <template #tbody>
-                    <tr class="totalrow">
+                    <tr class="totalrow" v-if="biometric">
                         <td colspan="2">{{ $t(`Total ([0] meals):`).format(meals.length) }} </td>
                         <td class="text-right" v-html="my_round(listobjects_sum(meals,'amount'),0)"></td>
                         <td :class="(biometric.bmr>listobjects_sum(meals,'calories')) ? 'boldgreen text-right':'boldred text-right'" v-html="my_round(listobjects_sum(meals,'calories'),0)"></td>

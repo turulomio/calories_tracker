@@ -10,20 +10,20 @@
                 <v-card class="mt-4">
                     <v-data-table density="compact" :headers="products_in_headers" :items="newep.products_in" :sort-by="[{key:'name',order:'asc'}]"  class="elevation-1" :items-per-page="10000" :key="'T'+key" :height="250" fixed-header>
                         <template #item.products="{item}">
-                            <div v-html="products_html_fullname(item.rawproducts,4)"></div>
+                            <div v-html="products_html_fullname(item.raw.products,4)"></div>
                         </template>
                         <template #item.actions="{item}">
                             <v-icon v-if="['C','U'].includes(mode)" small class="mr-2" @click="editProductIn(item.raw)">mdi-pencil</v-icon>
                             <v-icon v-if="['C','U'].includes(mode)" small @click="deleteProductIn(item.raw)">mdi-delete</v-icon>
                         </template>
-                        <!-- <template v-slot:[`body.append`]="{headers}" v-if="newep.products_in.length>0">
-                            <tr style="background-color: WhiteSmoke">
-                                <td v-for="(header,i) in headers" :key="i">
-                                    <div v-if="header.value=='products'">{{ $t("Total ([0] products):").format(newep.products_in.length) }}</div>
-                                    <div v-if="header.value == 'amount'" class="d-flex justify-end" v-html="listobjects_sum(newep.products_in,'amount')"></div>
-                                </td>
+                        <template #bottom></template>
+                        <template #tbody>
+                            <tr class="totalrow">
+                                <td>{{ $t("Total ([0] products):").format(newep.products_in.length) }} </td>
+                                <td class="text-right" v-html="listobjects_sum(newep.products_in,'amount')"></td>
+                                <td></td>
                             </tr>
-                        </template> -->
+                        </template>
                     </v-data-table>
                 </v-card>
             </v-form>
@@ -70,7 +70,7 @@
 
                 products_in_headers: [
                     { title: this.$t('Product'), sortable: true, key: 'products'},
-                    { title: this.$t('Amount'), key: 'amount', align:'right'},
+                    { title: this.$t('Amount'), key: 'amount', align:'end'},
                     { title: this.$t('Actions'), key: 'actions', sortable: false, width:"8%"},
                 ],
 

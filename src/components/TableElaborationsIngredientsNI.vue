@@ -18,51 +18,48 @@
                 <template #item.ferrum="{item}"><div v-html="my_round(item.raw.ferrum,0)"></div></template>  
                 <template #item.magnesium="{item}"><div v-html="my_round(item.raw.magnesium,0)"></div></template>  
                 <template #item.phosphor="{item}"><div v-html="my_round(item.raw.phosphor,0)"></div></template>  
-                <template #item.calcium="{item}"><div v-html="my_round(item.raw.calcium,0)"></div></template>  
-                <!-- <template v-slot:[`body.append`]="{headers}" v-if="items.length>0">
-                    <tr style="background-color: WhiteSmoke">
-                        <td v-for="(header,i) in headers" :key="i">
-                            <div v-if="header.value == 'products'">{{ $t(`Total ([0] items):`).format(items.length)}}</div>
-                            <div v-if="header.value == 'amount'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'amount'),0)"></div>
-                            <div v-if="header.value == 'calories'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'calories'),0)"></div>
-                            <div v-if="header.value == 'fat'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'fat'),0)"></div>
-                            <div v-if="header.value == 'protein'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'protein'),0)"></div>
-                            <div v-if="header.value == 'carbohydrate'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'carbohydrate'),0)"></div>
-                            <div v-if="header.value == 'fiber'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'fiber'),0)"></div>
-                            <div v-if="header.value == 'salt'" class="d-flex justify-end" @click="on_icon_salt_info()" ><v-icon small >mdi-information-outline</v-icon></div>
-                            <div v-if="header.value == 'cholesterol'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'cholesterol'),0)"></div>
-                            <div v-if="header.value == 'sodium'"  class="d-flex justify-end" v-html="total_sodium()"></div>
-                            <div v-if="header.value == 'potassium'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'potassium'),0)"></div>
-                            <div v-if="header.value == 'ferrum'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'ferrum'),0)"></div>
-                            <div v-if="header.value == 'magnesium'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'magnesium'),0)"></div>
-                            <div v-if="header.value == 'phosphor'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'phosphor'),0)"></div>
-                            <div v-if="header.value == 'calcium'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'calcium'),0)"></div>
-                            <div v-if="header.value == 'sugars'"  class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'sugars'),0)"></div>
-                            <div v-if="header.value == 'saturated_fat'" class="d-flex justify-end" v-html="my_round(listobjects_sum(items,'saturated_fat'),0)"></div>
-                        </td>
+                <template #item.calcium="{item}"><div v-html="my_round(item.raw.calcium,0)"></div></template>                 
+                <template #tbody>
+                    <tr class="totalrow">
+                        <td>{{ $t(`Total ([0] items):`).format(items.length) }} </td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(items,'amount'),0)"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(items,'calories'),0)"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(items,'fat'),0)"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(items,'protein'),0)"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(items,'carbohydrate'),0)"></td>
+                        <td class="text-right" @click="on_icon_salt_info()" ><v-icon small >mdi-information-outline</v-icon></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(items,'fiber'),0)"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(items,'sugars'),0)"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(items,'saturated_fat'),0)"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(items,'cholesterol'),0)"></td>
+                        <td class="text-right" v-html="total_sodium()"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(items,'potassium'),0)"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(items,'ferrum'),0)"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(items,'magnesium'),0)"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(items,'phosphor'),0)"></td>
+                        <td class="text-right" v-html="my_round(listobjects_sum(items,'calcium'),0)"></td>
+                        <td></td>      
                     </tr>
-                    <tr style="background-color: WhiteSmoke" v-if="elaboration.final_amount">
-                        <td v-for="(header,i) in headers" :key="i">
-                            <div v-if="header.value == 'products'">{{ $t(`Nutritional information in 100 g:`)}}</div>
-                            <div v-if="header.value == 'amount'" class="d-flex justify-end" v-html="100"></div>
-                            <div v-if="header.value == 'calories'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'calories')/elaboration.final_amount,0)"></div>
-                            <div v-if="header.value == 'fat'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'fat')/elaboration.final_amount,0)"></div>
-                            <div v-if="header.value == 'protein'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'protein')/elaboration.final_amount,0)"></div>
-                            <div v-if="header.value == 'carbohydrate'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'carbohydrate')/elaboration.final_amount,0)"></div>
-                            <div v-if="header.value == 'fiber'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'fiber')/elaboration.final_amount,0)"></div>
-                            <div v-if="header.value == 'salt'" class="d-flex justify-end" @click="on_icon_salt_info()" ><v-icon small >mdi-information-outline</v-icon></div>
-                            <div v-if="header.value == 'cholesterol'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'cholesterol')/elaboration.final_amount,0)"></div>
-                            <div v-if="header.value == 'sodium'"  class="d-flex justify-end" v-html="my_round(100*total_sodium()/elaboration.final_amount,0)"></div>
-                            <div v-if="header.value == 'potassium'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'potassium')/elaboration.final_amount,0)"></div>
-                            <div v-if="header.value == 'ferrum'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'ferrum')/elaboration.final_amount,0)"></div>
-                            <div v-if="header.value == 'magnesium'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'magnesium')/elaboration.final_amount,0)"></div>
-                            <div v-if="header.value == 'phosphor'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'phosphor')/elaboration.final_amount,0)"></div>
-                            <div v-if="header.value == 'calcium'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'calcium')/elaboration.final_amount,0)"></div>
-                            <div v-if="header.value == 'sugars'"  class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'sugars')/elaboration.final_amount,0)"></div>
-                            <div v-if="header.value == 'saturated_fat'" class="d-flex justify-end" v-html="my_round(100*listobjects_sum(items,'saturated_fat')/elaboration.final_amount,0)"></div>
-                        </td>
+                    <tr class="totalrow" v-if="elaboration.final_amount">
+                            <td>{{ $t(`Nutritional information in 100 g:`)}}</td>
+                            <td class="text-right" v-html="100"></td>
+                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'calories')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'fat')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'protein')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'carbohydrate')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" @click="on_icon_salt_info()" ><v-icon small >mdi-information-outline</v-icon></td>
+                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'fiber')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'sugars')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'saturated_fat')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'cholesterol')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="my_round(100*total_sodium()/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'potassium')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'ferrum')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'magnesium')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'phosphor')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'calcium')/elaboration.final_amount,0)"></td>
                     </tr>
-                </template> -->
+                </template>
                 <template #bottom></template>
         </v-data-table>
     </div>
@@ -81,22 +78,22 @@
             return{
                 products_in_headers: [
                     { title: this.$t('Product'), sortable: true, key: 'products',width:"30%"},
-                    { title: this.$t('Amount (g)'), sortable: true, key: 'amount',align:'right'},
-                    { title: this.$t('Calories (kcal)'), sortable: true, key: 'calories',align:'right'},
-                    { title: this.$t('Fat (g)'), sortable: true, key: 'fat',align:'right'},
-                    { title: this.$t('Protein (g)'), sortable: true, key: 'protein',align:'right'},
-                    { title: this.$t('Carbohydrate (g)'), sortable: true, key: 'carbohydrate',align:'right'},
-                    { title: this.$t('Salt (g)'), sortable: true, key: 'salt',align:'right'},
-                    { title: this.$t('Fiber (g)'), sortable: true, key: 'fiber',align:'right'},
-                    { title: this.$t('Sugars (g)'), sortable: true, key: 'sugars',align:'right'},
-                    { title: this.$t('Saturated fat (g)'), sortable: true, key: 'saturated_fat',align:'right'},
-                    { title: this.$t('Cholesterol (g)'), sortable: true, key: 'cholesterol',align:'right'},
-                    { title: this.$t('Sodium (mg)'), sortable: true, key: 'sodium',align:'right'},
-                    { title: this.$t('Potassium (mg)'), sortable: true, key: 'potassium',align:'right'},
-                    { title: this.$t('Ferrum (mg)'), sortable: true, key: 'ferrum',align:'right'},
-                    { title: this.$t('Magnesium (mg)'), sortable: true, key: 'magnesium',align:'right'},
-                    { title: this.$t('Phosphor (mg)'), sortable: true, key: 'phosphor',align:'right'},
-                    { title: this.$t('Calcium (mg)'), sortable: true, key: 'calcium',align:'right'},
+                    { title: this.$t('Amount (g)'), sortable: true, key: 'amount',align:'end'},
+                    { title: this.$t('Calories (kcal)'), sortable: true, key: 'calories',align:'end'},
+                    { title: this.$t('Fat (g)'), sortable: true, key: 'fat',align:'end'},
+                    { title: this.$t('Protein (g)'), sortable: true, key: 'protein',align:'end'},
+                    { title: this.$t('Carbohydrate (g)'), sortable: true, key: 'carbohydrate',align:'end'},
+                    { title: this.$t('Salt (g)'), sortable: true, key: 'salt',align:'end'},
+                    { title: this.$t('Fiber (g)'), sortable: true, key: 'fiber',align:'end'},
+                    { title: this.$t('Sugars (g)'), sortable: true, key: 'sugars',align:'end'},
+                    { title: this.$t('Saturated fat (g)'), sortable: true, key: 'saturated_fat',align:'end'},
+                    { title: this.$t('Cholesterol (g)'), sortable: true, key: 'cholesterol',align:'end'},
+                    { title: this.$t('Sodium (mg)'), sortable: true, key: 'sodium',align:'end'},
+                    { title: this.$t('Potassium (mg)'), sortable: true, key: 'potassium',align:'end'},
+                    { title: this.$t('Ferrum (mg)'), sortable: true, key: 'ferrum',align:'end'},
+                    { title: this.$t('Magnesium (mg)'), sortable: true, key: 'magnesium',align:'end'},
+                    { title: this.$t('Phosphor (mg)'), sortable: true, key: 'phosphor',align:'end'},
+                    { title: this.$t('Calcium (mg)'), sortable: true, key: 'calcium',align:'end'},
                 ],
 
                 items:[],
