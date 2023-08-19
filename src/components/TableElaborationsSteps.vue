@@ -8,12 +8,13 @@
             <template #item.container="{item}"><div v-html="show_container_name(item.raw.container)"></div></template> 
             <template #item.container_to="{item}">{{ show_container_name(item.raw.container_to) }}</template> 
             <template #item.actions="{item}">                     
-                <v-icon :disabled="(index==0 || can_crud==false)" small class="mr-2" @click="setOneUp(item.raw)">mdi-arrow-up-bold</v-icon>
-                <v-icon :disabled="(index==new_elaborations_steps.length-1 || can_crud==false)" small class="mr-2" @click="setOneDown(item.raw)">mdi-arrow-down-bold</v-icon>
+                <v-icon :disabled="(item.index==0 || can_crud==false)" small class="mr-2" @click="setOneUp(item.raw)">mdi-arrow-up-bold</v-icon>
+                <v-icon :disabled="(item.index==new_elaborations_steps.length-1 || can_crud==false)" small class="mr-2" @click="setOneDown(item.raw)">mdi-arrow-down-bold</v-icon>
                 <v-icon small :disabled="can_crud==false" class="mr-2" @click="editElaborationStep(item.raw)">mdi-pencil</v-icon>
                 <v-icon small :disabled="can_crud==false" @click="deleteElaborationStep(item.raw)">mdi-delete</v-icon>
             </template>
             
+            <template #bottom ></template>  
 
         </v-data-table>  
         <p class="my-2 bold d-flex justify-center">{{ $t("Elaboration time: [0]").format(elaboration.final_duration)}}</p>
