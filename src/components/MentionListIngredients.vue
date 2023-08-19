@@ -75,8 +75,7 @@
         this.selectItem(this.selectedIndex)
       },
   
-      selectItem(index) {
-        console.log("SelectItem",index)
+     selectItem(index) {
         const item = this.items[index]
   
         if (item) {
@@ -84,9 +83,6 @@
         }
       },
     },
-    mounted(){
-      console.log("Created mentionlist",self.command,self.items)
-    }
   }
   </script>
   

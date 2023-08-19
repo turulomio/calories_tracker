@@ -21,12 +21,16 @@
             </v-window-item>
             <v-window-item key="ingredients_sum" >
                 <v-card>
+                    <v-form ref="form" v-model="form_valid" lazy-validation>
                     <v-text-field v-model.number="final_amount" readonly :label="$t('Sum of ingredients')"  counter="10"/>
+                    </v-form>
                 </v-card>
             </v-window-item>
             <v-window-item key="fromyourweight" >
                 <v-card>
+                    <v-form ref="form" v-model="form_valid" lazy-validation>
                     <v-text-field v-model.number="your_weight" :label="$t('Your weight')" :placeholder="$t('Your weight')" :rules="RulesFloatGZ(10,true,2)" counter="10"/>
+                    </v-form>
                 </v-card>
             </v-window-item>
         </v-window> 
@@ -84,13 +88,11 @@
                 axios.put(this.new_elaboration.url, this.new_elaboration,  this.myheaders())
                 .then(() => {
                     this.$emit("cruded")
-                    console.log("CRUDED")
                 }, (error) => {
                     this.parseResponseError(error)
                 })
             },
             setNull(){
-                console.log(this.pot)
                 this.new_elaboration.final_amount=null
                 axios.put(this.new_elaboration.url, this.new_elaboration,  this.myheaders())
                 .then(() => {

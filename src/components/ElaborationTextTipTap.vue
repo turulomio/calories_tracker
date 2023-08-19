@@ -2,21 +2,7 @@
     <div>
     <div class="d-flex" >
 
-        <v-card width="20%" 
-       style="max-height: 300px"
-       class="overflow-y-auto">
-            <v-list >
-                {{ $t("Ingredients") }}
-                    <v-list-item v-for="(item, i) in elaboration.elaborations_products_in" :key="i" @click="on_ingredient_click(item)" prepend-icon="mdi-eye"  :title="item.fullname">
-                    </v-list-item>
-                {{ $t("Containers") }}
-
-                    <v-list-item v-for="(item, i) in elaboration.elaborations_containers" :key="i" @click="on_container_click(item)" prepend-icon="mdi-eye" :title="item.name" >
-                        
-                    </v-list-item>
-            </v-list>
-        </v-card>
-        <v-card width="80%" >
+    <v-card width="100%" height="500">
 
   <div v-if="editor">
     <v-btn @click="editor.chain().focus().toggleBold().run()" :disabled="!editor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }">
@@ -85,6 +71,9 @@
     <v-btn @click="on_btn_save_click" >
       save
     </v-btn>
+    <v-btn @click="on_btn_html_code" >
+      {{$t("HTML code")}}
+    </v-btn>
     <v-btn @click="print" >
       Print
     </v-btn>
@@ -92,7 +81,7 @@
             <editor-content id="editor" ref="me" :editor="editor" ></editor-content>
         </v-card>
     </div>
-        <p> HTMLCODE {{ html_code }}</p>
+        <p v-if="show_html_code"> HTMLCODE {{ html_code }}</p>
     </div>
 </template>
 <script>
@@ -116,31 +105,28 @@
                 required: true
             },
         },
-        watch: {
-            editor(value){
-                console.log(value.options.content)
-            }
-        },
         data(){ 
             return{
                 editor:null,
                 key:0,
                 html_code:"",
+                show_html_code:false,
 
             }
         },
         methods: {
-            on_btn_save_click(a,b,c){ 
-                // console.log(a,b,c)
+            on_btn_html_code(){
+              this.html_code=this.editor.getHTML()
+              this.show_html_code=!this.show_html_code
+            },
+            on_btn_save_click(){ 
                 var elaboration_text={
                     elaborations: this.elaboration.url,
                     text: this.editor.getHTML()
                 }
-                // console.log(elaboration_text)
                 if (this.elaboration.elaborations_texts==null){
                     axios.post(`${this.store().apiroot}/api/elaborations_texts/`, elaboration_text,  this.myheaders())
                     .then(() => {
-                        // this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
                     })
@@ -152,16 +138,6 @@
                     })
                 }
             },
-            on_ingredient_click(item){
-                // console.dir(this.editor.chain().focus())
-                this.editor.chain().focus().setBold().setColor("green").insertContent(item.fullname+", ").unsetColor().unsetBold().run()
-            },
-            on_container_click(item){
-                this.editor.chain().focus().setBold().setColor("brown").insertContent(item.name+" ").unsetColor().unsetBold().run()
-            },
-            post_process(){
-
-            },
             async print () {
               await this.$htmlToPaper("editor");
             },
@@ -169,8 +145,7 @@
               return {
                 char: "@",
                 items: ({ query }) => {
-                  console.log(this.elaboration.elaborations_products_in)
-                  return this.elaboration.elaborations_products_in.filter(item => item.fullname.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
+                  return this.elaboration.elaborations_products_in.filter(item => item.fullname.toLowerCase().startsWith(query.toLowerCase())).slice(0, 100)
                 },
 
                 render: () => {
@@ -179,7 +154,6 @@
 
                   return {
                     onStart: props => {
-                      console.log("onStart",props)
                       component = new VueRenderer(MentionListIngredients, {
                         props,
                         editor: props.editor,
@@ -202,7 +176,6 @@
                     },
 
                     onUpdate(props) {
-                      console.log("onUpdate")
                       component.updateProps(props)
 
                       if (!props.clientRect) {
@@ -215,7 +188,6 @@
                     },
 
                     onKeyDown(props) {
-                      console.log("onkeydown")
                       if (props.event.key === 'Escape') {
                         popup[0].hide()
 
@@ -226,7 +198,6 @@
                     },
 
                     onExit() {
-                      console.log("onExit2")
                       popup[0].destroy()
                       component.destroy()
                     },
@@ -240,7 +211,7 @@
                 char: "#",
                 pluginKey: new PluginKey("suggestionContainers"),
                 items: ({ query }) => {
-                  return this.elaboration.elaborations_containers.filter(item => item.name.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
+                  return this.elaboration.elaborations_containers.filter(item => item.name.toLowerCase().startsWith(query.toLowerCase())).slice(0, 100)
                 },
 
                 render: () => {
@@ -249,7 +220,6 @@
 
                   return {
                     onStart: props => {
-                      console.log("onStart",props)
                       component = new VueRenderer(MentionListContainers, {
                         props,
                         editor: props.editor,
@@ -272,7 +242,6 @@
                     },
 
                     onUpdate(props) {
-                      console.log("onUpdate")
                       component.updateProps(props)
 
                       if (!props.clientRect) {
@@ -285,7 +254,6 @@
                     },
 
                     onKeyDown(props) {
-                      console.log("onkeydown")
                       if (props.event.key === 'Escape') {
                         popup[0].hide()
 
@@ -296,7 +264,6 @@
                     },
 
                     onExit() {
-                      console.log("onExit2")
                       popup[0].destroy()
                       component.destroy()
                     },
@@ -323,21 +290,15 @@
                         class: 'mention_ingredients',
                       },
                       suggestion:this.suggestion_ingredients(),
-                      // renderLabel({ options, node }) {
-
-                      //   return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`
-                      // }
                     }),
                     Mention.extend({name: 'MentionContainers',}).configure({
                       HTMLAttributes: {
                         class: 'mention_containers',
                       },
                       suggestion:this.suggestion_containers(),
-                      // renderLabel({ options, node }) {
-                      //   return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`
-                      // }
                     }),
                 ],
+                
                 onUpdate: ({ editor }) => {
                     this.html_code=editor.getHTML()
                 },
@@ -350,14 +311,14 @@
 </script>
 <style>
   .mention_containers{
-    color: blue;
-    background-color: aqua;
+    color: rgb(15, 15, 139);
+    background-color: rgb(135, 185, 231);
   }
 
 
   .mention_ingredients {
-    color: #A975FF;
-    background-color: rgba(#A975FF, 0.1);
+    color: #320b70;
+    background-color: #857d92;
     border-radius: 0.3rem;
     padding: 0.1rem 0.3rem;
   }

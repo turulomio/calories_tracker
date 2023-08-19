@@ -9,6 +9,24 @@ import {router} from './routes.js'
 import mixin from '@/mixin'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import VueHtmlToPaper from 'vue-html-to-paper';
+
+const options = {
+  name: '_blank',
+  specs: [
+    'fullscreen=yes',
+    'titlebar=yes',
+    'scrollbars=yes'
+  ],
+  styles: [
+    'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
+    'https://unpkg.com/kidlat-css/css/kidlat.css'
+  ],
+  timeout: 1000, // default timeout before the print window appears
+  autoClose: true, // if false, the window will not close after printing
+  windowTitle: window.document.title, // override the window title
+}
+
 
 
 
@@ -27,6 +45,7 @@ app.component('VueDatePicker', VueDatePicker);
 app.component('v-chart', ECharts)
 app.mixin(mixin)
 app.mount('#app')
+app.use(VueHtmlToPaper, options);
 
 
 console.log(import.meta.env.MODE)
