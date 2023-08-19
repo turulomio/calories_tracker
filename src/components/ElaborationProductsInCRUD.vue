@@ -3,9 +3,8 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().products)" v-model="new_product_in.products" item-title="fullname" item-value="url" :label="$t('Select a product')" @input="on_products_input()">
-                    <template v-slot:item="{item}" ><div v-html="products_html_fullname(item,2)"></div></template>
-                </v-autocomplete>
+                <AutocompleteProducts :readonly="mode=='D'" :items="getArrayFromMap(store().products)" v-model="new_product_in.products" />
+
                 <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="getArrayFromMap(store().measures_types)" v-model="new_product_in.measures_types" :label="$t('Select your measure type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
 
                 <v-row class="pa-3">     
@@ -29,9 +28,11 @@
 <script>
     import axios from 'axios'
     import Multiplier from './Multiplier.vue'
+    import AutocompleteProducts from './AutocompleteProducts.vue'
     export default {
         components: {
             Multiplier,
+            AutocompleteProducts,
         },
         props: {
             product_in: { 

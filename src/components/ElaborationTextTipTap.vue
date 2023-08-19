@@ -166,9 +166,8 @@
             suggestion(){
               return {
                 items: ({ query }) => {
-                  return [
-                    'Lea Thompson', 'Cyndi Lauper', 'Tom Cruise', 'Madonna', 'Jerry Hall', 'Joan Collins', 'Winona Ryder', 'Christina Applegate', 'Alyssa Milano', 'Molly Ringwald', 'Ally Sheedy', 'Debbie Harry', 'Olivia Newton-John', 'Elton John', 'Michael J. Fox', 'Axl Rose', 'Emilio Estevez', 'Ralph Macchio', 'Rob Lowe', 'Jennifer Grey', 'Mickey Rourke', 'John Cusack', 'Matthew Broderick', 'Justine Bateman', 'Lisa Bonet',
-                  ].filter(item => item.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
+                  console.log(this.elaboration.elaborations_products_in)
+                  return this.elaboration.elaborations_products_in.filter(item => item.fullname.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
                 },
 
                 render: () => {
@@ -238,6 +237,8 @@
                 this.text=this.elaboration.elaborations_texts.text
             }
 
+
+
             this.editor = new Editor({
                 content: this.text,
                 extensions: [
@@ -249,6 +250,12 @@
                         class: 'mention',
                       },
                       suggestion:this.suggestion(),
+
+                    renderLabel({ options, node }) {
+                      console.log(options,node)
+
+                      return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`
+  }
                     }),
                 ],
                 onUpdate: ({ editor }) => {
@@ -256,8 +263,8 @@
                 },
             })
         },
-        // beforeDestroy() {
-        //     this.editor.destroy()
-        // },
+        beforeDestroy() {
+            this.editor.destroy()
+        },
     }
 </script>
