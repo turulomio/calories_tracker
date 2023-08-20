@@ -8,7 +8,7 @@
                 <v-text-field clearable :disabled="loading" class="mb-3"  v-model="search" prepend-icon="mdi-magnify" :label="$t('Add a string to filter table')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
             </v-row>
         </v-card>
-        <v-data-table density="compact" :headers="recipes_headers" :items="paginated_recipes.results" class="elevation-1 cursorpointer" :server-items-length="paginated_recipes.count" :options.sync="options"  @update:page="update_recipes" :loading="loading" item-value="content_url" @click:row="viewRecipe" :key="key">
+        <v-data-table-server ref="table" density="compact" :headers="recipes_headers" :items="(paginated_recipes)? paginated_recipes.results: []" class="elevation-1 cursorpointer" :items-length="(paginated_recipes)? paginated_recipes.count : 10" @update:items-per-page="on_update_items_per_page" @update:page="on_update_page" :options.sync="options" :loading="loading" item-value="content_url" @click:row="viewRecipe" :key="key">
             <template #item.photo="{item}"><v-img  v-if="item.raw.thumbnail" :src="item.raw.thumbnail" style="width: 50px; height: 50px" @click.stop="toggleFullscreen(item.raw)" /></template>
             <template #item.name="{item}"><div v-html="item.raw.name"></div></template>      
             <template #item.last="{item}">{{localtime(item.raw.last)}}</template>      
@@ -22,7 +22,7 @@
                 <v-icon small class="mr-1" @click.stop="editRecipe(item.raw)">mdi-pencil</v-icon>
                 <v-icon small @click.stop="deleteRecipe(item.raw)">mdi-delete</v-icon>
             </template>
-        </v-data-table>
+        </v-data-table-server>
 
 
         <!-- DIALOG RECIPES CRUD -->
@@ -82,13 +82,14 @@
             ShoppingList,
         },
         watch: {
-            options(newValue) {
-                this.update_recipes(newValue)
-            }
+            // options(new_val) {
+            //     console.log("Optionsupdated",new_val)
+            //     this.update_recipes(new_val)
+            // }
         },
         data(){
             return {
-                paginated_recipes:{},
+                paginated_recipes: null,
                 recipes_headers: [
                     { title: this.$t('Photo'), sortable: false, key: 'photo', width:"5%"},    
                     { title: this.$t('Name'), sortable: true, key: 'name'},    
@@ -273,18 +274,30 @@
             },
 
             on_search_change(){
-                //Pressing enter
-                this.options.multiSort=false
-                this.options.sortBy=["last"]
-                this.options.sortDesc=[true]
+                // //Pressing enter
+                // this.options.multiSort=false
+                // this.options.sortBy=["last"]
+                // this.options.sortDesc=[true]
+                // this.update_recipes(this.options)
+            },
+            on_update_items_per_page(new_val){
+                this.options.itemsPerPage=new_val
+                console.log(new_val,this.options.itemsPerPage,this.$refs.table)
                 this.update_recipes(this.options)
             },
-            update_recipes(options){                
+            on_update_page(new_val){
+                this.options.page=new_val
+                console.log(new_val,this.options.page)
+                this.update_recipes(this.options)
+            },
+            update_recipes(options){        
+                console.log("PARAMETER OPTIONS",options)        
                 this.loading=true
                 let headers={...this.myheaders(),params: options}
+                console.log("NAIVE OPTIONS",this.$refs.table?.options)
                 axios.get(`${this.store().apiroot}/api/recipes/?search=${this.search}`, headers)
                 .then((response) => {
-                    console.log(response.data)
+                    console.log("Server response",response.data)
                     response.data.results.forEach(r=>{
                         r.thumbnail=imgNoImage
                         r.content_url=null //Needed to select only one rl
@@ -347,14 +360,13 @@
             },
             empty_options(){
                 return {
-                    groupBy: [],
-                    groupDesc: [],
                     itemsPerPage: 10,
                     multiSort: false,
                     mustSort:true,
                     page:1,
-                    sortBy: ["last"],
-                    sortDesc: [true],
+                    sortBy: [{key:"last", order:"desc"}],
+                    groupBy: [],
+                    search: ":LAST"
 
                 }
             },
