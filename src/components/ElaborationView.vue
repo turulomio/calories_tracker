@@ -156,7 +156,7 @@
 <h2 class="h2_print">${this.$t("Ingredients")} @</h2>
 ${ingredients}
 <h2 class="h2_print">${this.$t("Containers")} #</h2>
-${containers}
+${containers}   
 <h2 class="h2_print">${this.$t("Recipe")}</h2>
 ${this.new_elaboration.elaborations_texts.text}
 `
