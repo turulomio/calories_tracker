@@ -15,6 +15,7 @@
                         <v-tab key="nutritional"><v-icon left>mdi-apple</v-icon>{{ $t('Nutritional information') }}<v-badge v-if="new_elaboration.elaborations_products_in.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_products_in.length" inline /></v-tab>
                         <v-tab key="containers"><v-icon left>mdi-apple</v-icon>{{ $t('Containers') }}<v-badge v-if="new_elaboration.elaborations_containers.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_containers.length" inline /></v-tab>
                         <v-tab key="tiptap"><v-icon left>mdi-apple</v-icon>{{ $t('Recipe') }}<v-badge v-if="new_elaboration.text?.length>0" color="error" class="ml-2" content="1" inline /></v-tab>
+                        <v-tab key="nice"><v-icon left>mdi-apple</v-icon>{{ $t('Nice recipe') }}<v-badge v-if="new_elaboration.text?.length>0" color="error" class="ml-2" content="1" inline /></v-tab>
                         <v-tab key="steps"><v-icon left>mdi-apple</v-icon>{{ $t('Steps') }}<v-badge v-if="new_elaboration.elaborations_steps.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_steps.length" inline /></v-tab>
                         <v-tab key="experiences"  v-if="!elaboration.automatic"><v-icon left>mdi-apple</v-icon>{{ $t('Experiences') }}<v-badge v-if="new_elaboration.elaborations_experiences.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_experiences.length" inline /></v-tab>
                     </v-tabs>
@@ -39,6 +40,12 @@
                         <v-window-item key="tiptap">      
                             <v-card outlined>         
                                 <ElaborationTextTipTap :elaboration="new_elaboration" :key="key" @cruded="on_ElaborationText_cruded" />
+                            </v-card>
+                        </v-window-item>
+                        <v-window-item key="nice">      
+                            <v-card outlined>         
+                                <v-btn @click="print" >{{ $t("Print") }}</v-btn>
+                                <div id="nice" v-html="nice"></div>
                             </v-card>
                         </v-window-item>
                         <v-window-item key="steps">  
@@ -126,6 +133,35 @@
                 key:0,
                 // FinalamountFromFullPot
                 dialog_finalamount:false,
+            }
+        },
+        computed:{
+            nice(){
+                var ingredients="<ul>"
+                this.new_elaboration.elaborations_products_in.forEach(o=>{
+                    ingredients=ingredients+ `<li>${o.fullname}</li>`
+                })
+                var ingredients=ingredients+"</ul>"
+                var containers="<ul>"
+                this.new_elaboration.elaborations_containers.forEach(o=>{
+                    containers=containers+ `<li>${o.name}</li>`
+                })
+                var containers=containers+"</ul>"
+
+
+
+
+                var s=`
+<h1 class="h1_print">${this.new_elaboration.fullname}</h1>
+<h2 class="h2_print">${this.$t("Ingredients")} @</h2>
+${ingredients}
+<h2 class="h2_print">${this.$t("Containers")} #</h2>
+${containers}
+<h2 class="h2_print">${this.$t("Recipe")}</h2>
+${this.new_elaboration.elaborations_texts.text}
+`
+                console.log(s)
+                return s
             }
         },
         methods: {
@@ -229,7 +265,21 @@
 
             async on_ElaborationText_cruded(){
                 await this.$emit("cruded")
-            }
+            },
+
+            async print () {
+                await this.$htmlToPaper("nice", {
+                    name: '_blank',
+                    specs: [
+                        'fullscreen=yes',
+                        'titlebar=no',
+                        'scrollbars=yes'
+                    ],
+                    timeout: 1000, // default timeout before the print window appears
+                    autoClose: true, // if false, the window will not close after printing
+                    windowTitle: "", // override the window title
+                });
+            },
         },
         created(){
             this.new_elaboration=Object.assign({},this.elaboration)
@@ -237,4 +287,11 @@
         }
     }
 </script>
-
+<style>
+.h1_print{
+    text-align: center;
+}
+.h2_print{
+    text-align: justify;
+}
+</style>

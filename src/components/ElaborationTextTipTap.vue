@@ -74,9 +74,6 @@
     <v-btn @click="on_btn_html_code" >
       {{$t("HTML code")}}
     </v-btn>
-    <v-btn @click="print" >
-      Print
-    </v-btn>
   </div>
             <editor-content id="editor" ref="me" :editor="editor" ></editor-content>
         </v-card>
@@ -137,9 +134,6 @@
                         this.parseResponseError(error)
                     })
                 }
-            },
-            async print () {
-              await this.$htmlToPaper("editor");
             },
             suggestion_ingredients(){
               return {
