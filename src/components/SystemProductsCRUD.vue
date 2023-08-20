@@ -171,7 +171,6 @@
                 this.dialog_formats_crud=true
             },
             on_FormatsCRUD_cruded(mode,item,olditem){
-                console.log(mode,item,olditem)
                 this.dialog_formats_crud=false  
                 if (mode=="C"){
                     this.new_system_product.formats.push(item)
@@ -182,10 +181,7 @@
                     
                 } else if (mode=="D"){
                     let index = this.new_system_product.formats.indexOf(olditem)
-                    console.log(index)
-                    console.log(this.new_system_product.formats)
                     this.new_system_product.formats.splice(index,1)
-                    console.log(this.new_system_product.formats)
                 }
                 this.key=this.key+1
             }
