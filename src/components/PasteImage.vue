@@ -2,6 +2,8 @@
     Returns a js object with base64 image, mame and jsimage
 
     Can set RulesString to component to set required
+
+    This is VUE-3 version
 -->
 
 <template>
@@ -31,6 +33,10 @@
             }
         },
         props: {
+            modelValue:{ //Can be an object (empty_image) or null
+                required: true,
+                default:null,
+            },
             height: { // Persons merge
                 required: false,
                 default: 200,
@@ -48,7 +54,6 @@
                 this.text=""
                 this.text_readonly=false
                 this.new_image=this.empty_image()
-                console.log("AHORA")
             },
             async pasteFunction(pasteEvent, callback){
 
@@ -75,7 +80,7 @@
                     console.log(this.new_image)
                     this.text=this.$t("[Image pasted]")
                     this.text_readonly=true
-                    this.$emit('input',this.new_image)
+                    this.$emit('update:modelValue',this.new_image)
                 }
             },
             addImage(file){
@@ -101,5 +106,12 @@
 
             },
         },
+        created(){
+            if (this.modelValue==null){
+                this.new_image=this.empty_image()
+            } else {
+                this.new_image=this.modelValue
+            }
+        }
     }
 </script>

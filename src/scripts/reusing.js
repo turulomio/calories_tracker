@@ -67,6 +67,5 @@ download("https://raw.githubusercontent.com/turulomio/moneymoney3o/main/src/comp
 download("https://raw.githubusercontent.com/turulomio/moneymoney3o/main/src/components/MyDateTimePicker.vue", "src/components/reusing/MyDateTimePicker.vue")
 download("https://raw.githubusercontent.com/turulomio/moneymoney3o/main/src/components/MyMenuInline.vue", "src/components/reusing/MyMenuInline.vue")
 download("https://raw.githubusercontent.com/turulomio/moneymoney3o/main/src/components/BtnSwitchLanguages.vue", "src/components/reusing/BtnSwitchLanguages.vue")
-download("https://raw.githubusercontent.com/turulomio/vipcontacts/main/src/components/PasteImage.vue", "src/components/reusing/PasteImage.vue")
 download("https://raw.githubusercontent.com/turulomio/moneymoney3o/main/src/rules.js", "src/components/reusing/rules.js")
 

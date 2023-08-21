@@ -144,7 +144,7 @@
                                 code: function(){
                                     this.recipe_mode="C"
                                     this.recipe=this.empty_recipes()
-                                    this.recipe.food_types=this.store().getters.getObjectPropertyById("food_types",19,"url")//Homemade food
+                                    this.recipe.food_types=this.hyperlinked_url("food_types",19)//Homemade food
                                     this.key=this.key+1
                                     this.dialog_recipes_crud=true
                                 }.bind(this),
@@ -161,8 +161,7 @@
                                 code: function(){
                                     this.search=":GUESTS"
                                     this.options.multiSort=false
-                                    this.options.sortBy=["last"]
-                                    this.options.sortDesc=[true]
+                                    this.options.sortBy=[{key:"last", order:"desc"}]
                                     this.update_recipes(this.options)
                                     this.key=this.key+1
                                 }.bind(this),
@@ -173,8 +172,7 @@
                                 code: function(){
                                     this.search=":SOON"
                                     this.options.multiSort=false
-                                    this.options.sortBy=["last"]
-                                    this.options.sortDesc=[true]
+                                    this.options.sortBy=[{key:"last", order:"desc"}]
                                     this.update_recipes(this.options)
                                     this.key=this.key+1
                                 }.bind(this),
@@ -185,8 +183,7 @@
                                 code: function(){
                                     this.search=":VALORATION"
                                     this.options.multiSort=true
-                                    this.options.sortBy=["valoration","last"]
-                                    this.options.sortDesc=[true,true]
+                                    this.options.sortBy=[{key:"valoration", order:"desc"},{key:"last", order:"desc"}]
                                     this.update_recipes(this.options)
                                     this.key=this.key+1
                                 }.bind(this),
@@ -197,8 +194,7 @@
                                 code: function(){
                                     this.search=":LAST"
                                     this.options.multiSort=false
-                                    this.options.sortBy=["last"]
-                                    this.options.sortDesc=[true]
+                                    this.options.sortBy=[{key:"last", order:"desc"}]
                                     this.update_recipes(this.options)
                                     this.key=this.key+1
                                 }.bind(this),
@@ -209,8 +205,7 @@
                                 code: function(){
                                     this.search=":WITH_ELABORATIONS"
                                     this.options.multiSort=false
-                                    this.options.sortBy=["last"]
-                                    this.options.sortDesc=[true]
+                                    this.options.sortBy=[{key:"last", order:"desc"}]
                                     this.update_recipes(this.options)
                                     this.key=this.key+1
                                 }.bind(this),
@@ -221,8 +216,7 @@
                                 code: function(){
                                     this.search=":WITHOUT_MAINPHOTO"
                                     this.options.multiSort=false
-                                    this.options.sortBy=["last"]
-                                    this.options.sortDesc=[true]
+                                    this.options.sortBy=[{key:"last", order:"desc"}]
                                     this.update_recipes(this.options)
                                     this.key=this.key+1
                                 }.bind(this),
@@ -354,7 +348,7 @@
             addMainPhoto(item){
                 this.recipes_links=this.empty_recipes_links()
                 this.recipes_links.recipes=item.url
-                this.recipes_links.type=this.store().getters.getObjectPropertyById("recipes_links_types", 7,"url"), // Main page
+                this.recipes_links.type=this.hyperlinked_url("recipes_links_types", 7), // Main page
                 this.recipes_links.description=this.$t("Main photo")
                 this.key=this.key+1
                 this.dialog_main_photo=true

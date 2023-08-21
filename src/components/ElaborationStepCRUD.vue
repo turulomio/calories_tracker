@@ -77,7 +77,7 @@
         created(){
             this.new_elaborations_step=Object.assign({},this.elaborations_step)
             if (this.new_elaborations_step.steps == null){
-                this.new_elaborations_step.steps=this.store().getters.getObjectPropertyById("steps",6,"url")
+                this.new_elaborations_step.steps=this.hyperlinked_url("steps",6)
             }
             console.log(this.new_elaborations_steps)
             this.widget_temperatures={

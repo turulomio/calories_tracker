@@ -18,7 +18,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import PasteImage from './reusing/PasteImage.vue'
+    import PasteImage from './PasteImage.vue'
     export default {
         components: {
             PasteImage,

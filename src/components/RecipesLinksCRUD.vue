@@ -7,7 +7,7 @@
                 <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().recipes_links_types)" v-model="new_recipes_links.type" :label="$t('Select type')" item-title="localname" item-value="url" :rules="RulesSelection(true)" @change="on_type_change"></v-autocomplete>
                 <v-text-field  v-if="show_link" :readonly="mode=='D'" v-model="new_recipes_links.link" :label="$t('Set an Internet link')" :placeholder="$t('Set an Internet link')" :rules="RulesString(2000,false)" counter="2000" autofocus/>
                 <v-file-input v-if="show_fileinput" show-size v-model="document" :label="$t('Select a document')" @change="on_fileinput_change" />
-                <PasteImage v-if="show_paste" v-model="pasted_image" :rules="RulesSelection(true)" :key="key"  @change="on_paste_change" />
+                <PasteImage v-if="show_paste" v-model="pasted_image" :rules="RulesSelection(true)" :key="key"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -20,7 +20,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import PasteImage from './reusing/PasteImage.vue'
+    import PasteImage from './PasteImage.vue'
     export default {
         components: {
             PasteImage,
@@ -49,6 +49,20 @@
                 show_link:false,
                 show_paste:false,
             }
+        },
+        watch: {
+
+            pasted_image(){
+                var id=this.id_from_hyperlinked_url(this.new_recipes_links.type)
+                if([2,7].includes(id)){
+                    if (this.pasted_image.image==null){
+                        this.show_fileinput=false
+                    } else {
+                        this.show_fileinput=true
+                    }
+
+                }
+            },
         },
         methods: {
             button(){
@@ -87,17 +101,6 @@
                         this.show_paste=false
                     } else {
                         this.show_paste=true
-                    }
-
-                }
-            },
-            on_paste_change(){
-                var id=this.id_from_hyperlinked_url(this.new_recipes_links.type)
-                if([2,7].includes(id)){
-                    if (this.pasted_image.image==null){
-                        this.show_fileinput=false
-                    } else {
-                        this.show_fileinput=true
                     }
 
                 }
