@@ -19,7 +19,7 @@
             </v-window-item>
             <v-window-item key="registers" >  
                 <v-card >
-                    <v-data-table density="compact" :headers="biometrics_headers" :items="biometrics" :sort-by="[{key:'datetime',order:'desc'}]"  class="elevation-1" :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500">
+                    <v-data-table-virtual density="compact" :headers="biometrics_headers" :items="biometrics" :sort-by="[{key:'datetime',order:'desc'}]"  class="elevation-1" :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500">
                         <template #item.datetime="{item}">
                             {{localtime(item.raw.datetime)}}
                         </template>              
@@ -36,7 +36,7 @@
                             <v-icon small @click="deleteBiometric(item.raw)">mdi-delete</v-icon>
                         </template>
                         <template #bottom></template>
-                    </v-data-table>
+                    </v-data-table-virtual>
                 </v-card>
             </v-window-item>
         </v-window> 
