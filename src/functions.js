@@ -12,7 +12,7 @@ export function product_risk_color(additive_risks_url){
 }
 
 // item is an object with additive_risks parameters as integer,glutenfree
-// type: 1:system_product, 2:product, 3:elaborated products, 4: meals (item is product_url)
+// type: 1:system_product, 2:product, 3:elaborated products, 4: meals (item is product_url), 5: system_product english
 export function products_html_fullname(item,type_){
     if (type_==4) {
         item=this.store().products.get(item)
@@ -23,7 +23,7 @@ export function products_html_fullname(item,type_){
     let risk_color=product_risk_color(additive_risks_object.url)
     let type_icon
     let type_string
-    if (type_==1) {//System
+    if (type_==1|| type_==5) {//System
         type_icon="mdi-database"
         type_string="System product"
     } else if (type_==2) { //Products
@@ -44,7 +44,11 @@ export function products_html_fullname(item,type_){
 
     let type=`<span title="${type_string}\n${additive_risks_object.localname}" class="mdi ${type_icon}" style="color:${risk_color};" color="${risk_color}"></span>`
     let glutenfree=(item.glutenfree)? '<span title="Gluten free" style="color:#00aaff" class="mdi mdi-barley-off"></span>':''
-    return `${type} <span class="${obsolete}">${item.fullname}</span> ${glutenfree}`
+    if (type_==5){
+        return `${type} <span class="${obsolete}">${item.fullname_english}</span> ${glutenfree}`
+    } else {
+        return `${type} <span class="${obsolete}">${item.fullname}</span> ${glutenfree}`
+    }
 }
 
 

@@ -12,7 +12,7 @@
         </v-tabs>
         <v-window v-model="tab" class="ma-5">
             <v-window-item key="products" >
-                <v-data-table density="compact" :headers="products_headers" :items="products" :sort-by="[{key:'fullname',order:'asc'}]"  class="elevation-1 cursorpointer" :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500" @click:row="viewProduct">
+                <v-data-table-virtual density="compact" :headers="products_headers" :items="products" :sort-by="[{key:'fullname',order:'asc'}]"  class="elevation-1 cursorpointer" :items-per-page="10000" :loading="loading" :key="'T'+key" height="65vh" @click:row="viewProduct" fixed-header>
                     <template #item.fullname="{item}"><div v-html="products_html_fullname(item.raw,2)"></div></template>
                     <template #item.calories="{item}"><div v-html="my_round(item.raw.calories,0)"></div></template>  
                     <template #item.fat="{item}"><div v-html="my_round(item.raw.fat,0)"></div></template>  
@@ -34,10 +34,10 @@
                         <v-icon v-if="item.raw.is_editable" small class="mr-1" @click.stop="editProduct(item.raw)">mdi-pencil</v-icon>
                         <v-icon v-if="item.raw.is_deletable" small @click.stop="deleteProduct(item.raw)">mdi-delete</v-icon>
                     </template>
-                </v-data-table>
+                </v-data-table-virtual>
             </v-window-item>
             <v-window-item key="elaborated_products">
-                <v-data-table density="compact" :headers="elaborated_products_headers" :items="elaborated_products" :sort-by="[{key:'name',order:'asc'}]"  class="elevation-1 cursorpointer" :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500" @click:row="viewElaboratedProduct">
+                <v-data-table-virtual density="compact" :headers="elaborated_products_headers" :items="elaborated_products" :sort-by="[{key:'name',order:'asc'}]"  class="elevation-1 cursorpointer" :items-per-page="10000" :loading="loading" :key="'T'+key" height="65vh" @click:row="viewElaboratedProduct"  fixed-header>
                     <template #item.fullname="{item}"><div v-html="products_html_fullname(item.raw,3)"></div></template>
                     <template #item.calories="{item}"><div v-html="my_round(item.raw.calories,0)"></div></template>  
                     <template #item.fat="{item}"><div v-html="my_round(item.raw.fat,0)"></div></template>  
@@ -58,11 +58,11 @@
                         <v-icon small class="mr-1" @click.stop="editElaboratedProduct(item.raw)">mdi-pencil</v-icon>
                         <v-icon small v-if="is_product_elaborated_deletable(item.raw)" @click.stop="deleteElaboratedProduct(item.raw)">mdi-delete</v-icon>
                     </template>
-                </v-data-table>
+                </v-data-table-virtual>
             </v-window-item>
             <v-window-item key="system_products" >                 
-                <v-data-table density="compact" :headers="system_products_headers" :items="system_products" :sort-by="[{key:'fullname',order:'asc'}]" class="elevation-1 cursorpointer" :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500" @click:row="viewSystemProduct">
-                    <template #item.fullname="{item}"><div v-html="products_html_fullname(item.raw,1)"></div></template>
+                <v-data-table-virtual density="compact" :headers="system_products_headers" :items="system_products" :sort-by="[{key:'fullname',order:'asc'}]" class="elevation-1 cursorpointer" :items-per-page="10000" :loading="loading" :key="'T'+key" height="65vh" @click:row="viewSystemProduct" fixed-header>
+                    <template #item.fullname="{item}"><div v-html="products_html_fullname(item.raw,5)"></div></template>
                     <template #item.calories="{item}"><div v-html="my_round(item.raw.calories,0)"></div></template>  
                     <template #item.fat="{item}"><div v-html="my_round(item.raw.fat,0)"></div></template>  
                     <template #item.protein="{item}"><div v-html="my_round(item.raw.protein,0)"></div></template>  
@@ -83,7 +83,7 @@
                         <v-icon class="mr-1" small @click.stop="editSystemProduct(item.raw)"  color="#AA0000" v-if="store().catalog_manager">mdi-pencil</v-icon>
                         <v-icon small @click.stop="deleteSystemProduct(item.raw)" color="#AA0000" v-if="store().catalog_manager">mdi-delete</v-icon>
                     </template>
-                </v-data-table>
+                </v-data-table-virtual>
             </v-window-item>
         </v-window>
 
@@ -149,7 +149,7 @@
                 ],
                 system_products:[],
                 system_products_headers: [ 
-                    { title: this.$t('English name'), sortable: true, key: 'name',width:"30%"},          
+                    { title: this.$t('English name'), sortable: true, key: 'fullname',width:"30%"},          
                     { title: this.$t('Calories (kcal)'), sortable: true, key: 'calories',align:'right'},
                     { title: this.$t('Fat (g)'), sortable: true, key: 'fat',align:'right'},
                     { title: this.$t('Protein (g)'), sortable: true, key: 'protein',align:'right'},
