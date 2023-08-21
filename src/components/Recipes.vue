@@ -5,10 +5,10 @@
         </h1>
         <v-card width="50%" class="mx-auto my-5" flat >
             <v-row class="mx-5 mb-5">
-                <v-text-field clearable :disabled="loading" class="mb-3"  v-model="search" prepend-icon="mdi-magnify" :label="$t('Add a string to filter table')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
+                <v-text-field clearable :disabled="loading" class="mb-3"  v-model="search" prepend-icon="mdi-magnify" :label="$t('Add a string to filter table')" single-line hide-details :placeholder="$t('Add a string to filter table')" @keyup.enter="on_search_change()"></v-text-field>
             </v-row>
         </v-card>
-        <v-data-table-server ref="table" density="compact" :headers="recipes_headers" :items="(paginated_recipes)? paginated_recipes.results: []" class="elevation-1 cursorpointer" :items-length="(paginated_recipes)? paginated_recipes.count : 10" @update:items-per-page="on_update_items_per_page" @update:page="on_update_page" :options.sync="options" :loading="loading" item-value="content_url" @click:row="viewRecipe" :key="key">
+        <v-data-table-server ref="table" density="compact" :headers="recipes_headers" :items="(paginated_recipes)? paginated_recipes.results: []" class="elevation-1 cursorpointer" :items-length="(paginated_recipes)? paginated_recipes.count : 10" @update:items-per-page="on_update_items_per_page" @update:page="on_update_page" :options.sync="options" :loading="loading" item-value="content_url" @click:row="viewRecipe" :key="key+1" >
             <template #item.photo="{item}"><v-img  v-if="item.raw.thumbnail" :src="item.raw.thumbnail" style="width: 50px; height: 50px" @click.stop="toggleFullscreen(item.raw)" /></template>
             <template #item.name="{item}"><div v-html="item.raw.name"></div></template>      
             <template #item.last="{item}">{{localtime(item.raw.last)}}</template>      
@@ -274,11 +274,12 @@
             },
 
             on_search_change(){
+                // this.search=new_val
                 // //Pressing enter
                 // this.options.multiSort=false
                 // this.options.sortBy=["last"]
                 // this.options.sortDesc=[true]
-                // this.update_recipes(this.options)
+                 this.update_recipes(this.options)
             },
             on_update_items_per_page(new_val){
                 this.options.itemsPerPage=new_val
@@ -290,34 +291,44 @@
                 console.log(new_val,this.options.page)
                 this.update_recipes(this.options)
             },
-            update_recipes(options){        
-                console.log("PARAMETER OPTIONS",options)        
+            update_recipes(options){  
                 this.loading=true
                 let headers={...this.myheaders(),params: options}
-                console.log("NAIVE OPTIONS",this.$refs.table?.options)
                 axios.get(`${this.store().apiroot}/api/recipes/?search=${this.search}`, headers)
                 .then((response) => {
-                    console.log("Server response",response.data)
-                    response.data.results.forEach(r=>{
+                    this.paginated_recipes=response.data
+                    this.paginated_recipes.results.forEach(r=>{
                         r.thumbnail=imgNoImage
                         r.content_url=null //Needed to select only one rl
-                        r.recipes_links.forEach(rl=>{
-                            if (rl.files && this.id_from_hyperlinked_url(rl.type)==7){//MAIN IMAGE
-                                axios.get(`${rl.files.url_thumbnail}`, this.myheaders())
-                                .then((responsethumbnail) => {
-                                    r.thumbnail=responsethumbnail.data
-                                    r.content_url=rl.files.url_content
-                                    this.key=this.key+1
-                                }, (error) => {
-                                    this.parseResponseError(error)
-                                });
-                            }
-                        })
                     })
-                    this.paginated_recipes=response.data
+                    this.update_images()
                     this.loading=false
                }, (error) => {
                     this.parseResponseError(error)
+                });
+            },
+            update_images(){
+                var promises=[]
+                this.paginated_recipes.results.forEach(recipe=>{
+                    recipe.recipes_links.forEach(rl=>{
+                        if (rl.files && this.id_from_hyperlinked_url(rl.type)==7){//MAIN IMAGE
+                            promises.push(axios.get(`${rl.files.url_thumbnail}`, this.myheaders())                    
+                            .then((responsethumbnail) => {
+                                    recipe.thumbnail=responsethumbnail.data
+                                    recipe.content_url=rl.files.url_content
+                                }, (error) => {
+                                    this.parseResponseError(error)
+                                })
+                            )
+                        }
+                    })
+                })
+
+
+                axios.all(promises)
+                .then(() => {
+                    this.key=this.key+1
+
                 });
             },
             toggleFullscreen(item){
@@ -366,7 +377,6 @@
                     page:1,
                     sortBy: [{key:"last", order:"desc"}],
                     groupBy: [],
-                    search: ":LAST"
 
                 }
             },
