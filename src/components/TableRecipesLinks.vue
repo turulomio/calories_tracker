@@ -64,7 +64,7 @@
             on_new_click(type=3){
                 this.recipes_links=this.empty_recipes_links()
                 this.recipes_links.recipes=this.recipe.url
-                this.recipes_links.type=this.store().recipes_links_types.get(this.hyperlinked_url("recipes_links_types",type)), // Web page link
+                this.recipes_links.type=this.store().recipes_links_types.get(this.hyperlinked_url("recipes_links_types",type)).url, // Web page link
                 this.recipes_links_crud_mode="C"
                 this.key=this.key+1
                 this.recipes_links_crud_dialog=true
