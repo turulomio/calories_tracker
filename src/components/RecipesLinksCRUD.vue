@@ -4,7 +4,7 @@
         <v-card class="pa-8 mt-4">
             <v-form ref="form" v-model="form_valid" lazy-validation>                
                 <v-text-field :readonly="mode=='D'" v-model="new_recipes_links.description" :label="$t('Set description')" :placeholder="$t('Set description')" :rules="RulesString(200,true)" counter="200"/>
-                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().recipes_links_types)" v-model="new_recipes_links.type" :label="$t('Select type')" item-title="localname" item-value="url" :rules="RulesSelection(true)" @change="on_type_change"></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().recipes_links_types)" v-model="new_recipes_links.type" :label="$t('Select type')" item-title="localname" item-value="url" :rules="RulesSelection(true)" />
                 <v-text-field  v-if="show_link" :readonly="mode=='D'" v-model="new_recipes_links.link" :label="$t('Set an Internet link')" :placeholder="$t('Set an Internet link')" :rules="RulesString(2000,false)" counter="2000" autofocus/>
                 <v-file-input v-if="show_fileinput" show-size v-model="document" :label="$t('Select a document')" @change="on_fileinput_change" />
                 <PasteImage v-if="show_paste" v-model="pasted_image" :rules="RulesSelection(true)" :key="key"/>
@@ -51,18 +51,21 @@
             }
         },
         watch: {
+            "new_recipes_links.type": function(){
+                this.reload_ui()
+            }
 
-            pasted_image(){
-                var id=this.id_from_hyperlinked_url(this.new_recipes_links.type)
-                if([2,7].includes(id)){
-                    if (this.pasted_image.image==null){
-                        this.show_fileinput=false
-                    } else {
-                        this.show_fileinput=true
-                    }
+            // pasted_image(){
+            //     var id=this.id_from_hyperlinked_url(this.new_recipes_links.type)
+            //     if([2,7].includes(id)){
+            //         if (this.pasted_image.image==null){
+            //             this.show_fileinput=false
+            //         } else {
+            //             this.show_fileinput=true
+            //         }
 
-                }
-            },
+            //     }
+            // },
         },
         methods: {
             button(){
@@ -105,8 +108,9 @@
 
                 }
             },
-            on_type_change(){
+            reload_ui(){
                 var id=this.id_from_hyperlinked_url(this.new_recipes_links.type)
+                console.log(id)
                 this.show_fileinput=false
                 this.show_link=false
                 this.show_paste=false
@@ -173,7 +177,7 @@
         },
         created(){
             this.new_recipes_links=Object.assign({},this.recipes_links)
-            this.on_type_change()
+            this.reload_ui()
         }
     }
 </script>
