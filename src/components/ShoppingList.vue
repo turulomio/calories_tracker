@@ -3,7 +3,7 @@
         <h1>{{ $t("Shopping list") }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-autocomplete :items="elaborations" v-model="elaborations_selected" item-title="fullname" item-value="url" :label="$t('Select a product')" multiple chips />
+                <v-autocomplete :items="elaborations" v-model="elaborations_selected" item-title="fullname" item-value="url" :label="$t('Select your elaborations')" multiple chips />
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
