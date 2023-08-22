@@ -1,14 +1,15 @@
 <template>
     <div class="ma-4">
-        <h1 class="mb-4">{{ $t(`Meals ranking`) }}</h1>
-            <v-card width="30%" class="pa-5 mx-auto" outlined>
-                <MyDatePicker density="compact" :label="$t('Report from selected date')" v-model="from_date" @input="on_day_input()"></MyDatePicker>
-            </v-card>
+        <h1>{{ $t(`Meals ranking`) }}</h1>
+            <div class="d-flex mx-auto" outlined>
+                <MyDatePicker density="compact" :label="$t('Report from selected date')" v-model="from_date"></MyDatePicker>
+            </div>
 
-        <v-data-table density="compact" :headers="ranking_headers" :items="ranking" :sort-by="[{key:'position',order:'asc'}]"  class="elevation-1" :items-per-page="10000" :loading="loading" :key="key" fixed-header height="500">
+        <v-data-table density="compact" :headers="ranking_headers" :items="ranking" :sort-by="[{key:'position',order:'asc'}]"  class="elevation-1" :items-per-page="10000" :loading="loading" :key="key" fixed-header height="70vh">
             <template #item.position="{item}">{{ item.index + 1 }}</template>
             <template #item.product="{item}"><div v-html="products_html_fullname(item.raw.product,4)"></div></template>            
             <template #item.amount="{item}">{{ my_round(item.raw.amount,0)}}</template>
+            <template #bottom></template>
         </v-data-table>
     </div>
 </template>
@@ -34,7 +35,12 @@
                     { title: this.$t('Amount'), sortable: false, key: 'amount',width:"8%",align:"right"},
                 ],
             }
-        },        
+        },
+        watch:{
+            from_date(){
+                this.update()
+            }
+        },
         methods:{
             update(){
                 this.loading=true
@@ -46,9 +52,6 @@
                 }, (error) => {
                     this.parseResponseError(error)
                 })
-            },
-            on_day_input(){
-                this.update()
             },
         },
         created(){
