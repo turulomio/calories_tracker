@@ -139,7 +139,7 @@
               return {
                 char: "@",
                 items: ({ query }) => {
-                  return this.elaboration.elaborations_products_in.filter(item => item.fullname.toLowerCase().startsWith(query.toLowerCase())).slice(0, 100)
+                  return this.elaboration.elaborations_products_in.filter(item => item.fullname.toLowerCase().includes(query.toLowerCase())).slice(0, 100)
                 },
 
                 render: () => {
@@ -205,7 +205,7 @@
                 char: "#",
                 pluginKey: new PluginKey("suggestionContainers"),
                 items: ({ query }) => {
-                  return this.elaboration.elaborations_containers.filter(item => item.name.toLowerCase().startsWith(query.toLowerCase())).slice(0, 100)
+                  return this.elaboration.elaborations_containers.filter(item => item.name.toLowerCase().includes(query.toLowerCase())).slice(0,100)
                 },
 
                 render: () => {
@@ -309,6 +309,11 @@
     background-color: rgb(135, 185, 231);
   }
 
+ol > li {
+    list-style-type: decimal-leading-zero;
+  margin-left: 50px;
+  padding-left: 20px;
+}
 
   .mention_ingredients {
     color: #320b70;

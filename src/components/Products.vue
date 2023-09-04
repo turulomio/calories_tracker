@@ -284,7 +284,8 @@
             },
             linkProduct(item){
                 axios.post(`${item.url}create_product/`, {}, this.myheaders())
-                .then(() => {
+                .then((response) => {
+                    this.store().products.set(response.data.url,response.data)
                     this.update_all()
                }, (error) => {
                     this.parseResponseError(error)
@@ -381,10 +382,8 @@
                 this.elaborated_products=this.getArrayFromMap(this.store().elaborated_products).filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
             },
             update_system_products(){
-                if (this.search==null)return
                 return axios.get(`${this.store().apiroot}/api/system_products/?search=${this.search}`, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
                     this.system_products=response.data
                }, (error) => {
                     this.parseResponseError(error)

@@ -6,6 +6,7 @@
                 <v-icon small class="mr-2" @click="editItem(item.raw)">mdi-pencil</v-icon>
                 <v-icon small class="mr-2" @click="deleteItem(item.raw)">mdi-delete</v-icon>
             </template>
+            <template #bottom></template>
         </v-data-table>   
         <!-- ItemCRUD DIALOG -->
         <v-dialog v-model="dialog" width="60%" >

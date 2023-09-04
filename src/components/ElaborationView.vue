@@ -191,8 +191,8 @@ ${this.new_elaboration.elaborations_texts.text}
 
             },
             async addExperience(){
-                if (this.tab!=4){
-                    this.tab=4
+                if (this.tab!=6){
+                    this.tab=6
                     await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
                 }
                 this.$refs.table_elaborations_experiences.addItem()
