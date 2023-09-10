@@ -43,7 +43,7 @@
                             </v-card>
                         </v-window-item>
                         <v-window-item key="nice">      
-                            <v-card outlined>         
+                            <v-card outlined v-if="new_elaboration.elaborations_texts">         
                                 <v-btn @click="print" >{{ $t("Print") }}</v-btn>
                                 <div id="nice" v-html="nice"></div>
                             </v-card>

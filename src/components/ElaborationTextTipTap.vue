@@ -74,6 +74,9 @@
     <v-btn @click="on_btn_html_code" >
       {{$t("HTML code")}}
     </v-btn>
+    <v-btn @click="on_update_mentions" >
+      {{$t("Update mentions")}}
+    </v-btn>
   </div>
             <editor-content id="editor" ref="me" :editor="editor" ></editor-content>
         </v-card>
@@ -112,6 +115,59 @@
             }
         },
         methods: {
+            get_id_label_from_span(span){
+              var r={
+                id: span.split('data-id="')[1].split('" data-label')[0],
+                label: span.split('data-label="')[1].split('">')[0],
+              }
+              return r
+            },
+            on_update_mentions(){
+                console.log("on_update_mentions")
+
+                this.get_ingredients_spans().forEach(span=>{
+                  var sspan=this.get_id_label_from_span(span)
+                  this.elaboration.elaborations_products_in.forEach(pi=>{
+                    if (pi.id.toString()==sspan.id){
+                      this.editor.commands.setContent(this.editor.getHTML().replace(span,this.span_ingredient(pi.id,pi.fullname)))
+                    }
+                  })
+                })
+                this.get_containers_spans().forEach(span=>{
+                  var sspan=this.get_id_label_from_span(span)
+                  this.elaboration.elaborations_containers.forEach(ec=>{
+                    if (ec.id.toString()==sspan.id){
+                      this.editor.commands.setContent(this.editor.getHTML().replace(span,this.span_container(ec.id,ec.name)))
+                    }
+                  })
+                })
+            },
+            get_ingredients_spans(){
+              /*
+                Returns a list of string with ingredients spans 
+               */
+              var r= this.editor.getHTML().match(/<span data-type="mention" class="mention_ingredients"(.*?)<\/span>/g)
+              return r
+            },
+            get_containers_spans(){
+              /*
+                Returns a list of string with recipients spans 
+               */
+              var r= this.editor.getHTML().match(/<span data-type="MentionContainers" class="mention_containers"(.*?)<\/span>/g)
+              return r
+            },
+            span_ingredient(id,label){
+              /**
+               * Returns a string with the span container
+               */
+              return `<span data-type="mention" class="mention_ingredients" data-id="${id}" data-label="${label}">@${label}</span>`
+            },
+            span_container(id,label){
+              /**
+               * Returns a string with the span container
+               */
+              return `<span data-type="MentionContainers" class="mention_containers" data-id="${id}" data-label="${label}">#${label}</span>`
+            },
             on_btn_html_code(){
               this.html_code=this.editor.getHTML()
               this.show_html_code=!this.show_html_code
@@ -121,6 +177,7 @@
                     elaborations: this.elaboration.url,
                     text: this.editor.getHTML()
                 }
+
                 if (this.elaboration.elaborations_texts==null){
                     axios.post(`${this.store().apiroot}/api/elaborations_texts/`, elaboration_text,  this.myheaders())
                     .then(() => {
@@ -264,7 +321,7 @@
                   }
                 },
               }
-            }
+            },
         },
         created(){
             if (this.elaboration.elaborations_texts){
@@ -309,11 +366,17 @@
     background-color: rgb(135, 185, 231);
   }
 
-ol > li {
-    list-style-type: decimal-leading-zero;
-  margin-left: 50px;
-  padding-left: 20px;
-}
+  ol > li {
+      list-style-type: decimal-leading-zero;
+    margin-left: 50px;
+    padding-left: 20px;
+  }
+  
+  ul > li {
+    list-style-type: disc;
+    margin-left: 50px;
+    padding-left: 20px;
+  }
 
   .mention_ingredients {
     color: #320b70;
