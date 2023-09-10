@@ -80,7 +80,9 @@
   </div>
             <editor-content id="editor" ref="me" :editor="editor" ></editor-content>
         </v-card>
-    </div>
+    </div>        
+    <p v-if="unused_ingredients()" class="my-2 boldred d-flex justify-center">{{ $t("Products unused : [0]").format(unused_ingredients())}}</p>
+
         <p v-if="show_html_code"> HTMLCODE {{ html_code }}</p>
     </div>
 </template>
@@ -167,6 +169,39 @@
                * Returns a string with the span container
                */
               return `<span data-type="MentionContainers" class="mention_containers" data-id="${id}" data-label="${label}">#${label}</span>`
+            },
+
+            unused_ingredients(){
+                var r=""
+                //Load all ingredientes urls in elaboration
+                var unused_ids=[]
+                this.elaboration.elaborations_products_in.forEach(element => {
+                    unused_ids.push(this.id_from_hyperlinked_url(element.url).toString())  
+                })
+
+                //Load all used_ids
+                var ingredients_spans=this.get_ingredients_spans()
+                if (ingredients_spans!=null){
+                    var used_ids=[]
+                    ingredients_spans.forEach(span=>{
+                    var sspan=this.get_id_label_from_span(span)
+                    used_ids.push(sspan.id)
+                    //substracion
+
+                    unused_ids = unused_ids.filter((item) => !used_ids.includes(item))
+                  })
+                } 
+
+
+                //Generation of string
+                unused_ids.forEach(o=>{
+                    this.elaboration.elaborations_products_in.forEach(p=> {
+                        if (this.id_from_hyperlinked_url(p.url).toString()==o){
+                            r=r+ p.fullname+", "
+                        }
+                    })
+                })
+                return r.slice(0,-2)
             },
             on_btn_html_code(){
               this.html_code=this.editor.getHTML()
