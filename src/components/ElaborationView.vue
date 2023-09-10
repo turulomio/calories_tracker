@@ -16,7 +16,6 @@
                         <v-tab key="containers"><v-icon left>mdi-apple</v-icon>{{ $t('Containers') }}<v-badge v-if="new_elaboration.elaborations_containers.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_containers.length" inline /></v-tab>
                         <v-tab key="tiptap"><v-icon left>mdi-apple</v-icon>{{ $t('Recipe') }}<v-badge v-if="new_elaboration.text?.length>0" color="error" class="ml-2" content="1" inline /></v-tab>
                         <v-tab key="nice"><v-icon left>mdi-apple</v-icon>{{ $t('Nice recipe') }}<v-badge v-if="new_elaboration.text?.length>0" color="error" class="ml-2" content="1" inline /></v-tab>
-                        <v-tab key="steps"><v-icon left>mdi-apple</v-icon>{{ $t('Steps') }}<v-badge v-if="new_elaboration.elaborations_steps.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_steps.length" inline /></v-tab>
                         <v-tab key="experiences"  v-if="!elaboration.automatic"><v-icon left>mdi-apple</v-icon>{{ $t('Experiences') }}<v-badge v-if="new_elaboration.elaborations_experiences.length>0" color="error" class="ml-2" :content="new_elaboration.elaborations_experiences.length" inline /></v-tab>
                     </v-tabs>
                     <v-window v-model="tab">
@@ -48,11 +47,6 @@
                                 <div id="nice" v-html="nice"></div>
                             </v-card>
                         </v-window-item>
-                        <v-window-item key="steps">  
-                            <v-card outlined>
-                                <TableElaborationsSteps ref="table_elaborations_steps" :elaboration="new_elaboration" :key="key" @cruded="on_TableElaborationsSteps_cruded"></TableElaborationsSteps>
-                            </v-card>
-                        </v-window-item>
                         <v-window-item key="experiences" v-if="!elaboration.automatic">      
                             <v-card outlined>
                                 <TableElaborationsExperiences ref="table_elaborations_experiences" :elaboration="new_elaboration" :key="key" @cruded="on_TableElaborationsExperiences_cruded"></TableElaborationsExperiences>
@@ -67,7 +61,6 @@
                 <v-spacer></v-spacer>
                 <v-btn color="primary" :disabled="elaboration.automatic" @click="addIngredient()" >{{ $t("Add an ingredient") }}</v-btn>
                 <v-btn color="primary" :disabled="elaboration.automatic" @click="addContainer()" >{{ $t("Add a container") }}</v-btn>
-                <v-btn color="primary" :disabled="elaboration.automatic" @click="addElaborationStep()" >{{ $t("Add a step") }}</v-btn>
                 <v-btn color="primary" :disabled="elaboration.automatic" @click="addExperience()" >{{ $t("Add a experience") }}</v-btn>
                 <v-btn color="primary" @click="on_close" >{{ $t("Close") }}</v-btn>
             </v-card-actions>
@@ -86,7 +79,6 @@
     import fraction from 'fraction.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import TableElaborationsContainers from './TableElaborationsContainers.vue'
-    import TableElaborationsSteps from './TableElaborationsSteps.vue'
     import {empty_elaborations_products_in} from '../empty_objects.js'
     import TableElaborationsExperiences from './TableElaborationsExperiences.vue'
     import TableElaborationsIngredients from './TableElaborationsIngredients.vue'
@@ -99,7 +91,6 @@
             TableElaborationsIngredients,
             MyMenuInline,
             TableElaborationsContainers,
-            TableElaborationsSteps,
             TableElaborationsExperiences,
             TableElaborationsIngredientsNI,
             ElaborationTextTipTap,
@@ -182,17 +173,9 @@ ${this.new_elaboration.elaborations_texts.text}
                 }
                 this.$refs.table_elaborations_containers.on_new_click()
             },
-            async addElaborationStep(){
-                if (this.tab!=3){
-                    this.tab=3
-                    await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
-                }
-                this.$refs.table_elaborations_steps.addElaborationStep()
-
-            },
             async addExperience(){
-                if (this.tab!=6){
-                    this.tab=6
+                if (this.tab!=5){
+                    this.tab=5
                     await new Promise(resolve => setTimeout(resolve, 1000));//Waits a second to mount table_links after tab change
                 }
                 this.$refs.table_elaborations_experiences.addItem()
@@ -219,9 +202,6 @@ ${this.new_elaboration.elaborations_texts.text}
                }, (error) => {
                     this.parseResponseError(error)
                 });
-            },
-            on_TableElaborationsSteps_cruded(){
-                this.update_elaboration()
             },
             createElaboratedProduct(){
                 return axios.post(`${this.new_elaboration.url}create_elaborated_product/`, {}, this.myheaders())

@@ -10,17 +10,17 @@
         <!-- ItemCRUD DIALOG -->
         <v-dialog v-model="dialog" width="100%" persistent>
             <v-card class="pa-3">
-                <NameCrud :item="item" :mode="mode" apiname="elaborations_containers" :key="key"  @cruded="on_NameCrud_cruded()"></NameCrud>
+                <ElaborationsContainersCRUD :container="item" :mode="mode" apiname="elaborations_containers" :key="key"  @cruded="on_ElaborationsContainersCRUD_cruded()"></ElaborationsContainersCRUD>
             </v-card>
         </v-dialog>
     </div>
 </template>
 <script>
     import {empty_elaborations_containers} from '../empty_objects.js'
-    import NameCrud from './NameCrud.vue'
+    import ElaborationsContainersCRUD from './ElaborationsContainersCRUD.vue'
     export default {
         components:{
-            NameCrud
+            ElaborationsContainersCRUD
         },
         props: {
             elaboration: { //Global recipe seriealizer
@@ -73,7 +73,7 @@
             gotoLastRow(){
                 this.$vuetify.goTo(10000, { container:  this.$refs.table_elaborations_containers.$el.childNodes[0] }) 
             },
-            on_NameCrud_cruded(){
+            on_ElaborationsContainersCRUD_cruded(){
                 this.key=this.key+1
                 this.dialog=false
                 this.$emit("cruded")

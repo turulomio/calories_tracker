@@ -229,23 +229,6 @@ export function empty_elaborations_products_in(){
     }
 }
 
-export function empty_elaborations_steps(){
-    return {
-        order: 0,
-        elaborations: null,
-        steps: null,
-        duration: "00:01:00",
-        temperatures_types: null,
-        temperatures_values:null,
-        stir_types:null,
-        stir_values:null,
-        comment: null,
-        products_in_step: [],
-        container: null,
-        container_to: null,
-    }
-}
-
 
 export function empty_measures_types(){
     return {

@@ -25,7 +25,7 @@
             mode: {
                 required: true,
             },
-            apiname: {
+            apiname: { //Only works for onefield api models
                 required: true,
                 type:String,
             }
