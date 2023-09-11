@@ -1,28 +1,43 @@
 <template>
   <div>
     <div class="d-flex flex-column" >
-      <div v-if="editor">    
+      <div v-if="editor" class="d-flex flex-row">
         <v-tooltip :text="$t('Save')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-content-save" @click="on_btn_save_click"></v-btn></template></v-tooltip>
-        <v-btn append-icon="mdi-undo"  @click="editor.chain().focus().undo().run()" :disabled="!editor.can().chain().focus().undo().run()"></v-btn>
-        <v-btn append-icon="mdi-redo" @click="editor.chain().focus().redo().run()" :disabled="!editor.can().chain().focus().redo().run()"></v-btn>
-        <v-tooltip :text="$t('Bold text')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-format-bold" @click="editor.chain().focus().toggleBold().run()"></v-btn></template></v-tooltip>
-        <v-btn append-icon="mdi-format-italic" @click="editor.chain().focus().toggleItalic().run()" :disabled="!editor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }"></v-btn>
-        <v-btn append-icon="mdi-format-strikethrough"  @click="editor.chain().focus().toggleStrike().run()" :disabled="!editor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }" ></v-btn>
-        <v-btn append-icon="mdi-code-greater-than" @click="editor.chain().focus().toggleCode().run()" :disabled="!editor.can().chain().focus().toggleCode().run()" :class="{ 'is-active': editor.isActive('code') }"></v-btn>
-        <v-tooltip :text="$t('Clear marks')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-format-clear" @click="editor.chain().focus().unsetAllMarks().run()"></v-btn></template></v-tooltip>
+        <v-tooltip :text="$t('Update mentions')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-reload" @click="on_update_mentions" ></v-btn></template></v-tooltip>
+        <v-divider vertical></v-divider>
+        <v-tooltip :text="$t('Undo')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-undo" @click="editor.chain().focus().undo().run()" :disabled="!editor.can().chain().focus().undo().run()"></v-btn></template></v-tooltip>
+        <v-tooltip :text="$t('Redo')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-redo" @click="editor.chain().focus().redo().run()" :disabled="!editor.can().chain().focus().redo().run()"></v-btn></template></v-tooltip>
+
+        <v-divider vertical></v-divider>
+        <v-tooltip :text="$t('Bold text')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-format-bold" @click="editor.chain().focus().toggleBold().run()" :disabled="!editor.can().chain().focus().toggleBold().run()"></v-btn></template></v-tooltip>
+        <v-tooltip :text="$t('Italic text')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-format-italic" @click="editor.chain().focus().toggleItalic().run()" :disabled="!editor.can().chain().focus().toggleItalic().run()"></v-btn></template></v-tooltip>
+        <v-tooltip :text="$t('Strike text')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-format-strikethrough" @click="editor.chain().focus().toggleStrike().run()" :disabled="!editor.can().chain().focus().toggleStrike().run()"></v-btn></template></v-tooltip>
+        <v-tooltip :text="$t('Toggle code')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-code-greater-than" @click="editor.chain().focus().toggleCode().run()" :disabled="!editor.can().chain().focus().toggleCode().run()"></v-btn></template></v-tooltip>
+        <v-tooltip :text="$t('Clear marks')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-format-clear" @click="editor.chain().focus().unsetAllMarks().run()" :disabled="!editor.can().chain().focus().unsetAllMarks().run()"></v-btn></template></v-tooltip>
+
+
+
+
+        <v-divider vertical></v-divider>
+        <v-tooltip :text="$t('Paragraph')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-format-paragraph" @click="editor.chain().focus().setParagraph().run()" ></v-btn></template></v-tooltip>
+        <v-tooltip :text="$t('Header 1')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-format-header-1" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()" ></v-btn></template></v-tooltip>
+        <v-tooltip :text="$t('Header 2')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-format-header-2" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()" ></v-btn></template></v-tooltip>
+        <v-tooltip :text="$t('Header 3')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-format-header-3" @click="editor.chain().focus().toggleHeading({ level: 3 }).run()" ></v-btn></template></v-tooltip>
+        <v-tooltip :text="$t('Bulleted list')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-format-list-bulleted" @click="editor.chain().focus().toggleBulletList().run()" ></v-btn></template></v-tooltip>
+        <v-tooltip :text="$t('Ordered list')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-format-list-numbered" @click="editor.chain().focus().toggleOrderedList().run()" ></v-btn></template></v-tooltip>
+
         <v-btn @click="editor.chain().focus().clearNodes().run()">clear nodes</v-btn>
-        <v-btn append-icon="mdi-format-paragraph" @click="editor.chain().focus().setParagraph().run()" :class="{ 'is-active': editor.isActive('paragraph') }"></v-btn>
-        <v-btn append-icon="mdi-format-header-1"  @click="editor.chain().focus().toggleHeading({ level: 1 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"></v-btn>
-        <v-btn append-icon="mdi-format-header-2"  @click="editor.chain().focus().toggleHeading({ level: 2 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"></v-btn>
-        <v-btn append-icon="mdi-format-header-3"  @click="editor.chain().focus().toggleHeading({ level: 3 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"></v-btn>
-        <v-btn append-icon="mdi-format-list-bulleted" @click="editor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': editor.isActive('bulletList') }"></v-btn>
-        <v-btn append-icon="mdi-format-list-numbered" @click="editor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': editor.isActive('orderedList') }"></v-btn>
         <v-btn @click="editor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': editor.isActive('codeBlock') }">code block  </v-btn>
         <v-btn @click="editor.chain().focus().toggleBlockquote().run()" :class="{ 'is-active': editor.isActive('blockquote') }">blockquote</v-btn>
-        <v-btn append-icon="mdi-minus"  @click="editor.chain().focus().setHorizontalRule().run()"></v-btn>
-        <v-btn append-icon="mdi-keyboard-return"  @click="editor.chain().focus().setHardBreak().run()"></v-btn>
-        <v-btn append-icon="mdi-language-html5"  @click="on_btn_html_code" ></v-btn>
-        <v-btn append-icon="mdi-reload"  @click="on_update_mentions" >{{$t("Update mentions")}}</v-btn>
+
+
+
+        <v-tooltip :text="$t('Horizontal line')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-minus" @click="editor.chain().focus().setHorizontalRule().run()" ></v-btn></template></v-tooltip>
+        <v-tooltip :text="$t('Hard break')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-keyboard-return" @click="editor.chain().focus().setHardBreak().run()" ></v-btn></template></v-tooltip>
+
+        <v-divider vertical></v-divider>
+        <v-tooltip :text="$t('HTML Code')" location="bottom"><template v-slot:activator="{ props }"><v-btn v-bind="props" variant="text" icon="mdi-language-html5" @click="on_btn_html_code" ></v-btn></template></v-tooltip>
+
       </div>
       <v-card  height="500" style="overflow: auto" class="d-flex flex-row">
         <editor-content id="editor" :locale="$i18n.locale" :lang="$i18n.locale" ref="me" :editor="editor" ></editor-content>
