@@ -36,8 +36,6 @@
                 this.$i18n.locale=item.value;
                 this.current=item;
                 localStorage.locale=item.value;
-                //console.log(this.$vuetify.locale.value)
-                //this.$vuetify.locale.current = item.value;
             },
             getStoredCurrent() {
                 if (!localStorage.locale || localStorage.locale==null) {

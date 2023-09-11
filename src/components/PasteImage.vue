@@ -59,7 +59,6 @@
 
                 if(pasteEvent.clipboardData == false){
                     if(typeof(callback) == "function"){
-                        console.log('Undefined ')
                         callback(undefined);
                     }
                 }
@@ -69,7 +68,6 @@
                 if(items == undefined){
                     if(typeof(callback) == "function"){
                         callback(undefined)
-                        console.log('Undefined 2')
                     }
                 }
                 for (var i = 0; i < items.length; i++) {
@@ -77,7 +75,6 @@
                     if (items[i].type.indexOf("image") == -1) continue
                     var blob = items[i].getAsFile()
                     this.new_image= await this.addImage(blob)
-                    console.log(this.new_image)
                     this.text=this.$t("[Image pasted]")
                     this.text_readonly=true
                     this.$emit('update:modelValue',this.new_image)

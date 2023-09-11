@@ -94,7 +94,6 @@
             },
             async on_ElaborationsView_clickoutside(){
                 this.elaboration_crud_dialog=false
-                console.log("Elaborations View CLICKOUTSIDE")
                 await this.$emit("cruded")
             },
             createAutomaticElaboration(item){

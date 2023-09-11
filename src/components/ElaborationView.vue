@@ -151,7 +151,6 @@ ${containers}
 <h2 class="h2_print">${this.$t("Recipe")}</h2>
 ${this.new_elaboration.elaborations_texts.text}
 `
-                console.log(s)
                 return s
             }
         },
@@ -196,7 +195,6 @@ ${this.new_elaboration.elaborations_texts.text}
             update_elaboration(){
                 return axios.get(this.new_elaboration.url, this.myheaders())
                 .then((response) => {
-                    console.log("UPDATE_ELABORTATIN" , response.data)
                     this.new_elaboration=response.data
                     this.key=this.key+1
                }, (error) => {
@@ -263,7 +261,6 @@ ${this.new_elaboration.elaborations_texts.text}
         },
         created(){
             this.new_elaboration=Object.assign({},this.elaboration)
-            console.log(this.new_elaboration)
         }
     }
 </script>

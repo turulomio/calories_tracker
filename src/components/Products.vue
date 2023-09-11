@@ -311,7 +311,6 @@
                 this.dialog_products_crud=true
             },
             viewProduct(event,object){
-                console.log(object.item.raw)
                 this.product=object.item.raw
                 this.product_cu_mode="R"
                 this.key=this.key+1
@@ -337,8 +336,7 @@
             convertToSystemProduct(item){
 
                 axios.post(`${this.store().apiroot}/products_to_system_products/`, {product: item.url}, this.myheaders())
-                .then((response) => {
-                    console.log(response.data)
+                .then(() => {
                     this.update_all()
                }, (error) => {
                     this.parseResponseError(error)

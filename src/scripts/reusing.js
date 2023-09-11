@@ -36,7 +36,6 @@ async function download(url, filePath) {
   
       // The destination stream is ended by the time it's called
       file.on('finish', () => {
-        console.log("Done", url)
         resolve(fileInfo)
       });
   

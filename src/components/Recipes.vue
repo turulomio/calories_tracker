@@ -82,10 +82,6 @@
             ShoppingList,
         },
         watch: {
-            // options(new_val) {
-            //     console.log("Optionsupdated",new_val)
-            //     this.update_recipes(new_val)
-            // }
         },
         data(){
             return {
@@ -277,12 +273,10 @@
             },
             on_update_items_per_page(new_val){
                 this.options.itemsPerPage=new_val
-                console.log(new_val,this.options.itemsPerPage,this.$refs.table)
                 this.update_recipes(this.options)
             },
             on_update_page(new_val){
                 this.options.page=new_val
-                console.log(new_val,this.options.page)
                 this.update_recipes(this.options)
             },
             update_recipes(options){  

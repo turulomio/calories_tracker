@@ -104,7 +104,6 @@
         },
         created(){
             this.new_elaboration=Object.assign({},this.elaboration)
-            console.log(this.new_elaboration)
             this.your_weight=this.new_elaboration.final_amount
         }
     }

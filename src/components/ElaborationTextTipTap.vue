@@ -73,7 +73,6 @@
               return r
             },
             on_update_mentions(){
-                console.log("on_update_mentions")
 
                 this.get_ingredients_spans().forEach(span=>{
                   var sspan=this.get_id_label_from_span(span)

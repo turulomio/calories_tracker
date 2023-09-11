@@ -195,7 +195,6 @@
             },
             update_companies(){
                 this.companies=this.getArrayFromMap(this.store().companies).filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase())) 
-                console.log(this.companies)
             },
             update_system_companies(){
                 return axios.get(`${this.store().apiroot}/api/system_companies/?search=${this.search}`, this.myheaders())

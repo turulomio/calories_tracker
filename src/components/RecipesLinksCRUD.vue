@@ -110,7 +110,6 @@
             },
             reload_ui(){
                 var id=this.id_from_hyperlinked_url(this.new_recipes_links.type)
-                console.log(id)
                 this.show_fileinput=false
                 this.show_link=false
                 this.show_paste=false

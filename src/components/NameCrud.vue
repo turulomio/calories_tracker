@@ -54,7 +54,6 @@
                     this.$refs.form.validate()
                     return
                 }
-                console.log(this.apiname)
 
                 if (this.mode=="C"){
                     axios.post(`${this.store().apiroot}/api/${this.apiname}/`, this.new_item,  this.myheaders())

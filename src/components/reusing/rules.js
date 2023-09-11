@@ -13,7 +13,6 @@ export function isNullOrEmpty(n){
         var r=false
         if (n==null) return r=true
         if (n=="") return r=true
-        //console.log(`isnullorempty: ${n} ${typeof n}: ${r}`)
         return r
     }
 //Returns if it's a Number, with required attribute
@@ -28,14 +27,12 @@ export function isNumberWithRequired(n,required){
     } else {
         if (isNullOrEmpty(n) || isNumber(n)) r= true
     }
-    //console.log(`isnumberwithrequired: ${n} ${required} ${typeof n}: ${r}`)
     return r
 }
 //Returns if it's a Number with max digits, with required attribute
 export function isNumberMaxDigitsWithRequired(n,required,maxdigits){
     var r=false
     if (isNumberWithRequired(n,required) && n.toString().length<=maxdigits) r=true
-    //console.log(`isnumbermaxdigitswithrequired: ${n} ${required} ${typeof n} ${maxdigits}: ${r}`)
     return r
 }
 
