@@ -5,9 +5,9 @@
 
             <template #item.actions="{item}">
                 <v-icon small class="mr-2" @click.stop="editItem(item.raw)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" @click.stop="deleteItem(item.raw)">mdi-delete</v-icon>      
-                <v-icon v-if="!item.automatic" small class="mr-2" @click.stop="createAutomaticElaboration(item.raw)">mdi-file-cog-outline</v-icon>
-
+                <v-icon small class="mr-2" :color="(item.raw.automatic) ? 'black': 'red'" @click.stop="deleteItem(item.raw)">mdi-delete</v-icon>      
+                <v-icon v-if="!item.raw.automatic" small class="mr-2" @click.stop="createAutomaticElaboration(item.raw)">mdi-file-cog-outline</v-icon>
+                
             </template>
             <template #bottom></template>
         </v-data-table>   

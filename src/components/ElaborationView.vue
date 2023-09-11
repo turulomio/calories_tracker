@@ -42,7 +42,7 @@
                 </v-card>
             </v-form>
             <v-card-actions>             
-                <v-btn color="primary" :disabled="elaboration.automatic" @click="showNI()" >{{ $t("Nutritional information") }}</v-btn>   
+                <v-btn color="primary" @click="showNI()" >{{ $t("Nutritional information") }}</v-btn>   
                 <v-spacer></v-spacer>
                 <v-btn color="primary" :disabled="elaboration.automatic" @click="addIngredient()" >{{ $t("Add an ingredient") }}</v-btn>
                 <v-btn color="primary" :disabled="elaboration.automatic" @click="addContainer()" >{{ $t("Add a container") }}</v-btn>
