@@ -1,6 +1,6 @@
 <template>
     <div>    
-        <h1>{{ $t("Elaboration for [0] diners").format(new_elaboration.diners) }}
+        <h1>{{ new_elaboration.fullname }}
             <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
             <br>
             <v-btn class="" :color="(new_elaboration.final_amount)? '': 'primary'" :disabled="elaboration.automatic" @click="setFinalAmount()" >{{ (new_elaboration.final_amount==null) ? $t("Final amount wasn't set") : $t("Final amount: [0] g").format(new_elaboration.final_amount)}}</v-btn>
@@ -69,6 +69,7 @@
         <!-- NI Dialog -->
         <v-dialog v-model="dialog_ni" width="100%">
             <v-card class="pa-3">     
+                <h1 class="mb-5">{{ new_elaboration.fullname}}</h1>
                 <TableElaborationsIngredientsNI :elaboration="new_elaboration" :key="key" @cruded="on_TableElaborationsIngredientsNI_cruded()" />
             </v-card>
         </v-dialog>
