@@ -8,7 +8,7 @@
             <template #bottom></template>
         </v-data-table>   
         <!-- ItemCRUD DIALOG -->
-        <v-dialog v-model="dialog" width="100%" persistent>
+        <v-dialog v-model="dialog" width="70%">
             <v-card class="pa-3">
                 <ElaborationsContainersCRUD :container="item" :mode="mode" apiname="elaborations_containers" :key="key"  @cruded="on_ElaborationsContainersCRUD_cruded()"></ElaborationsContainersCRUD>
             </v-card>
