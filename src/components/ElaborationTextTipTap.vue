@@ -27,7 +27,6 @@
       <v-card  height="500" style="overflow: auto" class="d-flex flex-row">
         <editor-content id="editor" :locale="$i18n.locale" :lang="$i18n.locale" ref="me" :editor="editor" ></editor-content>
       </v-card>
-      {{ $i18n.locale }}
     </div>    
         <p v-if="show_html_code"> HTMLCODE {{ html_code }}</p>    
     <p v-if="unused_ingredients()" class="my-2 boldred d-flex justify-center">{{ $t("Products unused : [0]").format(unused_ingredients())}}</p>
