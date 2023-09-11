@@ -172,19 +172,6 @@ export function empty_recipes_links_types(){
     }
 }
 
-export function empty_stir_types(){
-    return {
-        url:null,
-        name: "",
-    }
-}
-
-export function empty_temperatures_types(){
-    return {
-        url:null,
-        name: "",
-    }
-}
 
 export function empty_recipes_links(){
     return {
@@ -205,7 +192,6 @@ export function empty_elaborations(){
         diners:null,
         elaborations_products_in: [],
         recipes: null,
-        elaborations_steps: [],
     }
 }
 
@@ -234,24 +220,6 @@ export function empty_measures_types(){
     return {
         url:null,
         name: "",
-    }
-}
-
-
-export function empty_steps(){
-    return {
-        url:null,
-        name: "",
-        can_products_in_step:true,
-        can_container:true,
-        can_container_to:false,
-        can_temperatures:true,
-        can_stir:true,
-        man_products_in_step:true,
-        man_container:true,
-        man_container_to:false,
-        man_temperatures:true,
-        man_stir:true,
     }
 }
 

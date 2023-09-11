@@ -24,9 +24,6 @@ export const useStore = defineStore('global', {
         elaborated_products: new Map(),
         weight_wishes: new Map(),
         recipes_links_types: new Map(),
-        stir_types: new Map(),
-        temperatures_types: new Map(),
-        steps: new Map(),
         recipes_categories: new Map(),
         measures_types: new Map(),
         settings: null,
@@ -195,45 +192,6 @@ export const useStore = defineStore('global', {
           console.log(error)
       });
     },
-    updateStirTypes() {
-        var start=new Date()
-        return axios.get(`${this.apiroot}/api/stir_types/`, myheaders())
-        .then((response)=>{
-          this.stir_types.clear()
-          response.data.forEach(o=>{
-            this.stir_types.set(o.url, o)
-          })  
-          console.log(`Updated ${response.data.length} stir_types in ${new Date()-start} ms`)
-        }, (error) => {
-          console.log(error)
-      });
-    },
-    updateTemperaturesTypes() {
-        var start=new Date()
-        return axios.get(`${this.apiroot}/api/temperatures_types/`, myheaders())
-        .then((response)=>{
-          this.temperatures_types.clear()
-          response.data.forEach(o=>{
-            this.temperatures_types.set(o.url, o)
-          })  
-          console.log(`Updated ${response.data.length} temperatures_types in ${new Date()-start} ms`)
-        }, (error) => {
-          console.log(error)
-      });
-    },
-    updateSteps() {
-        var start=new Date()
-        return axios.get(`${this.apiroot}/api/steps/`, myheaders())
-        .then((response)=>{
-          this.steps.clear()
-          response.data.forEach(o=>{
-            this.steps.set(o.url, o)
-          })  
-          console.log(`Updated ${response.data.length} steps in ${new Date()-start} ms`)
-        }, (error) => {
-          console.log(error)
-      });
-    },
     updateRecipesCategories() {
         var start=new Date()
         return axios.get(`${this.apiroot}/api/recipes_categories/`, myheaders())
@@ -286,9 +244,6 @@ export const useStore = defineStore('global', {
         this.updateWeightWishes(),
         this.updateRecipesLinksTypes(),
         this.updateSettings(),
-        this.updateStirTypes(),
-        this.updateTemperaturesTypes(),
-        this.updateSteps(),
         this.updateRecipesCategories(),
         this.updateMeasuresTypes(),
       ])

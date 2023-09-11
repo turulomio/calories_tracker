@@ -211,17 +211,6 @@
                                 }.bind(this),
                             },
                             {
-                                name: this.$t("With elaboration steps"),
-                                icon: "mdi-image-off-outline",
-                                code: function(){
-                                    this.search=":WITH_STEPS"
-                                    this.options.multiSort=false
-                                    this.options.sortBy=[{key:"last", order:"desc"}]
-                                    this.update_recipes(this.options)
-                                    this.key=this.key+1
-                                }.bind(this),
-                            },
-                            {
                                 name: this.$t("Without main photo"),
                                 icon: "mdi-image-off-outline",
                                 code: function(){
