@@ -1,7 +1,7 @@
 <!-- // INFORMACION NUTRICIONAL -->
 <template>
     <div>    
-        <v-data-table density="compact" :headers="products_in_headers" :items="items" :sort-by="[{key:'amount',order:'desc'}]"  class="elevation-1" :items-per-page="10000" :key="'T'+key" height="50vh" fixed-header>
+        <v-data-table density="compact" :headers="products_in_headers" :items="items" :sort-by="[{key:'amount',order:'desc'}]"  class="elevation-1" :items-per-page="10000" :key="'T'+key" fixed-header>
             <template #item.products="{item}"><div v-html="products_html_fullname(item.raw.products,4)"></div></template>                       
                 <template #item.amount="{item}"><div v-html="my_round(item.raw.amount,0)"></div></template>                  
                 <template #item.calories="{item}"><div v-html="my_round(item.raw.calories,0)"></div></template>  
