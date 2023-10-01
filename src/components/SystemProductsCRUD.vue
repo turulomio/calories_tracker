@@ -32,10 +32,10 @@
                 <v-checkbox v-model="new_system_product.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
                 <v-card class="mt-4">
                     <v-data-table density="compact" :headers="formats_headers" :items="new_system_product.formats" :sort-by="[{key:'formats',order:'asc'}]" class="elevation-1" :items-per-page="10000" :key="'T'+key" :height="250">
-                        <template #item.formats="{item}"><div v-html="store().formats.get( item.raw.formats).name"></div></template> 
+                        <template #item.formats="{item}"><div v-html="store().formats.get( item.formats).name"></div></template> 
                         <template #item.actions="{item}">
-                            <v-icon small class="mr-2" @click="editFormat(item.raw)">mdi-pencil</v-icon>
-                            <v-icon small @click="deleteFormat(item.raw)">mdi-delete</v-icon>
+                            <v-icon small class="mr-2" @click="editFormat(item)">mdi-pencil</v-icon>
+                            <v-icon small @click="deleteFormat(item)">mdi-delete</v-icon>
                         </template>
                         <template #bottom></template>
                     </v-data-table>

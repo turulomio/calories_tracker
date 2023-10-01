@@ -9,18 +9,18 @@
             </v-row>
         </v-card>
         <v-data-table-server ref="table" density="compact" :headers="recipes_headers" :items="(paginated_recipes)? paginated_recipes.results: []" class="elevation-1 cursorpointer" :items-length="(paginated_recipes)? paginated_recipes.count : 10" @update:items-per-page="on_update_items_per_page" @update:page="on_update_page" :options.sync="options" :loading="loading" item-value="content_url" @click:row="viewRecipe" :key="key+1" >
-            <template #item.photo="{item}"><v-img  v-if="item.raw.thumbnail" :src="item.raw.thumbnail" style="width: 50px; height: 50px" @click.stop="toggleFullscreen(item.raw)" /></template>
-            <template #item.name="{item}"><div v-html="item.raw.name"></div></template>      
-            <template #item.last="{item}">{{localtime(item.raw.last)}}</template>      
-            <template #item.recipes_categories="{item}">{{show_categories(item.raw)}}</template>      
-            <template #item.food_types="{item}"><div v-html="store().food_types.get(item.raw.food_types).localname"></div></template> 
-            <template #item.guests="{item}"><v-icon small v-if="item.raw.guests" >mdi-check-outline</v-icon></template>   
-            <template #item.soon="{item}"><v-icon small v-if="item.raw.soon" >mdi-check-outline</v-icon></template>    
+            <template #item.photo="{item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px" @click.stop="toggleFullscreen(item)" /></template>
+            <template #item.name="{item}"><div v-html="item.name"></div></template>      
+            <template #item.last="{item}">{{localtime(item.last)}}</template>      
+            <template #item.recipes_categories="{item}">{{show_categories(item)}}</template>      
+            <template #item.food_types="{item}"><div v-html="store().food_types.get(item.food_types).localname"></div></template> 
+            <template #item.guests="{item}"><v-icon small v-if="item.guests" >mdi-check-outline</v-icon></template>   
+            <template #item.soon="{item}"><v-icon small v-if="item.soon" >mdi-check-outline</v-icon></template>    
             <template #item.actions="{item}">
-                <v-icon small class="mr-1" @click.stop="addMainPhoto(item.raw)">mdi-link-variant</v-icon>
-                <v-icon small class="mr-1" @click.stop="searchGoogle(item.raw)">mdi-search-web</v-icon>
-                <v-icon small class="mr-1" @click.stop="editRecipe(item.raw)">mdi-pencil</v-icon>
-                <v-icon small @click.stop="deleteRecipe(item.raw)">mdi-delete</v-icon>
+                <v-icon small class="mr-1" @click.stop="addMainPhoto(item)">mdi-link-variant</v-icon>
+                <v-icon small class="mr-1" @click.stop="searchGoogle(item)">mdi-search-web</v-icon>
+                <v-icon small class="mr-1" @click.stop="editRecipe(item)">mdi-pencil</v-icon>
+                <v-icon small @click.stop="deleteRecipe(item)">mdi-delete</v-icon>
             </template>
         </v-data-table-server>
 
@@ -257,7 +257,7 @@
                 this.dialog_recipes_crud=true
             },
             viewRecipe(event,object){       
-                    this.recipe=object.item.raw
+                    this.recipe=object.item
                     this.key=this.key+1
 
                     this.dialog_recipes_view=true

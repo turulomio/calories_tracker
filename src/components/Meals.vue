@@ -11,29 +11,29 @@
 
             <v-data-table density="compact" class="mt-4 elevation-1" :headers="meals_headers" :items="meals" :sort-by="[{key:'name',order:'asc'}]"  :items-per-page="10000" :loading="loading" :key="'T'+key">
                 <template #item.datetime="{item}">
-                    {{localtime(item.raw.datetime).slice(10)}}
+                    {{localtime(item.datetime).slice(10)}}
                 </template>          
-                <template #item.products="{item}"><div v-html="products_html_fullname(item.raw.products,4)" @click="on_product_click(item.raw)"></div></template>                       
-                <template #item.amount="{item}"><div v-html="my_round(item.raw.amount,0)"></div></template>                  
-                <template #item.calories="{item}"><div v-html="my_round(item.raw.calories,0)"></div></template>  
-                <template #item.fat="{item}"><div v-html="my_round(item.raw.fat,0)"></div></template>  
-                <template #item.protein="{item}"><div v-html="my_round(item.raw.protein,0)"></div></template>  
-                <template #item.carbohydrate="{item}"><div v-html="my_round(item.raw.carbohydrate,0)"></div></template>  
-                <template #item.salt="{item}"><div v-html="my_round(item.raw.salt,0)"></div></template>  
-                <template #item.fiber="{item}"><div v-html="my_round(item.raw.fiber,0)"></div></template>  
-                <template #item.sugars="{item}"><div v-html="my_round(item.raw.sugars,0)"></div></template>  
-                <template #item.saturated_fat="{item}"><div v-html="my_round(item.raw.saturated_fat,0)"></div></template>  
-                <template #item.cholesterol="{item}"><div v-html="my_round(item.raw.cholesterol,0)"></div></template>  
-                <template #item.sodium="{item}"><div v-html="my_round(item.raw.sodium,0)"></div></template>  
-                <template #item.potassium="{item}"><div v-html="my_round(item.raw.potassium,0)"></div></template>  
-                <template #item.ferrum="{item}"><div v-html="my_round(item.raw.ferrum,0)"></div></template>  
-                <template #item.magnesium="{item}"><div v-html="my_round(item.raw.magnesium,0)"></div></template>  
-                <template #item.phosphor="{item}"><div v-html="my_round(item.raw.phosphor,0)"></div></template>  
-                <template #item.calcium="{item}"><div v-html="my_round(item.raw.calcium,0)"></div></template>  
+                <template #item.products="{item}"><div v-html="products_html_fullname(item.products,4)" @click="on_product_click(item)"></div></template>                       
+                <template #item.amount="{item}"><div v-html="my_round(item.amount,0)"></div></template>                  
+                <template #item.calories="{item}"><div v-html="my_round(item.calories,0)"></div></template>  
+                <template #item.fat="{item}"><div v-html="my_round(item.fat,0)"></div></template>  
+                <template #item.protein="{item}"><div v-html="my_round(item.protein,0)"></div></template>  
+                <template #item.carbohydrate="{item}"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
+                <template #item.salt="{item}"><div v-html="my_round(item.salt,0)"></div></template>  
+                <template #item.fiber="{item}"><div v-html="my_round(item.fiber,0)"></div></template>  
+                <template #item.sugars="{item}"><div v-html="my_round(item.sugars,0)"></div></template>  
+                <template #item.saturated_fat="{item}"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
+                <template #item.cholesterol="{item}"><div v-html="my_round(item.cholesterol,0)"></div></template>  
+                <template #item.sodium="{item}"><div v-html="my_round(item.sodium,0)"></div></template>  
+                <template #item.potassium="{item}"><div v-html="my_round(item.potassium,0)"></div></template>  
+                <template #item.ferrum="{item}"><div v-html="my_round(item.ferrum,0)"></div></template>  
+                <template #item.magnesium="{item}"><div v-html="my_round(item.magnesium,0)"></div></template>  
+                <template #item.phosphor="{item}"><div v-html="my_round(item.phosphor,0)"></div></template>  
+                <template #item.calcium="{item}"><div v-html="my_round(item.calcium,0)"></div></template>  
                 <template #item.actions="{item}">
-                    <v-icon size="small" class="mr-1" @click="copyMeal(item.raw)">mdi-content-copy</v-icon>
-                    <v-icon small class="mr-1" @click="editMeal(item.raw)">mdi-pencil</v-icon>
-                    <v-icon small class="mr-1" @click="deleteMeal(item.raw)">mdi-delete</v-icon>
+                    <v-icon size="small" class="mr-1" @click="copyMeal(item)">mdi-content-copy</v-icon>
+                    <v-icon small class="mr-1" @click="editMeal(item)">mdi-pencil</v-icon>
+                    <v-icon small class="mr-1" @click="deleteMeal(item)">mdi-delete</v-icon>
                 </template>       
                 <template #bottom ></template>        
                 <template #tbody>

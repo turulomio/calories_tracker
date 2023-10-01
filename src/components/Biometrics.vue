@@ -21,19 +21,19 @@
                 <v-card >
                     <v-data-table-virtual density="compact" :headers="biometrics_headers" :items="biometrics" :sort-by="[{key:'datetime',order:'desc'}]"  class="elevation-1" :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500">
                         <template #item.datetime="{item}">
-                            {{localtime(item.raw.datetime)}}
+                            {{localtime(item.datetime)}}
                         </template>              
                         <template #item.activities="{item}">
-                            <div v-html="store().activities.get(item.raw.activities).localname"></div>
+                            <div v-html="store().activities.get(item.activities).localname"></div>
                         </template>         
                         <template #item.weight_wishes="{item}">
-                            <div v-html="store().weight_wishes.get(item.raw.weight_wishes).localname"></div>
+                            <div v-html="store().weight_wishes.get(item.weight_wishes).localname"></div>
                         </template>     
 
 
                         <template #item.actions="{item}">
-                            <v-icon small class="mr-2" @click="editBiometric(item.raw)">mdi-pencil</v-icon>
-                            <v-icon small @click="deleteBiometric(item.raw)">mdi-delete</v-icon>
+                            <v-icon small class="mr-2" @click="editBiometric(item)">mdi-pencil</v-icon>
+                            <v-icon small @click="deleteBiometric(item)">mdi-delete</v-icon>
                         </template>
                         <template #bottom></template>
                     </v-data-table-virtual>

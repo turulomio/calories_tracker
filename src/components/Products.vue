@@ -13,75 +13,75 @@
         <v-window v-model="tab" class="ma-5">
             <v-window-item key="products" >
                 <v-data-table-virtual density="compact" :headers="products_headers" :items="products" :sort-by="[{key:'fullname',order:'asc'}]"  class="elevation-1 cursorpointer" :items-per-page="10000" :loading="loading" :key="'T'+key" height="65vh" @click:row="viewProduct" fixed-header>
-                    <template #item.fullname="{item}"><div v-html="products_html_fullname(item.raw,2)"></div></template>
-                    <template #item.calories="{item}"><div v-html="my_round(item.raw.calories,0)"></div></template>  
-                    <template #item.fat="{item}"><div v-html="my_round(item.raw.fat,0)"></div></template>  
-                    <template #item.protein="{item}"><div v-html="my_round(item.raw.protein,0)"></div></template>  
-                    <template #item.carbohydrate="{item}"><div v-html="my_round(item.raw.carbohydrate,0)"></div></template>  
-                    <template #item.salt="{item}"><div v-html="my_round(item.raw.salt,0)"></div></template>  
-                    <template #item.fiber="{item}"><div v-html="my_round(item.raw.fiber,0)"></div></template>  
-                    <template #item.sugars="{item}"><div v-html="my_round(item.raw.sugars,0)"></div></template>  
-                    <template #item.saturated_fat="{item}"><div v-html="my_round(item.raw.saturated_fat,0)"></div></template>  
-                    <template #item.cholesterol="{item}"><div v-html="my_round(item.raw.cholesterol,0)"></div></template>  
-                    <template #item.sodium="{item}"><div v-html="my_round(item.raw.sodium,0)"></div></template>  
-                    <template #item.potassium="{item}"><div v-html="my_round(item.raw.potassium,0)"></div></template>  
-                    <template #item.ferrum="{item}"><div v-html="my_round(item.raw.ferrum,0)"></div></template>  
-                    <template #item.magnesium="{item}"><div v-html="my_round(item.raw.magnesium,0)"></div></template>  
-                    <template #item.phosphor="{item}"><div v-html="my_round(item.raw.phosphor,0)"></div></template>  
-                    <template #item.calcium="{item}"><div v-html="my_round(item.raw.calcium,0)"></div></template>  
+                    <template #item.fullname="{item}"><div v-html="products_html_fullname(item,2)"></div></template>
+                    <template #item.calories="{item}"><div v-html="my_round(item.calories,0)"></div></template>  
+                    <template #item.fat="{item}"><div v-html="my_round(item.fat,0)"></div></template>  
+                    <template #item.protein="{item}"><div v-html="my_round(item.protein,0)"></div></template>  
+                    <template #item.carbohydrate="{item}"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
+                    <template #item.salt="{item}"><div v-html="my_round(item.salt,0)"></div></template>  
+                    <template #item.fiber="{item}"><div v-html="my_round(item.fiber,0)"></div></template>  
+                    <template #item.sugars="{item}"><div v-html="my_round(item.sugars,0)"></div></template>  
+                    <template #item.saturated_fat="{item}"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
+                    <template #item.cholesterol="{item}"><div v-html="my_round(item.cholesterol,0)"></div></template>  
+                    <template #item.sodium="{item}"><div v-html="my_round(item.sodium,0)"></div></template>  
+                    <template #item.potassium="{item}"><div v-html="my_round(item.potassium,0)"></div></template>  
+                    <template #item.ferrum="{item}"><div v-html="my_round(item.ferrum,0)"></div></template>  
+                    <template #item.magnesium="{item}"><div v-html="my_round(item.magnesium,0)"></div></template>  
+                    <template #item.phosphor="{item}"><div v-html="my_round(item.phosphor,0)"></div></template>  
+                    <template #item.calcium="{item}"><div v-html="my_round(item.calcium,0)"></div></template>  
                     <template #item.actions="{item}">
-                        <v-icon v-if="item.raw.system_products==null && item.elaborated_products==null" small class="mr-1" @click.stop="convertToSystemProduct(item.raw)">mdi-database-arrow-right</v-icon>
-                        <v-icon v-if="item.raw.is_editable" small class="mr-1" @click.stop="editProduct(item.raw)">mdi-pencil</v-icon>
-                        <v-icon v-if="item.raw.is_deletable" small @click.stop="deleteProduct(item.raw)">mdi-delete</v-icon>
+                        <v-icon v-if="item.system_products==null && item.elaborated_products==null" small class="mr-1" @click.stop="convertToSystemProduct(item)">mdi-database-arrow-right</v-icon>
+                        <v-icon v-if="item.is_editable" small class="mr-1" @click.stop="editProduct(item)">mdi-pencil</v-icon>
+                        <v-icon v-if="item.is_deletable" small @click.stop="deleteProduct(item)">mdi-delete</v-icon>
                     </template>
                 </v-data-table-virtual>
             </v-window-item>
             <v-window-item key="elaborated_products">
                 <v-data-table-virtual density="compact" :headers="elaborated_products_headers" :items="elaborated_products" :sort-by="[{key:'name',order:'asc'}]"  class="elevation-1 cursorpointer" :items-per-page="10000" :loading="loading" :key="'T'+key" height="65vh" @click:row="viewElaboratedProduct"  fixed-header>
-                    <template #item.fullname="{item}"><div v-html="products_html_fullname(item.raw,3)"></div></template>
-                    <template #item.calories="{item}"><div v-html="my_round(item.raw.calories,0)"></div></template>  
-                    <template #item.fat="{item}"><div v-html="my_round(item.raw.fat,0)"></div></template>  
-                    <template #item.protein="{item}"><div v-html="my_round(item.raw.protein,0)"></div></template>  
-                    <template #item.carbohydrate="{item}"><div v-html="my_round(item.raw.carbohydrate,0)"></div></template>  
-                    <template #item.salt="{item}"><div v-html="my_round(item.raw.salt,0)"></div></template>  
-                    <template #item.fiber="{item}"><div v-html="my_round(item.raw.fiber,0)"></div></template>  
-                    <template #item.sugars="{item}"><div v-html="my_round(item.raw.sugars,0)"></div></template>  
-                    <template #item.saturated_fat="{item}"><div v-html="my_round(item.raw.saturated_fat,0)"></div></template>  
-                    <template #item.cholesterol="{item}"><div v-html="my_round(item.raw.cholesterol,0)"></div></template>  
-                    <template #item.sodium="{item}"><div v-html="my_round(item.raw.sodium,0)"></div></template>  
-                    <template #item.potassium="{item}"><div v-html="my_round(item.raw.potassium,0)"></div></template>  
-                    <template #item.ferrum="{item}"><div v-html="my_round(item.raw.ferrum,0)"></div></template>  
-                    <template #item.magnesium="{item}"><div v-html="my_round(item.raw.magnesium,0)"></div></template>  
-                    <template #item.phosphor="{item}"><div v-html="my_round(item.raw.phosphor,0)"></div></template>  
-                    <template #item.calcium="{item}"><div v-html="my_round(item.raw.calcium,0)"></div></template>  
+                    <template #item.fullname="{item}"><div v-html="products_html_fullname(item,3)"></div></template>
+                    <template #item.calories="{item}"><div v-html="my_round(item.calories,0)"></div></template>  
+                    <template #item.fat="{item}"><div v-html="my_round(item.fat,0)"></div></template>  
+                    <template #item.protein="{item}"><div v-html="my_round(item.protein,0)"></div></template>  
+                    <template #item.carbohydrate="{item}"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
+                    <template #item.salt="{item}"><div v-html="my_round(item.salt,0)"></div></template>  
+                    <template #item.fiber="{item}"><div v-html="my_round(item.fiber,0)"></div></template>  
+                    <template #item.sugars="{item}"><div v-html="my_round(item.sugars,0)"></div></template>  
+                    <template #item.saturated_fat="{item}"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
+                    <template #item.cholesterol="{item}"><div v-html="my_round(item.cholesterol,0)"></div></template>  
+                    <template #item.sodium="{item}"><div v-html="my_round(item.sodium,0)"></div></template>  
+                    <template #item.potassium="{item}"><div v-html="my_round(item.potassium,0)"></div></template>  
+                    <template #item.ferrum="{item}"><div v-html="my_round(item.ferrum,0)"></div></template>  
+                    <template #item.magnesium="{item}"><div v-html="my_round(item.magnesium,0)"></div></template>  
+                    <template #item.phosphor="{item}"><div v-html="my_round(item.phosphor,0)"></div></template>  
+                    <template #item.calcium="{item}"><div v-html="my_round(item.calcium,0)"></div></template>  
                     <template #item.actions="{item}">
-                        <v-icon small class="mr-1" @click.stop="editElaboratedProduct(item.raw)">mdi-pencil</v-icon>
-                        <v-icon small v-if="is_product_elaborated_deletable(item.raw)" @click.stop="deleteElaboratedProduct(item.raw)">mdi-delete</v-icon>
+                        <v-icon small class="mr-1" @click.stop="editElaboratedProduct(item)">mdi-pencil</v-icon>
+                        <v-icon small v-if="is_product_elaborated_deletable(item)" @click.stop="deleteElaboratedProduct(item)">mdi-delete</v-icon>
                     </template>
                 </v-data-table-virtual>
             </v-window-item>
             <v-window-item key="system_products" >                 
                 <v-data-table-virtual density="compact" :headers="system_products_headers" :items="system_products" :sort-by="[{key:'fullname',order:'asc'}]" class="elevation-1 cursorpointer" :items-per-page="10000" :loading="loading" :key="'T'+key" height="65vh" @click:row="viewSystemProduct" fixed-header>
-                    <template #item.fullname="{item}"><div v-html="products_html_fullname(item.raw,5)"></div></template>
-                    <template #item.calories="{item}"><div v-html="my_round(item.raw.calories,0)"></div></template>  
-                    <template #item.fat="{item}"><div v-html="my_round(item.raw.fat,0)"></div></template>  
-                    <template #item.protein="{item}"><div v-html="my_round(item.raw.protein,0)"></div></template>  
-                    <template #item.carbohydrate="{item}"><div v-html="my_round(item.raw.carbohydrate,0)"></div></template>  
-                    <template #item.salt="{item}"><div v-html="my_round(item.raw.salt,0)"></div></template>  
-                    <template #item.fiber="{item}"><div v-html="my_round(item.raw.fiber,0)"></div></template>  
-                    <template #item.sugars="{item}"><div v-html="my_round(item.raw.sugars,0)"></div></template>  
-                    <template #item.saturated_fat="{item}"><div v-html="my_round(item.raw.saturated_fat,0)"></div></template>  
-                    <template #item.cholesterol="{item}"><div v-html="my_round(item.raw.cholesterol,0)"></div></template>  
-                    <template #item.sodium="{item}"><div v-html="my_round(item.raw.sodium,0)"></div></template>  
-                    <template #item.potassium="{item}"><div v-html="my_round(item.raw.potassium,0)"></div></template>  
-                    <template #item.ferrum="{item}"><div v-html="my_round(item.raw.ferrum,0)"></div></template>  
-                    <template #item.magnesium="{item}"><div v-html="my_round(item.raw.magnesium,0)"></div></template>  
-                    <template #item.phosphor="{item}"><div v-html="my_round(item.raw.phosphor,0)"></div></template>  
-                    <template #item.calcium="{item}"><div v-html="my_round(item.raw.calcium,0)"></div></template>  
+                    <template #item.fullname="{item}"><div v-html="products_html_fullname(item,5)"></div></template>
+                    <template #item.calories="{item}"><div v-html="my_round(item.calories,0)"></div></template>  
+                    <template #item.fat="{item}"><div v-html="my_round(item.fat,0)"></div></template>  
+                    <template #item.protein="{item}"><div v-html="my_round(item.protein,0)"></div></template>  
+                    <template #item.carbohydrate="{item}"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
+                    <template #item.salt="{item}"><div v-html="my_round(item.salt,0)"></div></template>  
+                    <template #item.fiber="{item}"><div v-html="my_round(item.fiber,0)"></div></template>  
+                    <template #item.sugars="{item}"><div v-html="my_round(item.sugars,0)"></div></template>  
+                    <template #item.saturated_fat="{item}"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
+                    <template #item.cholesterol="{item}"><div v-html="my_round(item.cholesterol,0)"></div></template>  
+                    <template #item.sodium="{item}"><div v-html="my_round(item.sodium,0)"></div></template>  
+                    <template #item.potassium="{item}"><div v-html="my_round(item.potassium,0)"></div></template>  
+                    <template #item.ferrum="{item}"><div v-html="my_round(item.ferrum,0)"></div></template>  
+                    <template #item.magnesium="{item}"><div v-html="my_round(item.magnesium,0)"></div></template>  
+                    <template #item.phosphor="{item}"><div v-html="my_round(item.phosphor,0)"></div></template>  
+                    <template #item.calcium="{item}"><div v-html="my_round(item.calcium,0)"></div></template>  
                     <template #item.actions="{item}">
-                        <v-icon small class="mr-1" @click.stop="linkProduct(item.raw)">mdi-link-variant</v-icon>   
-                        <v-icon class="mr-1" small @click.stop="editSystemProduct(item.raw)"  color="#AA0000" v-if="store().catalog_manager">mdi-pencil</v-icon>
-                        <v-icon small @click.stop="deleteSystemProduct(item.raw)" color="#AA0000" v-if="store().catalog_manager">mdi-delete</v-icon>
+                        <v-icon small class="mr-1" @click.stop="linkProduct(item)">mdi-link-variant</v-icon>   
+                        <v-icon class="mr-1" small @click.stop="editSystemProduct(item)"  color="#AA0000" v-if="store().catalog_manager">mdi-pencil</v-icon>
+                        <v-icon small @click.stop="deleteSystemProduct(item)" color="#AA0000" v-if="store().catalog_manager">mdi-delete</v-icon>
                     </template>
                 </v-data-table-virtual>
             </v-window-item>
@@ -311,7 +311,7 @@
                 this.dialog_products_crud=true
             },
             viewProduct(event,object){
-                this.product=object.item.raw
+                this.product=object.item
                 this.product_cu_mode="R"
                 this.key=this.key+1
 
@@ -328,7 +328,7 @@
             },
 
             viewSystemProduct(event,object){
-                this.system_product=object.item.raw
+                this.system_product=object.item
                 this.system_product_cu_mode="R"
                 this.key=this.key+1
                 this.dialog_system_products_crud=true
@@ -355,7 +355,7 @@
                 this.dialog_elaborated_products_crud=true
             },
             viewElaboratedProduct(event,object){
-                this.elaborated_product=object.item.raw
+                this.elaborated_product=object.item
                 this.elaborated_product_mode='R'
                 this.key=this.key+1
                 this.dialog_elaborated_products_crud=true

@@ -7,8 +7,8 @@
 
         <v-data-table density="compact" :headers="ranking_headers" :items="ranking" :sort-by="[{key:'position',order:'asc'}]"  class="elevation-1" :items-per-page="10000" :loading="loading" :key="key" fixed-header height="70vh">
             <template #item.position="{item}">{{ item.index + 1 }}</template>
-            <template #item.product="{item}"><div v-html="products_html_fullname(item.raw.product,4)"></div></template>            
-            <template #item.amount="{item}">{{ my_round(item.raw.amount,0)}}</template>
+            <template #item.product="{item}"><div v-html="products_html_fullname(item.product,4)"></div></template>            
+            <template #item.amount="{item}">{{ my_round(item.amount,0)}}</template>
             <template #bottom></template>
         </v-data-table>
     </div>

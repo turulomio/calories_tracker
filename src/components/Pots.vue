@@ -6,12 +6,12 @@
         <v-text-field class="ml-10 mr-10 mb-5" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"  v-on:keyup.enter="on_search_change()"></v-text-field>
   
         <v-data-table density="compact" :headers="pots_headers" :key="key" :items="pots" :sort-by="[{key:'name',order:'asc'}]" class="elevation-1" :items-per-page="10000" item-key="item_key">   
-            <template #item.photo="{item}"><v-img  :src="item.raw.thumbnail" style="width: 50px; height: 50px" @click="toggleFullscreen(item.raw)" /></template>
-            <template #item.name="{item}">{{ item.raw.name }}</template>
-            <template #item.volume="{item}">{{ my_round(item.raw.volume,0) }}</template>
+            <template #item.photo="{item}"><v-img  :src="item.thumbnail" style="width: 50px; height: 50px" @click="toggleFullscreen(item)" /></template>
+            <template #item.name="{item}">{{ item.name }}</template>
+            <template #item.volume="{item}">{{ my_round(item.volume,0) }}</template>
             <template #item.actions="{item}">
-                <v-icon small class="mr-2" @click="editPot(item.raw)">mdi-pencil</v-icon>
-                <v-icon small @click="deletePot(item.raw)">mdi-delete</v-icon>
+                <v-icon small class="mr-2" @click="editPot(item)">mdi-pencil</v-icon>
+                <v-icon small @click="deletePot(item)">mdi-delete</v-icon>
             </template>
             <template #bottom ></template>  
         </v-data-table>

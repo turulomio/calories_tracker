@@ -2,23 +2,23 @@
 <template>
     <div>    
         <v-data-table density="compact" :headers="products_in_headers" :items="items" :sort-by="[{key:'amount',order:'desc'}]"  class="elevation-1" :items-per-page="10000" :key="'T'+key" fixed-header>
-            <template #item.products="{item}"><div v-html="products_html_fullname(item.raw.products,4)"></div></template>                       
-                <template #item.amount="{item}"><div v-html="my_round(item.raw.amount,0)"></div></template>                  
-                <template #item.calories="{item}"><div v-html="my_round(item.raw.calories,0)"></div></template>  
-                <template #item.fat="{item}"><div v-html="my_round(item.raw.fat,0)"></div></template>  
-                <template #item.protein="{item}"><div v-html="my_round(item.raw.protein,0)"></div></template>  
-                <template #item.carbohydrate="{item}"><div v-html="my_round(item.raw.carbohydrate,0)"></div></template>  
-                <template #item.salt="{item}"><div v-html="my_round(item.raw.salt,0)"></div></template>  
-                <template #item.fiber="{item}"><div v-html="my_round(item.raw.fiber,0)"></div></template>  
-                <template #item.sugars="{item}"><div v-html="my_round(item.raw.sugars,0)"></div></template>  
-                <template #item.saturated_fat="{item}"><div v-html="my_round(item.raw.saturated_fat,0)"></div></template>  
-                <template #item.cholesterol="{item}"><div v-html="my_round(item.raw.cholesterol,0)"></div></template>  
-                <template #item.sodium="{item}"><div v-html="my_round(item.raw.sodium,0)"></div></template>  
-                <template #item.potassium="{item}"><div v-html="my_round(item.raw.potassium,0)"></div></template>  
-                <template #item.ferrum="{item}"><div v-html="my_round(item.raw.ferrum,0)"></div></template>  
-                <template #item.magnesium="{item}"><div v-html="my_round(item.raw.magnesium,0)"></div></template>  
-                <template #item.phosphor="{item}"><div v-html="my_round(item.raw.phosphor,0)"></div></template>  
-                <template #item.calcium="{item}"><div v-html="my_round(item.raw.calcium,0)"></div></template>                 
+            <template #item.products="{item}"><div v-html="products_html_fullname(item.products,4)"></div></template>                       
+                <template #item.amount="{item}"><div v-html="my_round(item.amount,0)"></div></template>                  
+                <template #item.calories="{item}"><div v-html="my_round(item.calories,0)"></div></template>  
+                <template #item.fat="{item}"><div v-html="my_round(item.fat,0)"></div></template>  
+                <template #item.protein="{item}"><div v-html="my_round(item.protein,0)"></div></template>  
+                <template #item.carbohydrate="{item}"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
+                <template #item.salt="{item}"><div v-html="my_round(item.salt,0)"></div></template>  
+                <template #item.fiber="{item}"><div v-html="my_round(item.fiber,0)"></div></template>  
+                <template #item.sugars="{item}"><div v-html="my_round(item.sugars,0)"></div></template>  
+                <template #item.saturated_fat="{item}"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
+                <template #item.cholesterol="{item}"><div v-html="my_round(item.cholesterol,0)"></div></template>  
+                <template #item.sodium="{item}"><div v-html="my_round(item.sodium,0)"></div></template>  
+                <template #item.potassium="{item}"><div v-html="my_round(item.potassium,0)"></div></template>  
+                <template #item.ferrum="{item}"><div v-html="my_round(item.ferrum,0)"></div></template>  
+                <template #item.magnesium="{item}"><div v-html="my_round(item.magnesium,0)"></div></template>  
+                <template #item.phosphor="{item}"><div v-html="my_round(item.phosphor,0)"></div></template>  
+                <template #item.calcium="{item}"><div v-html="my_round(item.calcium,0)"></div></template>                 
                 <template #tbody>
                     <tr class="totalrow">
                         <td>{{ $t(`Total ([0] items):`).format(items.length) }} </td>

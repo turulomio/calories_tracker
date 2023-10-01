@@ -1,12 +1,12 @@
 <template>
     <div>
         <v-data-table density="compact" :headers="table_headers" :items="recipe.elaborations" class="elevation-1" :items-per-page="10000"  :sort-by="[{key:'diners',order:'asc'}]"  fixed-header :height="$attrs.height" ref="table_elaborations" @click:row="viewItem" style="cursor: pointer">
-            <template #item.automatic="{item}"><v-icon small v-if="item.raw.automatic" >mdi-check-outline</v-icon></template>
+            <template #item.automatic="{item}"><v-icon small v-if="item.automatic" >mdi-check-outline</v-icon></template>
 
             <template #item.actions="{item}">
-                <v-icon small class="mr-2" @click.stop="editItem(item.raw)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" :color="(item.raw.automatic) ? 'black': 'red'" @click.stop="deleteItem(item.raw)">mdi-delete</v-icon>      
-                <v-icon v-if="!item.raw.automatic" small class="mr-2" @click.stop="createAutomaticElaboration(item.raw)">mdi-file-cog-outline</v-icon>
+                <v-icon small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
+                <v-icon small class="mr-2" :color="(item.automatic) ? 'black': 'red'" @click.stop="deleteItem(item)">mdi-delete</v-icon>      
+                <v-icon v-if="!item.automatic" small class="mr-2" @click.stop="createAutomaticElaboration(item)">mdi-file-cog-outline</v-icon>
                 
             </template>
             <template #bottom></template>
@@ -80,7 +80,7 @@
                 this.elaboration_crud_dialog=true
             },
             viewItem(event,object){
-                this.elaboration=object.item.raw
+                this.elaboration=object.item
                 this.key=this.key+1
                 this.elaboration_view_dialog=true
             },

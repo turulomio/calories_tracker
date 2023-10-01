@@ -1,16 +1,16 @@
 <template>
     <div>
         <v-data-table density="compact" :headers="table_headers" :items="recipe.recipes_links" class="elevation-1" :items-per-page="10000" :sort-by="[{key:'name',order:'asc'}]" fixed-header :height="$attrs.height" ref="table_recipes_links">
-            <template #item.photo="{item}"><v-img  v-if="item.thumbnail" :src="item.raw.thumbnail" style="width: 50px; height: 50px"/></template>
-            <template #item.type="{item}"><div v-html="store().recipes_links_types.get(item.raw.type).localname"></div></template> 
-            <template #item.link="{item}"><div @click="on_link_click(item.raw)">{{item.raw.link}}</div></template> 
-            <template #item.mime="{item}">{{ show_mime(item.raw)}}</template> 
-            <template #item.size="{item}">{{ show_size(item.raw)}}</template> 
+            <template #item.photo="{item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px"/></template>
+            <template #item.type="{item}"><div v-html="store().recipes_links_types.get(item.type).localname"></div></template> 
+            <template #item.link="{item}"><div @click="on_link_click(item)">{{item.link}}</div></template> 
+            <template #item.mime="{item}">{{ show_mime(item)}}</template> 
+            <template #item.size="{item}">{{ show_size(item)}}</template> 
             
             <template #item.actions="{item}">
-                <v-icon v-if="item.raw.files" small class="mr-2" @click="downloadItem(item.raw)">mdi-download</v-icon>
-                <v-icon small class="mr-2" @click="editItem(item.raw)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" @click="deleteItem(item.raw)">mdi-delete</v-icon>
+                <v-icon v-if="item.files" small class="mr-2" @click="downloadItem(item)">mdi-download</v-icon>
+                <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+                <v-icon small class="mr-2" @click="deleteItem(item)">mdi-delete</v-icon>
             </template>
             <template #bottom></template>
         </v-data-table>   

@@ -10,11 +10,11 @@
                 <v-card class="mt-4">
                     <v-data-table density="compact" :headers="products_in_headers" :items="newep.products_in" :sort-by="[{key:'name',order:'asc'}]"  class="elevation-1" :items-per-page="10000" :key="'T'+key" :height="250" fixed-header>
                         <template #item.products="{item}">
-                            <div v-html="products_html_fullname(item.raw.products,4)"></div>
+                            <div v-html="products_html_fullname(item.products,4)"></div>
                         </template>
                         <template #item.actions="{item}">
-                            <v-icon v-if="['C','U'].includes(mode)" small class="mr-2" @click="editProductIn(item.raw)">mdi-pencil</v-icon>
-                            <v-icon v-if="['C','U'].includes(mode)" small @click="deleteProductIn(item.raw)">mdi-delete</v-icon>
+                            <v-icon v-if="['C','U'].includes(mode)" small class="mr-2" @click="editProductIn(item)">mdi-pencil</v-icon>
+                            <v-icon v-if="['C','U'].includes(mode)" small @click="deleteProductIn(item)">mdi-delete</v-icon>
                         </template>
                         <template #bottom></template>
                         <template #tbody>

@@ -8,9 +8,9 @@
   
         <v-data-table density="compact" :headers="catalog_table_headers" :items="catalog_table" :sort-by="[{key:'',order:'asc'}]"  class="elevation-1" :items-per-page="10000" :loading="loading" :key="'T'+key" height="70vh">
             <template #item.actions="{item}">
-                <v-icon small class="mr-1" @click="viewItem(item.raw)">mdi-eye</v-icon>
-                <v-icon small class="mr-1" @click="editItem(item.raw)">mdi-pencil</v-icon>
-                <v-icon small @click="deleteItem(item.raw)">mdi-delete</v-icon>
+                <v-icon small class="mr-1" @click="viewItem(item)">mdi-eye</v-icon>
+                <v-icon small class="mr-1" @click="editItem(item)">mdi-pencil</v-icon>
+                <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
             </template>
             <template #bottom ></template>  
         </v-data-table>
