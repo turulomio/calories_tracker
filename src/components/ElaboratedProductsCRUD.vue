@@ -121,8 +121,10 @@
                     var r = confirm(this.$t("Do you want to delete this elaborated product register?"))
                     if(r == true) {
                         axios.delete(this.newep.url, this.myheaders())
-                        .then(() => {
-                            this.store().elaborated_products.delete(this.newep.url)
+                        .then((response) => {
+                            console.log(response.data)
+                            this.store().elaborated_products.delete(response.data.deleted_elaborated_product)
+                            this.store().products.delete(response.data.deleted_product)
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)
