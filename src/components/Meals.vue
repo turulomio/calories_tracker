@@ -242,9 +242,6 @@
                 this.key=this.key+1
                 this.meals_crud_dialog=true
             },
-            on_icon_glutenfree(){
-                alert(this.$t("This meal is gluten free"))
-            },
             on_icon_salt_info(){
                 var salt=this.listobjects_sum(this.meals,"salt")
                 var salt_as_sodium=salt*396

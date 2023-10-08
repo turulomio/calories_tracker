@@ -118,6 +118,7 @@ export function empty_elaborated_products(){
         name: null,
         obsolete: false,
         products_in: [],
+        comment: "",
     }
 }
 export function empty_products_in(){

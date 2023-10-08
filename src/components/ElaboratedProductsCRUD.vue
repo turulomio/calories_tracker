@@ -6,7 +6,8 @@
                 <v-text-field :readonly="mode=='D'" v-model="newep.name" :label="$t('Set name')" :placeholder="$t('Set name')" :rules="RulesString(200)" counter="200"/>
                 <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().food_types)" v-model="newep.food_types" :label="$t('Select product food type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-text-field :readonly="mode=='D'" v-model="newep.final_amount" :label="$t('Set your final amount')" :placeholder="$t('Set your final amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
-                <v-checkbox v-model="newep.obsolete" :label="$t('Is obsolete?')"></v-checkbox>                
+                <v-checkbox v-model="newep.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
+                <v-textarea v-model="newep.comment" :label="$t('Set your comment')" />              
                 <v-card class="mt-4">
                     <v-data-table density="compact" :headers="products_in_headers" :items="newep.products_in" :sort-by="[{key:'name',order:'asc'}]"  class="elevation-1" :items-per-page="10000" :key="'T'+key" :height="250" fixed-header>
                         <template #item.products="{item}">
