@@ -30,7 +30,7 @@
                         </v-window-item>
                         <v-window-item key="tiptap">      
                             <v-card outlined>         
-                                <ElaborationTextTipTap :elaboration="new_elaboration" :key="key" @cruded="on_ElaborationText_cruded" />
+                                <ElaborationTextTipTap ref="tiptap" :elaboration="new_elaboration" :key="key" @cruded="on_ElaborationText_cruded" />
                             </v-card>
                         </v-window-item>
                         <v-window-item key="experiences" v-if="!elaboration.automatic">      
@@ -62,7 +62,7 @@
             <v-card class="pa-3">
                 <v-card outlined v-if="new_elaboration.elaborations_texts">         
                     <v-btn @click="print" >{{ $t("Print") }}</v-btn>
-                    <div id="nice" v-html="nice"></div>
+                    <div id="nice" v-html="nice()" :key="keynice"></div>
                 </v-card>
             </v-card>
         </v-dialog>
@@ -112,7 +112,7 @@
                                 name: this.$t("Nice recipe"),
                                 icon: "mdi-file-pdf-box",
                                 code: function(){
-                                    this.key=this.key+1 
+                                    this.keynice=this.keynice+1
                                     this.dialog_nice_recipe=true
                                 }.bind(this),
                             },
@@ -137,43 +137,16 @@
 
                 form_valid:false,
                 new_elaboration: null,
-                tab: 3,
+                tab: 2,
 
                 key:0,
+                keynice:0,
                 // FinalamountFromFullPot
                 dialog_finalamount:false,
                 // Nice recipe dialog
                 dialog_nice_recipe:false,
                 // NI dialog
                 dialog_ni:false,
-            }
-        },
-        computed:{
-            nice(){
-                var ingredients="<ul>"
-                this.new_elaboration.elaborations_products_in.forEach(o=>{
-                    ingredients=ingredients+ `<li>${o.fullname}</li>`
-                })
-                var ingredients=ingredients+"</ul>"
-                var containers="<ul>"
-                this.new_elaboration.elaborations_containers.forEach(o=>{
-                    containers=containers+ `<li>${o.name}</li>`
-                })
-                var containers=containers+"</ul>"
-
-
-
-
-                var s=`
-<h1 class="h1_print">${this.new_elaboration.fullname}</h1>
-<h2 class="h2_print">${this.$t("Ingredients")} @</h2>
-${ingredients}
-<h2 class="h2_print">${this.$t("Containers")} #</h2>
-${containers}   
-<h2 class="h2_print">${this.$t("Recipe")}</h2>
-${this.new_elaboration.elaborations_texts.text}
-`
-                return s
             }
         },
         methods: {
@@ -270,6 +243,7 @@ ${this.new_elaboration.elaborations_texts.text}
 
             async on_ElaborationText_cruded(){
                 await this.$emit("cruded")
+                this.keynice=this.keynice+1
             },
 
             async print () {
@@ -284,6 +258,32 @@ ${this.new_elaboration.elaborations_texts.text}
                     autoClose: true, // if false, the window will not close after printing
                     windowTitle: "", // override the window title
                 });
+            },
+
+            nice(){
+                console.log("Computing nice")
+                var ingredients="<ul>"
+                this.new_elaboration.elaborations_products_in.forEach(o=>{
+                    ingredients=ingredients+ `<li>${o.fullname}</li>`
+                })
+                var ingredients=ingredients+"</ul>"
+                var containers="<ul>"
+                this.new_elaboration.elaborations_containers.forEach(o=>{
+                    containers=containers+ `<li>${o.name}</li>`
+                })
+                var containers=containers+"</ul>"
+
+
+                var s=`
+<h1 class="h1_print">${this.new_elaboration.fullname}</h1>
+<h2 class="h2_print">${this.$t("Ingredients")} @</h2>
+${ingredients}
+<h2 class="h2_print">${this.$t("Containers")} #</h2>
+${containers}   
+<h2 class="h2_print">${this.$t("Recipe")}</h2>
+${this.$refs.tiptap.html_code}
+`
+                return s
             },
         },
         created(){
