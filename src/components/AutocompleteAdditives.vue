@@ -1,10 +1,10 @@
 <template>
-    <v-autocomplete :readonly="readonly" :items="new_additives" v-model="new_value" multiple :label="mylabel"  item-title="name" :return-object="returnObject" item-value="url" :rules="RulesSelection(true)">
+    <v-autocomplete :readonly="readonly" :items="new_additives" v-model="new_value" multiple :label="mylabel" item-title="fullname" :return-object="returnObject" item-value="url" :rules="RulesSelection(true)">
       <template v-slot:item="{ props, item }">
-            <v-list-item v-bind="props" title=""><div v-html="additives_html_fullname(item.raw)"></div></v-list-item>
+            <v-list-item v-bind="props"><div v-html="additives_html_fullname(item.raw)"></div></v-list-item>
         </template>         
         <template v-slot:selection="{ props, item }">
-            <v-list-item v-bind="props" title=""><div v-html="additives_html_fullname(item.raw)"></div></v-list-item>
+            <v-list-item v-bind="props"><div v-html="additives_html_fullname(item.raw)"></div></v-list-item>
         </template> 
     </v-autocomplete>
 </template>
