@@ -143,7 +143,6 @@
 
                 //DIALOG SHOPPING LIST
                 dialog_shopping_list:false,
-                options: this.empty_options(),
             }
         },
         methods:{
@@ -285,11 +284,6 @@
             },
 
             on_search_change(){
-                // this.search=new_val
-                // //Pressing enter
-                // this.multiSort=false
-                // this.sortBy=["last"]
-                // this.sortDesc=[true]
                  this.update_recipes()
             },
             update_recipes(){
@@ -378,17 +372,6 @@
             searchGoogle(item){
 
                 window.open(`https://www.google.com/search?q=${encodeURIComponent(item.name)}`)
-            },
-            empty_options(){
-                return {
-                    itemsPerPage: 10,
-                    multiSort: false,
-                    mustSort:true,
-                    page:1,
-                    sortBy: [{key:"last", order:"desc"}],
-                    groupBy: [],
-
-                }
             },
         },
         mounted(){
