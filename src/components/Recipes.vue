@@ -8,7 +8,7 @@
                 <v-text-field clearable :disabled="loading" class="mb-3"  v-model="search" prepend-icon="mdi-magnify" :label="$t('Add a string to filter table')" single-line hide-details :placeholder="$t('Add a string to filter table')" @keyup.enter="on_search_change()"></v-text-field>
             </v-row>
         </v-card>
-        <v-data-table-server ref="table" density="compact" :headers="recipes_headers" :items="(paginated_recipes)? paginated_recipes.results: []" class="elevation-1 cursorpointer" :items-length="(paginated_recipes)? paginated_recipes.count : 10" @update:items-per-page="on_update_items_per_page" @update:page="on_update_page" :options.sync="options" :loading="loading" item-value="content_url" @click:row="viewRecipe" :key="key+1" >
+        <v-data-table-server ref="table" density="compact" :headers="recipes_headers" :items="items" class="elevation-1 cursorpointer" :items-length="itemsLength" :search="search" v-model:items-per-page="itemsPerPage" v-model:page="page" v-model:sort-by="sortBy" :loading="loading" item-value="content_url" @click:row="viewRecipe" :key="key+1" >
             <template #item.photo="{item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px" @click.stop="toggleFullscreen(item)" /></template>
             <template #item.name="{item}"><div v-html="item.name"></div></template>      
             <template #item.last="{item}">{{localtime(item.last)}}</template>      
@@ -33,7 +33,7 @@
         </v-dialog>
 
         <!-- DIALOG RECIPES VIEW -->
-        <v-dialog v-model="dialog_recipes_view" width="100%"  @click:outside="update_recipes(options)">
+        <v-dialog v-model="dialog_recipes_view" width="100%"  @click:outside="update_recipes">
             <v-card class="pa-4">
                 <RecipesView  :recipe="recipe" :key="key"></RecipesView>
             </v-card>
@@ -82,10 +82,31 @@
             ShoppingList,
         },
         watch: {
+            itemsPerPage(){
+                this.update_recipes()
+
+            },
+            page(){
+                this.update_recipes()
+
+            },
+            sortBy(){
+                this.update_recipes()
+
+            },
         },
         data(){
             return {
-                paginated_recipes: null,
+                //Pagination
+                multiSort:true,
+                items:[],
+                totalPages:1,
+                itemsPerPage:10,
+                page:1,
+                sortBy:[{key:"last",order:"desc"}],
+                itemsLength:0,
+                
+                
                 recipes_headers: [
                     { title: this.$t('Photo'), sortable: false, key: 'photo', width:"5%"},    
                     { title: this.$t('Name'), sortable: true, key: 'name'},    
@@ -156,9 +177,9 @@
                                 icon: "mdi-account-group",
                                 code: function(){
                                     this.search=":GUESTS"
-                                    this.options.multiSort=false
-                                    this.options.sortBy=[{key:"last", order:"desc"}]
-                                    this.update_recipes(this.options)
+                                    this.multiSort=false
+                                    this.sortBy=[{key:"last", order:"desc"}]
+                                    this.update_recipes()
                                     this.key=this.key+1
                                 }.bind(this),
                             },
@@ -167,9 +188,9 @@
                                 icon: "mdi-clock-outline",
                                 code: function(){
                                     this.search=":SOON"
-                                    this.options.multiSort=false
-                                    this.options.sortBy=[{key:"last", order:"desc"}]
-                                    this.update_recipes(this.options)
+                                    this.multiSort=false
+                                    this.sortBy=[{key:"last", order:"desc"}]
+                                    this.update_recipes()
                                     this.key=this.key+1
                                 }.bind(this),
                             },
@@ -178,9 +199,9 @@
                                 icon: "mdi-star-outline",
                                 code: function(){
                                     this.search=":VALORATION"
-                                    this.options.multiSort=true
-                                    this.options.sortBy=[{key:"valoration", order:"desc"},{key:"last", order:"desc"}]
-                                    this.update_recipes(this.options)
+                                    this.multiSort=true
+                                    this.sortBy=[{key:"valoration", order:"desc"},{key:"last", order:"desc"}]
+                                    this.update_recipes()
                                     this.key=this.key+1
                                 }.bind(this),
                             },
@@ -189,9 +210,9 @@
                                 icon: "mdi-note-edit-outline",
                                 code: function(){
                                     this.search=":LAST"
-                                    this.options.multiSort=false
-                                    this.options.sortBy=[{key:"last", order:"desc"}]
-                                    this.update_recipes(this.options)
+                                    this.multiSort=false
+                                    this.sortBy=[{key:"last", order:"desc"}]
+                                    this.update_recipes()
                                     this.key=this.key+1
                                 }.bind(this),
                             },
@@ -200,9 +221,9 @@
                                 icon: "mdi-cog-outline",
                                 code: function(){
                                     this.search=":WITH_ELABORATIONS"
-                                    this.options.multiSort=false
-                                    this.options.sortBy=[{key:"last", order:"desc"}]
-                                    this.update_recipes(this.options)
+                                    this.multiSort=false
+                                    this.sortBy=[{key:"last", order:"desc"}]
+                                    this.update_recipes()
                                     this.key=this.key+1
                                 }.bind(this),
                             },
@@ -211,9 +232,9 @@
                                 icon: "mdi-image-off-outline",
                                 code: function(){
                                     this.search=":WITHOUT_MAINPHOTO"
-                                    this.options.multiSort=false
-                                    this.options.sortBy=[{key:"last", order:"desc"}]
-                                    this.update_recipes(this.options)
+                                    this.multiSort=false
+                                    this.sortBy=[{key:"last", order:"desc"}]
+                                    this.update_recipes()
                                     this.key=this.key+1
                                 }.bind(this),
                             },
@@ -237,10 +258,10 @@
             },
             on_RecipesCRUD_cruded(){
                 this.dialog_recipes_crud=false
-                this.update_recipes(this.options)
+                this.update_recipes()
             },
             on_RecipesView_cruded(){
-                this.update_recipes(this.options)
+                this.update_recipes()
             },
             editRecipe(item){
                 this.recipe=item
@@ -266,26 +287,27 @@
             on_search_change(){
                 // this.search=new_val
                 // //Pressing enter
-                // this.options.multiSort=false
-                // this.options.sortBy=["last"]
-                // this.options.sortDesc=[true]
-                 this.update_recipes(this.options)
+                // this.multiSort=false
+                // this.sortBy=["last"]
+                // this.sortDesc=[true]
+                 this.update_recipes()
             },
-            on_update_items_per_page(new_val){
-                this.options.itemsPerPage=new_val
-                this.update_recipes(this.options)
-            },
-            on_update_page(new_val){
-                this.options.page=new_val
-                this.update_recipes(this.options)
-            },
-            update_recipes(options){  
+            update_recipes(){
                 this.loading=true
-                let headers={...this.myheaders(),params: options}
-                axios.get(`${this.store().apiroot}/api/recipes/?search=${this.search}`, headers)
+                let headers={...this.myheaders(),params: {
+                        search:this.search,
+                        page:this.page,
+                        itemsPerPage:this.itemsPerPage,
+                        sortBy:this.sortBy,
+                        multiSort:this.multiSort,
+                }}
+                axios.get(`${this.store().apiroot}/api/recipes/`, headers)
                 .then((response) => {
-                    this.paginated_recipes=response.data
-                    this.paginated_recipes.results.forEach(r=>{
+                    console.log(response.data)
+                    this.items=response.data.results
+                    this.itemsLength=response.data.count
+                    this.totalPages=response.data.total_pages
+                    this.items.forEach(r=>{
                         r.thumbnail=imgNoImage
                         r.content_url=null //Needed to select only one rl
                     })
@@ -297,7 +319,7 @@
             },
             update_images(){
                 var promises=[]
-                this.paginated_recipes.results.forEach(recipe=>{
+                this.items.forEach(recipe=>{
                     recipe.recipes_links.forEach(rl=>{
                         if (rl.files && this.id_from_hyperlinked_url(rl.type)==7){//MAIN IMAGE
                             promises.push(axios.get(`${rl.files.url_thumbnail}`, this.myheaders())                    
@@ -350,7 +372,7 @@
             },
             on_RecipesLinksCRUD_cruded(){
                 this.dialog_main_photo=false
-                this.update_recipes(this.options)
+                this.update_recipes()
 
             },
             searchGoogle(item){
@@ -370,7 +392,7 @@
             },
         },
         mounted(){
-            this.update_recipes(this.options)
+            this.update_recipes()
         }
     }
 </script>
