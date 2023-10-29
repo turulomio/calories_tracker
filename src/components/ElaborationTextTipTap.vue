@@ -68,6 +68,10 @@
             elaboration: { 
                 required: true
             },
+            readonly: {
+              Type: Boolean,
+              default:false,
+            }
         },
         data(){ 
             return{
@@ -327,6 +331,7 @@
 
 
             this.editor = new Editor({
+                editable: !this.readonly,
                 content: this.text,
                 extensions: [
                     StarterKit, 

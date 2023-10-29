@@ -30,7 +30,7 @@
                         </v-window-item>
                         <v-window-item key="tiptap">      
                             <v-card outlined>         
-                                <ElaborationTextTipTap ref="tiptap" :elaboration="new_elaboration" :key="key" @cruded="on_ElaborationText_cruded" />
+                                <ElaborationTextTipTap ref="tiptap" :readonly="elaboration.automatic" :elaboration="new_elaboration" :key="key" @cruded="on_ElaborationText_cruded" />
                             </v-card>
                         </v-window-item>
                         <v-window-item key="experiences" v-if="!elaboration.automatic">      

@@ -5,7 +5,7 @@
             <v-form ref="form" v-model="form_valid" lazy-validation>          
                 <v-text-field :readonly="(mode=='D' || new_elaboration.automatic )" v-model.number="new_elaboration.diners" :label="$t('Set the number of diners')" :placeholder="$t('Set the number of diners')" :rules="RulesInteger(5,true)" counter="200"/>
                 <v-checkbox readonly v-model="new_elaboration.automatic" :label="$t('Is an automatic elaboration?')"></v-checkbox>
-                <v-textarea :readonly="mode=='D'" v-model="new_elaboration.automatic_adaptation_step" :label="$t('Add your comment for this automatic elaboration')" :placeholder="$t('Add your comment for this automatic elaboration')" :rules="RulesString(2000,false)" counter="2000"/>
+                <v-textarea :readonly="mode=='D'" v-model="new_elaboration.automatic_adaptation_step" :label="$t('Add your comment for all automatic elaborations')" :placeholder="$t('Add your comment for all automatic elaborations')" :rules="RulesString(2000,false)" counter="2000"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>

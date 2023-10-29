@@ -4,9 +4,9 @@
             <template #item.automatic="{item}"><v-icon small v-if="item.automatic" >mdi-check-outline</v-icon></template>
 
             <template #item.actions="{item}">
-                <v-icon small class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" :color="(item.automatic) ? 'black': 'red'" @click.stop="deleteItem(item)">mdi-delete</v-icon>      
+                <v-icon small v-if="!item.automatic" class="mr-2" @click.stop="editItem(item)">mdi-pencil</v-icon>     
                 <v-icon v-if="!item.automatic" small class="mr-2" @click.stop="createAutomaticElaboration(item)">mdi-file-cog-outline</v-icon>
+                <v-icon small class="mr-2" :color="(item.automatic) ? 'black': 'red'" @click.stop="deleteItem(item)">mdi-delete</v-icon> 
                 
             </template>
             <template #bottom></template>
@@ -30,6 +30,7 @@
     import {empty_elaborations} from '../empty_objects.js'
     import ElaborationCRUD from './ElaborationCRUD.vue'
     import ElaborationView from './ElaborationView.vue'
+import { isNumber } from '@tiptap/vue-3'
     export default {
         components:{
             ElaborationCRUD,
@@ -50,7 +51,7 @@
                     { title: this.$t('Diners'), key: 'diners', sortable: true, width:"7%"},
                     { title: this.$t('Automatic'), key: 'automatic', sortable: false, width:"10%"},
                     { title: this.$t('Automatic adaptation text'), key: 'automatic_adaptation_step', sortable: false},
-                    { title: this.$t('Actions'), key: 'actions', sortable: false, width: "7%"},
+                    { title: this.$t('Actions'), key: 'actions', sortable: false, width: "10%"},
                 ],
                 items:[],
                 key: 0,
@@ -97,16 +98,17 @@
                 await this.$emit("cruded")
             },
             createAutomaticElaboration(item){
-
                 var diners=prompt(this.$t("You are going to generate an automatic elaboration. How many diners do you want?"), item.diners*2)
-                axios.post(`${item.url}create_automatic_elaboration/`, {diners: diners},  this.myheaders())
-                .then((response) => {
-                    console.log(response.data)
-                    this.$emit("cruded")
-                }, (error) => {
-                    this.parseResponseError(error)
-                })
-            }
+                if (diners){
+                    axios.post(`${item.url}create_automatic_elaboration/`, {diners: diners, automatic_adaptation_step: item.automatic_adaptation_step},  this.myheaders())
+                    .then((response) => {
+                        console.log(response.data)
+                        this.$emit("cruded")
+                    }, (error) => {
+                        this.parseResponseError(error)
+                    })
+                }
+            },
         },
     }
 </script>
