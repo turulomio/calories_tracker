@@ -98,7 +98,12 @@ import { isNumber } from '@tiptap/vue-3'
                 await this.$emit("cruded")
             },
             createAutomaticElaboration(item){
-                var diners=prompt(this.$t("You are going to generate an automatic elaboration. How many diners do you want?"), item.diners*2)
+                var diners=prompt(
+                    this.$t("Automatic elaborations are generated with the information added in the parent elaboration. You can create and delete them as many times you wish without losing information.")+ "\n\n"+    
+                    this.$t("You can add your experiences in the parent elaboration. ") +"\n\n" +
+                    this.$t("If you need to add a comment for automatic elaborations you can write them in the main elaboration") +"\n\n"+
+                   this.$t("You are going to generate an automatic elaboration. How many diners do you want?"), item.diners*2)
+
                 if (diners){
                     axios.post(`${item.url}create_automatic_elaboration/`, {diners: diners, automatic_adaptation_step: item.automatic_adaptation_step},  this.myheaders())
                     .then((response) => {

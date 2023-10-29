@@ -1,7 +1,7 @@
 <template>
     <div>    
         <h1>{{ new_elaboration.fullname }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items()" :context="this"></MyMenuInline>
             <br>
             <v-btn class="" :color="(new_elaboration.final_amount)? '': 'primary'" :disabled="elaboration.automatic" @click="setFinalAmount()" >{{ (new_elaboration.final_amount==null) ? $t("Final amount wasn't set") : $t("Final amount: [0] g").format(new_elaboration.final_amount)}}</v-btn>
 
@@ -104,7 +104,25 @@
         },
         data(){ 
             return{
-                menuinline_items: [
+                form_valid:false,
+                new_elaboration: null,
+                tab: 2,
+
+                key:0,
+                keynice:0,
+                // FinalamountFromFullPot
+                dialog_finalamount:false,
+                // Nice recipe dialog
+                dialog_nice_recipe:false,
+                // NI dialog
+                dialog_ni:false,
+            }
+        },
+        methods: {
+            fraction,
+            empty_elaborations_products_in,
+            menuinline_items(){
+                var r=[
                     {
                         subheader: this.$t("Recipe options"),
                         children: [
@@ -132,26 +150,13 @@
                             },
                         ]
                     },
-                ],
+                ]
 
+                if (this.elaboration.automatic) r[0].children.pop()
+                return r
 
-                form_valid:false,
-                new_elaboration: null,
-                tab: 2,
+            },
 
-                key:0,
-                keynice:0,
-                // FinalamountFromFullPot
-                dialog_finalamount:false,
-                // Nice recipe dialog
-                dialog_nice_recipe:false,
-                // NI dialog
-                dialog_ni:false,
-            }
-        },
-        methods: {
-            fraction,
-            empty_elaborations_products_in,
             async addIngredient(){
                 if (this.tab!=0){
                     this.tab=0
