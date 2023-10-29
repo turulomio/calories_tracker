@@ -4,11 +4,9 @@
             <MyMenuInline :items="menuinline_items()" :context="this"></MyMenuInline>
         </h1>
         <v-card width="50%" class="mx-auto my-5" flat >
-            <v-row class="mx-5 mb-5">
-                <v-text-field clearable :disabled="loading" class="mb-3"  v-model="search" prepend-icon="mdi-magnify" :label="$t('Add a string to filter table')" single-line hide-details :placeholder="$t('Add a string to filter table')" @keyup.enter="on_search_change()"></v-text-field>
-            </v-row>
+                <v-text-field clearable density="default" :disabled="loading" class="mb-3"  v-model="search" prepend-icon="mdi-magnify" :label="$t('Add a string to filter table')" single-line hide-details :placeholder="$t('Add a string to filter table')" @keyup.enter="on_search_change()" />
         </v-card>
-        <v-data-table-server ref="table" density="compact" :headers="recipes_headers" :items="items" class="elevation-1 cursorpointer" :items-length="itemsLength" :search="search" v-model:items-per-page="itemsPerPage" v-model:page="page" v-model:sort-by="sortBy" :loading="loading" item-value="content_url" @click:row="viewRecipe" :key="key+1" >
+        <v-data-table-server ref="table" :headers="recipes_headers" :items="items" class="elevation-1 cursorpointer" :items-length="itemsLength" :search="search" v-model:items-per-page="itemsPerPage" v-model:page="page" v-model:sort-by="sortBy" :loading="loading" item-value="content_url" @click:row="viewRecipe" :key="key+1" >
             <template #item.photo="{item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px" @click.stop="toggleFullscreen(item)" /></template>
             <template #item.name="{item}"><div v-html="item.name"></div></template>      
             <template #item.last="{item}">{{localtime(item.last)}}</template>      
@@ -84,15 +82,12 @@
         watch: {
             itemsPerPage(){
                 this.update_recipes()
-
             },
             page(){
                 this.update_recipes()
-
             },
             sortBy(){
                 this.update_recipes()
-
             },
         },
         data(){

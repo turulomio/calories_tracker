@@ -18,9 +18,9 @@
     "@tiptap/starter-kit": "^2.1.12",
     "@tiptap/vue-3": "^2.1.12",
     "@vuepic/vue-datepicker": "^7.2.0",
-    "axios": "^1.5.1",
+    "axios": "^1.6.0",
     "echarts": "^5.4.3",
-    "flag-icons": "^6.11.1",
+    "flag-icons": "^6.11.2",
     "fraction.js": "^4.3.7",
     "moment-timezone": "^0.5.43",
     "npm-check-updates": "^16.14.6",
@@ -30,7 +30,7 @@
     "vue": "^3.3.7",
     "vue-echarts": "^6.6.1",
     "vue-html-to-paper": "^2.0.3",
-    "vue-i18n": "^9.5.0",
+    "vue-i18n": "^9.6.1",
     "vue-i18n-extract": "^2.0.7",
     "vue-router": "^4.2.5",
     "vuetify": "^3.3.23",
@@ -39,7 +39,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.4.0",
     "eslint": "^8.52.0",
-    "eslint-plugin-vue": "^9.18.0",
+    "eslint-plugin-vue": "^9.18.1",
     "vite": "^4.5.0",
     "vite-plugin-vuetify": "^1.0.2"
   }
