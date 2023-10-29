@@ -9,8 +9,8 @@
 
                 <v-row class="pa-3">     
                     <v-text-field :readonly="mode=='D'" v-model.number="new_product_in.amount" :label="$t('Set product amount')" :placeholder="$t('Set product amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
-                    <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-title="name" item-value="amount" :rules="RulesSelection(false)"  @input="on_product_format_input()"></v-autocomplete>
-                    <Multiplier v-model="multiplier" :readonly="mode=='D'" @input="on_multiplier_input()"></Multiplier>
+                    <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-title="name" item-value="amount" :rules="RulesSelection(false)"></v-autocomplete>
+                    <Multiplier v-model="multiplier" :readonly="mode=='D'"></Multiplier>
                 </v-row>                    
                 <v-checkbox v-model="new_product_in.ni" :label="$t('Used for nutritional information calcs?')"></v-checkbox>
                 <v-text-field :readonly="mode=='D'" v-model.number="new_product_in.automatic_percentage" :label="$t('Set automatic transformation percentage')" :placeholder="$t('Set automatic transformation percentage')" :rules="RulesInteger(3,true,3)" counter="3"/>
@@ -51,6 +51,25 @@
                 product_format:null,
                 multiplier:1,
             }
+        },
+        watch:{
+            "new_product_in.products": function(){
+                if (this.new_product_in.products==null) return
+                let product=this.store().products.get(this.new_product_in.products)
+                this.products_formats=[]
+                product.formats.forEach(element => {
+                    this.products_formats.push({name: `${this.store().formats.get(element.formats).name} (${element.amount} g)`, amount: element.amount})
+                    
+                });
+                console.log(this.products_formats)
+
+            },
+            product_format(){
+                this.calculate_format_multiplier()
+            },
+            multiplier(){
+                this.calculate_format_multiplier()
+            },
         },
         methods: {
             button(){
@@ -96,20 +115,7 @@
                     }
                 }
             },
-
-            on_products_input(){
-                if (this.new_product_in.products==null) return
-                let product=this.store().products.get(this.new_product_in.products)
-                this.products_formats=[]
-                product.formats.forEach(element => {
-                    this.products_formats.push({name: `${this.store().formats.get(element.formats).name} (${element.amount} g)`, amount: element.amount})
-                    
-                });
-            },
-            on_product_format_input(){
-                this.on_multiplier_input()
-            },
-            on_multiplier_input(){
+            calculate_format_multiplier(){
                 if (this.product_format) this.new_product_in.amount=this.my_round(this.multiplier*this.product_format,3)
             }
         },
