@@ -365,6 +365,9 @@
   .mention_containers{
     color: rgb(15, 15, 139);
     background-color: rgb(165, 197, 228);
+    border-radius: 0.3rem;
+    padding: 0.1rem 0.3rem;
+
   }
 
   ol > li {

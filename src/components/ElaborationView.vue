@@ -59,11 +59,11 @@
         </v-dialog>
         <!--  NICE RECIPE DIALOG -->
         <v-dialog v-model="dialog_nice_recipe" width="70%">
-            <v-card class="pa-3">
-                <v-card outlined v-if="new_elaboration.elaborations_texts">         
-                    <v-btn @click="print" >{{ $t("Print") }}</v-btn>
-                    <div id="nice" v-html="nice()" :key="keynice"></div>
+            <v-card class="pa-3">       
+                <v-card outlined v-if="new_elaboration.elaborations_texts" style="overflow: auto" >  
+                    <div class="ma-3" id="nice" v-html="nice()" :key="keynice"></div>
                 </v-card>
+                <v-btn color="primary" @click="print" >{{ $t("Print") }}</v-btn>    
             </v-card>
         </v-dialog>
         <!-- NI Dialog -->
@@ -252,6 +252,7 @@
             },
 
             async print () {
+                this.dialog_nice_recipe=false
                 await this.$htmlToPaper("nice", {
                     name: '_blank',
                     specs: [
@@ -264,29 +265,72 @@
                     windowTitle: "", // override the window title
                 });
             },
-
             nice(){
-                console.log("Computing nice")
-                var ingredients="<ul>"
+                var ingredients="<p><div class='column_wrapper'><ul>"
                 this.new_elaboration.elaborations_products_in.forEach(o=>{
                     ingredients=ingredients+ `<li>${o.fullname}</li>`
                 })
-                var ingredients=ingredients+"</ul>"
-                var containers="<ul>"
+                var ingredients=ingredients+"</ul></div>"
+                var containers="<div class='column_wrapper'><ul>"
                 this.new_elaboration.elaborations_containers.forEach(o=>{
                     containers=containers+ `<li>${o.name}</li>`
                 })
-                var containers=containers+"</ul>"
+                var containers=containers+"</ul></div>"
 
-
+                var automatic=""
+                if (this.new_elaboration.automatic && this.new_elaboration.automatic_adaptation_step!=""){
+                    automatic=this.$t("<p class='p_print'>This is an automatic recipe with this comment: '[0]'</p>").format(this.new_elaboration.automatic_adaptation_step)
+                }
                 var s=`
 <h1 class="h1_print">${this.new_elaboration.fullname}</h1>
+${automatic}
 <h2 class="h2_print">${this.$t("Ingredients")} @</h2>
 ${ingredients}
 <h2 class="h2_print">${this.$t("Containers")} #</h2>
 ${containers}   
 <h2 class="h2_print">${this.$t("Recipe")}</h2>
-${this.$refs.tiptap.html_code}
+${this.$refs.tiptap.editor.getHTML()}
+<style>
+.h1_print{
+    text-align: center;
+    font-size: 14pt;
+}
+.h2_print{
+    text-align: center;
+    font-size: 13pt;
+}
+
+.column_wrapper {
+    column-count: 2;
+    font-size: 11pt;
+}
+.mention_containers{
+    color: rgb(15, 15, 139);
+    background-color: rgb(165, 197, 228);
+  }
+
+p {
+    margin: 0 !important;
+    padding: 2px !important;
+}
+
+ol > li {
+    margin-left: 20px;
+    font-size: 10pt;
+  }
+  
+ul > li {
+    margin-left: 20px;
+    font-size: 10pt;
+  }
+
+  .mention_ingredients {
+    color: #3f310b;
+    background-color: #f7dbbc;
+    border-radius: 0.3rem;
+    padding: 0.1rem 0.3rem;
+  }
+</style>
 `
                 return s
             },
@@ -296,11 +340,4 @@ ${this.$refs.tiptap.html_code}
         }
     }
 </script>
-<style>
-.h1_print{
-    text-align: center;
-}
-.h2_print{
-    text-align: justify;
-}
-</style>
+
