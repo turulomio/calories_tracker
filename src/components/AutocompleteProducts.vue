@@ -1,5 +1,5 @@
 <template>
-    <v-autocomplete :readonly="readonly" :items="new_products" v-model="new_value" :label="mylabel"  item-title="fullname" :return-object="returnObject" item-value="url">
+    <v-autocomplete :readonly="readonly" :items="new_products" v-model="new_value" :label="mylabel"  item-title="fullname" :return-object="returnObject" :item-value="(multiple)? 'id': 'url'" :multiple="multiple">
       <template v-slot:item="{ props, item }">
             <v-list-item v-bind="props" title=""><div v-html="products_html_fullname(item.raw,2)"></div></v-list-item>
         </template>         
@@ -31,7 +31,13 @@ export default {
             type: Array,
             required:false,
             default: new Array(),
-        }
+        },
+
+        multiple: { //Used to select several products, returns a list of ids
+            type: Boolean,
+            required: false,
+            default: false
+        },
     },
     emits: ['update:modelValue'],
     computed:{
@@ -55,22 +61,6 @@ export default {
         },
     },
     methods:{
-        // on_custom_filter(a,b,c){
-        //     if(this.new_value.length<1) {
-        //         return
-        //     } 
-        //     console.log(a,b,c)
-        // },
-        // on_update_modelValue(){
-        //     console.log("AOHOARA")
-        //     if(this.new_value.length<1) {
-        //         this.products_filtered=[]
-        //     } else {
-        //         this.products_filtered=this.new_products.filter(o => o.includes(this.new_value))
-        //     }
-        //     console.log(this.products_filtered.length)
-        //     // this.$emit("update:modelValue", this.new_value)
-        // },
     },
     created(){
         this.new_value=this.modelValue

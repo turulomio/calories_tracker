@@ -59,6 +59,13 @@
             </v-card>
         </v-dialog>
 
+        <!-- DIALOG SEARCH BY INGREDIENTS -->
+        <v-dialog v-model="dialog_recipes_by_ingredients" width="60%">
+            <v-card class="pa-4">
+                <RecipesByIngredients :key="key" @selected="on_RecipesByIngredients_selected"/>
+            </v-card>
+        </v-dialog>
+
     </div>
 </template>
 
@@ -71,6 +78,7 @@
     import RecipesView from './RecipesView.vue'
     import RecipesLinksCRUD from './RecipesLinksCRUD.vue'
     import ShoppingList from './ShoppingList.vue'
+    import RecipesByIngredients from './RecipesByIngredients.vue'
     export default {
         components: {
             MyMenuInline,
@@ -78,6 +86,7 @@
             RecipesView,
             RecipesLinksCRUD,
             ShoppingList,
+            RecipesByIngredients
         },
         watch: {
             itemsPerPage(){
@@ -138,6 +147,9 @@
 
                 //DIALOG SHOPPING LIST
                 dialog_shopping_list:false,
+
+                //DIALOG RECIPES BY INGREDIENTS
+                dialog_recipes_by_ingredients: false,
             }
         },
         methods:{
@@ -242,6 +254,14 @@
                                 icon: "mdi-cart",
                                 code: function(){
                                     this.dialog_shopping_list=true
+                                    this.key=this.key+1
+                                }.bind(this),
+                            },
+                            {
+                                name: this.$t("Search recipes by ingredients"),
+                                icon: "mdi-magnify",
+                                code: function(){
+                                    this.dialog_recipes_by_ingredients=true
                                     this.key=this.key+1
                                 }.bind(this),
                             },
@@ -363,6 +383,11 @@
                 this.dialog_main_photo=false
                 this.update_recipes()
 
+            },
+            on_RecipesByIngredients_selected(s){
+                this.search=s
+                this.dialog_recipes_by_ingredients=false
+                this.update_recipes()
             },
             searchGoogle(item){
 
