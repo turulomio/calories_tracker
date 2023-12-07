@@ -6,8 +6,7 @@
             </div>
 
         <v-data-table density="compact" :headers="ranking_headers" :items="ranking" :sort-by="[{key:'position',order:'asc'}]"  class="elevation-1" :items-per-page="10000" :loading="loading" :key="key" fixed-header height="70vh">
-            <template #item.position="{item}">{{ item.index + 1 }}</template>
-            <template #item.product="{item}"><div v-html="products_html_fullname(item.product,4)"></div></template>            
+            <template #item.products="{item}"><div v-html="products_html_fullname(item.products,4)"></div></template>            
             <template #item.amount="{item}">{{ my_round(item.amount,0)}}</template>
             <template #bottom></template>
         </v-data-table>
@@ -30,8 +29,8 @@
                 from_date:null,
 
                 ranking_headers: [
-                    { title: this.$t('Position'), sortable: false, key: 'position', width:"8%",align:"right"},
-                    { title: this.$t('Product'), sortable: false, key: 'product'},
+                    { title: this.$t('Position'), sortable: false, key: 'ranking', width:"8%",align:"right"},
+                    { title: this.$t('Product'), sortable: false, key: 'products'},
                     { title: this.$t('Amount'), sortable: false, key: 'amount',width:"8%",align:"right"},
                 ],
             }
@@ -58,7 +57,6 @@
             let d = new Date()
             d.setDate(d.getDate()-365)
             this.from_date=d.toISOString().substring(0, 10)
-            this.update()
         }
     }
 </script>
