@@ -342,13 +342,6 @@
                         }
                     })
                 })
-
-
-                axios.all(promises)
-                .then(() => {
-                    this.key=this.key+1
-
-                });
             },
             toggleFullscreen(item){
                 if (item.content_url==null) return
@@ -390,7 +383,6 @@
                 this.update_recipes()
             },
             searchGoogle(item){
-
                 window.open(`https://www.google.com/search?q=${encodeURIComponent(item.name)}`)
             },
         },
