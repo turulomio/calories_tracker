@@ -308,6 +308,11 @@ ${this.$refs.tiptap.editor.getHTML()}
         <li>${this.$t("Sugars")}: ${this.elaboration_nutritional_information( this.new_elaboration, "sugars")} g</li>
         <li>${this.$t("Saturated fat")}: ${this.elaboration_nutritional_information( this.new_elaboration, "saturated_fat")} g</li>
         <li>${this.$t("Cholesterol")}: ${this.elaboration_nutritional_information( this.new_elaboration, "cholesterol")} g</li>
+        <li>${this.$t("Sodium")}: ${this.elaboration_nutritional_information( this.new_elaboration, "sodium")} g</li>
+        <li>${this.$t("Potassium")}: ${this.elaboration_nutritional_information( this.new_elaboration, "potassium")} g</li>
+        <li>${this.$t("Magnessium")}: ${this.elaboration_nutritional_information( this.new_elaboration, "magnesium")} g</li>
+        <li>${this.$t("Phosphor")}: ${this.elaboration_nutritional_information( this.new_elaboration, "phosphor")} g</li>
+        <li>${this.$t("Calcium")}: ${this.elaboration_nutritional_information( this.new_elaboration, "calcium")} g</li>
     </ul
 </div>
 <style>
