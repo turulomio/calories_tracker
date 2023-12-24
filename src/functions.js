@@ -341,3 +341,22 @@ export function percentage_string(num, decimals=2){
 export function percentage_html(num, decimals=2){
     return percentage_generic_html(num,localStorage.locale,decimals )
 }
+
+/**
+ * Returns a rounded float with the nutritional information of a elaboration and an element in 100 grams of elaboration
+ * For example elaboration_nutritional_information(elaboration, "calories")
+ * 
+ * Elaboration is an object  with elaborations_products_in array that have [products,ni,amount]
+ */
+export function elaboration_nutritional_information(elaboration,item_name, round=2){
+    var sum_items=0
+    this.elaboration.elaborations_products_in.forEach(o => {
+        let product=this.store().products.get(o.products)
+        if (o.ni){
+            sum_items+=product[item_name]*o.amount/product["amount"]
+        }
+    })
+    var final_amount=this.new_elaboration.final_amount
+
+    return this.my_round(100*sum_items/final_amount, round)
+}
