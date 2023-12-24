@@ -86,6 +86,7 @@
     import TableElaborationsIngredientsNI from './TableElaborationsIngredientsNI.vue'
     import ElaborationsFinalAmount from './ElaborationsFinalAmount.vue'
     import ElaborationTextTipTap from './ElaborationTextTipTap.vue'
+    import {elaboration_nutritional_information} from '../functions.js'
     export default {
         components: {
             ElaborationsFinalAmount,
@@ -121,6 +122,7 @@
         methods: {
             fraction,
             empty_elaborations_products_in,
+            elaboration_nutritional_information,
             menuinline_items(){
                 var r=[
                     {
@@ -265,22 +267,25 @@
                     windowTitle: "", // override the window title
                 });
             },
+
+
             nice(){
                 var ingredients="<p><div class='column_wrapper'><ul>"
                 this.new_elaboration.elaborations_products_in.forEach(o=>{
                     ingredients=ingredients+ `<li>${o.fullname}</li>`
                 })
-                var ingredients=ingredients+"</ul></div>"
+                ingredients=ingredients+"</ul></div>"
                 var containers="<div class='column_wrapper'><ul>"
                 this.new_elaboration.elaborations_containers.forEach(o=>{
                     containers=containers+ `<li>${o.name}</li>`
                 })
-                var containers=containers+"</ul></div>"
+                containers=containers+"</ul></div>"
 
                 var automatic=""
                 if (this.new_elaboration.automatic && this.new_elaboration.automatic_adaptation_step!=""){
                     automatic=this.$t("<p class='p_print'>This is an automatic recipe with this comment: '[0]'</p>").format(this.new_elaboration.automatic_adaptation_step)
                 }
+
                 var s=`
 <h1 class="h1_print">${this.new_elaboration.fullname}</h1>
 ${automatic}
@@ -290,6 +295,21 @@ ${ingredients}
 ${containers}   
 <h2 class="h2_print">${this.$t("Recipe")}</h2>
 ${this.$refs.tiptap.editor.getHTML()}
+<h2 class="h2_print">${this.$t("Nutritional information for each 100 g")}</h2>
+<div class="column_wrapper">
+    <ul>
+        <li>${this.$t("Recipe total amount")}: ${this.my_round(this.new_elaboration.final_amount,0)} g </li>
+        <li>${this.$t("Calories")}: ${this.elaboration_nutritional_information( this.new_elaboration, "calories")} kcal</li>
+        <li>${this.$t("Fat")}: ${this.elaboration_nutritional_information( this.new_elaboration, "fat")} g</li>
+        <li>${this.$t("Protein")}: ${this.elaboration_nutritional_information( this.new_elaboration, "protein")} g</li>
+        <li>${this.$t("Carbohydrates")}: ${this.elaboration_nutritional_information( this.new_elaboration, "carbohydrate")} g</li>
+        <li>${this.$t("Salt")}: ${this.elaboration_nutritional_information( this.new_elaboration, "salt")} g</li>
+        <li>${this.$t("Fiber")}: ${this.elaboration_nutritional_information( this.new_elaboration, "fiber")} g</li>
+        <li>${this.$t("Sugars")}: ${this.elaboration_nutritional_information( this.new_elaboration, "sugars")} g</li>
+        <li>${this.$t("Saturated fat")}: ${this.elaboration_nutritional_information( this.new_elaboration, "saturated_fat")} g</li>
+        <li>${this.$t("Cholesterol")}: ${this.elaboration_nutritional_information( this.new_elaboration, "cholesterol")} g</li>
+    </ul
+</div>
 <style>
 .h1_print{
     text-align: center;
