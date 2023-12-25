@@ -45,8 +45,11 @@ export class NutritionalElement {
       // console.log("THIS",this)
       // console.log(VueI18n)
       // console.log(VueI18n.useI18n().$t("Amount"))
-      if (["calories","fat"].includes(this.attribute)){
+      if (["calories",].includes(this.attribute)){
         unit="kcal"
+        round=0
+      } else if (["magnessium","phosphor","potassium","ferrum","calcium","sodium"].includes(this.attribute)) {
+        unit="mg"
         round=0
       } else {
         unit="g"
