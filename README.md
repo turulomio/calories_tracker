@@ -35,7 +35,7 @@ Edit settings.py if needed and run backend
 ```bash
 python manage.py migrate
 python manage.py createsuperuser
-python manage.py loaddata_catalogs
+python manage.py loaddata calories_tracker/fixtures/all.json
 python manage.py runserver
 ```
 

@@ -86,7 +86,8 @@
     import TableElaborationsIngredientsNI from './TableElaborationsIngredientsNI.vue'
     import ElaborationsFinalAmount from './ElaborationsFinalAmount.vue'
     import ElaborationTextTipTap from './ElaborationTextTipTap.vue'
-    import {elaboration_nutritional_information} from '../functions.js'
+    import {elaboration_nutritional_information_string} from '../functions.js'
+    import { NutritionalElement } from '@/types'
     export default {
         components: {
             ElaborationsFinalAmount,
@@ -122,7 +123,7 @@
         methods: {
             fraction,
             empty_elaborations_products_in,
-            elaboration_nutritional_information,
+            elaboration_nutritional_information_string,
             menuinline_items(){
                 var r=[
                     {
@@ -298,21 +299,21 @@ ${this.$refs.tiptap.editor.getHTML()}
 <h2 class="h2_print">${this.$t("Nutritional information for each 100 g")}</h2>
 <div class="column_wrapper">
     <ul>
-        <li>${this.$t("Recipe total amount")}: ${this.my_round(this.new_elaboration.final_amount,0)} g </li>
-        <li>${this.$t("Calories")}: ${this.elaboration_nutritional_information( this.new_elaboration, "calories")} kcal</li>
-        <li>${this.$t("Fat")}: ${this.elaboration_nutritional_information( this.new_elaboration, "fat")} g</li>
-        <li>${this.$t("Protein")}: ${this.elaboration_nutritional_information( this.new_elaboration, "protein")} g</li>
-        <li>${this.$t("Carbohydrates")}: ${this.elaboration_nutritional_information( this.new_elaboration, "carbohydrate")} g</li>
-        <li>${this.$t("Salt")}: ${this.elaboration_nutritional_information( this.new_elaboration, "salt")} g</li>
-        <li>${this.$t("Fiber")}: ${this.elaboration_nutritional_information( this.new_elaboration, "fiber")} g</li>
-        <li>${this.$t("Sugars")}: ${this.elaboration_nutritional_information( this.new_elaboration, "sugars")} g</li>
-        <li>${this.$t("Saturated fat")}: ${this.elaboration_nutritional_information( this.new_elaboration, "saturated_fat")} g</li>
-        <li>${this.$t("Cholesterol")}: ${this.elaboration_nutritional_information( this.new_elaboration, "cholesterol")} g</li>
-        <li>${this.$t("Sodium")}: ${this.elaboration_nutritional_information( this.new_elaboration, "sodium")} g</li>
-        <li>${this.$t("Potassium")}: ${this.elaboration_nutritional_information( this.new_elaboration, "potassium")} g</li>
-        <li>${this.$t("Magnessium")}: ${this.elaboration_nutritional_information( this.new_elaboration, "magnesium")} g</li>
-        <li>${this.$t("Phosphor")}: ${this.elaboration_nutritional_information( this.new_elaboration, "phosphor")} g</li>
-        <li>${this.$t("Calcium")}: ${this.elaboration_nutritional_information( this.new_elaboration, "calcium")} g</li>
+        <li>${this.$t("Recipe total amount")}: ${NutritionalElement.Amount.amount(this.new_elaboration.final_amount)}</li>
+        <li>${this.$t("Calories")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Calories)}</li>
+        <li>${this.$t("Fat")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Fat)}</li>
+        <li>${this.$t("Protein")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Protein)}</li>
+        <li>${this.$t("Carbohydrates")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Carbohydrate)}</li>
+        <li>${this.$t("Salt")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Salt)}</li>
+        <li>${this.$t("Fiber")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Fiber)}</li>
+        <li>${this.$t("Sugars")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Sugars)}</li>
+        <li>${this.$t("Saturated fat")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.SaturatedFat)}</li>
+        <li>${this.$t("Cholesterol")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Cholesterol)}</li>
+        <li>${this.$t("Sodium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Sodium)}</li>
+        <li>${this.$t("Potassium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Potassium)}</li>
+        <li>${this.$t("Magnessium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Magnesium)}</li>
+        <li>${this.$t("Phosphor")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Phosphor)}</li>
+        <li>${this.$t("Calcium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Calcium)}</li>
     </ul
 </div>
 <style>

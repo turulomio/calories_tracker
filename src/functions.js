@@ -348,15 +348,26 @@ export function percentage_html(num, decimals=2){
  * 
  * Elaboration is an object  with elaborations_products_in array that have [products,ni,amount]
  */
-export function elaboration_nutritional_information(elaboration,item_name, round=2){
+export function elaboration_nutritional_information(elaboration,item_name){
     var sum_items=0
-    this.elaboration.elaborations_products_in.forEach(o => {
-        let product=this.store().products.get(o.products)
+    elaboration.elaborations_products_in.forEach(o => {
+        let product=useStore().products.get(o.products)
         if (o.ni){
             sum_items+=product[item_name]*o.amount/product["amount"]
         }
     })
-    var final_amount=this.new_elaboration.final_amount
+    var final_amount=elaboration.final_amount
 
-    return this.my_round(100*sum_items/final_amount, round)
+    return 100*sum_items/final_amount
+}
+
+/**
+ * Returns a string with the nutritional information of a elaboration and an element in 100 grams of elaboration
+ * For example elaboration_nutritional_information(elaboration, "calories")
+ * 
+ * Elaboration is an object  with elaborations_products_in array that have [products,ni,amount]
+ */
+export function elaboration_nutritional_information_string(elaboration, nutritional_element){
+    let value=elaboration_nutritional_information(elaboration,nutritional_element.attribute)
+    return nutritional_element.amount(value)
 }
