@@ -2,6 +2,17 @@
 // https://masteringjs.io/tutorials/fundamentals/enum
 import {my_round} from 'vuetify_rules'
 
+import { config } from '@vue/test-utils';
+
+
+if ("is_testing" in config.global) {
+  console.log("testing")
+  // this.$t=config.global.mocks.$t
+} else {
+  console.log("no testing")
+}
+
+// console.log(this)
 
 export class NutritionalElement {
     // Create new instances of the same class as static attributes
@@ -31,6 +42,9 @@ export class NutritionalElement {
     amount(amount){
       let unit
       let round
+      // console.log("THIS",this)
+      // console.log(VueI18n)
+      // console.log(VueI18n.useI18n().$t("Amount"))
       if (["calories","fat"].includes(this.attribute)){
         unit="kcal"
         round=0

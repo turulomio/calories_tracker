@@ -87,6 +87,7 @@
     import ElaborationsFinalAmount from './ElaborationsFinalAmount.vue'
     import ElaborationTextTipTap from './ElaborationTextTipTap.vue'
     import {elaboration_nutritional_information} from '../functions.js'
+    import { NutritionalElement } from '@/types'
     export default {
         components: {
             ElaborationsFinalAmount,
@@ -299,7 +300,7 @@ ${this.$refs.tiptap.editor.getHTML()}
 <div class="column_wrapper">
     <ul>
         <li>${this.$t("Recipe total amount")}: ${this.my_round(this.new_elaboration.final_amount,0)} g </li>
-        <li>${this.$t("Calories")}: ${this.elaboration_nutritional_information( this.new_elaboration, "calories")} kcal</li>
+        <li>${this.$t("Calories")}: ${NutritionalElement.Calories.amount(this.elaboration_nutritional_information( this.new_elaboration, "calories"))}</li>
         <li>${this.$t("Fat")}: ${this.elaboration_nutritional_information( this.new_elaboration, "fat")} g</li>
         <li>${this.$t("Protein")}: ${this.elaboration_nutritional_information( this.new_elaboration, "protein")} g</li>
         <li>${this.$t("Carbohydrates")}: ${this.elaboration_nutritional_information( this.new_elaboration, "carbohydrate")} g</li>
