@@ -86,7 +86,7 @@
     import TableElaborationsIngredientsNI from './TableElaborationsIngredientsNI.vue'
     import ElaborationsFinalAmount from './ElaborationsFinalAmount.vue'
     import ElaborationTextTipTap from './ElaborationTextTipTap.vue'
-    import {elaboration_nutritional_information,elaboration_nutritional_information_string} from '../functions.js'
+    import {elaboration_nutritional_information_string} from '../functions.js'
     import { NutritionalElement } from '@/types'
     export default {
         components: {
@@ -123,7 +123,6 @@
         methods: {
             fraction,
             empty_elaborations_products_in,
-            elaboration_nutritional_information,
             elaboration_nutritional_information_string,
             menuinline_items(){
                 var r=[
@@ -300,7 +299,7 @@ ${this.$refs.tiptap.editor.getHTML()}
 <h2 class="h2_print">${this.$t("Nutritional information for each 100 g")}</h2>
 <div class="column_wrapper">
     <ul>
-        <li>${this.$t("Recipe total amount")}: ${this.my_round(this.new_elaboration.final_amount,0)} g</li>
+        <li>${this.$t("Recipe total amount")}: ${NutritionalElement.Amount.amount(this.new_elaboration.final_amount)}</li>
         <li>${this.$t("Calories")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Calories)}</li>
         <li>${this.$t("Fat")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Fat)}</li>
         <li>${this.$t("Protein")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Protein)}</li>
