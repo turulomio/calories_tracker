@@ -2,16 +2,6 @@
 // https://masteringjs.io/tutorials/fundamentals/enum
 import {my_round} from 'vuetify_rules'
 
-import { config } from '@vue/test-utils';
-
-
-if ("is_testing" in config.global) {
-  console.log("testing")
-  // this.$t=config.global.mocks.$t
-} else {
-  console.log("no testing")
-}
-
 // console.log(this)
 
 export class NutritionalElement {

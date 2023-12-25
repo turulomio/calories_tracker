@@ -1,5 +1,4 @@
 import { config } from '@vue/test-utils';
-import { VueI18n } from 'vue-i18n'
 import i18n from '@/i18n';
 import { createApp } from 'vue'
 
@@ -19,4 +18,4 @@ config.global.mocks = {
   $app: app
 };
 config.global.is_testing=true
-// console.log(config.global)
+console.log("Testing...")
