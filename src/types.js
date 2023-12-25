@@ -1,6 +1,6 @@
 // This way https://www.sohamkamani.com/javascript/enums/#defining-enums-with-classes
 // https://masteringjs.io/tutorials/fundamentals/enum
-
+import {my_round} from 'vuetify_rules'
 
 
 export class NutritionalElement {
@@ -9,11 +9,36 @@ export class NutritionalElement {
     static Calories = new NutritionalElement("calories", "Calories")
     static Fat = new NutritionalElement("fat", "Fat")
     static Protein = new NutritionalElement("protein", "Protein")
+    static Carbohydrate = new NutritionalElement("carbohydrate", "Carbohydrate")
+    static Salt = new NutritionalElement("salt", "Salt")
+    static Fiber = new NutritionalElement("fiber", "Fiber")
+    static Sugars = new NutritionalElement("sugars", "Sugars")
+    static SaturatedFat = new NutritionalElement("saturated_fat", "Saturated fat")
+    static Cholesterol = new NutritionalElement("cholesterol", "Cholesterol")
+    static Sodium = new NutritionalElement("sodium", "Sodium")
+    static Potassium = new NutritionalElement("potassium", "Potassium")
+    static Ferrum = new NutritionalElement("ferrum", "Ferrum")
+    static Magnesium = new NutritionalElement("magnesium", "Magnesium")
+    static Phosphor = new NutritionalElement("phosphor", "Phosphor")
+    static Calcium = new NutritionalElement("calcium", "Calcium")
+
   
     constructor(attribute,name) {
       this.attribute=attribute
       this.name=name
-      console.log(this)
+    }
+
+    amount(amount){
+      let unit
+      let round
+      if (["calories","fat"].includes(this.attribute)){
+        unit="kcal"
+        round=0
+      } else {
+        unit="g"
+        round=2
+      }
+      return `${my_round(amount,round)} ${unit}`
     }
 
   }
