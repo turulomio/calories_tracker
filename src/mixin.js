@@ -1,7 +1,5 @@
   
 import {
-    additives_html_fullname,
-    arrayofintegers_to_stringofintegers,
     arrayobjects_to_array,
     id_from_hyperlinked_url,
     hyperlinked_url,
@@ -28,8 +26,6 @@ const mixin = {
         }
     },
     methods: {
-        additives_html_fullname,
-        arrayofintegers_to_stringofintegers,
         arrayobjects_to_array,
         id_from_hyperlinked_url,
         hyperlinked_url,

@@ -12,6 +12,7 @@
 <script>
 
 import {RulesSelection} from 'vuetify_rules'
+import {additives_html_fullname} from '@/functions.js'
 export default {
     name: "AutocompleteAdditives",
     props:{
@@ -56,6 +57,7 @@ export default {
         },
     },
     methods:{
+        additives_html_fullname,
         RulesSelection,
         // on_custom_filter(a,b,c){
         //     if(this.new_value.length<1) {
