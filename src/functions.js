@@ -187,12 +187,6 @@ export function parseResponseError(error){
     }
 }
 
-
-export function parseNumber(strg){
-    strg = strg.toString().replace(',', '.');
-    return parseFloat(strg);
-}
-
 export function sortObjectsArray(objectsArray, sortKey)
 {
     // Quick Sort:
