@@ -56,6 +56,7 @@
 <script>
     import axios from 'axios'
     import {empty_biometrics} from '../empty_objects.js'
+    import {localtime} from 'vuetify_rules'
     import DisplayValues from './reusing/DisplayValues.vue'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import BiometricsCRUD from './BiometricsCRUD.vue'
@@ -119,6 +120,7 @@
         },
         methods:{
             empty_biometrics,
+            localtime,
             displayvalues(){
                 var r=[]
                 if (this.biometrics.length>0){

@@ -69,6 +69,7 @@
 <script>
     import axios from 'axios'
     import { empty_companies,empty_system_companies } from '../empty_objects.js'
+    import {localtime} from 'vuetify_rules'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import CompaniesCRUD from './CompaniesCRUD.vue'
     import SystemCompaniesCRUD from './SystemCompaniesCRUD.vue'
@@ -113,7 +114,7 @@
         methods:{
             empty_companies,
             empty_system_companies,
-
+            localtime,
             menuinline_items(){
                 let r= [
                     {

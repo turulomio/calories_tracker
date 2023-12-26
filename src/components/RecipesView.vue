@@ -25,6 +25,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import {localtime} from 'vuetify_rules'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import DisplayValues from './reusing/DisplayValues.vue'
     import TableRecipesLinks from './TableRecipesLinks.vue'
@@ -87,7 +88,8 @@
         },
         watch:{
         },
-        methods: {        
+        methods: { 
+            localtime,       
             displayvalues(){
                 return [
                     {title:this.$t('Created'), value: this.localtime(this.new_recipe.datetime)},

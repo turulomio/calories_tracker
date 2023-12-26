@@ -18,6 +18,7 @@
 </template>
 <script>
     import {empty_elaborations_experiences} from '../empty_objects.js'
+    import {localtime} from 'vuetify_rules'
     import ElaborationsExperiencesCRUD from './ElaborationsExperiencesCRUD.vue'
     export default {
         components:{
@@ -41,6 +42,7 @@
         },
         methods: {
             empty_elaborations_experiences,
+            localtime,
             table_headers(){
                 var r=[
                     { title: this.$t('Date and time'), key: 'datetime', sortable: true,width:"10%"},

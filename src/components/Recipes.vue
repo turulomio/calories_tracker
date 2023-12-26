@@ -72,6 +72,7 @@
 <script>
     import axios from 'axios'
     import { empty_recipes,empty_recipes_links} from '../empty_objects.js'
+    import {localtime} from 'vuetify_rules'
     import imgNoImage from "@/assets/no_image.jpg"
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import RecipesCRUD from './RecipesCRUD.vue'
@@ -155,7 +156,7 @@
         methods:{
             empty_recipes,
             empty_recipes_links,
-
+            localtime,
             menuinline_items(){
                 let r= [
                     {
