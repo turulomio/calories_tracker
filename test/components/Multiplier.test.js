@@ -6,9 +6,9 @@ import Multiplier from '../../src/components/Multiplier.vue'
 
 describe("Multiplier.vue", () => {
 
-    test('displays message', () => {
+    test('Mount from parent', async () => {
         const wrapper = mount({
-          template: '<v-layout><Multiplier v-model="value" /></v-layout>'
+          template: '<v-layout><Multiplier ref="mycomp" v-model="value" /></v-layout>'
         }, {
           props: {},
           data: ()=>{
@@ -26,8 +26,29 @@ describe("Multiplier.vue", () => {
 
 
         })
-        
+        console.log(wrapper.attributes())
+        console.log(wrapper.classes())
+        console.log(wrapper.html())
         expect(wrapper.text()).toContain("Select a multiplier");
+        console.log("Compoent,", wrapper.findComponent('Multiplier'))
+
     });
+
+
+
+    // test('Mount directly', () => {
+    //     const div = document.createElement('div')
+    //     document.body.appendChild(div)
+    //     const wrapper = mount(Multiplier,{
+            
+    //   attachTo: div,
+    //         propsData: {
+    //             modelValue:2
+    //       }
+    //     })
+    //     console.log(wrapper.attributes())
+    //     console.log(wrapper.classes())
+    //     expect(wrapper.text()).toContain("Select a multiplier");
+    // });
 
 });

@@ -1,6 +1,6 @@
 <template>
     <div> 
-        <v-select :readonly="readonly" :items="items" v-model="newvalue" :label="$t('Select a multiplier')"></v-select>
+        <v-select id="select_multiplier" :readonly="readonly" :items="items" v-model="newvalue" :label="$t('Select a multiplier')"></v-select>
     </div>
 </template>
 <script>
