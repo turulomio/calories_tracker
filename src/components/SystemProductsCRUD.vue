@@ -66,6 +66,7 @@
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import FormatsCRUD from './FormatsCRUD.vue'
     import { empty_formats } from '../empty_objects.js'
+    import {RulesString,RulesSelection,RulesFloatGEZ} from 'vuetify_rules'
     export default {
         components: {
             AutoCompleteApiIdName,
@@ -102,6 +103,9 @@
         },
         methods: {
             empty_formats,
+            RulesString,
+            RulesSelection,
+            RulesFloatGEZ,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')

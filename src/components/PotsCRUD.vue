@@ -19,6 +19,7 @@
 <script>
     import axios from 'axios'
     import PasteImage from './PasteImage.vue'
+    import {RulesSelection,RulesInteger,RulesString} from 'vuetify_rules'
     export default {
         components: {
             PasteImage,
@@ -40,6 +41,7 @@
             }
         },
         methods: {
+            RulesSelection,RulesInteger,RulesString,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')

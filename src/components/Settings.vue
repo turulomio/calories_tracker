@@ -27,6 +27,7 @@
 <script>
     import axios from 'axios'
     import MyDatePicker from './reusing/MyDatePicker.vue'
+    import {RulesEmail,RulesString} from 'vuetify_rules'
     export default {
         components: {
             MyDatePicker,
@@ -38,6 +39,7 @@
             }
         },
         methods: {
+            RulesEmail,RulesString,
             save_settings(){       
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()

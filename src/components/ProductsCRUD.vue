@@ -64,6 +64,7 @@
     import FormatsCRUD from './FormatsCRUD.vue'
     import { empty_formats } from '../empty_objects.js'
     import { additives_html_fullname} from '../functions.js'
+    import {RulesSelection,RulesFloatGEZ,RulesString} from 'vuetify_rules'
     export default {
         components: {
             AutocompleteAdditives,
@@ -98,6 +99,7 @@
             }
         },
         methods: {
+            RulesSelection,RulesFloatGEZ,RulesString,
             empty_formats,
             additives_html_fullname,
             button(){

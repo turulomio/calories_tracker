@@ -47,6 +47,7 @@
 <script>
     import axios from 'axios'
     import ProductsInCRUD from './ProductsInCRUD.vue'
+    import {RulesSelection,RulesString,RulesFloatGEZ} from 'vuetify_rules'
     import {empty_products_in} from '../empty_objects.js'
     export default {
         components: {
@@ -83,6 +84,9 @@
         },
         methods: {
             empty_products_in,
+            RulesFloatGEZ,
+            RulesSelection,
+            RulesString,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')

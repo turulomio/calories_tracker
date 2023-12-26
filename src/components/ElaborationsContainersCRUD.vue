@@ -14,6 +14,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import {RulesString} from 'vuetify_rules'
     export default {
         components: {
         },
@@ -33,6 +34,7 @@
             }
         },
         methods: {
+            RulesString,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')

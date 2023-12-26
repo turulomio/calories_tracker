@@ -256,12 +256,6 @@ export function listobjects_sum(lo,key){
 
 
 
-export function ifnullempty(value){
-    if (value==null) return ""
-    return value
-}
-
-
 // Generate a hyperlinked_url (DRF hyperlinked url) from model and id uses $sotre for apiroot
 export function hyperlinked_url(model,id){
     return `${store().apiroot}/api/${model}/${id}/`

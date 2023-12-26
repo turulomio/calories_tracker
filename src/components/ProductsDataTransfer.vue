@@ -21,6 +21,7 @@
 <script>
     import axios from 'axios'
     import {empty_products_data_transfer} from '../empty_objects.js'
+    import {RulesSelection} from 'vuetify_rules'
     export default {
         props: {
             pdt: { // Product data transfer
@@ -35,6 +36,7 @@
             }
         },
         methods: {
+            RulesSelection,
             empty_products_data_transfer,
             transfer(){    
                 if (this.validate()==false) return          

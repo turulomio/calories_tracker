@@ -23,7 +23,7 @@
     import MyDateTimePicker from './reusing/MyDateTimePicker.vue'
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import Multiplier from './Multiplier.vue'
-    import {my_round} from 'vuetify_rules'
+    import {my_round,RulesSelection,RulesFloatGEZ} from 'vuetify_rules'
     export default {
         components: {
             AutocompleteProducts,
@@ -65,6 +65,8 @@
         },
         methods: {
             my_round,
+            RulesFloatGEZ,
+            RulesSelection,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')
