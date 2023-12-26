@@ -20,3 +20,10 @@ config.global.mocks = {
 config.global.is_testing=true
 console.log("Testing...")
 // console.log(i18n)
+
+// // NOTE: not needed with `globals: true`
+// import { vi } from 'vitest'
+
+// createTestingPinia({
+//   createSpy: vi.fn,
+// })
