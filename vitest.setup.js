@@ -39,6 +39,16 @@ const testingPinia = createTestingPinia({
 
 
 
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+
+const vuetify = createVuetify({
+  components,
+  directives,
+})
+
+config.global.vuetify=vuetify
 
 
 
@@ -50,8 +60,11 @@ const testingPinia = createTestingPinia({
 export function setupGlobalConfigs() {
   return {
     global: {
-      plugins: [i18n, testingPinia],
+      plugins: [i18n, testingPinia,vuetify],
       // Additional global configurations or mocks can be added here
     },
   };
 }
+
+global.ResizeObserver = require('resize-observer-polyfill')
+// console.log(config)
