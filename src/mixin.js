@@ -1,16 +1,13 @@
   
 import {
     myheaders,
-    myheaders_noauth,
     parseResponse,
     parseResponseError,
     listobjects_sum,
-    myheaders_formdata,
     percentage_string,
     percentage_generic_html,
     percentage_generic_string, 
     percentage_html,
-    getMapObjectById,
     getArrayFromMap,
     store,
     products_html_fullname,
@@ -24,8 +21,6 @@ const mixin = {
     },
     methods: {
         myheaders,
-        myheaders_noauth,
-        myheaders_formdata,
         parseResponse,
         parseResponseError,
         listobjects_sum,
@@ -35,7 +30,6 @@ const mixin = {
         percentage_generic_string, 
         percentage_html,
         products_html_fullname,
-        getMapObjectById,
         getArrayFromMap,
     }
   }

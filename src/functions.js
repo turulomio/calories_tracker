@@ -1,5 +1,4 @@
 import { useStore } from './store.js'
-import moment from 'moment-timezone'
 import {my_round} from 'vuetify_rules'
 
 // item is an additive_risks url
@@ -19,7 +18,7 @@ export function products_html_fullname(item,type_){
         item=this.store().products.get(item)
         type_=2
     }
-    let additive_risks_object=this.getMapObjectById("additive_risks", item.additives_risk)
+    let additive_risks_object=getMapObjectById("additive_risks", item.additives_risk)
     let obsolete=(item.obsolete)? 'text-decoration-line-through' : ''
     let risk_color=product_risk_color(additive_risks_object.url)
     let type_icon
@@ -99,16 +98,6 @@ export function myheaders_noauth(){
         headers:{
             'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
             'Content-Type':'application/json'
-        }
-    }
-}
-
-export function myheaders_formdata(){
-    return {
-        headers:{
-            'Authorization': `Token ${store().token}`,
-            'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
-            'Content-Type': 'multipart/form-data'
         }
     }
 }
