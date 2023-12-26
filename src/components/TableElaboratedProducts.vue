@@ -34,6 +34,7 @@
 
 <script>
     import { empty_elaborated_products } from '../empty_objects.js'
+    import {my_round} from 'vuetify_rules'
     import ElaboratedProductsCRUD from './ElaboratedProductsCRUD.vue'
     export default {
         components: {
@@ -81,6 +82,7 @@
         },     
         methods:{
             empty_elaborated_products,
+            my_round,
             on_ElaboratedProductsCRUD_cruded(){
                 this.dialog_elaborated_products_crud=false
                 this.$emit("cruded")

@@ -66,6 +66,7 @@
 </template>
 <script>
     import fraction from 'fraction.js'
+    import {my_round} from 'vuetify_rules'
     export default {
         components: {
         },
@@ -102,6 +103,7 @@
         },
         methods: {
             fraction,
+            my_round,
             on_ElaborationProductsInCRUD_cruded(){
                 this.dialog_products_in_crud=false  
                 this.key=this.key+1

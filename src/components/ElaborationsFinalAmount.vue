@@ -46,6 +46,7 @@
 </template>
 <script>
     import axios from "axios"
+    import {my_round} from 'vuetify_rules'
     export default {
         props: {
             elaboration: { 
@@ -74,6 +75,7 @@
             }
         },
         methods: {
+            my_round,
             pots_html(item){
                 var r=`<img src="${item.thumbnail}" height="150" contain />${item.fullname}`
                 return r

@@ -83,6 +83,7 @@
 
 <script>
     import axios from 'axios'
+    import {my_round} from 'vuetify_rules'
     import { empty_products,empty_elaborated_products,empty_system_products } from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import ProductsCRUD from './ProductsCRUD.vue'
@@ -168,7 +169,7 @@
             empty_products,
             empty_system_products,
             empty_elaborated_products,
-
+            my_round,
             menuinline_items(){
                 let r= [
                     {

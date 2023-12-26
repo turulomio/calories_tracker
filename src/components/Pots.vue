@@ -36,6 +36,7 @@
 
 <script>
     import axios from 'axios'
+    import {my_round} from 'vuetify_rules'
     import { empty_pots } from '../empty_objects.js'
     import imgNoImage from "@/assets/no_image.jpg"
     import MyMenuInline from './reusing/MyMenuInline.vue'
@@ -72,6 +73,7 @@
         },        
         methods:{
             empty_pots,
+            my_round,
             menuinline_items(){
                 return [
                     {

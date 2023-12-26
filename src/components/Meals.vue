@@ -107,6 +107,7 @@
     import MealsCRUD from './MealsCRUD.vue'
     import ElaboratedProductsCRUD from './ElaboratedProductsCRUD.vue'
     import ProductsCRUD from './ProductsCRUD.vue'
+    import {my_round} from 'vuetify_rules'
     export default {
         components: {
             MyMenuInline,
@@ -206,6 +207,7 @@
         }, 
         methods:{
             empty_meals,
+            my_round,
             on_MealsCRUD_cruded(){
                 this.meals_crud_dialog=false
                 this.update_all()

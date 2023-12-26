@@ -1,5 +1,6 @@
 import { useStore } from './store.js'
 import moment from 'moment-timezone'
+import {my_round} from 'vuetify_rules'
 
 // item is an additive_risks url
 export function product_risk_color(additive_risks_url){
@@ -81,12 +82,6 @@ String.prototype.format = function() {
     }
     return formatted;
 };
-
-
-export function my_round(num, decimals = 2) {
-    return Math.round(num*Math.pow(10, decimals))/Math.pow(10, decimals)
-}
-
 
 // Value es un utc iso string with T and Z
 export function localtime(value){

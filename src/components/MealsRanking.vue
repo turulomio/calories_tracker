@@ -15,6 +15,7 @@
 
 <script>
     import axios from 'axios'
+    import {my_round} from 'vuetify_rules'
     import MyDatePicker from './reusing/MyDatePicker.vue'
     export default {
         components: {
@@ -41,6 +42,7 @@
             }
         },
         methods:{
+            my_round,
             update(){
                 this.loading=true
                 axios.get(`${this.store().apiroot}/api/meals/ranking/?from_date=${this.from_date}`, this.myheaders())
