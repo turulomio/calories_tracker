@@ -10,7 +10,7 @@
     "lint": "eslint . --fix --ignore-path .gitignore",
     "reusing": "node src/scripts/reusing.js",
     "test": "vitest",
-    "coverage": "vitest --coverage"
+    "coverage": "vitest --coverage --run"
   },
   "dependencies": {
     "@mdi/font": "7.3.67",
