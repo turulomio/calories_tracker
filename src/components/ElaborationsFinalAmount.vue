@@ -77,7 +77,7 @@
         methods: {
             my_round,
             RulesSelection,
-            RulesFloatGZ
+            RulesFloatGZ,
             pots_html(item){
                 var r=`<img src="${item.thumbnail}" height="150" contain />${item.fullname}`
                 return r

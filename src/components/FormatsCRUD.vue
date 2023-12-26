@@ -14,7 +14,7 @@
     </div>
 </template>
 <script>
-    import {RulesSelection} from 'vuetify_rules'
+    import {RulesSelection,RulesFloatGEZ} from 'vuetify_rules'
     export default {
         props: {
             
