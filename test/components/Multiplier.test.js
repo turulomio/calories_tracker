@@ -1,5 +1,5 @@
 import {describe,test, expect, } from 'vitest'
-import {mount} from "@vue/test-utils";
+import {mount, shallowMount} from "@vue/test-utils";
 import { config } from '@vue/test-utils';
 
 import Multiplier from '../../src/components/Multiplier.vue'
@@ -30,25 +30,29 @@ describe("Multiplier.vue", () => {
         console.log(wrapper.classes())
         console.log(wrapper.html())
         expect(wrapper.text()).toContain("Select a multiplier");
-        console.log("Compoent,", wrapper.findComponent('Multiplier'))
 
     });
 
 
 
-    // test('Mount directly', () => {
-    //     const div = document.createElement('div')
-    //     document.body.appendChild(div)
-    //     const wrapper = mount(Multiplier,{
+    test('Mount directly', async () => {
+        const wrapper = shallowMount(Multiplier,{
             
-    //   attachTo: div,
-    //         propsData: {
-    //             modelValue:2
-    //       }
-    //     })
-    //     console.log(wrapper.attributes())
-    //     console.log(wrapper.classes())
-    //     expect(wrapper.text()).toContain("Select a multiplier");
-    // });
+            propsData: {
+                modelValue:2
+            }
+        })
+        console.log(wrapper.html())
+        expect(wrapper.html()).toContain("Select a multiplier");
+        expect(wrapper.vm.items.length).toBe(20)
+        wrapper.vm.newvalue=5
+        expect(wrapper.vm.modelValue).toBe(2)
+        let found=wrapper.find('v-select-stub')
+        console.log("Compoent,", found )
+        console.log("VM",wrapper.vm)
+        console.log("$REFS",wrapper.vm.$refs)
+        // console.log("$REFS",wrapper.vm.$)
+        // await found.setSelect(4)
+    });
 
 });
