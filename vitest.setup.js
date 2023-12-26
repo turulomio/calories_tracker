@@ -27,3 +27,44 @@ console.log("Testing...")
 // createTestingPinia({
 //   createSpy: vi.fn,
 // })
+
+import { createI18n } from 'vue-i18n';
+import { createTestingPinia } from '@pinia/testing';
+import { vi } from 'vitest';
+
+// Mocking any modules as necessary
+vi.mock('path-to-module-to-mock', () => {
+  return {
+    // Mock implementation
+  };
+});
+
+// Setup for vue-i18n
+const i18n = createI18n({
+  locale: 'en', // default locale
+  fallbackLocale: 'en', // fallback locale
+  messages: {
+    en: {
+      // English translations
+    },
+    // Other locales...
+  },
+});
+
+// Setup for Pinia with testing utilities
+const testingPinia = createTestingPinia({
+  createSpy: vi.fn, // Using Vitest's spy function
+});
+
+// Global setup for Vue Test Utils
+// If using Vue Test Utils, you can set global configuration here
+
+// Export a function to setup global configurations
+export function setupGlobalConfigs() {
+  return {
+    global: {
+      plugins: [i18n, testingPinia],
+      // Additional global configurations or mocks can be added here
+    },
+  };
+}
