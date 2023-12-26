@@ -41,5 +41,17 @@ export default defineConfig({
     // globals: true,
     environment: 'jsdom',
     setupFiles: 'vitest.setup.js',
-  }
+    server: {
+      deps: {
+        inline: ['vuetify'],
+      },
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "path-to-your-variables.scss";` // If you have global SCSS variables
+      }
+    }
+  },
 })

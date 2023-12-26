@@ -28,6 +28,7 @@
     "moment-timezone": "^0.5.43",
     "npm-check-updates": "^16.14.11",
     "pinia": "^2.1.7",
+    "resize-observer-polyfill": "^1.5.1",
     "roboto-fontface": "*",
     "tippy.js": "^6.3.7",
     "vue": "^3.3.10",

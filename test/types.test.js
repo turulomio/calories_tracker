@@ -1,7 +1,5 @@
 import { NutritionalElement } from '@/types';
 import {describe,it, expect, test,} from 'vitest'
-import { config } from '@vue/test-utils';
-console.log(config)
 
 describe('types', () => {
   it('NutritionalElement', () => {
