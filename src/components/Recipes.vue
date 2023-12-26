@@ -80,6 +80,7 @@
     import RecipesLinksCRUD from './RecipesLinksCRUD.vue'
     import ShoppingList from './ShoppingList.vue'
     import RecipesByIngredients from './RecipesByIngredients.vue'
+    import { id_from_hyperlinked_url, hyperlinked_url } from '@/functions'
     export default {
         components: {
             MyMenuInline,
@@ -154,6 +155,8 @@
             }
         },
         methods:{
+            id_from_hyperlinked_url,
+            hyperlinked_url,
             empty_recipes,
             empty_recipes_links,
             localtime,

@@ -22,6 +22,7 @@
     import axios from 'axios'
     import PasteImage from './PasteImage.vue'
     import {RulesSelection,RulesString,RulesInteger} from 'vuetify_rules'
+    import { id_from_hyperlinked_url } from '@/functions'
     export default {
         components: {
             PasteImage,
@@ -69,6 +70,7 @@
             // },
         },
         methods: {
+            id_from_hyperlinked_url,
             RulesInteger,RulesSelection,RulesString,
             button(){
                 if (this.mode=="C") return this.$t('Add')

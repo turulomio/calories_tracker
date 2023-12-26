@@ -26,6 +26,7 @@
     import axios from 'axios'
     import RecipesLinksCRUD from './RecipesLinksCRUD.vue'
     import {empty_recipes_links} from '../empty_objects.js'
+    import { hyperlinked_url } from '@/functions'
     export default {
         components:{
             RecipesLinksCRUD,
@@ -57,6 +58,7 @@
         },
         methods: {
             empty_recipes_links,
+            hyperlinked_url,
             on_link_click(item){
                 window.open(item.link, '_blank').focus()
             },

@@ -45,6 +45,7 @@
     import fraction from 'fraction.js'
     import ElaborationProductsInCRUD from './ElaborationProductsInCRUD.vue'
     import {empty_elaborations_products_in} from '../empty_objects.js'
+    import { hyperlinked_url } from '@/functions'
     export default {
         components: {
             ElaborationProductsInCRUD,
@@ -68,6 +69,7 @@
         methods: {
             fraction,
             empty_elaborations_products_in,
+            hyperlinked_url,
 
 
             products_in_headers(){

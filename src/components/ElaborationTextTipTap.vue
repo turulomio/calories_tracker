@@ -57,6 +57,7 @@
     import TextStyle from "@tiptap/extension-text-style";
     import Mention from '@tiptap/extension-mention'
     import tippy from 'tippy.js'
+    import { id_from_hyperlinked_url } from '@/functions';
 
     import MentionListIngredients from './MentionListIngredients.vue'
     import MentionListContainers from './MentionListContainers.vue'
@@ -83,6 +84,7 @@
             }
         },
         methods: {
+            id_from_hyperlinked_url,
             get_id_label_from_span(span){
               var r={
                 id: span.split('data-id="')[1].split('" data-label')[0],

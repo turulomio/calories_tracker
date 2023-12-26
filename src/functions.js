@@ -205,33 +205,6 @@ export function sortObjectsArray(objectsArray, sortKey)
 }
 
 
-export function arrayobjects_to_stringofstrings(l, key){
-    var s=""
-    l.forEach(o => s=s+o[key].toString() + ", ")
-    return s.slice(0,-2)
-}
-
-
-export function arrayofintegers_to_stringofintegers(l){
-    var s=""
-    l.forEach(o => s=s+o.toString() + ", ")
-    return s.slice(0,-2)
-}
-
-
-export function stringofintegers_to_arrayofintegers(s,separator=", "){
-    var l=[]
-    s.split(separator).forEach(o => l.push(parseInt(o)))
-    return l
-}
-
-
-export function arrayobjects_to_array(l, key){
-    var s=[]
-    l.forEach(o => s.push(o[key]))
-    return s
-}
-
 export function percentage_generic_string(num, locale, decimals=2){
     if (num==null) return "- - - %"
     return `${my_round(num*100,decimals).toLocaleString(locale,{ minimumFractionDigits: decimals,  })} %`

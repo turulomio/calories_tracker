@@ -1,8 +1,5 @@
   
 import {
-    arrayobjects_to_array,
-    id_from_hyperlinked_url,
-    hyperlinked_url,
     myheaders,
     myheaders_noauth,
     parseResponse,
@@ -26,9 +23,6 @@ const mixin = {
         }
     },
     methods: {
-        arrayobjects_to_array,
-        id_from_hyperlinked_url,
-        hyperlinked_url,
         myheaders,
         myheaders_noauth,
         myheaders_formdata,
