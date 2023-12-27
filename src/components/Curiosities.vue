@@ -20,15 +20,26 @@
 
 <script>
     import axios from 'axios'
-import { useStore } from '@/store.js'
+    import { useStore } from '@/store.js'
+    import { myheaders } from '@/functions'
     export default {
+        props: {
+            
+            company: { 
+                required: true
+            },
+            mode: {
+                required: false,
+            }
+        },
         data(){
             return {
                 curiosities:[],
             }
         },        
         methods:{
-        useStore,
+            useStore,
+            myheaders,
             update(){
                 axios.get(`${this.useStore().apiroot}/curiosities/`, this.myheaders())
                 .then((response) => {
