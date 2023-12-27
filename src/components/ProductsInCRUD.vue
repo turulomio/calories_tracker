@@ -4,7 +4,7 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
 
-                <AutocompleteProducts :readonly="mode=='D'" :items="getArrayFromMap(store().products)" v-model="newproduct_in.products" />
+                <AutocompleteProducts :readonly="mode=='D'" :items="getArrayFromMap(useStore().products)" v-model="newproduct_in.products" />
                 <v-row class="pa-3">     
                     <v-text-field :readonly="mode=='D'" v-model.number="newproduct_in.amount" :label="$t('Set product amount')" :placeholder="$t('Set product amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
                     <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-title="name" item-value="amount" :rules="RulesSelection(false)"></v-autocomplete>
@@ -21,6 +21,8 @@
 <script>
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import Multiplier from './Multiplier.vue'
+    import {my_round,RulesFloatGEZ,RulesSelection} from 'vuetify_rules'
+    import { useStore } from '@/store.js'
     export default {
         components: {
             AutocompleteProducts,
@@ -59,6 +61,10 @@
             },
         },
         methods: {
+        useStore,
+            RulesFloatGEZ,
+            RulesSelection,
+            my_round,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')
@@ -79,10 +85,10 @@
 
             product_formats_update(){
                 if (this.newproduct_in.products==null) return
-                let product=this.store().products.get(this.newproduct_in.products)
+                let product=this.useStore().products.get(this.newproduct_in.products)
                 this.products_formats=[]
                 product.formats.forEach(element => {
-                    this.products_formats.push({name: `${this.store().formats.get(element.formats).name} (${element.amount} g)`, amount: element.amount})
+                    this.products_formats.push({name: `${this.useStore().formats.get(element.formats).name} (${element.amount} g)`, amount: element.amount})
                     
                 });
             },

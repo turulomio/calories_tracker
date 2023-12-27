@@ -15,6 +15,8 @@
 </template>
 <script>
     import axios from 'axios'
+    import {RulesString} from 'vuetify_rules'
+    import { useStore } from '@/store.js'
     export default {
         props: {
             
@@ -32,6 +34,8 @@
             }
         },
         methods: {
+        useStore,
+            RulesString,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')
@@ -48,7 +52,7 @@
                     return
                 }
                 if (this.mode=="C"){
-                    axios.post(`${this.store().apiroot}/api/system_companies/`, this.new_system_company,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/system_companies/`, this.new_system_company,  this.myheaders())
                     .then((response) => {
                         console.log(response.data)
                         this.$emit("cruded")

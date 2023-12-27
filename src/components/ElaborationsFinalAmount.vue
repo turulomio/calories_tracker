@@ -12,7 +12,7 @@
             <v-window-item key="frompot" >
                 <v-card>
                     <v-form ref="form" v-model="form_valid" lazy-validation>
-                        <v-autocomplete :items="getArrayFromMap(store().pots)" v-model="pot" item-title="name" item-value="url" :label="$t('Select a pot')" return-object :rules="RulesSelection(true)">
+                        <v-autocomplete :items="getArrayFromMap(useStore().pots)" v-model="pot" item-title="name" item-value="url" :label="$t('Select a pot')" return-object :rules="RulesSelection(true)">
                             <template v-slot:item="{item}" ><div v-html="pots_html(item)"></div></template>
                         </v-autocomplete>
                         <v-text-field v-model.number="weight_with_pot" :label="$t('Weight of the full pot')" :placeholder="$t('Weight of the full pot')" :rules="RulesFloatGZ(10,true,2)" counter="10"/>
@@ -46,6 +46,8 @@
 </template>
 <script>
     import axios from "axios"
+    import {my_round,RulesSelection,RulesFloatGZ} from 'vuetify_rules'
+import { useStore } from '@/store.js'
     export default {
         props: {
             elaboration: { 
@@ -74,6 +76,10 @@
             }
         },
         methods: {
+        useStore,
+            my_round,
+            RulesSelection,
+            RulesFloatGZ,
             pots_html(item){
                 var r=`<img src="${item.thumbnail}" height="150" contain />${item.fullname}`
                 return r

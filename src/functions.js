@@ -1,5 +1,5 @@
-import { useStore } from './store.js'
-import moment from 'moment-timezone'
+import { useStore } from '@/store.js'
+import {my_round} from 'vuetify_rules'
 
 // item is an additive_risks url
 export function product_risk_color(additive_risks_url){
@@ -15,10 +15,10 @@ export function product_risk_color(additive_risks_url){
 // type: 1:system_product, 2:product, 3:elaborated products, 4: meals (item is product_url), 5: system_product english
 export function products_html_fullname(item,type_){
     if (type_==4) {
-        item=this.store().products.get(item)
+        item=this.useStore().products.get(item)
         type_=2
     }
-    let additive_risks_object=this.getMapObjectById("additive_risks", item.additives_risk)
+    let additive_risks_object=getMapObjectById("additive_risks", item.additives_risk)
     let obsolete=(item.obsolete)? 'text-decoration-line-through' : ''
     let risk_color=product_risk_color(additive_risks_object.url)
     let type_icon
@@ -54,7 +54,7 @@ export function products_html_fullname(item,type_){
 
 // item is an object of additives. additives_object.additive_risks is an url
 export function additives_html_fullname(additives_object){
-    let additive_risks_object=this.store().additive_risks.get(additives_object.additive_risks)
+    let additive_risks_object=this.useStore().additive_risks.get(additives_object.additive_risks)
 
     let risk_color=product_risk_color(additive_risks_object.url)
 
@@ -62,12 +62,6 @@ export function additives_html_fullname(additives_object){
     return `${icon} ${additives_object.fullname}</span>`
 }
 
-
-
-
-export function store(){
-    return useStore()    
-}
 
 
 // Due to problems with translations I made this function to help i18n
@@ -82,28 +76,10 @@ String.prototype.format = function() {
     return formatted;
 };
 
-
-export function my_round(num, decimals = 2) {
-    return Math.round(num*Math.pow(10, decimals))/Math.pow(10, decimals)
-}
-
-
-// Value es un utc iso string with T and Z
-export function localtime(value){
-    if (value){
-        var dateFormat = 'YYYY-MM-DD HH:mm:ss';
-        var testDateUtc = moment.utc(value);
-        var localDate = testDateUtc.tz(Intl.DateTimeFormat().resolvedOptions().timeZone)
-        return (localDate.format(dateFormat)); // 2015-30-01 02:00:00
-    }
-    return null;
-}   
-
-
 export function myheaders(){
     return {
         headers:{
-            'Authorization': `Token ${store().token}`,
+            'Authorization': `Token ${useStore().token}`,
             'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
             'Content-Type':'application/json'
         }
@@ -120,23 +96,13 @@ export function myheaders_noauth(){
     }
 }
 
-export function myheaders_formdata(){
-    return {
-        headers:{
-            'Authorization': `Token ${store().token}`,
-            'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
-            'Content-Type': 'multipart/form-data'
-        }
-    }
-}
-
 // returns true if everything is ok
 // return false if there is something wrong
 export function parseResponse(response){
     if (response.status==200){ //Good connection
         if (response.data == "Wrong credentials"){
-            this.store().token=null
-            this.store().logged=false
+            this.useStore().token=null
+            this.useStore().logged=false
             alert(this.$t("Wrong credentials"))
             return false
         }
@@ -158,12 +124,12 @@ export function parseResponseError(error){
 //       console.log(error.response.status);
 //       console.log(error.response.headers);
         if (error.response.status == 401){
-            if (this.store().token==null){ // Not logged yet
+            if (this.useStore().token==null){ // Not logged yet
                 alert(this.$t("Wrong credentials"))
             } else {
                 alert (this.$t("You aren't authorized to do this request"))
-                this.store().token=null;
-                this.store().logged=false;
+                this.useStore().token=null;
+                this.useStore().logged=false;
                 if (this.$router.currentRoute.name != "about") this.$router.push("about")
                 console.log(error.response)
             }
@@ -172,8 +138,8 @@ export function parseResponseError(error){
             console.log(error.response)
         } else if (error.response.status == 403){ // Used for developer or app errors
             alert (this.$t("You've done something forbidden"))
-            this.store().token=null;
-            this.store().logged=false;
+            this.useStore().token=null;
+            this.useStore().logged=false;
             if (this.$router.currentRoute.name != "about") this.$router.push("about")
             console.log(error.response)
         } else if (error.response.status == 500){
@@ -190,12 +156,6 @@ export function parseResponseError(error){
         console.log("OTROS")
         console.log('Error', error.message);
     }
-}
-
-
-export function parseNumber(strg){
-    strg = strg.toString().replace(',', '.');
-    return parseFloat(strg);
 }
 
 export function sortObjectsArray(objectsArray, sortKey)
@@ -228,33 +188,6 @@ export function sortObjectsArray(objectsArray, sortKey)
 }
 
 
-export function arrayobjects_to_stringofstrings(l, key){
-    var s=""
-    l.forEach(o => s=s+o[key].toString() + ", ")
-    return s.slice(0,-2)
-}
-
-
-export function arrayofintegers_to_stringofintegers(l){
-    var s=""
-    l.forEach(o => s=s+o.toString() + ", ")
-    return s.slice(0,-2)
-}
-
-
-export function stringofintegers_to_arrayofintegers(s,separator=", "){
-    var l=[]
-    s.split(separator).forEach(o => l.push(parseInt(o)))
-    return l
-}
-
-
-export function arrayobjects_to_array(l, key){
-    var s=[]
-    l.forEach(o => s.push(o[key]))
-    return s
-}
-
 export function percentage_generic_string(num, locale, decimals=2){
     if (num==null) return "- - - %"
     return `${my_round(num*100,decimals).toLocaleString(locale,{ minimumFractionDigits: decimals,  })} %`
@@ -279,15 +212,9 @@ export function listobjects_sum(lo,key){
 
 
 
-export function ifnullempty(value){
-    if (value==null) return ""
-    return value
-}
-
-
 // Generate a hyperlinked_url (DRF hyperlinked url) from model and id uses $sotre for apiroot
 export function hyperlinked_url(model,id){
-    return `${store().apiroot}/api/${model}/${id}/`
+    return `${useStore().apiroot}/api/${model}/${id}/`
 }
 
 //Gets id (integer) from an hyperlinked_url(DRF hyperlinked ul)
@@ -324,7 +251,7 @@ export function getBase64(file) {
 export function getMapObjectById(catalog,id) { 
     // If id doesn't exists return undefined
     var url=hyperlinked_url(catalog,id)
-    var r= store()[catalog].get(url)
+    var r= useStore()[catalog].get(url)
     return r
 }
 

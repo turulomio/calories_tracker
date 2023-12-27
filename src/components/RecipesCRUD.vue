@@ -4,8 +4,8 @@
         <v-card class="pa-8 mt-4">
             <v-form ref="form" v-model="form_valid" lazy-validation>                
                 <v-text-field :readonly="mode=='D'" v-model="new_recipe.name" :label="$t('Set name')" :placeholder="$t('Set name')" :rules="RulesString(200,true)" counter="200" autofocus/>
-                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().food_types)" v-model="new_recipe.food_types" :label="$t('Select product food type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().recipes_categories)" v-model="new_recipe.recipes_categories" multiple chips :label="$t('Select recipe categories')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(useStore().food_types)" v-model="new_recipe.food_types" :label="$t('Select product food type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(useStore().recipes_categories)" v-model="new_recipe.recipes_categories" multiple chips :label="$t('Select recipe categories')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-text-field :readonly="mode=='D'" v-model.number="new_recipe.valoration" :label="$t('Set your valoration')" :placeholder="$t('Set your valoration')" :rules="RulesInteger(10,false)" counter="200"/>
                 <v-checkbox density="compact" :readonly="mode=='D'" v-model="new_recipe.guests" :label="$t('Is a recipe for guests?')"></v-checkbox>                
                 <v-checkbox density="compact" :readonly="mode=='D'" v-model="new_recipe.soon" :label="$t('Do you want to make it soon?')"></v-checkbox>                     
@@ -23,6 +23,8 @@
 </template>
 <script>
     import axios from 'axios'
+    import {RulesSelection,RulesString,RulesInteger} from 'vuetify_rules'
+    import { useStore } from '@/store.js'
     export default {
         components: {
         },
@@ -46,6 +48,8 @@
             }
         },
         methods: {
+        useStore,
+            RulesInteger,RulesSelection,RulesString,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')
@@ -64,7 +68,7 @@
                 }
 
                 if (this.mode=="C"){
-                    axios.post(`${this.store().apiroot}/api/recipes/`, this.new_recipe,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/recipes/`, this.new_recipe,  this.myheaders())
                     .then((response) => {
                         console.log(response.data)
                         this.$emit("cruded")

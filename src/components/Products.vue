@@ -59,8 +59,8 @@
                     <template #item.calcium="{item}"><div v-html="my_round(item.calcium,0)"></div></template>  
                     <template #item.actions="{item}">
                         <v-icon small class="mr-1" @click.stop="linkProduct(item)">mdi-link-variant</v-icon>   
-                        <v-icon class="mr-1" small @click.stop="editSystemProduct(item)"  color="#AA0000" v-if="store().catalog_manager">mdi-pencil</v-icon>
-                        <v-icon small @click.stop="deleteSystemProduct(item)" color="#AA0000" v-if="store().catalog_manager">mdi-delete</v-icon>
+                        <v-icon class="mr-1" small @click.stop="editSystemProduct(item)"  color="#AA0000" v-if="useStore().catalog_manager">mdi-pencil</v-icon>
+                        <v-icon small @click.stop="deleteSystemProduct(item)" color="#AA0000" v-if="useStore().catalog_manager">mdi-delete</v-icon>
                     </template>
                 </v-data-table-virtual>
             </v-window-item>
@@ -83,11 +83,13 @@
 
 <script>
     import axios from 'axios'
+    import {my_round} from 'vuetify_rules'
     import { empty_products,empty_elaborated_products,empty_system_products } from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import ProductsCRUD from './ProductsCRUD.vue'
     import SystemProductsCRUD from './SystemProductsCRUD.vue'
     import TableElaboratedProducts from './TableElaboratedProducts.vue'
+    import { useStore } from '@/store.js'
     export default {
         components: {
             MyMenuInline,
@@ -168,7 +170,8 @@
             empty_products,
             empty_system_products,
             empty_elaborated_products,
-
+            my_round,
+        useStore,
             menuinline_items(){
                 let r= [
                     {
@@ -199,7 +202,7 @@
                         ]
                     },
                 ]
-                if (this.store().catalog_manager){
+                if (this.useStore().catalog_manager){
                     r.push({
                         subheader: this.$t("System product options"),
                         children: [
@@ -232,7 +235,7 @@
             linkProduct(item){
                 axios.post(`${item.url}create_product/`, {}, this.myheaders())
                 .then((response) => {
-                    this.store().products.set(response.data.url,response.data)
+                    this.useStore().products.set(response.data.url,response.data)
                     this.update_all()
                }, (error) => {
                     this.parseResponseError(error)
@@ -282,7 +285,7 @@
             },
             convertToSystemProduct(item){
 
-                axios.post(`${this.store().apiroot}/products_to_system_products/`, {product: item.url}, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/products_to_system_products/`, {product: item.url}, this.myheaders())
                 .then(() => {
                     this.update_all()
                }, (error) => {
@@ -294,13 +297,13 @@
                 this.update_all()
             },
             update_products(){
-                this.products=this.getArrayFromMap(this.store().products).filter(o=> o.fullname.toLowerCase().includes(this.search.toLowerCase()))
+                this.products=this.getArrayFromMap(this.useStore().products).filter(o=> o.fullname.toLowerCase().includes(this.search.toLowerCase()))
             },
             update_elaborated_products(){
-                this.elaborated_products=this.getArrayFromMap(this.store().elaborated_products).filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
+                this.elaborated_products=this.getArrayFromMap(this.useStore().elaborated_products).filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
             },
             update_system_products(){
-                return axios.get(`${this.store().apiroot}/api/system_products/?search=${this.search}`, this.myheaders())
+                return axios.get(`${this.useStore().apiroot}/api/system_products/?search=${this.search}`, this.myheaders())
                 .then((response) => {
                     this.system_products=response.data
                }, (error) => {

@@ -4,10 +4,10 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <MyDateTimePicker :readonly="deleting" v-model="newbiometric.datetime" :label="$t('Set date and time')"></MyDateTimePicker>
-                <v-autocomplete :readonly="deleting" :items="getArrayFromMap(store().activities)" v-model="newbiometric.activities" :label="$t('Select your activity level')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-autocomplete :readonly="deleting" :items="getArrayFromMap(store().weight_wishes)" v-model="newbiometric.weight_wishes" :label="$t('Select your weight wish')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field :readonly="deleting" v-model="newbiometric.height" :label="$t('Set your height')" :placeholder="$t('Set your height')" :rules="RulesFloatGEZ(10,true,2)" counter="10"/>
-                <v-text-field :readonly="deleting" v-model="newbiometric.weight" :label="$t('Set your weight')" :placeholder="$t('Set your weight')" :rules="RulesFloatGEZ(10,true,2)" counter="10"/>
+                <v-autocomplete :readonly="deleting" :items="getArrayFromMap(useStore().activities)" v-model="newbiometric.activities" :label="$t('Select your activity level')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="deleting" :items="getArrayFromMap(useStore().weight_wishes)" v-model="newbiometric.weight_wishes" :label="$t('Select your weight wish')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-text-field :readonly="deleting" v-model.number="newbiometric.height" :label="$t('Set your height')" :placeholder="$t('Set your height')" :rules="RulesFloatGEZ(10,true,2)" counter="10"/>
+                <v-text-field :readonly="deleting" v-model.number="newbiometric.weight" :label="$t('Set your weight')" :placeholder="$t('Set your weight')" :rules="RulesFloatGEZ(10,true,2)" counter="10"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -18,7 +18,9 @@
 </template>
 <script>
     import axios from 'axios'
+    import {RulesSelection,RulesFloatGEZ} from 'vuetify_rules'
     import MyDateTimePicker from './reusing/MyDateTimePicker.vue'
+import { useStore } from '@/store.js'
     export default {
         components: {
             MyDateTimePicker,
@@ -41,6 +43,9 @@
             }
         },
         methods: {
+            RulesFloatGEZ,
+            RulesSelection,
+        useStore,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')
@@ -58,7 +63,7 @@
                 }
 
                 if (this.mode=="C"){
-                    axios.post(`${this.store().apiroot}/api/biometrics/`, this.newbiometric,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/biometrics/`, this.newbiometric,  this.myheaders())
                     .then(() => {
                         this.$emit("cruded")
                     }, (error) => {

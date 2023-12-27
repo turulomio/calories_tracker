@@ -1,5 +1,5 @@
 <template>
-    <div v-show="this.store().logged">
+    <div v-show="this.useStore().logged">
         <div >
             <h1 class="mb-2">{{ $t("Settings") }}</h1>
             
@@ -27,6 +27,8 @@
 <script>
     import axios from 'axios'
     import MyDatePicker from './reusing/MyDatePicker.vue'
+    import {RulesEmail,RulesString} from 'vuetify_rules'
+    import { useStore } from '@/store.js'
     export default {
         components: {
             MyDatePicker,
@@ -38,15 +40,17 @@
             }
         },
         methods: {
+        useStore,
+            RulesEmail,RulesString,
             save_settings(){       
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()
                     return
                 }
 
-                axios.post(`${this.store().apiroot}/settings/`, this.new_settings, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/settings/`, this.new_settings, this.myheaders())
                 .then((response) => {
-                    this.store().settings=response.data
+                    this.useStore().settings=response.data
                     alert(this.$t("Settings saved"))
 
                     this.$router.push("home")
@@ -56,7 +60,7 @@
             },
         },
         created(){
-            this.new_settings=Object.assign({},this.store().settings)
+            this.new_settings=Object.assign({},this.useStore().settings)
         }
     }
 </script>

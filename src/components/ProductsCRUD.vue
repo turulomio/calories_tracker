@@ -4,9 +4,9 @@
         <v-card class="pa-6 mt-4" style="overflow-y: scroll" :height="600" >
             <v-form ref="form" v-model="form_valid" lazy-validation >
                 <v-text-field :readonly="mode=='D' || mode=='R'" v-model="newproduct.name" :label="$t('Set product name')" :placeholder="$t('Set product name')" :rules="RulesString(200)" counter="200"/>
-                <v-autocomplete v-model="newproduct.companies" :items="getArrayFromMap(store().companies)" :label="$t('Select a company')" item-title="name" item-value="url" :rules="RulesSelection(true)"/>
-                <v-autocomplete :readonly="mode=='D' || mode=='R'" :items="getArrayFromMap(store().food_types)" v-model="newproduct.food_types" :label="$t('Select product food type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <AutocompleteAdditives :readonly="mode=='D' || mode=='R'" :additives="getArrayFromMap(store().additives)" v-model="newproduct.additives" />
+                <v-autocomplete v-model="newproduct.companies" :items="getArrayFromMap(useStore().companies)" :label="$t('Select a company')" item-title="name" item-value="url" :rules="RulesSelection(true)"/>
+                <v-autocomplete :readonly="mode=='D' || mode=='R'" :items="getArrayFromMap(useStore().food_types)" v-model="newproduct.food_types" :label="$t('Select product food type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <AutocompleteAdditives :readonly="mode=='D' || mode=='R'" :additives="getArrayFromMap(useStore().additives)" v-model="newproduct.additives" />
                 <v-text-field :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.amount" :label="$t('Set product amount (gr)')" :placeholder="$t('Set product amount (gr)')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.density" :label="$t(`Set product density (gr/ml). Empty if you don't know`)" :placeholder="$t('Set product density(gr/ml)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.fat" :label="$t('Set product fat (gr)')" :placeholder="$t('Set product fat (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
@@ -25,12 +25,12 @@
                 <v-text-field :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.phosphor" :label="$t('Set product phosphor (mg)')" :placeholder="$t('Set product phosphor (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.calcium" :label="$t('Set product calcium (mg)')" :placeholder="$t('Set product calcium (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-checkbox v-model="newproduct.glutenfree" :label="$t('Is gluten free?')"></v-checkbox>
-                <AutocompleteProducts :readonly="mode=='D' || mode=='R'" :products="getArrayFromMap(store().products)" v-model="newproduct.products"/>
+                <AutocompleteProducts :readonly="mode=='D' || mode=='R'" :products="getArrayFromMap(useStore().products)" v-model="newproduct.products"/>
                 <v-text-field :readonly="mode=='D' || mode=='R'" v-model="newproduct.version_description" :label="$t('Set product version description')" :placeholder="$t('Set product version description')" :rules="RulesString(200,false)" counter="200"/>
                 <v-checkbox v-model="newproduct.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
                 <v-card class="mt-4">
                     <v-data-table density="compact" :headers="formats_headers" :items="newproduct.formats" :sort-by="[{key:'formats',order:'asc'}]"  class="elevation-1" :items-per-page="10000" :key="'T'+key" :height="250">
-                        <template #item.formats="{item}"><div v-html="store().formats.get(item.formats).name"></div></template> 
+                        <template #item.formats="{item}"><div v-html="useStore().formats.get(item.formats).name"></div></template> 
                         <template #item.actions="{item}">
                             <v-icon small class="mr-2" @click="editFormat(item)">mdi-pencil</v-icon>
                             <v-icon small @click="deleteFormat(item)">mdi-delete</v-icon>
@@ -64,6 +64,8 @@
     import FormatsCRUD from './FormatsCRUD.vue'
     import { empty_formats } from '../empty_objects.js'
     import { additives_html_fullname} from '../functions.js'
+    import {RulesSelection,RulesFloatGEZ,RulesString} from 'vuetify_rules'
+    import { useStore } from '@/store.js'
     export default {
         components: {
             AutocompleteAdditives,
@@ -98,6 +100,8 @@
             }
         },
         methods: {
+        useStore,
+            RulesSelection,RulesFloatGEZ,RulesString,
             empty_formats,
             additives_html_fullname,
             button(){
@@ -117,9 +121,9 @@
                     return
                 }
                 if (this.mode=="C"){
-                    axios.post(`${this.store().apiroot}/api/products/`, this.newproduct,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/products/`, this.newproduct,  this.myheaders())
                     .then((response) => {
-                        this.store().products.set(response.data.url,response.data)
+                        this.useStore().products.set(response.data.url,response.data)
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -128,7 +132,7 @@
                 if (this.mode=="U"){
                     axios.put(this.newproduct.url, this.newproduct,  this.myheaders())
                     .then((response) => {
-                        this.store().products.set(response.data.url,response.data)
+                        this.useStore().products.set(response.data.url,response.data)
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -139,7 +143,7 @@
                     if(r == true) {
                         axios.delete(this.newproduct.url, this.myheaders())
                         .then(() => {
-                            this.store().products.delete(this.newproduct.url)
+                            this.useStore().products.delete(this.newproduct.url)
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)

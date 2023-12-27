@@ -17,6 +17,8 @@
 </template>
 <script>
     import axios from 'axios'
+    import {RulesInteger,RulesString} from 'vuetify_rules'
+import { useStore } from '@/store.js'
     export default {
         components: {
         },
@@ -41,6 +43,9 @@
             }
         },
         methods: {
+            RulesInteger,
+            RulesString,
+        useStore,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')
@@ -59,7 +64,7 @@
                 }
 
                 if (this.mode=="C"){
-                    axios.post(`${this.store().apiroot}/api/elaborations/`, this.new_elaboration,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/elaborations/`, this.new_elaboration,  this.myheaders())
                     .then(() => {
                         if (cruded==true) this.$emit("cruded")
                     }, (error) => {

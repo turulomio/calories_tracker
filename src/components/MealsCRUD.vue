@@ -4,7 +4,7 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <MyDateTimePicker :readonly="mode=='D'" v-model="newmeal.datetime" :label="$t('Set transfer date and time')"></MyDateTimePicker>
-                <AutocompleteProducts :readonly="mode=='D'" :items="getArrayFromMap(store().products)" v-model="newmeal.products" />
+                <AutocompleteProducts :readonly="mode=='D'" :items="getArrayFromMap(useStore().products)" v-model="newmeal.products" />
                 <v-row class="pa-3">     
                     <v-text-field :readonly="mode=='D'" v-model.number="newmeal.amount" :label="$t('Set your amount')" :placeholder="$t('Set your amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
                     <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-title="name" item-value="amount" :rules="RulesSelection(false)" ></v-autocomplete>
@@ -23,6 +23,8 @@
     import MyDateTimePicker from './reusing/MyDateTimePicker.vue'
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import Multiplier from './Multiplier.vue'
+    import {my_round,RulesSelection,RulesFloatGEZ} from 'vuetify_rules'
+    import { useStore } from '@/store.js'
     export default {
         components: {
             AutocompleteProducts,
@@ -63,6 +65,10 @@
             },
         },
         methods: {
+            my_round,
+            RulesFloatGEZ,
+            RulesSelection,
+        useStore,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')
@@ -80,7 +86,7 @@
                 }
 
                 if (this.mode=="C"){
-                    axios.post(`${this.store().apiroot}/api/meals/`, this.newmeal,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/meals/`, this.newmeal,  this.myheaders())
                     .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
@@ -113,9 +119,9 @@
             update_formats(){
                 if (this.newmeal.products==null) return
                 this.products_formats=[]
-                let product=this.store().products.get(this.newmeal.products)
+                let product=this.useStore().products.get(this.newmeal.products)
                 product.formats.forEach(element => {
-                    this.products_formats.push({name: `${this.store().formats.get(element.formats).name} (${element.amount} g)`, amount: element.amount})
+                    this.products_formats.push({name: `${this.useStore().formats.get(element.formats).name} (${element.amount} g)`, amount: element.amount})
                     
                 });
             }

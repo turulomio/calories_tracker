@@ -7,9 +7,9 @@
                     <v-list-item>
                         
                             <v-list-item-title class="title">Calories Tracker</v-list-item-title>
-                            <v-list-item-subtitle>{{ store().version }} ({{ store().versiondate.toISOString().slice(0,10)}})</v-list-item-subtitle>
-                            <!-- <v-list-item-subtitle>{{ store().settings.first_name }} {{store().settings.last_name}}</v-list-item-subtitle> -->
-                            <v-list-item-subtitle class="boldred" v-if="store().catalog_manager"><span class="vuered">{{ $t("With catalog manager role") }}</span></v-list-item-subtitle>
+                            <v-list-item-subtitle>{{ useStore().version }} ({{ useStore().versiondate.toISOString().slice(0,10)}})</v-list-item-subtitle>
+                            <!-- <v-list-item-subtitle>{{ useStore().settings.first_name }} {{useStore().settings.last_name}}</v-list-item-subtitle> -->
+                            <v-list-item-subtitle class="boldred" v-if="useStore().catalog_manager"><span class="vuered">{{ $t("With catalog manager role") }}</span></v-list-item-subtitle>
                         
                     </v-list-item>
 
@@ -18,19 +18,19 @@
 <!--                     HOME -->
                     <v-list-item link router :to="{ name: 'home'}" prepend-icon="mdi-home" :title="$t('Home')" />
 <!--                    BIOMETRICS -->
-                    <v-list-item link router :to="{ name: 'biometrics'}" v-if="store().logged"  prepend-icon="mdi-human-male-height" :title="$t('Biometrics')" />
+                    <v-list-item link router :to="{ name: 'biometrics'}" v-if="useStore().logged"  prepend-icon="mdi-human-male-height" :title="$t('Biometrics')" />
 <!--                    COMPANIES -->
-                    <v-list-item link router :to="{ name: 'companies'}" v-if="store().logged" prepend-icon="mdi-domain" :title="$t('Companies')" />
+                    <v-list-item link router :to="{ name: 'companies'}" v-if="useStore().logged" prepend-icon="mdi-domain" :title="$t('Companies')" />
 <!--                    PRODUCTS -->
-                    <v-list-item link router :to="{ name: 'products'}" v-if="store().logged" prepend-icon="mdi-apple" :title="$t('Products')" />
+                    <v-list-item link router :to="{ name: 'products'}" v-if="useStore().logged" prepend-icon="mdi-apple" :title="$t('Products')" />
 <!--                    MEALS -->
-                    <v-list-item link router :to="{ name: 'meals'}" v-if="store().logged" prepend-icon="mdi-food-turkey" :title="$t('Meals')" />
+                    <v-list-item link router :to="{ name: 'meals'}" v-if="useStore().logged" prepend-icon="mdi-food-turkey" :title="$t('Meals')" />
 <!--                    RECIPES -->
-                    <v-list-item link router :to="{ name: 'recipes'}" v-if="store().logged"  prepend-icon="mdi-book-open-variant" :title="$t('Recipes')" />
+                    <v-list-item link router :to="{ name: 'recipes'}" v-if="useStore().logged"  prepend-icon="mdi-book-open-variant" :title="$t('Recipes')" />
 <!--                    POTS -->
-                    <v-list-item link router :to="{ name: 'pots'}" v-if="store().logged" prepend-icon="mdi-pot" :title="$t('Pot')" />
+                    <v-list-item link router :to="{ name: 'pots'}" v-if="useStore().logged" prepend-icon="mdi-pot" :title="$t('Pot')" />
 <!--                     REPORTS -->                   
-                    <v-list-group value="Reports"  v-if="store().logged">
+                    <v-list-group value="Reports"  v-if="useStore().logged">
                         <template v-slot:activator="{ props }">
                             <v-list-item v-bind="props" prepend-icon="mdi-chart-box-outline" :title="$t('Reports')"></v-list-item>
                         </template>
@@ -42,12 +42,12 @@
                         </v-list-item>
                     </v-list-group>    
 <!--                     ADMINISTRATION -->                    
-                    <v-list-group value="Administration"  v-if="store().logged">
+                    <v-list-group value="Administration"  v-if="useStore().logged">
                         <template v-slot:activator="{ props }">
                             <v-list-item v-bind="props" prepend-icon="mdi-cogs" :title="$t('Administration')"></v-list-item>
                         </template>
 
-                        <v-list-item link router :to="{ name: 'catalog_tables'}" v-if="store().catalog_manager">
+                        <v-list-item link router :to="{ name: 'catalog_tables'}" v-if="useStore().catalog_manager">
                             <v-list-item-title>{{ $t("Catalog tables") }}</v-list-item-title>
                         </v-list-item>
                         <v-list-item link router :to="{ name: 'products_datatransfer'}">
@@ -60,7 +60,7 @@
                             <v-list-item v-bind="props" prepend-icon="mdi-lifebuoy" :title="$t('Help')"></v-list-item>
                         </template>
                         <v-list-item link router :to="{ name: 'about'}" :title="$t('About')" />
-                        <v-list-item  v-if="store().logged" link router :to="{ name: 'statistics'}" :title="$t('Statistics')" />
+                        <v-list-item  v-if="useStore().logged" link router :to="{ name: 'statistics'}" :title="$t('Statistics')" />
                         <v-list-item  href="https://github.com/turulomio/calories_tracker/" target="_blank" :title="$t('Calories Tracker Github')" />
                         <v-list-item  href="https://github.com/turulomio/django_calories_tracker/" target="_blank" :title="$t('Django Calories Tracker Github')" />
                     </v-list-group>
@@ -71,13 +71,13 @@
         <v-app-bar color="primary" dark  fixed fill-height app >
             <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
             <v-btn :to="{ name: 'home'}"><v-icon icon="mdi-home" dark></v-icon></v-btn>
-            <v-btn :to="{ name: 'settings'}" v-if="store().logged"><v-icon icon="mdi-wrench" dark></v-icon></v-btn>
+            <v-btn :to="{ name: 'settings'}" v-if="useStore().logged"><v-icon icon="mdi-wrench" dark></v-icon></v-btn>
             <v-spacer />
             <h1 class="font-weight-black text-no-wrap text-truncate" >{{ $t("Calories Tracker. Another way to manage your diet") }}</h1>
             <v-spacer />
             <BtnSwitchLanguages />
-            <BtnLogIn v-show="!this.store().logged"/>
-            <BtnLogOut v-show="this.store().logged"/>
+            <BtnLogIn v-show="!this.useStore().logged"/>
+            <BtnLogOut v-show="this.useStore().logged"/>
 
         </v-app-bar>
         <v-main>   
@@ -87,6 +87,7 @@
 </template>
 
 <script>
+import { useStore } from '@/store.js'
 import BtnLogIn from './components/reusing/BtnLogIn';
 import BtnLogOut from './components/reusing/BtnLogOut';
 import BtnSwitchLanguages from './components/reusing/BtnSwitchLanguages';
@@ -104,6 +105,9 @@ export default {
             height:22,
             width:22,
         }
+    },
+    methods:{
+        useStore,
     },
     created(){
     }

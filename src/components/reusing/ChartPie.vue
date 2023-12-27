@@ -1,5 +1,5 @@
 <template>
-    <div class="ma-4">
+    <div ref="div" class="ma-4">
         <p v-if="items.length==0">No data to show</p>
         <v-card v-if="items.length>0">
             <v-row :style="styleheight()">
@@ -35,7 +35,6 @@
 </template>
 
 <script>
-    import axios from 'axios'
     export default {
         props: {
             name: {
@@ -49,7 +48,7 @@
                 required: false,
                 default:600
             },
-            save_name:{
+            reference:{ //used to pass in on_finished signal
                 required:false,
                 default:null,
             },
@@ -58,6 +57,11 @@
                 required:false,
                 default:false,
             },
+            hidden:{ //Hide using visibility==hidden it will take up space
+                type: Boolean,
+                required:false,
+                default:false,
+            }
         },
         data: function () {
             return {
@@ -118,21 +122,18 @@
                 
             },
             on_finished(){
-                if (this.save_name!=null){
-                    var data=this.$refs.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff'})
-                    axios.post(`${this.store().apiroot}/storefile/`, {filename:this.save_name,data:data,}, this.myheaders())
-                    .then(() => {
-                        this.$emit("finished")
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    });
-                }
-                
+                this.$emit("finished",this.reference, this.$refs.chart.getDataURL({pixelRatio: 6, backgroundColor: '#fff'}))
             },
             styleheight: function(){
                 return `height: ${this.height}px`
             },
 
         },
+        mounted(){
+            if (this.hidden){
+                console.log(`Chart ${this.reference} has been hidden`)
+                this.$refs.div.style.visibility="hidden"
+            } 
+        }
     }
 </script>

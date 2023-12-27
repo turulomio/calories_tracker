@@ -3,7 +3,7 @@
         <v-data-table density="compact" :headers="products_in_headers()" :items="elaboration.elaborations_products_in" :sort-by="[{key:'final_grams',order:'desc'}]" class="elevation-1" :items-per-page="10000" :key="'T'+key" height="50vh" fixed-header>
             <template #item.products="{item}"><div v-html="products_html_fullname(item.products,4)"></div></template>
             <template #item.amount="{item}">{{ fraction(item.amount).toFraction(true)}}</template>
-            <template #item.measures_types="{item}"><div v-html="store().measures_types.get(item.measures_types).localname"></div></template> 
+            <template #item.measures_types="{item}"><div v-html="useStore().measures_types.get(item.measures_types).localname"></div></template> 
             <template #item.ni="{item}"><v-icon small v-if="item.ni" >mdi-check-outline</v-icon></template>
             <template #item.actions="{item}">
                 <v-icon small class="mr-2" @click="editProductIn(item)">mdi-pencil</v-icon>
@@ -45,6 +45,8 @@
     import fraction from 'fraction.js'
     import ElaborationProductsInCRUD from './ElaborationProductsInCRUD.vue'
     import {empty_elaborations_products_in} from '../empty_objects.js'
+    import { hyperlinked_url } from '@/functions'
+    import { useStore } from '@/store.js'
     export default {
         components: {
             ElaborationProductsInCRUD,
@@ -66,8 +68,10 @@
             }
         },
         methods: {
+        useStore,
             fraction,
             empty_elaborations_products_in,
+            hyperlinked_url,
 
 
             products_in_headers(){

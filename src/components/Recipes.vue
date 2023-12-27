@@ -11,7 +11,7 @@
             <template #item.name="{item}"><div v-html="item.name"></div></template>      
             <template #item.last="{item}">{{localtime(item.last)}}</template>      
             <template #item.recipes_categories="{item}">{{show_categories(item)}}</template>      
-            <template #item.food_types="{item}"><div v-html="store().food_types.get(item.food_types).localname"></div></template> 
+            <template #item.food_types="{item}"><div v-html="useStore().food_types.get(item.food_types).localname"></div></template> 
             <template #item.guests="{item}"><v-icon small v-if="item.guests" >mdi-check-outline</v-icon></template>   
             <template #item.soon="{item}"><v-icon small v-if="item.soon" >mdi-check-outline</v-icon></template>    
             <template #item.actions="{item}">
@@ -72,6 +72,7 @@
 <script>
     import axios from 'axios'
     import { empty_recipes,empty_recipes_links} from '../empty_objects.js'
+    import {localtime} from 'vuetify_rules'
     import imgNoImage from "@/assets/no_image.jpg"
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import RecipesCRUD from './RecipesCRUD.vue'
@@ -79,6 +80,8 @@
     import RecipesLinksCRUD from './RecipesLinksCRUD.vue'
     import ShoppingList from './ShoppingList.vue'
     import RecipesByIngredients from './RecipesByIngredients.vue'
+    import { id_from_hyperlinked_url, hyperlinked_url } from '@/functions'
+    import { useStore } from '@/store.js'
     export default {
         components: {
             MyMenuInline,
@@ -153,9 +156,12 @@
             }
         },
         methods:{
+        useStore,
+            id_from_hyperlinked_url,
+            hyperlinked_url,
             empty_recipes,
             empty_recipes_links,
-
+            localtime,
             menuinline_items(){
                 let r= [
                     {
@@ -310,7 +316,7 @@
                         sortBy:this.sortBy,
                         multiSort:this.multiSort,
                 }}
-                axios.get(`${this.store().apiroot}/api/recipes/`, headers)
+                axios.get(`${this.useStore().apiroot}/api/recipes/`, headers)
                 .then((response) => {
                     console.log(response.data)
                     this.items=response.data.results
@@ -358,7 +364,7 @@
             show_categories(item){
                 var r=""
                 item.recipes_categories.forEach(o=>{
-                    var categorie=this.store().recipes_categories.get(o)
+                    var categorie=this.useStore().recipes_categories.get(o)
                         r=r+ categorie.localname + ", "
                 })
                 return r.slice(0,-2)

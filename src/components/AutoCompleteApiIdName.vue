@@ -1,6 +1,6 @@
 /* 
     This Component needs to use hyperlinked drf models
-    Must be defined as `${this.store().apiroot}/api/id/` for
+    Must be defined as `${this.useStore().apiroot}/api/id/` for
     This path can get search=name, url with returnobject=false or {url:} with returnobject with try
 */
 
@@ -41,6 +41,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from '@/store.js'
     export default {    
         props: {
             modelValue: {
@@ -75,6 +76,7 @@
             },
         },
         methods: {
+            useStore,
             on_update_search(search) {
                 // Items have already been loaded
                 if (search==null || search==""|| search.length<this.minchars) return

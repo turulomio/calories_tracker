@@ -24,10 +24,10 @@
                             {{localtime(item.datetime)}}
                         </template>              
                         <template #item.activities="{item}">
-                            <div v-html="store().activities.get(item.activities).localname"></div>
+                            <div v-html="useStore().activities.get(item.activities).localname"></div>
                         </template>         
                         <template #item.weight_wishes="{item}">
-                            <div v-html="store().weight_wishes.get(item.weight_wishes).localname"></div>
+                            <div v-html="useStore().weight_wishes.get(item.weight_wishes).localname"></div>
                         </template>     
 
 
@@ -56,11 +56,13 @@
 <script>
     import axios from 'axios'
     import {empty_biometrics} from '../empty_objects.js'
+    import {localtime} from 'vuetify_rules'
     import DisplayValues from './reusing/DisplayValues.vue'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import BiometricsCRUD from './BiometricsCRUD.vue'
     import ChartHeight from './ChartHeight.vue'
     import ChartWeight from './ChartHeight.vue'
+import { useStore } from '@/store.js'
     export default {
         components: {
             MyMenuInline,
@@ -119,15 +121,17 @@
         },
         methods:{
             empty_biometrics,
+            localtime,
+        useStore,
             displayvalues(){
                 var r=[]
                 if (this.biometrics.length>0){
                     r.push({title:this.$t('Date and time'), value: this.localtime(this.biometric_last.datetime)})
                     r.push({title:this.$t('Weight'), value: this.biometric_last.weight})
                     r.push({title:this.$t('Height'), value: this.biometric_last.height})
-                    r.push({title:this.$t('Weight wish'), value: this.store().weight_wishes.get(this.biometric_last.weight_wishes).localname})
+                    r.push({title:this.$t('Weight wish'), value: this.useStore().weight_wishes.get(this.biometric_last.weight_wishes).localname})
                     r.push({title:this.$t('IMC status'), value: this.biometric_last.imc_comment})
-                    r.push({title:this.$t('Activity'), value: this.store().activities.get(this.biometric_last.activities).localname})
+                    r.push({title:this.$t('Activity'), value: this.useStore().activities.get(this.biometric_last.activities).localname})
 
                 }
                 return r
@@ -138,7 +142,7 @@
             },
             update_biometrics(){
                 this.loading=true
-                axios.get(`${this.store().apiroot}/api/biometrics/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/biometrics/`, this.myheaders())
                 .then((response) => {
                     this.biometrics=response.data
                     if (this.biometrics.length>0) this.biometric_last=this.biometrics[this.biometrics.length - 1]

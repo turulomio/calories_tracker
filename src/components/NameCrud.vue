@@ -16,6 +16,8 @@
 </template>
 <script>
     import axios from 'axios'
+    import {RulesString} from 'vuetify_rules'
+    import { useStore } from '@/store.js'
     export default {
         props: {
             
@@ -38,6 +40,8 @@
             }
         },
         methods: {
+            RulesString,
+        useStore,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')
@@ -56,9 +60,9 @@
                 }
 
                 if (this.mode=="C"){
-                    axios.post(`${this.store().apiroot}/api/${this.apiname}/`, this.new_item,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/${this.apiname}/`, this.new_item,  this.myheaders())
                     .then((response) => {
-                        this.store()[this.apiname].set(response.data.url,response.data)
+                        this.useStore()[this.apiname].set(response.data.url,response.data)
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -67,7 +71,7 @@
                 if (this.mode=="U"){
                     axios.put(this.new_item.url, this.new_item,  this.myheaders())
                     .then((response) => {
-                        this.store()[this.apiname].set(response.data.url,response.data)
+                        this.useStore()[this.apiname].set(response.data.url,response.data)
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -78,7 +82,7 @@
                     if(r == true) {
                         axios.delete(this.new_item.url, this.myheaders())
                         .then(() => {
-                            this.store()[this.apiname].delete(this.new_item.url)
+                            this.useStore()[this.apiname].delete(this.new_item.url)
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)

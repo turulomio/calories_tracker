@@ -1,4 +1,4 @@
-
+/// <reference types="vitest" />
 // Plugins
 import vue from '@vitejs/plugin-vue'
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
@@ -38,7 +38,20 @@ export default defineConfig({
     port: 8012,
   },
   test: {
+    // globals: true,
     environment: 'jsdom',
     setupFiles: 'vitest.setup.js',
-  }
+    server: {
+      deps: {
+        inline: ['vuetify'],
+      },
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "path-to-your-variables.scss";` // If you have global SCSS variables
+      }
+    }
+  },
 })

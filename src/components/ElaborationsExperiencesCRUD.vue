@@ -15,7 +15,9 @@
 </template>
 <script>
     import axios from 'axios'
+    import {RulesString} from 'vuetify_rules'
     import MyDateTimePicker from './reusing/MyDateTimePicker.vue'
+import { useStore } from '@/store.js'
     export default {
         components: {
             MyDateTimePicker,
@@ -40,6 +42,8 @@
             }
         },
         methods: {
+            RulesString,
+        useStore,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')
@@ -56,7 +60,7 @@
                     return
                 }
                 if (this.mode=="C"){
-                    axios.post(`${this.store().apiroot}/api/elaborations_experiences/`, this.new_experience,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/elaborations_experiences/`, this.new_experience,  this.myheaders())
                     .then(() => {
                         this.$emit("cruded")
                     }, (error) => {

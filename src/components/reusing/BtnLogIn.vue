@@ -12,7 +12,7 @@
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" :loading="loading" @click="login">{{ $t("Log in") }}</v-btn>
+                <v-btn color="primary" :loading="loading" @click="login" :disabled="!form_valid">{{ $t("Log in") }}</v-btn>
                 <v-btn color="error" :disabled="loading" @click="cancel">{{ $t("Cancel") }}</v-btn>
             </v-card-actions>
         </v-card>
@@ -22,6 +22,8 @@
 
 <script>
 import axios from 'axios'
+import {RulesString} from "vuetify_rules"
+    import { useStore } from '@/store.js'
 export default {
     data () {
         return {
@@ -34,6 +36,8 @@ export default {
         }
     },
     methods: {
+        useStore,
+        RulesString,
         login(){
             var start=new Date()
                 if (this.form_valid!=true) {
@@ -42,12 +46,12 @@ export default {
                 }
             if (this.loading==true) return
             this.loading=true
-            axios.post(`${this.store().apiroot}/login/`, {username: this.user, password:this.password}, this.myheaders_noauth())
+            axios.post(`${this.useStore().apiroot}/login/`, {username: this.user, password:this.password}, this.myheaders_noauth())
             .then((response) => {
-                if (this.parseResponse(response,this.store())==true){
+                if (this.parseResponse(response,this.useStore())==true){
                     console.log("Authenticated");
-                    this.store().setToken(response.data)
-                    this.store().updateAll()
+                    this.useStore().setToken(response.data)
+                    this.useStore().updateAll()
                     .then(()=>{
                         this.$refs.form.reset()
                         this.loading=false

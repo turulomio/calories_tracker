@@ -3,10 +3,10 @@
         <h1>{{ $t("Products data transfer") }}</h1>           
         <v-card class="pa-6 mt-4" style="overflow-y: scroll" :height="600" >
             <v-form ref="form" v-model="form_valid" lazy-validation >
-                <v-autocomplete :items="getArrayFromMap(store().products)" v-model="new_pdt.product_from" :label="$t('Select product to move data from')" item-title="fullname" item-value="url" :rules="RulesSelection(true)" @input="get_statistics()">
+                <v-autocomplete :items="getArrayFromMap(useStore().products)" v-model="new_pdt.product_from" :label="$t('Select product to move data from')" item-title="fullname" item-value="url" :rules="RulesSelection(true)" @input="get_statistics()">
                     <template v-slot:item="{item}" ><div v-html="products_html_fullname(item,2)"></div></template>                
                 </v-autocomplete>
-                <v-autocomplete :items="getArrayFromMap(store().products)" v-model="new_pdt.product_to" :label="$t('Select product to move data to')" item-title="fullname" item-value="url" :rules="RulesSelection(true)" @input="get_statistics()">
+                <v-autocomplete :items="getArrayFromMap(useStore().products)" v-model="new_pdt.product_to" :label="$t('Select product to move data to')" item-title="fullname" item-value="url" :rules="RulesSelection(true)" @input="get_statistics()">
                     <template v-slot:item="{item}" ><div v-html="products_html_fullname(item,2)"></div></template>
                 </v-autocomplete>
             </v-form>
@@ -21,6 +21,8 @@
 <script>
     import axios from 'axios'
     import {empty_products_data_transfer} from '../empty_objects.js'
+    import {RulesSelection} from 'vuetify_rules'
+    import { useStore } from '@/store.js'
     export default {
         props: {
             pdt: { // Product data transfer
@@ -35,10 +37,12 @@
             }
         },
         methods: {
+        useStore,
+            RulesSelection,
             empty_products_data_transfer,
             transfer(){    
                 if (this.validate()==false) return          
-                axios.post(`${this.store().apiroot}/products/datatransfer/`, this.new_pdt,  this.myheaders())
+                axios.post(`${this.useStore().apiroot}/products/datatransfer/`, this.new_pdt,  this.myheaders())
                 .then((response) => {
                     console.log(response.data)
                     this.$emit("cruded")
@@ -64,7 +68,7 @@
                 if (this.validate()==false) return     
                 let headers={...this.myheaders(),params: this.new_pdt}
 
-                axios.get(`${this.store().apiroot}/products/datatransfer/`, headers)
+                axios.get(`${this.useStore().apiroot}/products/datatransfer/`, headers)
                 .then((response) => {
                     console.log(response.data)
                 }, (error) => {

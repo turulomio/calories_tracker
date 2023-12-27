@@ -20,15 +20,21 @@
 
 <script>
     import axios from 'axios'
+    import { useStore } from '@/store.js'
+    import { myheaders } from '@/functions'
     export default {
+        props: {
+        },
         data(){
             return {
                 curiosities:[],
             }
         },        
         methods:{
+            useStore,
+            myheaders,
             update(){
-                axios.get(`${this.store().apiroot}/curiosities/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/curiosities/`, this.myheaders())
                 .then((response) => {
                     this.curiosities=response.data
                 }, (error) => {

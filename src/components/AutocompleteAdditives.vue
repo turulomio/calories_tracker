@@ -11,6 +11,9 @@
 
 <script>
 
+import { useStore } from '@/store.js'
+import {RulesSelection} from 'vuetify_rules'
+import {additives_html_fullname} from '@/functions.js'
 export default {
     name: "AutocompleteAdditives",
     props:{
@@ -55,6 +58,9 @@ export default {
         },
     },
     methods:{
+        useStore,
+        additives_html_fullname,
+        RulesSelection,
         // on_custom_filter(a,b,c){
         //     if(this.new_value.length<1) {
         //         return
@@ -75,7 +81,7 @@ export default {
     created(){
         this.new_value=this.modelValue
         if (this.additives.length==0){//Default value
-            this.new_additives=this.getArrayFromMap(this.store().additives)
+            this.new_additives=this.getArrayFromMap(this.useStore().additives)
         } else {
             this.new_additives=this.additives
         }

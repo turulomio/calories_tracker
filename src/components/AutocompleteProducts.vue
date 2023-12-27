@@ -11,6 +11,7 @@
 
 <script>
 
+import { useStore } from '@/store.js'
 export default {
     name: "AutocompleteProducts",
     props:{
@@ -61,11 +62,12 @@ export default {
         },
     },
     methods:{
+        useStore,
     },
     created(){
         this.new_value=this.modelValue
         if (this.products.length==0){//Default value
-            this.new_products=this.getArrayFromMap(this.store().products)
+            this.new_products=this.getArrayFromMap(this.useStore().products)
         } else {
             this.new_products=this.products
         }

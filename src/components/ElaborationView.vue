@@ -88,6 +88,7 @@
     import ElaborationTextTipTap from './ElaborationTextTipTap.vue'
     import {elaboration_nutritional_information_string} from '../functions.js'
     import { NutritionalElement } from '@/types'
+import { useStore } from '@/store.js'
     export default {
         components: {
             ElaborationsFinalAmount,
@@ -122,6 +123,7 @@
         },
         methods: {
             fraction,
+        useStore,
             empty_elaborations_products_in,
             elaboration_nutritional_information_string,
             menuinline_items(){
@@ -212,8 +214,8 @@
                 return axios.post(`${this.new_elaboration.url}create_elaborated_product/`, {}, this.myheaders())
                 .then((response) => {
                     console.log(response.data)
-                    this.store().elaborated_products.set(response.data.elaborated_product.url,response.data.elaborated_product)
-                    this.store().products.set(response.data.product.url,response.data.product)
+                    this.useStore().elaborated_products.set(response.data.elaborated_product.url,response.data.elaborated_product)
+                    this.useStore().products.set(response.data.product.url,response.data.product)
                     alert(this.$t("Elaborated product created correctly. Now you can use it to track calories in your meals"))
                 }, (error) => {
                     this.parseResponseError(error)
