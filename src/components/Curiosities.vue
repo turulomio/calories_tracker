@@ -24,13 +24,6 @@
     import { myheaders } from '@/functions'
     export default {
         props: {
-            
-            company: { 
-                required: true
-            },
-            mode: {
-                required: false,
-            }
         },
         data(){
             return {
