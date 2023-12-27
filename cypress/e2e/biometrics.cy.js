@@ -1,11 +1,8 @@
-describe('template spec', () => {
+import { login_test_User } from "./commons"
+describe('e2e Biometrics', () => {
   it('Biometrics', () => {    
-    cy.visit('http://127.0.0.1:8012/calories_tracker/')
-    cy.contains("Log in").click()
-    cy.get("input").first().type("test")
-    cy.get("input").last().type("test")
-    cy.get('[id="btnLogIn"]').click() //Find by id
 
+    login_test_User(cy)
     //Open lateral menu
     cy.get('[id="lateral_icon"]').click() //Find by id
 
@@ -28,10 +25,6 @@ describe('template spec', () => {
     cy.get('input[id="txtHeight"]').click().clear().type("180") //Find by id
     cy.get('input[id="txtWeight"]').click().clear().type("90") //Find by id
     cy.get('button[id="cmd"]').click()
-
-    // // Add second biometrics
-    // cy.get('[inset=""] > :nth-child(2) > .v-list-item > .v-list-item__content > .v-list-item-title').click()
-    // cy.get('button[id="cmd"]').click()
 
     // Update biometrics
     cy.get('.mdi-pencil').first().click()
