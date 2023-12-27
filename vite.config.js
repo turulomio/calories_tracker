@@ -2,7 +2,7 @@
 // Plugins
 import vue from '@vitejs/plugin-vue'
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
-import basicSsl from '@vitejs/plugin-basic-ssl'
+// import basicSsl from '@vitejs/plugin-basic-ssl'
 
 // Utilities
 import { defineConfig } from 'vite'
@@ -18,7 +18,7 @@ export default defineConfig({
     vuetify({
       autoImport: true,
     }),
-    basicSsl(),
+    // basicSsl(),
   ],
   base: '/calories_tracker',
   define: { 'process.env': {} },
@@ -37,7 +37,7 @@ export default defineConfig({
     ],
   },
   server: {
-    https: true,
+    // https: true,
     host: "127.0.0.1",
     port: 8012,
   },

@@ -22,7 +22,7 @@ describe('template spec', () => {
   //   body:  window.localStorage.getItem('authtoken') ,
   // }).as('apiCheck');
 
-    cy.visit('https://127.0.0.1:8012/calories_tracker/')
+    cy.visit('http://127.0.0.1:8012/calories_tracker/')
 
 
     cy.contains("Log in").click()
