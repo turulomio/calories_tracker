@@ -2,8 +2,8 @@ describe('template spec', () => {
   it('Biometrics', () => {    
     cy.visit('http://127.0.0.1:8012/calories_tracker/')
     cy.contains("Log in").click()
-    cy.get("input").first().type(Cypress.env("username"))
-    cy.get("input").last().type(Cypress.env("password"))
+    cy.get("input").first().type("test")
+    cy.get("input").last().type("test")
     cy.get('[id="btnLogIn"]').click() //Find by id
 
     //Open lateral menu
@@ -20,7 +20,28 @@ describe('template spec', () => {
     // Open List views
     cy.get('h1 > .v-btn').click()
 
-    // Adds a new biometrics
+    // Adds firt biometrics
     cy.get('[inset=""] > :nth-child(2) > .v-list-item > .v-list-item__content > .v-list-item-title').click()
+
+    cy.get('input[id="cmbActivities"]').click().type("{downArrow}{enter}") //Find by id
+    cy.get('input[id="cmbWeightWishes"]').click().type("{downArrow}{enter}") //Find by id
+    cy.get('input[id="txtHeight"]').click().clear().type("180") //Find by id
+    cy.get('input[id="txtWeight"]').click().clear().type("90") //Find by id
+    cy.get('button[id="cmd"]').click()
+
+    // // Add second biometrics
+    // cy.get('[inset=""] > :nth-child(2) > .v-list-item > .v-list-item__content > .v-list-item-title').click()
+    // cy.get('button[id="cmd"]').click()
+
+    // Update biometrics
+    cy.get('.mdi-pencil').first().click()
+    cy.get('button[id="cmd"]').click()
+
+    // Delete biometrics
+    cy.get('.mdi-delete').first().click()
+    cy.get('button[id="cmd"]').click()
+    
   })
+
+  
 })
