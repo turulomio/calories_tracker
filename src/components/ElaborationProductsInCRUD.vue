@@ -29,7 +29,7 @@
     import axios from 'axios'
     import Multiplier from './Multiplier.vue'
     import AutocompleteProducts from './AutocompleteProducts.vue'
-    import {my_round,RulesSelection,RulesInteger,RulesFloatGEZ} from 'vuetify_rules'
+    import {my_round,RulesSelection,RulesInteger,RulesString,RulesFloatGEZ} from 'vuetify_rules'
     import { useStore } from '@/store.js'
     export default {
         components: {
@@ -76,9 +76,10 @@
         methods: {
             my_round,
             RulesSelection,
-            RulesFloatGEZ,
+            RulesString,
             RulesInteger,
-        useStore,
+            RulesFloatGEZ,
+            useStore,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')
