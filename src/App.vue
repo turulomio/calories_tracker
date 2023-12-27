@@ -69,7 +69,7 @@
         </v-navigation-drawer>
         
         <v-app-bar color="primary" dark  fixed fill-height app >
-            <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+            <v-app-bar-nav-icon id="lateral_icon" @click="drawer = !drawer"></v-app-bar-nav-icon>
             <v-btn :to="{ name: 'home'}"><v-icon icon="mdi-home" dark></v-icon></v-btn>
             <v-btn :to="{ name: 'settings'}" v-if="useStore().logged"><v-icon icon="mdi-wrench" dark></v-icon></v-btn>
             <v-spacer />

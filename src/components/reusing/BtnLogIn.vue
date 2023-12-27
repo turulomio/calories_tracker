@@ -12,7 +12,7 @@
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" :loading="loading" @click="login" :disabled="!form_valid">{{ $t("Log in") }}</v-btn>
+                <v-btn color="primary" id="btnLogIn" :loading="loading" @click="login" :disabled="!form_valid">{{ $t("Log in") }}</v-btn>
                 <v-btn color="error" :disabled="loading" @click="cancel">{{ $t("Cancel") }}</v-btn>
             </v-card-actions>
         </v-card>

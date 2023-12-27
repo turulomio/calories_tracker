@@ -48,4 +48,11 @@ cd calories_tracker
 npm run dev
 ```
 
+## Testing
+
+### e2e Tests
+python manage.py testserver calories_tracker/fixtures/all.json calories_tracker/fixtures/test_server.json --addrport 8011
+
+
+
 ## Changelog
