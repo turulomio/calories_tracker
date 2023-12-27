@@ -39,7 +39,6 @@ export default {
         useStore,
         RulesString,
         login(){
-            console.log("AHORA")
             var start=new Date()
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()
