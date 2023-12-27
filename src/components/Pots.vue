@@ -41,6 +41,7 @@
     import imgNoImage from "@/assets/no_image.jpg"
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import PotsCRUD from './PotsCRUD.vue'
+    import { useStore } from '@/store.js'
     export default {
         components: {
             MyMenuInline,
@@ -74,6 +75,7 @@
         methods:{
             empty_pots,
             my_round,
+        useStore,
             menuinline_items(){
                 return [
                     {
@@ -117,7 +119,7 @@
             },
             update_pots(){          
                 var r=[]
-                this.getArrayFromMap(this.store().pots).forEach(p=>{
+                this.getArrayFromMap(this.useStore().pots).forEach(p=>{
                     if (p.name.toLowerCase().includes(this.search.toLowerCase())){
                         p.thumbnail=imgNoImage
                         p.item_key=null//Used for table-item key

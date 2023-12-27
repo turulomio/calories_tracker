@@ -1,6 +1,7 @@
   
 import {
     myheaders,
+    myheaders_noauth,
     parseResponse,
     parseResponseError,
     listobjects_sum,
@@ -9,7 +10,6 @@ import {
     percentage_generic_string, 
     percentage_html,
     getArrayFromMap,
-    store,
     products_html_fullname,
 } from './functions.js'
 
@@ -21,10 +21,10 @@ const mixin = {
     },
     methods: {
         myheaders,
+        myheaders_noauth,
         parseResponse,
         parseResponseError,
         listobjects_sum,
-        store,
         percentage_string,
         percentage_generic_html,
         percentage_generic_string, 

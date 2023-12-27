@@ -17,6 +17,7 @@
     import axios from 'axios'
     import {my_round} from 'vuetify_rules'
     import MyDatePicker from './reusing/MyDatePicker.vue'
+    import { useStore } from '@/store.js'
     export default {
         components: {
             MyDatePicker,
@@ -43,9 +44,10 @@
         },
         methods:{
             my_round,
+        useStore,
             update(){
                 this.loading=true
-                axios.get(`${this.store().apiroot}/api/meals/ranking/?from_date=${this.from_date}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/meals/ranking/?from_date=${this.from_date}`, this.myheaders())
                 .then((response) => {
                     this.ranking=response.data
                     this.key=this.key+1

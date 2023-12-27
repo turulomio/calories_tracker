@@ -67,6 +67,7 @@
 <script>
     import fraction from 'fraction.js'
     import {my_round} from 'vuetify_rules'
+    import { useStore } from '@/store.js'
     export default {
         components: {
         },
@@ -102,6 +103,7 @@
             }
         },
         methods: {
+        useStore,
             fraction,
             my_round,
             on_ElaborationProductsInCRUD_cruded(){
@@ -111,7 +113,7 @@
             },
             refresh(){
                 this.elaboration.elaborations_products_in.forEach(o => {
-                    var product=this.store().products.get(o.products)
+                    var product=this.useStore().products.get(o.products)
                     if (o.ni){
                         var item={}
                         item.products=o.products

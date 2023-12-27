@@ -20,6 +20,7 @@
 
 <script>
     import axios from 'axios'
+import { useStore } from '@/store.js'
     export default {
         data(){
             return {
@@ -27,8 +28,9 @@
             }
         },        
         methods:{
+        useStore,
             update(){
-                axios.get(`${this.store().apiroot}/curiosities/`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/curiosities/`, this.myheaders())
                 .then((response) => {
                     this.curiosities=response.data
                 }, (error) => {

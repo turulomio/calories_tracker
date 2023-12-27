@@ -36,6 +36,7 @@
     import { empty_elaborated_products } from '../empty_objects.js'
     import {my_round} from 'vuetify_rules'
     import ElaboratedProductsCRUD from './ElaboratedProductsCRUD.vue'
+    import { useStore } from '@/store.js'
     export default {
         components: {
             ElaboratedProductsCRUD,
@@ -81,6 +82,7 @@
             }
         },     
         methods:{
+        useStore,
             empty_elaborated_products,
             my_round,
             on_ElaboratedProductsCRUD_cruded(){
@@ -113,7 +115,7 @@
             },
             is_product_elaborated_deletable(item){
                 let product
-                this.store().products.forEach(element => {
+                this.useStore().products.forEach(element => {
                     if (element.elaborated_products==item.url) product=element
                 });
                 if (product==null) return true

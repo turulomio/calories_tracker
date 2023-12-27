@@ -58,6 +58,7 @@
     import Mention from '@tiptap/extension-mention'
     import tippy from 'tippy.js'
     import { id_from_hyperlinked_url } from '@/functions';
+import { useStore } from '@/store.js'
 
     import MentionListIngredients from './MentionListIngredients.vue'
     import MentionListContainers from './MentionListContainers.vue'
@@ -84,6 +85,7 @@
             }
         },
         methods: {
+        useStore,
             id_from_hyperlinked_url,
             get_id_label_from_span(span){
               var r={
@@ -181,7 +183,7 @@
                 }
 
                 if (this.elaboration.elaborations_texts==null){
-                    axios.post(`${this.store().apiroot}/api/elaborations_texts/`, elaboration_text,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/elaborations_texts/`, elaboration_text,  this.myheaders())
                     .then(() => {
                     }, (error) => {
                         this.parseResponseError(error)

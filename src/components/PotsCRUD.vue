@@ -20,6 +20,7 @@
     import axios from 'axios'
     import PasteImage from './PasteImage.vue'
     import {RulesSelection,RulesInteger,RulesString} from 'vuetify_rules'
+    import { useStore } from '@/store.js'
     export default {
         components: {
             PasteImage,
@@ -41,6 +42,7 @@
             }
         },
         methods: {
+        useStore,
             RulesSelection,RulesInteger,RulesString,
             button(){
                 if (this.mode=="C") return this.$t('Add')
@@ -62,9 +64,9 @@
                     this.new_pot.photo_content=this.pasted_image.image
                 }
                 if (this.mode=="C"){
-                    axios.post(`${this.store().apiroot}/api/pots/`, this.new_pot,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/pots/`, this.new_pot,  this.myheaders())
                     .then((response) => {
-                        this.store().pots.set(response.data.url,response.data)
+                        this.useStore().pots.set(response.data.url,response.data)
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -73,7 +75,7 @@
                 if (this.mode=="U"){
                     axios.put(this.new_pot.url, this.new_pot,  this.myheaders())
                     .then((response) => {
-                        this.store().pots.set(response.data.url,response.data)
+                        this.useStore().pots.set(response.data.url,response.data)
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -84,7 +86,7 @@
                     if(r == true) {
                         axios.delete(this.new_pot.url, this.myheaders())
                         .then((response) => {
-                            this.store().pots.delete(response.data.url,response.data)
+                            this.useStore().pots.delete(response.data.url,response.data)
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)

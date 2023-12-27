@@ -4,7 +4,7 @@
         <v-card class="pa-8 mt-4">
             <v-form ref="form" v-model="form_valid" lazy-validation>                
                 <v-text-field :readonly="mode=='D'" v-model="newep.name" :label="$t('Set name')" :placeholder="$t('Set name')" :rules="RulesString(200)" counter="200"/>
-                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(store().food_types)" v-model="newep.food_types" :label="$t('Select product food type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(useStore().food_types)" v-model="newep.food_types" :label="$t('Select product food type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <v-text-field :readonly="mode=='D'" v-model.number="newep.final_amount" :label="$t('Set your final amount')" :placeholder="$t('Set your final amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
                 <v-checkbox v-model="newep.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
                 <v-textarea v-model="newep.comment" :label="$t('Set your comment')" />              
@@ -46,6 +46,7 @@
 </template>
 <script>
     import axios from 'axios'
+import { useStore } from '@/store.js'
     import ProductsInCRUD from './ProductsInCRUD.vue'
     import {RulesSelection,RulesString,RulesFloatGEZ} from 'vuetify_rules'
     import {empty_products_in} from '../empty_objects.js'
@@ -87,6 +88,7 @@
             RulesFloatGEZ,
             RulesSelection,
             RulesString,
+        useStore,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')
@@ -105,9 +107,9 @@
                 }
 
                 if (this.mode=="C"){
-                    axios.post(`${this.store().apiroot}/api/elaborated_products/`, this.newep,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/elaborated_products/`, this.newep,  this.myheaders())
                     .then((response) => {
-                        this.store().elaborated_products.set(response.data.url,response.data)
+                        this.useStore().elaborated_products.set(response.data.url,response.data)
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -116,7 +118,7 @@
                 if (this.mode=="U"){
                     axios.put(this.newep.url, this.newep,  this.myheaders())
                     .then((response) => {
-                        this.store().elaborated_products.set(response.data.url,response.data)
+                        this.useStore().elaborated_products.set(response.data.url,response.data)
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -128,8 +130,8 @@
                         axios.delete(this.newep.url, this.myheaders())
                         .then((response) => {
                             console.log(response.data)
-                            this.store().elaborated_products.delete(response.data.deleted_elaborated_product)
-                            this.store().products.delete(response.data.deleted_product)
+                            this.useStore().elaborated_products.delete(response.data.deleted_elaborated_product)
+                            this.useStore().products.delete(response.data.deleted_product)
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)

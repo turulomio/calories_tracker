@@ -40,8 +40,8 @@
                     </template>
                     <template #item.actions="{item}">
                         <v-icon small @click="linkCompany(item)">mdi-link-variant</v-icon>
-                        <v-icon class="mr-1" small @click="editSystemCompany(item)"  color="#AA0000" v-if="store().catalog_manager">mdi-pencil</v-icon>
-                        <v-icon class="mr-1" small @click="deleteSystemCompany(item)" color="#AA0000" v-if="store().catalog_manager">mdi-delete</v-icon>
+                        <v-icon class="mr-1" small @click="editSystemCompany(item)"  color="#AA0000" v-if="useStore().catalog_manager">mdi-pencil</v-icon>
+                        <v-icon class="mr-1" small @click="deleteSystemCompany(item)" color="#AA0000" v-if="useStore().catalog_manager">mdi-delete</v-icon>
                     </template>
                     <template #bottom ></template>  
                 </v-data-table>
@@ -73,6 +73,7 @@
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import CompaniesCRUD from './CompaniesCRUD.vue'
     import SystemCompaniesCRUD from './SystemCompaniesCRUD.vue'
+import { useStore } from '@/store.js'
     export default {
         components: {
             MyMenuInline,
@@ -115,6 +116,7 @@
             empty_companies,
             empty_system_companies,
             localtime,
+        useStore,
             menuinline_items(){
                 let r= [
                     {
@@ -133,7 +135,7 @@
                         ]
                     },
                 ]
-                if (this.store().catalog_manager) r.push({
+                if (this.useStore().catalog_manager) r.push({
                         subheader: this.$t("System company options"),
                         children: [
                             {
@@ -195,10 +197,10 @@
                 });
             },
             update_companies(){
-                this.companies=this.getArrayFromMap(this.store().companies).filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase())) 
+                this.companies=this.getArrayFromMap(this.useStore().companies).filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase())) 
             },
             update_system_companies(){
-                return axios.get(`${this.store().apiroot}/api/system_companies/?search=${this.search}`, this.myheaders())
+                return axios.get(`${this.useStore().apiroot}/api/system_companies/?search=${this.search}`, this.myheaders())
                 .then((response) => {
                     this.system_companies=response.data
                }, (error) => {

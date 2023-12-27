@@ -16,6 +16,7 @@
 <script>
     import axios from 'axios'
     import {RulesString} from 'vuetify_rules'
+import { useStore } from '@/store.js'
     export default {
         props: {
             
@@ -33,6 +34,7 @@
             }
         },
         methods: {
+        useStore,
             RulesString,
             button(){
                 if (this.mode=="C") return this.$t('Add')
@@ -50,9 +52,9 @@
                     return
                 }
                 if (this.mode=="C"){
-                    axios.post(`${this.store().apiroot}/api/companies/`, this.newcompany,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/companies/`, this.newcompany,  this.myheaders())
                     .then((response) => {
-                        this.store().companies.set(response.data.url,response.data)
+                        this.useStore().companies.set(response.data.url,response.data)
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -61,7 +63,7 @@
                 if (this.mode=="U"){
                     axios.put(this.newcompany.url, this.newcompany,  this.myheaders())
                     .then((response) => {
-                        this.store().companies.set(response.data.url,response.data)
+                        this.useStore().companies.set(response.data.url,response.data)
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -72,7 +74,7 @@
                     if(r == true) {
                         axios.delete(this.newcompany.url, this.myheaders())
                         .then(() => {
-                            this.store().companies.delete(this.newcompany.url)
+                            this.useStore().companies.delete(this.newcompany.url)
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)

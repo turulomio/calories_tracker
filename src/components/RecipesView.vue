@@ -30,6 +30,7 @@
     import DisplayValues from './reusing/DisplayValues.vue'
     import TableRecipesLinks from './TableRecipesLinks.vue'
     import TableElaborations from './TableElaborations.vue'
+    import { useStore } from '@/store.js'
     export default {
         components:{
             DisplayValues,
@@ -89,6 +90,7 @@
         watch:{
         },
         methods: { 
+        useStore,
             localtime,       
             displayvalues(){
                 return [
@@ -98,7 +100,7 @@
                     {title:this.$t('Is a recipe for guests?'), value: this.new_recipe.guests},
                     {title:this.$t('Do you want to make it soon?'), value: this.new_recipe.soon},
                     {title:this.$t('Id'), value: this.new_recipe.id},
-                    {title:this.$t('Food type'), value: this.store().food_types.get(this.new_recipe.food_types).localname},
+                    {title:this.$t('Food type'), value: this.useStore().food_types.get(this.new_recipe.food_types).localname},
 
                 ]
             },

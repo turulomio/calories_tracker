@@ -47,6 +47,7 @@
     } from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import NameCRUD from './NameCrud.vue'
+import { useStore } from '@/store.js'
     export default {
         components: {
             MyMenuInline,
@@ -83,6 +84,7 @@
             empty_recipes_links_types,
             empty_recipes_categories,
             empty_measures_types,
+        useStore,
 
             menuinline_items(){
                 let r= [
@@ -141,7 +143,7 @@
                     ]
                 }
                 this.loading=true
-                this.catalog_table=this.getArrayFromMap(this.store()[this.table.value])
+                this.catalog_table=this.getArrayFromMap(this.useStore()[this.table.value])
                 this.loading=false
                 this.key=this.key+1
 

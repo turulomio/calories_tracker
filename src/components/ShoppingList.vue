@@ -14,6 +14,7 @@
 </template>
 <script>
     import axios from 'axios'
+    import { useStore } from '@/store.js'
     export default {
         data(){ 
             return{
@@ -23,12 +24,13 @@
             }
         },
         methods: {
+        useStore,
             acceptDialog(){       
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()
                     return
                 }
-                axios.post(`${this.store().apiroot}/shopping_list/`, {elaborations: this.elaborations_selected}, this.myheaders())
+                axios.post(`${this.useStore().apiroot}/shopping_list/`, {elaborations: this.elaborations_selected}, this.myheaders())
                 .then((response) => {
                     var link = window.document.createElement('a')
                     link.href = `data:${response.data.data.mime};base64,${response.data.data.data}`
@@ -42,7 +44,7 @@
             },
         },
         created(){
-            axios.get(`${this.store().apiroot}/api/elaborations/`, this.myheaders())
+            axios.get(`${this.useStore().apiroot}/api/elaborations/`, this.myheaders())
             .then((response) => {
                 this.elaborations=response.data
             }, (error) => {

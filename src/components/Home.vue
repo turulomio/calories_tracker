@@ -1,13 +1,14 @@
 <template>
     <div>
         <h1>{{ $t("Wellcome to Calories Tracker") }}</h1>
-        <h2>{{ `${store().version} (${store().versiondate.toISOString().slice(0,10)})` }}</h2>
+        <h2>{{ `${useStore().version} (${useStore().versiondate.toISOString().slice(0,10)})` }}</h2>
         <v-img :src="imgUrl" height="200px" contain ></v-img>
         <v-alert density="compact" class="mx-15 px-10 mb-2" outlined type="warning" v-if="time_message.length>0"> {{time_message}}</v-alert>   
     </div>
 </template>
 <script>
     import imgUrl from '@/assets/calories_tracker.png'
+    import { useStore } from '@/store.js'
     export default {
         components:{
         },
@@ -24,6 +25,7 @@
             },
         },
         methods:{
+        useStore,
         },
         created(){
         }

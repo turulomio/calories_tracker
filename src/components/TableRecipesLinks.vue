@@ -2,7 +2,7 @@
     <div>
         <v-data-table density="compact" :headers="table_headers" :items="recipe.recipes_links" class="elevation-1" :items-per-page="10000" :sort-by="[{key:'name',order:'asc'}]" fixed-header :height="$attrs.height" ref="table_recipes_links">
             <template #item.photo="{item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px"/></template>
-            <template #item.type="{item}"><div v-html="store().recipes_links_types.get(item.type).localname"></div></template> 
+            <template #item.type="{item}"><div v-html="useStore().recipes_links_types.get(item.type).localname"></div></template> 
             <template #item.link="{item}"><div @click="on_link_click(item)">{{item.link}}</div></template> 
             <template #item.mime="{item}">{{ show_mime(item)}}</template> 
             <template #item.size="{item}">{{ show_size(item)}}</template> 
@@ -27,6 +27,7 @@
     import RecipesLinksCRUD from './RecipesLinksCRUD.vue'
     import {empty_recipes_links} from '../empty_objects.js'
     import { hyperlinked_url } from '@/functions'
+    import { useStore } from '@/store.js'
     export default {
         components:{
             RecipesLinksCRUD,
@@ -57,6 +58,7 @@
             }
         },
         methods: {
+        useStore,
             empty_recipes_links,
             hyperlinked_url,
             on_link_click(item){
@@ -66,7 +68,7 @@
             on_new_click(type=3){
                 this.recipes_links=this.empty_recipes_links()
                 this.recipes_links.recipes=this.recipe.url
-                this.recipes_links.type=this.store().recipes_links_types.get(this.hyperlinked_url("recipes_links_types",type)).url, // Web page link
+                this.recipes_links.type=this.useStore().recipes_links_types.get(this.hyperlinked_url("recipes_links_types",type)).url, // Web page link
                 this.recipes_links_crud_mode="C"
                 this.key=this.key+1
                 this.recipes_links_crud_dialog=true

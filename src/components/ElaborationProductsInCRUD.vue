@@ -3,9 +3,9 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <AutocompleteProducts :readonly="mode=='D'" :items="getArrayFromMap(store().products)" v-model="new_product_in.products" />
+                <AutocompleteProducts :readonly="mode=='D'" :items="getArrayFromMap(useStore().products)" v-model="new_product_in.products" />
 
-                <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="getArrayFromMap(store().measures_types)" v-model="new_product_in.measures_types" :label="$t('Select your measure type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="getArrayFromMap(useStore().measures_types)" v-model="new_product_in.measures_types" :label="$t('Select your measure type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
 
                 <v-row class="pa-3">     
                     <v-text-field :readonly="mode=='D'" v-model.number="new_product_in.amount" :label="$t('Set product amount')" :placeholder="$t('Set product amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
@@ -30,6 +30,7 @@
     import Multiplier from './Multiplier.vue'
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import {my_round,RulesSelection,RulesInteger,RulesFloatGEZ} from 'vuetify_rules'
+    import { useStore } from '@/store.js'
     export default {
         components: {
             Multiplier,
@@ -56,10 +57,10 @@
         watch:{
             "new_product_in.products": function(){
                 if (this.new_product_in.products==null) return
-                let product=this.store().products.get(this.new_product_in.products)
+                let product=this.useStore().products.get(this.new_product_in.products)
                 this.products_formats=[]
                 product.formats.forEach(element => {
-                    this.products_formats.push({name: `${this.store().formats.get(element.formats).name} (${element.amount} g)`, amount: element.amount})
+                    this.products_formats.push({name: `${this.useStore().formats.get(element.formats).name} (${element.amount} g)`, amount: element.amount})
                     
                 });
                 console.log(this.products_formats)
@@ -77,6 +78,7 @@
             RulesSelection,
             RulesFloatGEZ,
             RulesInteger,
+        useStore,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')
@@ -93,7 +95,7 @@
                     return
                 }
                 if (this.mode=="C"){
-                    axios.post(`${this.store().apiroot}/api/elaborationsproductsinthrough/`, this.new_product_in,  this.myheaders())
+                    axios.post(`${this.useStore().apiroot}/api/elaborationsproductsinthrough/`, this.new_product_in,  this.myheaders())
                     .then(() => {
                         this.$emit("cruded")
                     }, (error) => {

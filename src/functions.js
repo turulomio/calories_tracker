@@ -1,4 +1,4 @@
-import { useStore } from './store.js'
+import { useStore } from '@/store.js'
 import {my_round} from 'vuetify_rules'
 
 // item is an additive_risks url
@@ -15,7 +15,7 @@ export function product_risk_color(additive_risks_url){
 // type: 1:system_product, 2:product, 3:elaborated products, 4: meals (item is product_url), 5: system_product english
 export function products_html_fullname(item,type_){
     if (type_==4) {
-        item=this.store().products.get(item)
+        item=this.useStore().products.get(item)
         type_=2
     }
     let additive_risks_object=getMapObjectById("additive_risks", item.additives_risk)
@@ -54,7 +54,7 @@ export function products_html_fullname(item,type_){
 
 // item is an object of additives. additives_object.additive_risks is an url
 export function additives_html_fullname(additives_object){
-    let additive_risks_object=this.store().additive_risks.get(additives_object.additive_risks)
+    let additive_risks_object=this.useStore().additive_risks.get(additives_object.additive_risks)
 
     let risk_color=product_risk_color(additive_risks_object.url)
 
@@ -62,12 +62,6 @@ export function additives_html_fullname(additives_object){
     return `${icon} ${additives_object.fullname}</span>`
 }
 
-
-
-
-export function store(){
-    return useStore()    
-}
 
 
 // Due to problems with translations I made this function to help i18n
@@ -85,7 +79,7 @@ String.prototype.format = function() {
 export function myheaders(){
     return {
         headers:{
-            'Authorization': `Token ${store().token}`,
+            'Authorization': `Token ${useStore().token}`,
             'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
             'Content-Type':'application/json'
         }
@@ -107,8 +101,8 @@ export function myheaders_noauth(){
 export function parseResponse(response){
     if (response.status==200){ //Good connection
         if (response.data == "Wrong credentials"){
-            this.store().token=null
-            this.store().logged=false
+            this.useStore().token=null
+            this.useStore().logged=false
             alert(this.$t("Wrong credentials"))
             return false
         }
@@ -130,12 +124,12 @@ export function parseResponseError(error){
 //       console.log(error.response.status);
 //       console.log(error.response.headers);
         if (error.response.status == 401){
-            if (this.store().token==null){ // Not logged yet
+            if (this.useStore().token==null){ // Not logged yet
                 alert(this.$t("Wrong credentials"))
             } else {
                 alert (this.$t("You aren't authorized to do this request"))
-                this.store().token=null;
-                this.store().logged=false;
+                this.useStore().token=null;
+                this.useStore().logged=false;
                 if (this.$router.currentRoute.name != "about") this.$router.push("about")
                 console.log(error.response)
             }
@@ -144,8 +138,8 @@ export function parseResponseError(error){
             console.log(error.response)
         } else if (error.response.status == 403){ // Used for developer or app errors
             alert (this.$t("You've done something forbidden"))
-            this.store().token=null;
-            this.store().logged=false;
+            this.useStore().token=null;
+            this.useStore().logged=false;
             if (this.$router.currentRoute.name != "about") this.$router.push("about")
             console.log(error.response)
         } else if (error.response.status == 500){
@@ -220,7 +214,7 @@ export function listobjects_sum(lo,key){
 
 // Generate a hyperlinked_url (DRF hyperlinked url) from model and id uses $sotre for apiroot
 export function hyperlinked_url(model,id){
-    return `${store().apiroot}/api/${model}/${id}/`
+    return `${useStore().apiroot}/api/${model}/${id}/`
 }
 
 //Gets id (integer) from an hyperlinked_url(DRF hyperlinked ul)
@@ -257,7 +251,7 @@ export function getBase64(file) {
 export function getMapObjectById(catalog,id) { 
     // If id doesn't exists return undefined
     var url=hyperlinked_url(catalog,id)
-    var r= store()[catalog].get(url)
+    var r= useStore()[catalog].get(url)
     return r
 }
 

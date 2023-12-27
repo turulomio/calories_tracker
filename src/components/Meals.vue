@@ -108,6 +108,7 @@
     import ElaboratedProductsCRUD from './ElaboratedProductsCRUD.vue'
     import ProductsCRUD from './ProductsCRUD.vue'
     import {my_round,localtime} from 'vuetify_rules'
+    import { useStore } from '@/store.js'
     export default {
         components: {
             MyMenuInline,
@@ -143,7 +144,7 @@
                                             day_meals.push(element.url)
                                         })
 
-                                        axios.post(`${this.store().apiroot}/api/meals/delete_several/`, {meals:day_meals},  this.myheaders())
+                                        axios.post(`${this.useStore().apiroot}/api/meals/delete_several/`, {meals:day_meals},  this.myheaders())
                                         .then(() => {
                                             this.update_all()
                                         }, (error) => {
@@ -209,6 +210,7 @@
             empty_meals,
             my_round,
             localtime,
+        useStore,
             on_MealsCRUD_cruded(){
                 this.meals_crud_dialog=false
                 this.update_all()
@@ -216,8 +218,8 @@
             update_all(){
                 this.loading=true
                 axios.all([
-                    axios.get(`${this.store().apiroot}/api/biometrics/?day=${this.day}`, this.myheaders()),
-                    axios.get(`${this.store().apiroot}/api/meals/?day=${this.day}`, this.myheaders())
+                    axios.get(`${this.useStore().apiroot}/api/biometrics/?day=${this.day}`, this.myheaders()),
+                    axios.get(`${this.useStore().apiroot}/api/meals/?day=${this.day}`, this.myheaders())
                 ])
                 .then(([resBiometric,resMeals]) => {
                     this.meals=resMeals.data
@@ -265,11 +267,11 @@
                 return  this.my_round(sum_sodium+salt*396,0)
             },
             on_product_click(item){
-                var product=this.store().products.get(item.products)
+                var product=this.useStore().products.get(item.products)
                 this.key=this.key+1
                 if (product.elaborated_products!=null){ //ELABORATED PRODUCT
                     this.elaborated_product_crud_mode="R"
-                    this.elaborated_product=this.store().elaborated_product.get(product.elaborated_products)
+                    this.elaborated_product=this.useStore().elaborated_product.get(product.elaborated_products)
                     this.elaborated_product_crud_dialog=true
                 } else { // SYSTEM PRODUCTS AND PRODUCTS
                     this.product_crud_mode="R"
