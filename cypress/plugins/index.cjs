@@ -1,8 +1,10 @@
+const { startDevServer } = require('@cypress/vite-dev-server');
+
 module.exports = (on, config) => {
-    // require('@cypress/code-coverage/task')(on, config);
-    on('task',require('@cypress/code-coverage/task'))
-    // other configurations or event listeners
-    // return config;
-  };
+  on('dev-server:start', (options) => startDevServer({ options }));
+  require('@cypress/code-coverage/task')(on, config);
+  return config;
+};
+
   
   console.log("PLGUINS INDEX:CJJS")

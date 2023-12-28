@@ -7,6 +7,8 @@ import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 // Utilities
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
+import istanbul from 'vite-plugin-istanbul';
+
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -18,6 +20,11 @@ export default defineConfig({
     vuetify({
       autoImport: true,
     }),
+    istanbul({
+      include: 'src/*', // specify the files you want to instrument
+      exclude: ['node_modules', 'test/*'],
+      extension: ['.js', '.vue'], // include your file extensions
+    })
     // basicSsl(),
   ],
   base: '/calories_tracker',
