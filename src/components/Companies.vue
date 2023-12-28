@@ -6,7 +6,7 @@
         <v-text-field id="filter" class="ml-10 mr-10 mb-5" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"  v-on:keyup.enter="on_search_change()"></v-text-field>
     
         <v-tabs bg-color="primary" v-model="tab" >
-            <v-tab key="companies">{{ $t('Companies') }}<v-badge inline v-if="companies.length>0" color="error" class="ml-2" :content="companies.length"/></v-tab>
+            <v-tab id="tabCompanies" key="companies">{{ $t('Companies') }}<v-badge inline v-if="companies.length>0" color="error" class="ml-2" :content="companies.length"/></v-tab>
             <v-tab id="tabSystemCompanies" key="system_companies">{{ $t('System companies') }}<v-badge inline v-if="system_companies.length>0" color="error" class="ml-2" :content="system_companies.length"/></v-tab>
         </v-tabs>
         <v-window v-model="tab" class="ma-5">
@@ -73,7 +73,8 @@
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import CompaniesCRUD from './CompaniesCRUD.vue'
     import SystemCompaniesCRUD from './SystemCompaniesCRUD.vue'
-import { useStore } from '@/store.js'
+    import { useStore } from '@/store.js'
+    import { myheaders, parseResponseError } from '@/functions'
     export default {
         components: {
             MyMenuInline,
@@ -116,7 +117,9 @@ import { useStore } from '@/store.js'
             empty_companies,
             empty_system_companies,
             localtime,
-        useStore,
+            myheaders,
+            parseResponseError,
+            useStore,
             menuinline_items(){
                 let r= [
                     {
@@ -190,7 +193,8 @@ import { useStore } from '@/store.js'
             },
             linkCompany(item){
                 axios.post(`${item.url}create_company/`, {}, this.myheaders())
-                .then(() => {
+                .then((response) => {
+                    this.useStore().companies.set(response.data.url,response.data)
                     this.update_all()
                }, (error) => {
                     this.parseResponseError(error)
