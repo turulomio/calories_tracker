@@ -4,7 +4,7 @@
         <v-card class="pa-6 mt-4" style="overflow-y: scroll" :height="600" >
             <v-form ref="form" v-model="form_valid" lazy-validation >
                 <v-text-field id="name" :readonly="mode=='D' || mode=='R'" v-model="newproduct.name" :label="$t('Set product name')" :placeholder="$t('Set product name')" :rules="RulesString(200)" counter="200"/>
-                <v-autocomplete id="companies" v-model="newproduct.companies" :items="getArrayFromMap(useStore().companies)" :label="$t('Select a company')" item-title="name" item-value="url" :rules="RulesSelection(true)"/>
+                <v-autocomplete id="companies" v-model="newproduct.companies" :items="getArrayFromMap(useStore().companies)" :label="$t('Select a company')" item-title="name" item-value="url" :rules="RulesSelection(false)"/>
                 <v-autocomplete id="food_types" :readonly="mode=='D' || mode=='R'" :items="getArrayFromMap(useStore().food_types)" v-model="newproduct.food_types" :label="$t('Select product food type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
                 <AutocompleteAdditives id="additives" :readonly="mode=='D' || mode=='R'" :additives="getArrayFromMap(useStore().additives)" v-model="newproduct.additives" />
                 <v-text-field id="amount" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.amount" :label="$t('Set product amount (gr)')" :placeholder="$t('Set product amount (gr)')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
