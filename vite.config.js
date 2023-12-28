@@ -48,21 +48,21 @@ export default defineConfig({
     host: "127.0.0.1",
     port: 8012,
   },
-  test: {
-    // globals: true,
-    environment: 'jsdom',
-    setupFiles: 'vitest.setup.js',
-    server: {
-      deps: {
-        inline: ['vuetify'],
-      },
-    },
-  },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: `@import "path-to-your-variables.scss";` // If you have global SCSS variables
-      }
-    }
-  },
+  // test: {
+  //   // globals: true,
+  //   environment: 'jsdom',
+  //   setupFiles: 'vitest.setup.js',
+  //   server: {
+  //     deps: {
+  //       inline: ['vuetify'],
+  //     },
+  //   },
+  // },
+  // css: {
+  //   preprocessorOptions: {
+  //     scss: {
+  //       additionalData: `@import "path-to-your-variables.scss";` // If you have global SCSS variables
+  //     }
+  //   }
+  // },
 })
