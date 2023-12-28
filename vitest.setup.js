@@ -7,7 +7,6 @@ config.global.mocks = {
   // $app: app
 };
 config.global.is_testing=true
-console.log("Testing...")
 
 import { createI18n } from 'vue-i18n';
 import { createTestingPinia } from '@pinia/testing';
