@@ -3,7 +3,7 @@
         <h1>{{ $t(`Products`) }}
             <MyMenuInline :items="menuinline_items()" :context="this"></MyMenuInline>
         </h1>
-          <v-text-field class="ml-10 mr-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
+          <v-text-field id="Products_filter" class="ml-10 mr-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
     
         <v-tabs  bg-color="primary" dark v-model="tab" >
             <v-tab key="products"><v-icon left>mdi-apple</v-icon>{{ $t('Products') }}<v-badge v-if="products.length>0" color="error" class="ml-2" :content="products.length" inline/></v-tab>
@@ -285,8 +285,10 @@
             },
             convertToSystemProduct(item){
 
-                axios.post(`${this.useStore().apiroot}/products_to_system_products/`, {product: item.url}, this.myheaders())
-                .then(() => {
+                axios.post(`${item.url}convert_to_system/`, {}, this.myheaders())
+                .then((response) => {
+                    this.useStore().products.set(response.data.product.url,response.data.product)
+                    this.system_products.push(response.data.system_product)
                     this.update_all()
                }, (error) => {
                     this.parseResponseError(error)
