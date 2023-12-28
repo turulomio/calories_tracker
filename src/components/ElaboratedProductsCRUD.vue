@@ -3,19 +3,19 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-4">
             <v-form ref="form" v-model="form_valid" lazy-validation>                
-                <v-text-field :readonly="mode=='D'" v-model="newep.name" :label="$t('Set name')" :placeholder="$t('Set name')" :rules="RulesString(200)" counter="200"/>
-                <v-autocomplete :readonly="mode=='D'" :items="getArrayFromMap(useStore().food_types)" v-model="newep.food_types" :label="$t('Select product food type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field :readonly="mode=='D'" v-model.number="newep.final_amount" :label="$t('Set your final amount')" :placeholder="$t('Set your final amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
-                <v-checkbox v-model="newep.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
-                <v-textarea v-model="newep.comment" :label="$t('Set your comment')" />              
+                <v-text-field id="ElaboratedProductsCRUD_Name" :readonly="['D','R'].includes(mode)" v-model="newep.name" :label="$t('Set name')" :placeholder="$t('Set name')" :rules="RulesString(200)" counter="200"/>
+                <v-autocomplete id="ElaboratedProductsCRUD_FoodTypes" :readonly="['D','R'].includes(mode)" :items="getArrayFromMap(useStore().food_types)" v-model="newep.food_types" :label="$t('Select product food type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-text-field id="ElaboratedProductsCRUD_Amount" :readonly="['D','R'].includes(mode)" v-model.number="newep.final_amount" :label="$t('Set your final amount')" :placeholder="$t('Set your final amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
+                <v-checkbox id="ElaboratedProductsCRUD_Obsolete" :readonly="['D','R'].includes(mode)" v-model="newep.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
+                <v-textarea id="ElaboratedProductsCRUD_Comment" :readonly="['D','R'].includes(mode)" v-model="newep.comment" :label="$t('Set your comment')" />              
                 <v-card class="mt-4">
                     <v-data-table density="compact" :headers="products_in_headers" :items="newep.products_in" :sort-by="[{key:'name',order:'asc'}]"  class="elevation-1" :items-per-page="10000" :key="'T'+key" :height="250" fixed-header>
                         <template #item.products="{item}">
                             <div v-html="products_html_fullname(item.products,4)"></div>
                         </template>
                         <template #item.actions="{item}">
-                            <v-icon v-if="['C','U'].includes(mode)" small class="mr-2" @click="editProductIn(item)">mdi-pencil</v-icon>
-                            <v-icon v-if="['C','U'].includes(mode)" small @click="deleteProductIn(item)">mdi-delete</v-icon>
+                            <v-icon id="ElaboratedProductsCRUD_iconEdit" v-if="['C','U'].includes(mode)" small class="mr-2" @click="editProductIn(item)">mdi-pencil</v-icon>
+                            <v-icon id="ElaboratedProductsCRUD_iconDelete" v-if="['C','U'].includes(mode)" small @click="deleteProductIn(item)">mdi-delete</v-icon>
                         </template>
                         <template #bottom></template>
                         <template #tbody>
@@ -30,29 +30,29 @@
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" v-if="['C','U'].includes(mode)" @click="addProductIn()" >{{ $t("Add a product") }}</v-btn>
-                <v-btn color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()">{{ button() }}</v-btn> 
-                <v-btn color="error" @click="$emit('cruded')" >{{ $t("Cancel") }}</v-btn>
+                <v-btn id="ElaboratedProductsCRUD_cmdProductIn" color="primary" v-if="['C','U'].includes(mode)" @click="addProductIn()" >{{ $t("Add a product") }}</v-btn>
+                <v-btn id="ElaboratedProductsCRUD_cmd" color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()">{{ button() }}</v-btn> 
+                <v-btn id="ElaboratedProductsCRUD_cmdCancel" color="error" @click="$emit('cruded')" >{{ $t("Cancel") }}</v-btn>
             </v-card-actions>
         </v-card>
 
         <!-- DIALOG PRODUCTS_IN CRUD -->
         <v-dialog v-model="dialog_products_in_crud" width="45%">
             <v-card class="pa-4">
-                <ProductsInCRUD :product_in="product_in" :mode="product_in_mode" :key="'B'+key" @cruded="on_ProductsInCRUD_cruded"></ProductsInCRUD>
+                <ElaboratedProductsProductsInCRUD :product_in="product_in" :mode="product_in_mode" :key="'B'+key" @cruded="on_ProductsInCRUD_cruded" />
             </v-card>
         </v-dialog>
     </div>
 </template>
 <script>
     import axios from 'axios'
-import { useStore } from '@/store.js'
-    import ProductsInCRUD from './ProductsInCRUD.vue'
+    import { useStore } from '@/store.js'
+    import ElaboratedProductsProductsInCRUD from './ElaboratedProductsProductsInCRUD.vue'
     import {RulesSelection,RulesString,RulesFloatGEZ} from 'vuetify_rules'
     import {empty_products_in} from '../empty_objects.js'
     export default {
         components: {
-            ProductsInCRUD,
+            ElaboratedProductsProductsInCRUD,
         },
         props: {
             

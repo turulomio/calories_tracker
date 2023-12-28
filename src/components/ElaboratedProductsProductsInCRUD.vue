@@ -4,16 +4,16 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
 
-                <AutocompleteProducts :readonly="mode=='D'" :items="getArrayFromMap(useStore().products)" v-model="newproduct_in.products" />
+                <AutocompleteProducts id="ElaboratedProductsProductsInCRUD_Products" :readonly="mode=='D'" :items="getArrayFromMap(useStore().products)" v-model="newproduct_in.products" />
                 <v-row class="pa-3">     
-                    <v-text-field :readonly="mode=='D'" v-model.number="newproduct_in.amount" :label="$t('Set product amount')" :placeholder="$t('Set product amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
-                    <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-title="name" item-value="amount" :rules="RulesSelection(false)"></v-autocomplete>
-                    <Multiplier v-model="multiplier" :readonly="mode=='D'" />
+                    <v-text-field id="ElaboratedProductsProductsInCRUD_Amount" :readonly="mode=='D'" v-model.number="newproduct_in.amount" :label="$t('Set product amount')" :placeholder="$t('Set product amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
+                    <v-autocomplete id="ElaboratedProductsProductsInCRUD_ProductsFormats" class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-title="name" item-value="amount" :rules="RulesSelection(false)"></v-autocomplete>
+                    <Multiplier  id="ElaboratedProductsProductsInCRUD_Multiplier" v-model="multiplier" :readonly="mode=='D'" />
                 </v-row>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="acceptDialog()">{{ button() }}</v-btn>
+                <v-btn id="ElaboratedProductsProductsInCRUD_cmd" color="primary" @click="acceptDialog()">{{ button() }}</v-btn>
             </v-card-actions>
         </v-card>
     </div>
@@ -61,7 +61,7 @@
             },
         },
         methods: {
-        useStore,
+            useStore,
             RulesFloatGEZ,
             RulesSelection,
             my_round,
