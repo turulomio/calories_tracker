@@ -1,10 +1,12 @@
-import { defineConfig } from "cypress";
+const { defineConfig } = require("cypress")
 // import registerCodeCoverageTasks from "@cypress/code-coverage/task.js"
 
 // import * as babelrc from "@cypress/code-coverage/use-babelrc.js"
 // console.log(babelrc)
 
-export default defineConfig({
+// cypress.config.js
+
+module.exports = defineConfig({
   chromeWebSecurity: false,
 
   // e2e: {
@@ -15,14 +17,15 @@ export default defineConfig({
   //     // }
   //   },
   // },
-  env: {
-    // test: {
-    //   plugins: ['istanbul']
-    // },
-    codeCoverage: {
-      url: "http://127.0.0.1:3000/__coverage__",
-    },
-  },
+  // env: {
+  //   // test: {
+  //   //   plugins: ['istanbul']
+  //   // },
+  //   codeCoverage: {
+  //     url: "/__coverage__",
+  //   },
+  // },
+  
 
   // e2e: {
   //   async setupNodeEvents(on, config) {
@@ -43,7 +46,11 @@ export default defineConfig({
 
   e2e: {
     setupNodeEvents(on, config) {
+      require('@cypress/code-coverage/task')(on,config)
       // implement node event listeners here
+      return config
     },
   },
 });
+
+console.log("READING")
