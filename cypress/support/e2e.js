@@ -10,13 +10,13 @@
 // 'supportFile' configuration option.
 //
 // You can read more here:
-// https://on.cypress.io/configuration
-// ***********************************************************
+// // https://on.cypress.io/configuration
+// // ***********************************************************
 
-// Import commands.js using ES2015 syntax:
-import './commands'
+// // Import commands.js using ES2015 syntax:
+// import './commands'
 import '@cypress/code-coverage/support';
-console.log("SUPPORT E2e.js")
+// console.log("SUPPORT E2e.js")
 
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
+// // Alternatively you can use CommonJS syntax:
+// // require('./commands')

@@ -48,6 +48,17 @@ export default defineConfig({
     host: "127.0.0.1",
     port: 8012,
   },
+  test: {
+    include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
+    exclude: ['node_modules', 'dist', '**/examples/**'],
+    coverage: {
+      // Include specific files or patterns
+      include: ['src/functions.js','src/types.js'],
+
+      // Exclude specific files or patterns
+      exclude: ['src/main.ts', 'src/api/**/*.ts']
+    }
+  }
   // test: {
   //   // globals: true,
   //   environment: 'jsdom',
