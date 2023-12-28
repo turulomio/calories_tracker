@@ -50,9 +50,9 @@ npm run dev
 
 ## Testing
 
-### e2e Tests
-In django_calories_tracker sources root: poe cypress_test_server
-In calories_tracker sources root: npm run cypress
+This app has two testing procedures:
 
+- `npm run vitest` Used to test independent functions
+- `npm run cypress` or `npm run cypress_console` Used for e2e testing with Cypress, to test UI logic. To use this command, you need to run  from django_calories_tracker sources root: `poe cypress_test_server`
 
 ## Changelog

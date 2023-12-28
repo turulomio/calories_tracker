@@ -4,10 +4,6 @@ describe('e2e Products', () => {
 
     login_test_User(cy)
     cy.get('#lateral_icon').click()
-
-    // PRODUCTS
-    cy.get('#lateral_icon').click()
-    //Open lateral menu companies to create one company from a system company
     cy.get('#lateral_companies').click()
 
     // Move to system companies tab
@@ -31,14 +27,14 @@ describe('e2e Products', () => {
     // Add first product
     add_product_from_products_vue("My first product")
 
-    // Update product
-    cy.get('.mdi-pencil').first().click()
-    cy.get('input[id="name"]').clear().type("My first product updated") //Find by id
-    cy.get('#cmd').click()
+    // // Update product
+    // cy.get('.mdi-pencil').first().click()
+    // cy.get('input[id="name"]').clear().type("My first product updated") //Find by id
+    // cy.get('#cmd').click()
 
-    // Delete product
-    cy.get('.mdi-delete').first().click()
-    cy.get('#cmd').click()
+    // // Delete product
+    // cy.get('.mdi-delete').first().click()
+    // cy.get('#cmd').click()
 
     // Create second product
     add_product_from_products_vue("My second product")

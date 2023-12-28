@@ -7,6 +7,8 @@ import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 // Utilities
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
+import istanbul from 'vite-plugin-istanbul';
+
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -18,6 +20,11 @@ export default defineConfig({
     vuetify({
       autoImport: true,
     }),
+    istanbul({
+      include: 'src/*', // specify the files you want to instrument
+      exclude: ['node_modules', 'test/*'],
+      extension: ['.js', '.vue'], // include your file extensions
+    })
     // basicSsl(),
   ],
   base: '/calories_tracker',
@@ -42,20 +49,32 @@ export default defineConfig({
     port: 8012,
   },
   test: {
-    // globals: true,
-    environment: 'jsdom',
-    setupFiles: 'vitest.setup.js',
-    server: {
-      deps: {
-        inline: ['vuetify'],
-      },
-    },
-  },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: `@import "path-to-your-variables.scss";` // If you have global SCSS variables
-      }
+    include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
+    exclude: ['node_modules', 'dist', '**/examples/**'],
+    coverage: {
+      reporter: ['html'],
+      // Include specific files or patterns
+      include: ['src/functions.js','src/types.js'],
+
+      // Exclude specific files or patterns
+      exclude: ['src/main.ts', 'src/api/**/*.ts']
     }
-  },
+  }
+  // test: {
+  //   // globals: true,
+  //   environment: 'jsdom',
+  //   setupFiles: 'vitest.setup.js',
+  //   server: {
+  //     deps: {
+  //       inline: ['vuetify'],
+  //     },
+  //   },
+  // },
+  // css: {
+  //   preprocessorOptions: {
+  //     scss: {
+  //       additionalData: `@import "path-to-your-variables.scss";` // If you have global SCSS variables
+  //     }
+  //   }
+  // },
 })
