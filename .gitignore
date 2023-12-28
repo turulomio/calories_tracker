@@ -25,3 +25,4 @@ package-lock.json
 coverage
 cypress.env.json
 cypress/screenshots
+.nyc_output

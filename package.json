@@ -10,7 +10,6 @@
     "lint": "eslint . --fix --ignore-path .gitignore",
     "reusing": "node src/scripts/reusing.js",
     "test": "vitest",
-    "coverage": "vitest --coverage --run",
     "cypress": "cypress open",
     "cypress_console": "cypress run"
   },
