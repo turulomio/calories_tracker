@@ -52,6 +52,7 @@ export default defineConfig({
     include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
     exclude: ['node_modules', 'dist', '**/examples/**'],
     coverage: {
+      reporter: ['html'],
       // Include specific files or patterns
       include: ['src/functions.js','src/types.js'],
 
