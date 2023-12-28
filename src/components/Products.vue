@@ -3,12 +3,12 @@
         <h1>{{ $t(`Products`) }}
             <MyMenuInline :items="menuinline_items()" :context="this"></MyMenuInline>
         </h1>
-          <v-text-field class="ml-10 mr-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
+          <v-text-field id="Products_filter" class="ml-10 mr-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
     
         <v-tabs  bg-color="primary" dark v-model="tab" >
-            <v-tab key="products"><v-icon left>mdi-apple</v-icon>{{ $t('Products') }}<v-badge v-if="products.length>0" color="error" class="ml-2" :content="products.length" inline/></v-tab>
-            <v-tab key="elaborated_products"><v-icon left>mdi-food-takeout-box</v-icon>{{ $t('Elaborated products') }}<v-badge v-if="elaborated_products.length>0" color="error" class="ml-2" :content="elaborated_products.length" inline/></v-tab>
-            <v-tab key="system_products"><v-icon left>mdi-database</v-icon>{{ $t('System products') }}<v-badge v-if="system_products.length>0" color="error" class="ml-2" :content="system_products.length" inline/></v-tab>
+            <v-tab id="Products_tabProducts" key="products"><v-icon left>mdi-apple</v-icon>{{ $t('Products') }}<v-badge v-if="products.length>0" color="error" class="ml-2" :content="products.length" inline/></v-tab>
+            <v-tab id="Products_tabElaboratedProducts" key="elaborated_products"><v-icon left>mdi-food-takeout-box</v-icon>{{ $t('Elaborated products') }}<v-badge v-if="elaborated_products.length>0" color="error" class="ml-2" :content="elaborated_products.length" inline/></v-tab>
+            <v-tab id="Products_tabSystemProducts" key="system_products"><v-icon left>mdi-database</v-icon>{{ $t('System products') }}<v-badge v-if="system_products.length>0" color="error" class="ml-2" :content="system_products.length" inline/></v-tab>
         </v-tabs>
         <v-window v-model="tab" class="ma-5">
             <v-window-item key="products" >
@@ -58,9 +58,9 @@
                     <template #item.phosphor="{item}"><div v-html="my_round(item.phosphor,0)"></div></template>  
                     <template #item.calcium="{item}"><div v-html="my_round(item.calcium,0)"></div></template>  
                     <template #item.actions="{item}">
-                        <v-icon small class="mr-1" @click.stop="linkProduct(item)">mdi-link-variant</v-icon>   
-                        <v-icon class="mr-1" small @click.stop="editSystemProduct(item)"  color="#AA0000" v-if="useStore().catalog_manager">mdi-pencil</v-icon>
-                        <v-icon small @click.stop="deleteSystemProduct(item)" color="#AA0000" v-if="useStore().catalog_manager">mdi-delete</v-icon>
+                        <v-icon id="Products_SystemProductsMdiLinkVariant" small class="mr-1" @click.stop="linkProduct(item)">mdi-link-variant</v-icon>   
+                        <v-icon id="Products_SystemProductsMdiPencil" class="mr-1" small @click.stop="editSystemProduct(item)"  color="#AA0000" v-if="useStore().catalog_manager">mdi-pencil</v-icon>
+                        <v-icon id="Products_SystemProductsMdiDelete" small @click.stop="deleteSystemProduct(item)" color="#AA0000" v-if="useStore().catalog_manager">mdi-delete</v-icon>
                     </template>
                 </v-data-table-virtual>
             </v-window-item>
@@ -285,8 +285,10 @@
             },
             convertToSystemProduct(item){
 
-                axios.post(`${this.useStore().apiroot}/products_to_system_products/`, {product: item.url}, this.myheaders())
-                .then(() => {
+                axios.post(`${item.url}convert_to_system/`, {}, this.myheaders())
+                .then((response) => {
+                    this.useStore().products.set(response.data.product.url,response.data.product)
+                    this.system_products.push(response.data.system_product)
                     this.update_all()
                }, (error) => {
                     this.parseResponseError(error)

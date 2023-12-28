@@ -11,7 +11,8 @@
     "reusing": "node src/scripts/reusing.js",
     "test": "vitest",
     "coverage": "vitest --coverage --run",
-    "cypress": "cypress open"
+    "cypress": "cypress open",
+    "cypress_console": "cypress run"
   },
   "dependencies": {
     "@mdi/font": "7.3.67",
@@ -47,6 +48,7 @@
     "@vitejs/plugin-vue": "^4.5.2",
     "@vitest/coverage-v8": "^1.1.0",
     "@vue/test-utils": "^2.4.3",
+    "babel-plugin-istanbul": "^6.1.1",
     "cypress": "^13.6.2",
     "eslint": "^8.55.0",
     "eslint-plugin-vue": "^9.19.2",

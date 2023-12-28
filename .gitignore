@@ -24,3 +24,4 @@ pnpm-debug.log*
 package-lock.json
 coverage
 cypress.env.json
+cypress/screenshots

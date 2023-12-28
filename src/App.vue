@@ -20,9 +20,9 @@
 <!--                    BIOMETRICS -->
                     <v-list-item link router :to="{ name: 'biometrics'}" v-if="useStore().logged"  prepend-icon="mdi-human-male-height" :title="$t('Biometrics')" />
 <!--                    COMPANIES -->
-                    <v-list-item link router :to="{ name: 'companies'}" v-if="useStore().logged" prepend-icon="mdi-domain" :title="$t('Companies')" />
+                    <v-list-item id="lateral_companies" link router :to="{ name: 'companies'}" v-if="useStore().logged" prepend-icon="mdi-domain" :title="$t('Companies')" />
 <!--                    PRODUCTS -->
-                    <v-list-item link router :to="{ name: 'products'}" v-if="useStore().logged" prepend-icon="mdi-apple" :title="$t('Products')" />
+                    <v-list-item id="lateral_products" link router :to="{ name: 'products'}" v-if="useStore().logged" prepend-icon="mdi-apple" :title="$t('Products')" />
 <!--                    MEALS -->
                     <v-list-item link router :to="{ name: 'meals'}" v-if="useStore().logged" prepend-icon="mdi-food-turkey" :title="$t('Meals')" />
 <!--                    RECIPES -->
