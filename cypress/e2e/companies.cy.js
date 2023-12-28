@@ -38,17 +38,19 @@ describe('e2e Companies', () => {
     //Buscamos
     cy.get("#filter").clear().type("My first system company{enter}")
 
-    // Update company
+    // Update system company
     cy.get('.mdi-pencil').first().click()
     cy.get('input[id="name"]').clear().type("My first system company updated") //Find by id
     cy.get('button[id="cmd"]').click()
 
-    // Delete company
-    cy.get('.mdi-delete').first().click() //No se puede sale alert
+    // Delete system company
+    //cy.get('.mdi-delete').first().click() //No se puede sale alert
 
     // Link System Company to Company
     cy.get('.mdi-link-variant').first().click()
     
+    // Move to  companies tab
+    cy.get('#tabCompanies').click()
 
   })
 
