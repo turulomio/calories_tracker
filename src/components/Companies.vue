@@ -73,7 +73,8 @@
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import CompaniesCRUD from './CompaniesCRUD.vue'
     import SystemCompaniesCRUD from './SystemCompaniesCRUD.vue'
-import { useStore } from '@/store.js'
+    import { useStore } from '@/store.js'
+    import { myheaders, parseResponseError } from '@/functions'
     export default {
         components: {
             MyMenuInline,
@@ -116,7 +117,9 @@ import { useStore } from '@/store.js'
             empty_companies,
             empty_system_companies,
             localtime,
-        useStore,
+            myheaders,
+            parseResponseError,
+            useStore,
             menuinline_items(){
                 let r= [
                     {
@@ -190,7 +193,8 @@ import { useStore } from '@/store.js'
             },
             linkCompany(item){
                 axios.post(`${item.url}create_company/`, {}, this.myheaders())
-                .then(() => {
+                .then((response) => {
+                    this.useStore().companies.set(response.data.url,response.data)
                     this.update_all()
                }, (error) => {
                     this.parseResponseError(error)
