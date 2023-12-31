@@ -1,7 +1,7 @@
 <template>
     <div>    
         <h1>{{ new_elaboration.fullname }}
-            <MyMenuInline :items="menuinline_items()" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items()"></MyMenuInline>
             <br>
             <v-btn class="" :color="(new_elaboration.final_amount)? '': 'primary'" :disabled="elaboration.automatic" @click="setFinalAmount()" >{{ (new_elaboration.final_amount==null) ? $t("Final amount wasn't set") : $t("Final amount: [0] g").format(new_elaboration.final_amount)}}</v-btn>
 

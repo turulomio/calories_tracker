@@ -1,7 +1,7 @@
 <template>
     <div class="ma-5">
         <h1>{{ $t(`Biometrics`) }}
-            <MyMenuInline :items="menuinline_items" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items"></MyMenuInline>
         </h1>
         <DisplayValues :items="displayvalues()" :key="key" :minimized_items="6" width="30%"></DisplayValues>
 

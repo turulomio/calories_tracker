@@ -1,7 +1,7 @@
 <template>
     <div class="ma-4">
         <h1>{{ $t(`Companies`) }}
-            <MyMenuInline :items="menuinline_items()" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items()"></MyMenuInline>
         </h1>
         <v-text-field id="filter" class="ml-10 mr-10 mb-5" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"  v-on:keyup.enter="on_search_change()"></v-text-field>
     
