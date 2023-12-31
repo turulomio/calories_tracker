@@ -3,8 +3,8 @@ describe('e2e Products', () => {
   it('Products', () => {    
 
     login_test_User(cy)
-    cy.get('#lateral_icon').click()
-    cy.get('#lateral_companies').click()
+    cy.getDataTest('lateral_icon').click()
+    cy.getDataTest('lateral_companies').click()
 
     // Move to system companies tab
     cy.get('#tabSystemCompanies').click()
@@ -17,8 +17,8 @@ describe('e2e Products', () => {
     cy.get('#tabCompanies').click()
 
     //Select menu products
-    cy.get('#lateral_icon').click()
-    cy.get('#lateral_products').click()
+    cy.getDataTest('lateral_icon').click()
+    cy.getDataTest('lateral_products').click()
 
 
     

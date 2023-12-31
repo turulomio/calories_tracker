@@ -1,7 +1,7 @@
 <template>
     <div class="ma-4">
         <h1>{{ $t(`Meals`) }}
-            <MyMenuInline :items="menuinline_items"></MyMenuInline>
+            <MyMenuInline data-test="Meals_MyMenuInline" :items="menuinline_items"></MyMenuInline>
         </h1>
 
             <div class="d-flex flex-column mx-auto pa-4">    

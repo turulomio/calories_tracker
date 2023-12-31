@@ -4,16 +4,16 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <MyDateTimePicker :readonly="mode=='D'" v-model="newmeal.datetime" :label="$t('Set transfer date and time')"></MyDateTimePicker>
-                <AutocompleteProducts :readonly="mode=='D'" :items="getArrayFromMap(useStore().products)" v-model="newmeal.products" />
+                <AutocompleteProducts data-test="MealsCRUD_Products" :readonly="mode=='D'" :items="getArrayFromMap(useStore().products)" v-model="newmeal.products" />
                 <v-row class="pa-3">     
-                    <v-text-field :readonly="mode=='D'" v-model.number="newmeal.amount" :label="$t('Set your amount')" :placeholder="$t('Set your amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
-                    <v-autocomplete  class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-title="name" item-value="amount" :rules="RulesSelection(false)" ></v-autocomplete>
-                    <Multiplier v-model="multiplier" :readonly="mode=='D'"></Multiplier>
+                    <v-text-field data-test="MealsCRUD_Amount" :readonly="mode=='D'" v-model.number="newmeal.amount" :label="$t('Set your amount')" :placeholder="$t('Set your amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
+                    <v-autocomplete data-test="MealsCRUD_ProductsFormats" class="mx-2" :readonly="mode=='D'" :items="products_formats" v-model="product_format" :label="$t('Select your product format')" item-title="name" item-value="amount" :rules="RulesSelection(false)" ></v-autocomplete>
+                    <Multiplier data-test="MealsCRUD_Multiplier" v-model="multiplier" :readonly="mode=='D'"></Multiplier>
                 </v-row>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="acceptDialog()">{{ button() }}</v-btn>
+                <v-btn data-test="MealsCRUD_Button" color="primary" @click="acceptDialog()">{{ button() }}</v-btn>
             </v-card-actions>
         </v-card>
     </div>

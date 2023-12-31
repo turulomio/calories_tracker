@@ -3,11 +3,11 @@ describe('e2e System products', () => {
   it('System Products', () => {    
 
     login_test_User(cy)
-    cy.get('#lateral_icon').click()
+    cy.getDataTest('lateral_icon').click()
+    cy.getDataTest('lateral_products').click()
 
 
     // SYSTEM PRODUCTS
-    cy.get('#lateral_products').click()
 
     cy.get("#Products_filter").type("{enter}")
 

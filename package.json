@@ -22,7 +22,6 @@
     "@tiptap/pm": "^2.1.13",
     "@tiptap/starter-kit": "^2.1.13",
     "@tiptap/vue-3": "^2.1.13",
-    "@vuepic/vue-datepicker": "^7.4.0",
     "axios": "^1.6.3",
     "echarts": "^5.4.3",
     "flag-icons": "^7.1.0",

@@ -7,8 +7,6 @@ import i18n from './i18n'
 import { createPinia } from 'pinia';
 import {router} from './routes.js'
 import mixin from '@/mixin'
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
 import VueHtmlToPaper from 'vue-html-to-paper';
 
 
@@ -27,7 +25,6 @@ app.use(i18n)
 app.use(createPinia())
 app.use(router)
 app.use(vuetify)
-app.component('VueDatePicker', VueDatePicker);
 app.component('v-chart', ECharts)
 app.mixin(mixin)
 app.mount('#app')

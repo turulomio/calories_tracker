@@ -4,7 +4,7 @@ describe('e2e Companies', () => {
 
     login_test_User(cy)
     //Open lateral menu
-    cy.get('[id="lateral_icon"]').click() //Find by id
+    cy.getDataTest('lateral_icon').click() //Find by id
 
     //Select biometrics
     cy.get('[href="/calories_tracker/companies/"] > .v-list-item__content > .v-list-item-title').click()
