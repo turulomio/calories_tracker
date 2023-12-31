@@ -1,7 +1,7 @@
 <template>
     <div class="ma-4">
         <h1>{{ $t(`Catalog tables`) }}
-            <MyMenuInline :items="menuinline_items()" :context="this"></MyMenuInline>
+            <MyMenuInline :items="menuinline_items()"></MyMenuInline>
         </h1>
         <v-select class="mt-4" density="compact" :items="tables" v-model="table" :label="$t('Select a catalog table')" return-object />
 

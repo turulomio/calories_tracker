@@ -8,10 +8,10 @@
 
 <script>
     import axios from 'axios'
-    import { useStore } from '@/store.js'
+    import { useStore } from "@/store"
     export default {
         methods: {
-        useStore,
+            useStore,
             logout(){
                 axios.post(`${this.useStore().apiroot}/logout/`, {'key': this.useStore().token},this.myheaders())
                 .then(() => {

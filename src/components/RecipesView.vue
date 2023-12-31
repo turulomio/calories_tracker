@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ recipe.name }}
-            <MyMenuInline :items="items"  :context="this"></MyMenuInline>
+            <MyMenuInline :items="items" ></MyMenuInline>
         </h1>
         <DisplayValues :items="displayvalues()" :minimized_items="5" :key="key"></DisplayValues>
 
