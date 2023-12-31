@@ -4,8 +4,8 @@ describe('e2e Elaborated Products', () => {
   it('Elaborated Products', () => {    
 
     login_test_User(cy)
-    cy.get('#lateral_icon').click()
-    cy.get('#lateral_products').click()
+    cy.getDataTest('lateral_icon').click()
+    cy.getDataTest('lateral_products').click()
     cy.get('#Products_tabElaboratedProducts').click()
 
     // Add a product to allow adding products_in

@@ -20,11 +20,11 @@
 <!--                    BIOMETRICS -->
                     <v-list-item link router :to="{ name: 'biometrics'}" v-if="useStore().logged"  prepend-icon="mdi-human-male-height" :title="$t('Biometrics')" />
 <!--                    COMPANIES -->
-                    <v-list-item id="lateral_companies" link router :to="{ name: 'companies'}" v-if="useStore().logged" prepend-icon="mdi-domain" :title="$t('Companies')" />
+                    <v-list-item data-test="lateral_companies" link router :to="{ name: 'companies'}" v-if="useStore().logged" prepend-icon="mdi-domain" :title="$t('Companies')" />
 <!--                    PRODUCTS -->
-                    <v-list-item id="lateral_products" link router :to="{ name: 'products'}" v-if="useStore().logged" prepend-icon="mdi-apple" :title="$t('Products')" />
+                    <v-list-item data-test="lateral_products" link router :to="{ name: 'products'}" v-if="useStore().logged" prepend-icon="mdi-apple" :title="$t('Products')" />
 <!--                    MEALS -->
-                    <v-list-item link router :to="{ name: 'meals'}" v-if="useStore().logged" prepend-icon="mdi-food-turkey" :title="$t('Meals')" />
+                    <v-list-item data-test="lateral_meals" link router :to="{ name: 'meals'}" v-if="useStore().logged" prepend-icon="mdi-food-turkey" :title="$t('Meals')" />
 <!--                    RECIPES -->
                     <v-list-item link router :to="{ name: 'recipes'}" v-if="useStore().logged"  prepend-icon="mdi-book-open-variant" :title="$t('Recipes')" />
 <!--                    POTS -->
@@ -69,7 +69,7 @@
         </v-navigation-drawer>
         
         <v-app-bar color="primary" dark  fixed fill-height app >
-            <v-app-bar-nav-icon id="lateral_icon" @click="drawer = !drawer"></v-app-bar-nav-icon>
+            <v-app-bar-nav-icon data-test="lateral_icon" @click="drawer = !drawer"></v-app-bar-nav-icon>
             <v-btn :to="{ name: 'home'}"><v-icon icon="mdi-home" dark></v-icon></v-btn>
             <v-btn :to="{ name: 'settings'}" v-if="useStore().logged"><v-icon icon="mdi-wrench" dark></v-icon></v-btn>
             <v-spacer />
