@@ -12,7 +12,6 @@ describe('e2e System products', () => {
     // Merging recipes
 
     add_recipe_from_recipes_vue("Recipe1")
-    add_recipe_from_recipes_vue("Recipe2")
     cy.intercept('POST', 'http://127.0.0.1:8011/api/recipes/').as("post_main_recipe")
     add_recipe_from_recipes_vue("Main recipe merging")
     cy.wait('@post_main_recipe').then((interception)=>{
@@ -21,6 +20,8 @@ describe('e2e System products', () => {
       cy.getDataTest(`Recipes_Table_Row${recipes_id}`).click()
       cy.get('h1 > .v-btn').last().click()
       cy.getDataTest('MyMenuInline_Header1_Item0').click()
+      cy.getDataTest('RecipesMerge_Autocomplete').type("e1{downArrow}{enter}{esc}")
+      cy.getDataTest('RecipesMerge_Button').click()
       
     })
   })
