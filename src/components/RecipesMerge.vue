@@ -1,11 +1,11 @@
 <template>
     <div>
-        <h1>{{ $t("Search recipes by its ingredients") }}</h1>
+        <h1>{{ $t("Merge recipes in '{name}'",  { "name": main_recipe.name}) }} {{ main_recipe.name }}</h1>
         <v-card>
             <AutoCompleteApiIdName data-test="RecipesMerge_Autocomplete" v-model="recipes" :url="`${useStore().apiroot}/api/recipes/`" :label="$t('Select recipes to merge')" paginated multiple />
             <v-card-actions>
                 <v-spacer></v-spacer>
-            <v-btn color="primary" @click="on_accept">{{ $t("Accept") }}</v-btn>
+                <v-btn data-test="RecipesMerge_Button" color="primary" @click="on_accept">{{ $t("Accept") }}</v-btn>
             </v-card-actions>
         </v-card>
     </div>  
