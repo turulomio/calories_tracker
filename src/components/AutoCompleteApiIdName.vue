@@ -21,6 +21,8 @@
             :label="label"
             placeholder="Start typing to Search"
             prepend-icon="mdi-database-search"
+            :multiple="multiple"
+            :chips="multiple"
         ></v-autocomplete>
         <v-autocomplete
             v-if="returnobject==true"
@@ -36,6 +38,8 @@
             :label="label"
             placeholder="Start typing to Search"
             prepend-icon="mdi-database-search"
+            :multiple="multiple"
+            :chips="multiple"
         ></v-autocomplete>
     </div>
 </template>
@@ -61,7 +65,17 @@
                 type: Boolean,
                 required: false,
                 default: false,
-            }
+            },
+            paginated:{ // If paginated result.data.results
+                type: Boolean,
+                required: false,
+                default: false,
+            },
+            multiple:{ // If paginated result.data.results
+                type: Boolean,
+                required: false,
+                default: false,
+            },
         },
         data(){ 
             return{
@@ -88,7 +102,12 @@
 
                 axios.get(`${this.url}?search=${search}`, this.myheaders())
                 .then((response) => {
-                    this.entries=response.data
+                    if (this.paginated){
+                        this.entries=response.data.results
+                    } else {
+                        this.entries=response.data
+                    }
+                    console.log(this.entries)
                     this.loading = false
                 }, (error) => {
                     this.parseResponseError(error)

@@ -5,12 +5,10 @@
                 <v-list>
                 
                     <v-list-item>
-                        
                             <v-list-item-title class="title">Calories Tracker</v-list-item-title>
                             <v-list-item-subtitle>{{ useStore().version }} ({{ useStore().versiondate.toISOString().slice(0,10)}})</v-list-item-subtitle>
                             <!-- <v-list-item-subtitle>{{ useStore().settings.first_name }} {{useStore().settings.last_name}}</v-list-item-subtitle> -->
                             <v-list-item-subtitle class="boldred" v-if="useStore().catalog_manager"><span class="vuered">{{ $t("With catalog manager role") }}</span></v-list-item-subtitle>
-                        
                     </v-list-item>
 
                     <v-divider></v-divider>
@@ -26,9 +24,9 @@
 <!--                    MEALS -->
                     <v-list-item data-test="lateral_meals" link router :to="{ name: 'meals'}" v-if="useStore().logged" prepend-icon="mdi-food-turkey" :title="$t('Meals')" />
 <!--                    RECIPES -->
-                    <v-list-item link router :to="{ name: 'recipes'}" v-if="useStore().logged"  prepend-icon="mdi-book-open-variant" :title="$t('Recipes')" />
+                    <v-list-item data-test="lateral_recipes" link router :to="{ name: 'recipes'}" v-if="useStore().logged"  prepend-icon="mdi-book-open-variant" :title="$t('Recipes')" />
 <!--                    POTS -->
-                    <v-list-item link router :to="{ name: 'pots'}" v-if="useStore().logged" prepend-icon="mdi-pot" :title="$t('Pot')" />
+                    <v-list-item data-test="lateral_pots" link router :to="{ name: 'pots'}" v-if="useStore().logged" prepend-icon="mdi-pot" :title="$t('Pot')" />
 <!--                     REPORTS -->                   
                     <v-list-group value="Reports"  v-if="useStore().logged">
                         <template v-slot:activator="{ props }">

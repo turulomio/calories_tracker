@@ -8,14 +8,14 @@
         </v-card>
         <v-data-table-server ref="table" :headers="recipes_headers" :items="items" class="elevation-1 cursorpointer" :items-length="itemsLength" :search="search" v-model:items-per-page="itemsPerPage" v-model:page="page" v-model:sort-by="sortBy" :loading="loading" item-value="content_url" @click:row="viewRecipe" :key="key+1" >
             <template #item.photo="{item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px" @click.stop="toggleFullscreen(item)" /></template>
-            <template #item.name="{item}"><div v-html="item.name"></div></template>      
+            <template #item.name="{item}"><div :data-test="`Recipes_Table_Row${item.id}`" v-html="item.name"></div></template>      
             <template #item.last="{item}">{{localtime(item.last)}}</template>      
             <template #item.recipes_categories="{item}">{{show_categories(item)}}</template>      
             <template #item.food_types="{item}"><div v-html="useStore().food_types.get(item.food_types).localname"></div></template> 
             <template #item.guests="{item}"><v-icon small v-if="item.guests" >mdi-check-outline</v-icon></template>   
             <template #item.soon="{item}"><v-icon small v-if="item.soon" >mdi-check-outline</v-icon></template>    
             <template #item.actions="{item}">
-                <v-icon small class="mr-1" @click.stop="addMainPhoto(item)">mdi-link-variant</v-icon>
+                <v-icon :data-test="`Recipes_Table_ButtonRecipeLink${item.id}`" small class="mr-1" @click.stop="addMainPhoto(item)">mdi-link-variant</v-icon>
                 <v-icon small class="mr-1" @click.stop="searchGoogle(item)">mdi-search-web</v-icon>
                 <v-icon small class="mr-1" @click.stop="editRecipe(item)">mdi-pencil</v-icon>
                 <v-icon small @click.stop="deleteRecipe(item)">mdi-delete</v-icon>
@@ -318,7 +318,7 @@
                 }}
                 axios.get(`${this.useStore().apiroot}/api/recipes/`, headers)
                 .then((response) => {
-                    console.log(response.data)
+                    // console.log(response.data)
                     this.items=response.data.results
                     this.itemsLength=response.data.count
                     this.totalPages=response.data.total_pages

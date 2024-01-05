@@ -42,3 +42,16 @@ export function add_product_from_products_vue(name){
     cy.get('#FormatsCRUD_cmd').click()
     cy.get('#cmd').click()
 }
+
+
+export function add_recipe_from_recipes_vue(name){
+    /*
+     * Add a recipe from Recipes.vue
+     */
+    cy.get('h1 > .v-btn').click()
+    cy.getDataTest('MyMenuInline_Header0_Item0').click()
+    cy.getDataTest("RecipesCRUD_Name").type(name)
+    cy.getDataTest("RecipesCRUD_RecipesCategories").type("chicken{downArrow}{enter}")
+
+    cy.getDataTest('RecipesCRUD_Button').click()
+}

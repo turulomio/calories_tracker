@@ -21,6 +21,12 @@
                 </v-card>
             </v-window-item>
         </v-window>
+        <!-- DIALOG SYSTEM PRODUCTS CRUD -->
+        <v-dialog v-model="dialog_recipes_merge" width="60%">
+            <v-card class="pa-4">
+                <RecipesMerge :main_recipe="new_recipe" :key="key" @merged="on_RecipesMerge_merged"/>
+            </v-card>
+        </v-dialog>
     </div>  
 </template>
 <script>
@@ -28,6 +34,7 @@
     import {localtime} from 'vuetify_rules'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import DisplayValues from './reusing/DisplayValues.vue'
+    import RecipesMerge from './RecipesMerge.vue'
     import TableRecipesLinks from './TableRecipesLinks.vue'
     import TableElaborations from './TableElaborations.vue'
     import { useStore } from '@/store.js'
@@ -35,6 +42,7 @@
         components:{
             DisplayValues,
             MyMenuInline,
+            RecipesMerge,
             TableRecipesLinks,
             TableElaborations
         },
@@ -84,7 +92,20 @@
                             },
                         ]
                     },
+                    {
+                        subheader:this.$t('Recipe utils'),
+                        children: [
+                            {
+                                name:this.$t('Merge recipes in this one'),
+                                code: function(){
+                                    this.dialog_recipes_merge=true
+                                }.bind(this),
+                                icon: "mdi-merge",
+                            },
+                        ]
+                    },
                 ],
+                dialog_recipes_merge:false,
             }  
         },
         watch:{
@@ -111,6 +132,13 @@
                 await this.update_recipe()
                 console.log("actualizada")
             },
+            async on_RecipesMerge_merged(){
+                this.dialog_recipes_merge=false
+                await this.update_recipe()
+                console.log("merged")
+            },
+
+
             update_recipe(){
                 axios.get(this.recipe.url, this.myheaders())
                 .then((response) => {
