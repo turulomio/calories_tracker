@@ -21,7 +21,6 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
-package-lock.json
 coverage
 cypress.env.json
 cypress/screenshots
