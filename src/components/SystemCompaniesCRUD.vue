@@ -53,8 +53,7 @@
                 }
                 if (this.mode=="C"){
                     axios.post(`${this.useStore().apiroot}/api/system_companies/`, this.new_system_company,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -62,8 +61,7 @@
                 }
                 if (this.mode=="U"){
                     axios.put(this.new_system_company.url, this.new_system_company,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -73,8 +71,7 @@
                     var r = confirm(this.$t("Do you want to delete this system company?"))
                     if(r == true) {
                         axios.delete(this.new_system_company.url, this.myheaders())
-                        .then((response) => {
-                            console.log(response.data)
+                        .then(() => {
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)

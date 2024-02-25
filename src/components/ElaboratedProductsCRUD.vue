@@ -129,7 +129,6 @@
                     if(r == true) {
                         axios.delete(this.newep.url, this.myheaders())
                         .then((response) => {
-                            console.log(response.data)
                             this.useStore().elaborated_products.delete(response.data.deleted_elaborated_product)
                             this.useStore().products.delete(response.data.deleted_product)
                             this.$emit("cruded")

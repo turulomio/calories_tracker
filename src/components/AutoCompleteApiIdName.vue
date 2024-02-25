@@ -107,7 +107,6 @@
                     } else {
                         this.entries=response.data
                     }
-                    console.log(this.entries)
                     this.loading = false
                 }, (error) => {
                     this.parseResponseError(error)

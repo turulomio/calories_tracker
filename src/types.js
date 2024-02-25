@@ -2,8 +2,6 @@
 // https://masteringjs.io/tutorials/fundamentals/enum
 import {my_round} from 'vuetify_rules'
 
-// console.log(this)
-
 export class NutritionalElement {
     // Create new instances of the same class as static attributes
     static Amount= new NutritionalElement("amount", "Amount")

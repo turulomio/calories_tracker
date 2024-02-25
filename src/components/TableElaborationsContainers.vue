@@ -53,7 +53,6 @@
             on_new_click(){
                 this.item=this.empty_elaborations_containers()
                 this.item.elaborations=this.elaboration.url
-                console.log(this.item)
                 this.mode="C"
                 this.key=this.key+1
                 this.dialog=true

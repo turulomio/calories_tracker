@@ -43,8 +43,7 @@
             transfer(){    
                 if (this.validate()==false) return          
                 axios.post(`${this.useStore().apiroot}/products/datatransfer/`, this.new_pdt,  this.myheaders())
-                .then((response) => {
-                    console.log(response.data)
+                .then(() => {
                     this.$emit("cruded")
                 }, (error) => {
                     this.parseResponseError(error)
@@ -69,8 +68,7 @@
                 let headers={...this.myheaders(),params: this.new_pdt}
 
                 axios.get(`${this.useStore().apiroot}/products/datatransfer/`, headers)
-                .then((response) => {
-                    console.log(response.data)
+                .then(() => {
                 }, (error) => {
                     this.parseResponseError(error)
                 }) 

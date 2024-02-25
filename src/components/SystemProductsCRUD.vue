@@ -126,8 +126,7 @@
                 }
                 if (this.mode=="C"){
                     axios.post(`${this.useStore().apiroot}/api/system_products/`, this.new_system_product,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -135,8 +134,7 @@
                 }
                 if (this.mode=="U"){
                     axios.put(this.new_system_product.url, this.new_system_product,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -146,8 +144,7 @@
                     var r = confirm(this.$t("Do you want to delete this system product?"))
                     if(r == true) {
                         axios.delete(this.new_system_product.url, this.myheaders())
-                        .then((response) => {
-                            console.log(response.data)
+                        .then(() => {
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)

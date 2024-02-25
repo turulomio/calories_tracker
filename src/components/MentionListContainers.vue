@@ -79,7 +79,6 @@
         const item = this.items[index]
   
         if (item) {
-          console.log(item)
           this.command({id:item.id,label:item.name})
         }
       },

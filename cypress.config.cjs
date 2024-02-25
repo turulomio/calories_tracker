@@ -20,5 +20,3 @@ module.exports = defineConfig({
     },
   },
 });
-
-console.log("READING")
