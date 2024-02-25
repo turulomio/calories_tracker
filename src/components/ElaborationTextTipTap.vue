@@ -158,8 +158,11 @@ import { useStore } from '@/store.js'
                     //substracion
 
                     unused_ids = unused_ids.filter((item) => !used_ids.includes(item))
+                    console.log("USED",used_ids)
                   })
                 } 
+
+                console.log("UNUSED",unused_ids)
 
 
                 //Generation of string
