@@ -318,7 +318,6 @@
                 }}
                 axios.get(`${this.useStore().apiroot}/api/recipes/`, headers)
                 .then((response) => {
-                    // console.log(response.data)
                     this.items=response.data.results
                     this.itemsLength=response.data.count
                     this.totalPages=response.data.total_pages

@@ -61,22 +61,6 @@ export default {
         useStore,
         additives_html_fullname,
         RulesSelection,
-        // on_custom_filter(a,b,c){
-        //     if(this.new_value.length<1) {
-        //         return
-        //     } 
-        //     console.log(a,b,c)
-        // },
-        // on_update_modelValue(){
-        //     console.log("AOHOARA")
-        //     if(this.new_value.length<1) {
-        //         this.additives_filtered=[]
-        //     } else {
-        //         this.additives_filtered=this.new_additives.filter(o => o.includes(this.new_value))
-        //     }
-        //     console.log(this.additives_filtered.length)
-        //     // this.$emit("update:modelValue", this.new_value)
-        // },
     },
     created(){
         this.new_value=this.modelValue

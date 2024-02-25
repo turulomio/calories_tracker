@@ -150,8 +150,7 @@
 
                 if (this.mode=="C"){
                     axios.post(`${this.useStore().apiroot}/api/recipes_links/`, this.new_recipes_links,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -159,8 +158,7 @@
                 }
                 if (this.mode=="U"){
                     axios.put(this.new_recipes_links.url, this.new_recipes_links,  this.myheaders())
-                    .then((response) => {
-                        console.log(response.data)
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
@@ -170,8 +168,7 @@
                     var r = confirm(this.$t("Do you want to delete this recipe link?"))
                     if(r == true) {
                         axios.delete(this.new_recipes_links.url, this.myheaders())
-                        .then((response) => {
-                            console.log(response.data)
+                        .then(() => {
                             this.$emit("cruded")
                         }, (error) => {
                             this.parseResponseError(error)

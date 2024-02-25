@@ -130,12 +130,10 @@
             },
             async on_TableElaborations_cruded(){
                 await this.update_recipe()
-                console.log("actualizada")
             },
             async on_RecipesMerge_merged(){
                 this.dialog_recipes_merge=false
                 await this.update_recipe()
-                console.log("merged")
             },
 
 

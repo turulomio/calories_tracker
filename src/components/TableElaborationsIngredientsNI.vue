@@ -137,7 +137,6 @@
                     }
                 });
                 this.key=this.key+1
-                console.log(this.items)
 
             },
             on_icon_salt_info(){

@@ -58,8 +58,7 @@
     import Mention from '@tiptap/extension-mention'
     import tippy from 'tippy.js'
     import { id_from_hyperlinked_url } from '@/functions';
-import { useStore } from '@/store.js'
-
+    import { useStore } from '@/store.js'
     import MentionListIngredients from './MentionListIngredients.vue'
     import MentionListContainers from './MentionListContainers.vue'
     export default {
@@ -160,7 +159,6 @@ import { useStore } from '@/store.js'
                     unused_ids = unused_ids.filter((item) => !used_ids.includes(item))
                   })
                 } 
-
 
                 //Generation of string
                 unused_ids.forEach(o=>{
@@ -345,11 +343,37 @@ import { useStore } from '@/store.js'
                       HTMLAttributes: {
                         class: 'mention_ingredients',
                       },
+                      renderHTML({options,node}){
+                        return [
+                          "span",
+                          {
+                            "data-type":"mention",
+                            class:"mention_ingredients",
+                            "data-id": node.attrs.id,
+                            "data-label": node.attrs.label,
+
+                          },
+                          `${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`,
+                        ]
+                      },
                       suggestion:this.suggestion_ingredients(),
                     }),
                     Mention.extend({name: 'MentionContainers',}).configure({
                       HTMLAttributes: {
                         class: 'mention_containers',
+                      },                      
+                      renderHTML({options,node}){
+                        return [
+                          "span",
+                          {
+                            "data-type":"MentionContainers",
+                            class:"mention_containers",
+                            "data-id": node.attrs.id,
+                            "data-label": node.attrs.label,
+
+                          },
+                          `${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`,
+                        ]
                       },
                       suggestion:this.suggestion_containers(),
                     }),

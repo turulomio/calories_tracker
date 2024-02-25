@@ -33,10 +33,8 @@
             useStore,  
             myheaders,
             on_accept(){              
-                console.log(this.recipes)
                 axios.post(`${this.main_recipe.url}merge/`, {recipes:this.recipes}, this.myheaders())
-                .then((response) => {
-                    console.log(response.data)
+                .then(() => {
                     this.$emit("merged")
                }, (error) => {
                     this.parseResponseError(error)

@@ -63,7 +63,6 @@
                     this.products_formats.push({name: `${this.useStore().formats.get(element.formats).name} (${element.amount} g)`, amount: element.amount})
                     
                 });
-                console.log(this.products_formats)
 
             },
             product_format(){

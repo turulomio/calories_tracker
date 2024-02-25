@@ -11,23 +11,3 @@ describe('types', () => {
   })
 })
 
-
-// function $t(s){
-//     return s
-// }
-// console.log(this)
-
-//   describe("Functions", () => {
-//     it('NutritionalElement', () => {;
-//         beforeEach(function () {
-//           this.$t=function(s){
-//             return s
-//           }
-//           console.log("Initialising... Test " + testRan);
-//         });
-//       assert.equal(NutritionalElement.Fat,2)
-//     });
-  
-  
-//   });
-  

@@ -213,7 +213,6 @@ import { useStore } from '@/store.js'
                 }
                 return axios.post(`${this.new_elaboration.url}create_elaborated_product/`, {}, this.myheaders())
                 .then((response) => {
-                    console.log(response.data)
                     this.useStore().elaborated_products.set(response.data.elaborated_product.url,response.data.elaborated_product)
                     this.useStore().products.set(response.data.product.url,response.data.product)
                     alert(this.$t("Elaborated product created correctly. Now you can use it to track calories in your meals"))
