@@ -24,6 +24,7 @@
 import axios from 'axios'
 import { useStore } from "@/store"
 import {RulesString} from "vuetify_rules"
+import {myheaders_noauth,parseResponse,parseResponseError} from "@/functions"
 export default {
     data () {
         return {
@@ -36,8 +37,11 @@ export default {
         }
     },
     methods: {
-            useStore,
+        useStore,
+        myheaders_noauth,
         RulesString,
+        parseResponse,
+        parseResponseError,
         login(){
             var start=new Date()
                 if (this.form_valid!=true) {
@@ -81,7 +85,7 @@ export default {
             this.dialog = false
         }
     },
-    mounted(){
+    created(){
         this.$router.push({name:'about'}) //On reload F5 browser always in home   COMMENT FOR WIDGETS DEBUGGING
     }
 }
