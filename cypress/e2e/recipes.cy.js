@@ -20,7 +20,7 @@ describe('e2e System products', () => {
       cy.getDataTest(`Recipes_Table_Row${recipes_id}`).click()
       cy.get('h1 > .v-btn').last().click()
       cy.getDataTest('MyMenuInline_Header1_Item0').click()
-      cy.getDataTest('RecipesMerge_Autocomplete').type("e1{downArrow}{enter}{esc}")
+      cy.getDataTest('RecipesMerge_Autocomplete').type("e1{downArrow}{enter}")
       cy.getDataTest('RecipesMerge_Button').click()
       
     })

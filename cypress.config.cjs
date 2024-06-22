@@ -4,6 +4,8 @@ module.exports = defineConfig({
   viewportHeight:1080,
   viewportWidth:1920,
   chromeWebSecurity: false,
+  defaultCommandTimeout: 10000,
+  waitForAnimations: true,
 
   component: {
     devServer: {
