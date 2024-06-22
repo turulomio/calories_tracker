@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>{{ $t("Merge recipes in '{name}'",  { "name": main_recipe.name}) }} {{ main_recipe.name }}</h1>
+        <h1>{{ f($t("Merge recipes in '[0]'"), [main_recipe.name]) }}</h1>
         <v-card>
             <AutoCompleteApiIdName data-test="RecipesMerge_Autocomplete" v-model="recipes" :url="`${useStore().apiroot}/api/recipes/`" :label="$t('Select recipes to merge')" paginated multiple />
             <v-card-actions>
@@ -15,6 +15,7 @@
     import { useStore } from '@/store.js'
     import axios from 'axios'
     import {myheaders} from '@/functions'
+    import { f } from 'vuetify_rules'
     export default {
         props: {
             main_recipe: { //recipe object
@@ -29,7 +30,8 @@
                 recipes:[],
             }  
         },
-        methods: {    
+        methods: {
+            f,
             useStore,  
             myheaders,
             on_accept(){              
