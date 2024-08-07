@@ -57,15 +57,6 @@
                 <ElaborationsFinalAmount :elaboration="new_elaboration" :key="key"  @cruded="on_ElaborationsFinalAmount_cruded"/>
             </v-card>
         </v-dialog>
-        <!--  NICE RECIPE DIALOG -->
-        <v-dialog v-model="dialog_nice_recipe" width="70%">
-            <v-card class="pa-3">       
-                <v-card outlined v-if="new_elaboration.elaborations_texts" style="overflow: auto" >  
-                    <div class="ma-3" id="nice" v-html="nice()" :key="keynice"></div>
-                </v-card>
-                <v-btn color="primary" @click="print" >{{ $t("Print") }}</v-btn>    
-            </v-card>
-        </v-dialog>
         <!-- NI Dialog -->
         <v-dialog v-model="dialog_ni" width="100%">
             <v-card class="pa-3">     
@@ -88,7 +79,11 @@
     import ElaborationTextTipTap from './ElaborationTextTipTap.vue'
     import {elaboration_nutritional_information_string} from '../functions.js'
     import { NutritionalElement } from '@/types'
-import { useStore } from '@/store.js'
+    import { useStore } from '@/store.js'
+    import pdfMake from "pdfmake/build/pdfmake";
+    import pdfFonts from "pdfmake/build/vfs_fonts";
+import htmlToPdfmake from 'html-to-pdfmake'
+    pdfMake.addVirtualFileSystem(pdfFonts);
     export default {
         components: {
             ElaborationsFinalAmount,
@@ -112,11 +107,8 @@ import { useStore } from '@/store.js'
                 tab: 2,
 
                 key:0,
-                keynice:0,
                 // FinalamountFromFullPot
                 dialog_finalamount:false,
-                // Nice recipe dialog
-                dialog_nice_recipe:false,
                 // NI dialog
                 dialog_ni:false,
             }
@@ -131,14 +123,6 @@ import { useStore } from '@/store.js'
                     {
                         subheader: this.$t("Recipe options"),
                         children: [
-                            {
-                                name: this.$t("Nice recipe"),
-                                icon: "mdi-file-pdf-box",
-                                code: function(){
-                                    this.keynice=this.keynice+1
-                                    this.dialog_nice_recipe=true
-                                }.bind(this),
-                            },
                             {
                                 name: this.$t("Generate PDF"),
                                 icon: "mdi-file-pdf-box",
@@ -221,17 +205,73 @@ import { useStore } from '@/store.js'
                 });
             },
             generate_pdf(){
-                axios.post(`${this.new_elaboration.url}generate_pdf/`, {}, this.myheaders())
-                .then((response) => {
-                    var link = window.document.createElement('a')
-                    link.href = `data:${response.data.data.mime};base64,${response.data.data.data}`
-                    link.download = response.data.data.filename
-                    document.body.appendChild(link)
-                    link.click()
-                    document.body.removeChild(link)
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
+
+                this.creating=true
+                var ingredients=[]
+                this.new_elaboration.elaborations_products_in.forEach(o=>{
+                    ingredients.push(o.fullname)
+                })
+                var containers=[]
+                this.new_elaboration.elaborations_containers.forEach(o=>{
+                    containers.push(o.name)
+                })
+
+                var ni=htmlToPdfmake(`<div class="column_wrapper">
+    <ul>
+        <li>${this.$t("Recipe total amount")}: ${NutritionalElement.Amount.amount(this.new_elaboration.final_amount)}</li>
+        <li>${this.$t("Calories")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Calories)}</li>
+        <li>${this.$t("Fat")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Fat)}</li>
+        <li>${this.$t("Protein")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Protein)}</li>
+        <li>${this.$t("Carbohydrates")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Carbohydrate)}</li>
+        <li>${this.$t("Salt")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Salt)}</li>
+        <li>${this.$t("Fiber")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Fiber)}</li>
+        <li>${this.$t("Sugars")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Sugars)}</li>
+        <li>${this.$t("Saturated fat")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.SaturatedFat)}</li>
+        <li>${this.$t("Cholesterol")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Cholesterol)}</li>
+        <li>${this.$t("Sodium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Sodium)}</li>
+        <li>${this.$t("Potassium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Potassium)}</li>
+        <li>${this.$t("Magnessium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Magnesium)}</li>
+        <li>${this.$t("Phosphor")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Phosphor)}</li>
+        <li>${this.$t("Calcium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Calcium)}</li>
+    </ul
+</div>
+`)
+
+
+
+                const docDefinition = {
+                    info: {
+                        title: this.$t("Recipe") + this.new_elaboration.fullname,
+                        author: `Calories Tracker v${this.useStore().version}`,
+                        subject: this.$t("Calories Tracker recipe"),
+                        keywords: 'recipe',
+                    },
+                    content: [    
+                        { text: this.new_elaboration.fullname, style: 'header1', alignment:'center' },
+                        { text: (this.new_elaboration.automatic && this.new_elaboration.automatic_adaptation_step!="")? this.$t("<p class='p_print'>This is an automatic recipe with this comment: '[0]'</p>").format(this.new_elaboration.automatic_adaptation_step) : "", style:"body"},
+
+                        { text: 'Ingredients', style: 'header2', alignment:'center' },
+                        { ul : ingredients, style:"mention_ingredients"},
+                        { text: 'Containers', style: 'header2', alignment:'center' },
+                        { ul : containers, style: "mention_containers"},
+                        { text: 'Recipe', style: 'header2', alignment:'center' },
+                        htmlToPdfmake(this.$refs.tiptap.editor.getHTML()),
+                        { text: this.$t("Nutritional information for each 100 g"), style: 'header2', alignment:'center' },
+                        ni,
+                     ],
+                    styles: {
+                        header1: { fontSize: 16, bold: true , margin: [0, 6, 0, 6]},
+                        header2: { fontSize: 14, bold: true , margin: [6, 4, 0, 4]},
+                        body: { fontSize: 11 ,margin:[0,2,0,2], alignment:"justify"},
+                        mention_ingredients: { fillColor: "#f7dbbb", color:"#3f310a", bold:true},
+                        mention_containers: { fillColor: "#a5c4e4" , color: "#0e0e8b", bold:true},
+                    },
+                };
+                console.log("PDFMAKE", docDefinition)
+
+                var filename=`${this.new_elaboration.fullname}.pdf`
+                pdfMake.createPdf(docDefinition,{tagged:true}).download(filename);
+                this.creating=false
             },
             showNI(){
                 this.key=this.key+1
@@ -271,96 +311,6 @@ import { useStore } from '@/store.js'
             },
 
 
-            nice(){
-                var ingredients="<p><div class='column_wrapper'><ul>"
-                this.new_elaboration.elaborations_products_in.forEach(o=>{
-                    ingredients=ingredients+ `<li>${o.fullname}</li>`
-                })
-                ingredients=ingredients+"</ul></div>"
-                var containers="<div class='column_wrapper'><ul>"
-                this.new_elaboration.elaborations_containers.forEach(o=>{
-                    containers=containers+ `<li>${o.name}</li>`
-                })
-                containers=containers+"</ul></div>"
-
-                var automatic=""
-                if (this.new_elaboration.automatic && this.new_elaboration.automatic_adaptation_step!=""){
-                    automatic=this.$t("<p class='p_print'>This is an automatic recipe with this comment: '[0]'</p>").format(this.new_elaboration.automatic_adaptation_step)
-                }
-
-                var s=`
-<h1 class="h1_print">${this.new_elaboration.fullname}</h1>
-${automatic}
-<h2 class="h2_print">${this.$t("Ingredients")} @</h2>
-${ingredients}
-<h2 class="h2_print">${this.$t("Containers")} #</h2>
-${containers}   
-<h2 class="h2_print">${this.$t("Recipe")}</h2>
-${this.$refs.tiptap.editor.getHTML()}
-<h2 class="h2_print">${this.$t("Nutritional information for each 100 g")}</h2>
-<div class="column_wrapper">
-    <ul>
-        <li>${this.$t("Recipe total amount")}: ${NutritionalElement.Amount.amount(this.new_elaboration.final_amount)}</li>
-        <li>${this.$t("Calories")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Calories)}</li>
-        <li>${this.$t("Fat")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Fat)}</li>
-        <li>${this.$t("Protein")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Protein)}</li>
-        <li>${this.$t("Carbohydrates")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Carbohydrate)}</li>
-        <li>${this.$t("Salt")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Salt)}</li>
-        <li>${this.$t("Fiber")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Fiber)}</li>
-        <li>${this.$t("Sugars")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Sugars)}</li>
-        <li>${this.$t("Saturated fat")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.SaturatedFat)}</li>
-        <li>${this.$t("Cholesterol")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Cholesterol)}</li>
-        <li>${this.$t("Sodium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Sodium)}</li>
-        <li>${this.$t("Potassium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Potassium)}</li>
-        <li>${this.$t("Magnessium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Magnesium)}</li>
-        <li>${this.$t("Phosphor")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Phosphor)}</li>
-        <li>${this.$t("Calcium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Calcium)}</li>
-    </ul
-</div>
-<style>
-.h1_print{
-    text-align: center;
-    font-size: 14pt;
-}
-.h2_print{
-    text-align: center;
-    font-size: 13pt;
-}
-
-.column_wrapper {
-    column-count: 2;
-    font-size: 11pt;
-}
-.mention_containers{
-    color: rgb(15, 15, 139);
-    background-color: rgb(165, 197, 228);
-  }
-
-p {
-    margin: 0 !important;
-    padding: 2px !important;
-}
-
-ol > li {
-    margin-left: 20px;
-    font-size: 10pt;
-  }
-  
-ul > li {
-    margin-left: 20px;
-    font-size: 10pt;
-  }
-
-  .mention_ingredients {
-    color: #3f310b;
-    background-color: #f7dbbc;
-    border-radius: 0.3rem;
-    padding: 0.1rem 0.3rem;
-  }
-</style>
-`
-                return s
-            },
         },
         created(){
             this.new_elaboration=Object.assign({},this.elaboration)
