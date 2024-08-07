@@ -4,18 +4,6 @@ This is the Vue 3 evolution of the branch vue2 of project https://github.com/tur
 
 ## Installation
 
-### Unogenerator installation
-You must configure unogenerator.
-
-If you want to install it in Gentoo you can use my ebuild at myportage.
-
-In other Linux distributions you must run
-
-```bash
-    pip install unogenerator
-    unogenator_start
-```
-
 ### Django_calories_tracker installation
 
  You need to create a new database. I recommend postgresql.
