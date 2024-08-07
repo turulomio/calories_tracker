@@ -82,7 +82,7 @@
     import { useStore } from '@/store.js'
     import pdfMake from "pdfmake/build/pdfmake";
     import pdfFonts from "pdfmake/build/vfs_fonts";
-import htmlToPdfmake from 'html-to-pdfmake'
+    import htmlToPdfmake from 'html-to-pdfmake'
     pdfMake.addVirtualFileSystem(pdfFonts);
     export default {
         components: {
@@ -294,23 +294,6 @@ import htmlToPdfmake from 'html-to-pdfmake'
                 await this.$emit("cruded")
                 this.keynice=this.keynice+1
             },
-
-            async print () {
-                this.dialog_nice_recipe=false
-                await this.$htmlToPaper("nice", {
-                    name: '_blank',
-                    specs: [
-                        'fullscreen=yes',
-                        'titlebar=no',
-                        'scrollbars=yes'
-                    ],
-                    timeout: 1000, // default timeout before the print window appears
-                    autoClose: true, // if false, the window will not close after printing
-                    windowTitle: "", // override the window title
-                });
-            },
-
-
         },
         created(){
             this.new_elaboration=Object.assign({},this.elaboration)
