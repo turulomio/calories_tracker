@@ -7,7 +7,6 @@ import i18n from './i18n'
 import { createPinia } from 'pinia';
 import {router} from './routes.js'
 import mixin from '@/mixin'
-import VueHtmlToPaper from 'vue-html-to-paper';
 
 
 
@@ -28,7 +27,6 @@ app.use(vuetify)
 app.component('v-chart', ECharts)
 app.mixin(mixin)
 app.mount('#app')
-app.use(VueHtmlToPaper);
 
 
 console.log(import.meta.env.MODE)
