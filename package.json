@@ -27,6 +27,7 @@
     "echarts": "^5.5.1",
     "flag-icons": "^7.2.3",
     "fraction.js": "^4.3.7",
+    "pdfmake": "^0.3.0-beta.8",
     "pinia": "^2.2.1",
     "roboto-fontface": "*",
     "tippy.js": "^6.3.7",
