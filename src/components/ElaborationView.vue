@@ -77,12 +77,13 @@
     import TableElaborationsIngredientsNI from './TableElaborationsIngredientsNI.vue'
     import ElaborationsFinalAmount from './ElaborationsFinalAmount.vue'
     import ElaborationTextTipTap from './ElaborationTextTipTap.vue'
-    import {elaboration_nutritional_information_string} from '../functions.js'
+    import {elaboration_nutritional_information_string, pdfmake_array_to_two_columns_table} from '../functions.js'
     import { NutritionalElement } from '@/types'
     import { useStore } from '@/store.js'
     import pdfMake from "pdfmake/build/pdfmake";
     import pdfFonts from "pdfmake/build/vfs_fonts";
     import htmlToPdfmake from 'html-to-pdfmake'
+    import { f } from 'vuetify_rules'
     pdfMake.addVirtualFileSystem(pdfFonts);
     export default {
         components: {
@@ -116,8 +117,10 @@
         methods: {
             fraction,
         useStore,
+            f,
             empty_elaborations_products_in,
             elaboration_nutritional_information_string,
+            pdfmake_array_to_two_columns_table,
             menuinline_items(){
                 var r=[
                     {
@@ -216,28 +219,36 @@
                     containers.push(o.name)
                 })
 
-                var ni=htmlToPdfmake(`<div class="column_wrapper">
-    <ul>
-        <li>${this.$t("Recipe total amount")}: ${NutritionalElement.Amount.amount(this.new_elaboration.final_amount)}</li>
-        <li>${this.$t("Calories")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Calories)}</li>
-        <li>${this.$t("Fat")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Fat)}</li>
-        <li>${this.$t("Protein")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Protein)}</li>
-        <li>${this.$t("Carbohydrates")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Carbohydrate)}</li>
-        <li>${this.$t("Salt")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Salt)}</li>
-        <li>${this.$t("Fiber")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Fiber)}</li>
-        <li>${this.$t("Sugars")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Sugars)}</li>
-        <li>${this.$t("Saturated fat")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.SaturatedFat)}</li>
-        <li>${this.$t("Cholesterol")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Cholesterol)}</li>
-        <li>${this.$t("Sodium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Sodium)}</li>
-        <li>${this.$t("Potassium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Potassium)}</li>
-        <li>${this.$t("Magnessium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Magnesium)}</li>
-        <li>${this.$t("Phosphor")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Phosphor)}</li>
-        <li>${this.$t("Calcium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Calcium)}</li>
-    </ul
-</div>
-`)
+
+                var ni=[]
+                ni.push(`${this.$t("Calories")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Calories)}`)
+                ni.push(`${this.$t("Fat")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Fat)}`)
+                ni.push(`${this.$t("Protein")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Protein)}`)
+                ni.push(`${this.$t("Carbohydrates")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Carbohydrate)}`)
+                ni.push(`${this.$t("Salt")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Salt)}`)
+                ni.push(`${this.$t("Fiber")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Fiber)}`)
+                ni.push(`${this.$t("Sugars")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Sugars)}`)
+                ni.push(`${this.$t("Saturated fat")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.SaturatedFat)}`)
+                ni.push(`${this.$t("Cholesterol")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Cholesterol)}`)
+                ni.push(`${this.$t("Sodium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Sodium)}`)
+                ni.push(`${this.$t("Potassium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Potassium)}`)
+                ni.push(`${this.$t("Magnessium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Magnesium)}`)
+                ni.push(`${this.$t("Phosphor")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Phosphor)}`)
+                ni.push(`${this.$t("Calcium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Calcium)}`)
 
 
+                var options = {
+    year: 'numeric',    // Año numérico (2024)
+    month: 'long',      // Mes largo (enero, febrero, etc.)
+    day: 'numeric',     // Día numérico (1, 2, etc.)
+    hour: 'numeric',    // Hora numérica (0-23)
+    minute: 'numeric',  // Minutos numéricos (0-59)
+    second: 'numeric',  // Segundos numéricos (0-59)
+    hour12: false       // Formato de 24 horas (usar true para formato de 12 horas)
+};
+
+// Obtener la fecha y hora localizadas
+                var longdt= new Date().toLocaleString( localStorage.locale, options);
 
                 const docDefinition = {
                     info: {
@@ -246,25 +257,30 @@
                         subject: this.$t("Calories Tracker recipe"),
                         keywords: 'recipe',
                     },
-                    content: [    
+                    content: [           
                         { text: this.new_elaboration.fullname, style: 'header1', alignment:'center' },
+                        { text: this.$t("Recipe total amount") + ` : ${NutritionalElement.Amount.amount(this.new_elaboration.final_amount)}`, style: "subtitle", alignment:"center"},
+                        { text: longdt, style: "littlesubtitle"},
                         { text: (this.new_elaboration.automatic && this.new_elaboration.automatic_adaptation_step!="")? this.$t("<p class='p_print'>This is an automatic recipe with this comment: '[0]'</p>").format(this.new_elaboration.automatic_adaptation_step) : "", style:"body"},
 
-                        { text: 'Ingredients', style: 'header2', alignment:'center' },
-                        { ul : ingredients, style:"mention_ingredients"},
-                        { text: 'Containers', style: 'header2', alignment:'center' },
+                        { text: this.$t('Ingredients'), style: 'header2', alignment:'center' },
+                        { table: { widths: ['50%', '50%'], body: pdfmake_array_to_two_columns_table(ingredients, "mention_ingredients")}}, 
+                        { text: this.$t('Containers'), style: 'header2', alignment:'center' },
                         { ul : containers, style: "mention_containers"},
-                        { text: 'Recipe', style: 'header2', alignment:'center' },
+                        { text: this.$t('Recipe'), style: 'header2', alignment:'center' },
                         htmlToPdfmake(this.$refs.tiptap.editor.getHTML()),
                         { text: this.$t("Nutritional information for each 100 g"), style: 'header2', alignment:'center' },
-                        ni,
+                        { table: { widths: ['50%', '50%'], body: pdfmake_array_to_two_columns_table(ni, "tablecell")}, alignment:'center', margin:[150,0, 150,0]},
                      ],
                     styles: {
                         header1: { fontSize: 16, bold: true , margin: [0, 6, 0, 6]},
-                        header2: { fontSize: 14, bold: true , margin: [6, 4, 0, 4]},
-                        body: { fontSize: 11 ,margin:[0,2,0,2], alignment:"justify"},
-                        mention_ingredients: { fillColor: "#f7dbbb", color:"#3f310a", bold:true},
-                        mention_containers: { fillColor: "#a5c4e4" , color: "#0e0e8b", bold:true},
+                        header2: { fontSize: 13, bold: true , margin: [6, 4, 0, 4]},
+                        subtitle: { fontSize: 8 , margin: [0, 2, 0, 2]},
+                        littlesubtitle: { fontSize: 6 , alignment:"center"},
+                        body: { fontSize: 10, margin:[0,2,0,2], alignment:"justify"},
+                        tablecell: { fontSize: 8, alignment:"justify"},
+                        mention_ingredients: { fontSize: 10, background: "#f7dbbb", color:"#3f310a", bold:true},
+                        mention_containers: { fontSize: 10, background: "#a5c4e4" , color: "#0e0e8b", bold:true},
                     },
                 };
                 console.log("PDFMAKE", docDefinition)
@@ -292,7 +308,6 @@
 
             async on_ElaborationText_cruded(){
                 await this.$emit("cruded")
-                this.keynice=this.keynice+1
             },
         },
         created(){
