@@ -260,7 +260,7 @@
                     content: [           
                         { text: this.new_elaboration.fullname, style: 'header1', alignment:'center' },
                         { text: this.$t("Recipe total amount") + ` : ${NutritionalElement.Amount.amount(this.new_elaboration.final_amount)}`, style: "subtitle", alignment:"center"},
-                        { text: longdt, style: "littlesubtitle"},
+                        { text: longdt, style: "littlesubtitle", alignment:"center"},
                         { text: (this.new_elaboration.automatic && this.new_elaboration.automatic_adaptation_step!="")? this.$t("<p class='p_print'>This is an automatic recipe with this comment: '[0]'</p>").format(this.new_elaboration.automatic_adaptation_step) : "", style:"body"},
 
                         { text: this.$t('Ingredients'), style: 'header2', alignment:'center' },
@@ -271,12 +271,23 @@
                         htmlToPdfmake(this.$refs.tiptap.editor.getHTML()),
                         { text: this.$t("Nutritional information for each 100 g"), style: 'header2', alignment:'center' },
                         { table: { widths: ['50%', '50%'], body: pdfmake_array_to_two_columns_table(ni, "tablecell")}, alignment:'center', margin:[150,0, 150,0]},
-                     ],
+                    ],
+                    footer: function(currentPage, pageCount) {
+                        return [
+                            {
+                                text: f(this.$t(`Calories Tracker v[0]. Page [1] of [2]`), [this.useStore().version,currentPage,pageCount]),
+                                alignment: 'right',
+                                color: 'grey',
+                                style: 'littlesubtitle',
+                                margin: [0, 0, 40, 0]
+                            }
+                        ];
+                     }.bind(this),
                     styles: {
                         header1: { fontSize: 16, bold: true , margin: [0, 6, 0, 6]},
                         header2: { fontSize: 13, bold: true , margin: [6, 4, 0, 4]},
                         subtitle: { fontSize: 8 , margin: [0, 2, 0, 2]},
-                        littlesubtitle: { fontSize: 6 , alignment:"center"},
+                        littlesubtitle: { fontSize: 6 },
                         body: { fontSize: 10, margin:[0,2,0,2], alignment:"justify"},
                         tablecell: { fontSize: 8, alignment:"justify"},
                         mention_ingredients: { fontSize: 10, background: "#f7dbbb", color:"#3f310a", bold:true},
