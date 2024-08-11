@@ -60,8 +60,8 @@ jobs:
     - name: Install python dependencies ${{ matrix.python-version }} and launch django_calories_tracker
       run: |
         cd ..
-        git clone https://github.com/turulomio/django_moneymoney
-        cd django_moneymoney
+        git clone https://github.com/turulomio/django_calories_tracker
+        cd django_calories_tracker
         sudo python3.11 -m venv .python3.11
         sudo .python3.11/bin/pip install .
         sudo .python3.11/bin/python manage.py testserver calories_tracker/fixtures/all.json calories_tracker/fixtures/test_server.json --addrport 8011 &
