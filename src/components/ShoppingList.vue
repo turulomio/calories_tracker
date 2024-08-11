@@ -17,7 +17,7 @@
     import { useStore } from '@/store.js'
     import pdfMake from "pdfmake/build/pdfmake";
     import pdfFonts from "pdfmake/build/vfs_fonts";
-    import htmlToPdfmake from 'html-to-pdfmake';
+    import {f} from 'vuetify_rules'
     pdfMake.addVirtualFileSystem(pdfFonts);
 
     export default {
@@ -31,6 +31,7 @@
         },
         methods: {
             useStore,
+            f,
             async acceptDialog(){       
                 if (this.form_valid!=true) {
                     this.$refs.form.validate()
@@ -43,7 +44,7 @@
 
                     var shopping_list=[]
                     response.data.shopping_list.forEach(o => {
-                        shopping_list.push(`${o.product_fullname} (${o.grams})`)
+                        shopping_list.push(`${o.product_fullname} (${o.grams}g)`)
                         
                     });
 
@@ -57,21 +58,29 @@
                             keywords: 'shopping list',
                         },
                         content: [    
-                            { text: 'Shopping list', style: 'header1', alignment:'center' },
-                            { text: 'Recipes', style: 'header2', alignment:'center' },
+                            { text: this.$t('Shopping list'), style: 'header1', alignment:'center' },
+                            { text: this.$t('Recipes'), style: 'header2', alignment:'center' },
                             { ul: response.data.recipes},
-                            { text: 'Shopping list', style: 'header2', alignment:'center' },
+                            { text: this.$t('Shopping list'), style: 'header2', alignment:'center' },
                             { ul: shopping_list},
                         ],
                         styles: {
                             header1: { fontSize: 16, bold: true , margin: [0, 6, 0, 6]},
                             header2: { fontSize: 14, bold: true , margin: [6, 4, 0, 4]},
                             body: { fontSize: 11 ,margin:[0,2,0,2], alignment:"justify"},
+                            littlesubtitle: { fontSize: 6 },
                         },
-
                         footer: function(currentPage, pageCount) {
-                            return (currentPage>2)? { text: currentPage.toString() + this.$t(' of ') + pageCount, alignment: 'center' }:""
-                        }.bind(this)
+                            return [
+                                {
+                                    text: f(this.$t(`Calories Tracker v[0]. Page [1] of [2]`), [this.useStore().version,currentPage,pageCount]),
+                                    alignment: 'right',
+                                    color: 'grey',
+                                    style: 'littlesubtitle',
+                                    margin: [0, 0, 40, 0]
+                                }
+                            ];
+                        }.bind(this),
                     };
                     console.log("PDFMAKE", docDefinition)
 
