@@ -1,5 +1,8 @@
 # CaloriesTracker 
 
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fturulomio%2Fcalories_tracker%2Fbadge%3Fref%3Dmain&style=flat)](https://actions-badge.atrox.dev/turulomio/calories_tracker/goto?ref=main)
+
+
 This is the Vue 3 evolution of the branch vue2 of project https://github.com/turulomio/calories_tracker/ and it's the frontend app of  https://github.com/turulomio/django_calories_tracker backend.
 
 ## Installation
