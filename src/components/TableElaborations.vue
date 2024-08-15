@@ -30,7 +30,6 @@
     import {empty_elaborations} from '../empty_objects.js'
     import ElaborationCRUD from './ElaborationCRUD.vue'
     import ElaborationView from './ElaborationView.vue'
-import { isNumber } from '@tiptap/vue-3'
     export default {
         components:{
             ElaborationCRUD,

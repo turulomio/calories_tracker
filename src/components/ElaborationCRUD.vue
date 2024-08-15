@@ -3,13 +3,13 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-4">
             <v-form ref="form" v-model="form_valid" lazy-validation>          
-                <v-text-field :readonly="(mode=='D' || new_elaboration.automatic )" v-model.number="new_elaboration.diners" :label="$t('Set the number of diners')" :placeholder="$t('Set the number of diners')" :rules="RulesInteger(5,true)" counter="200"/>
-                <v-checkbox readonly v-model="new_elaboration.automatic" :label="$t('Is an automatic elaboration?')"></v-checkbox>
-                <v-textarea :readonly="mode=='D'" v-model="new_elaboration.automatic_adaptation_step" :label="$t('Add your comment for all automatic elaborations')" :placeholder="$t('Add your comment for all automatic elaborations')" :rules="RulesString(2000,false)" counter="2000"/>
+                <v-text-field data-test="ElaborationCRUD_Diners" :readonly="(mode=='D' || new_elaboration.automatic )" v-model.number="new_elaboration.diners" :label="$t('Set the number of diners')" :placeholder="$t('Set the number of diners')" :rules="RulesInteger(5,true)" counter="200"/>
+                <v-checkbox data-test="ElaborationCRUD_Automatic" readonly v-model="new_elaboration.automatic" :label="$t('Is an automatic elaboration?')"></v-checkbox>
+                <v-textarea data-test="ElaborationCRUD_Text" :readonly="mode=='D'" v-model="new_elaboration.automatic_adaptation_step" :label="$t('Add your comment for all automatic elaborations')" :placeholder="$t('Add your comment for all automatic elaborations')" :rules="RulesString(2000,false)" counter="2000"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()">{{ button() }}</v-btn> 
+                <v-btn data-test="ElaborationCRUD_Button" color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()">{{ button() }}</v-btn> 
             </v-card-actions>
         </v-card>
   
@@ -18,7 +18,7 @@
 <script>
     import axios from 'axios'
     import {RulesInteger,RulesString} from 'vuetify_rules'
-import { useStore } from '@/store.js'
+    import { useStore } from '@/store.js'
     export default {
         components: {
         },
