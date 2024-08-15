@@ -1,7 +1,9 @@
 
 
+
+
 export function login_test_User(cy){
-    cy.visit('http://127.0.0.1:8012/calories_tracker/')
+    cy.visit('/')
     cy.contains("Log in").click()
     cy.getDataTest("BtnLogIn_User").type("test")
     cy.getDataTest("BtnLogIn_Password").type("test")
@@ -44,7 +46,7 @@ export function add_product_from_products_vue(name){
 }
 
 
-export function add_recipe_from_recipes_vue(name){
+export function add_recipe_from_recipes_vue(cy,name){
     /*
      * Add a recipe from Recipes.vue
      */
@@ -52,6 +54,10 @@ export function add_recipe_from_recipes_vue(name){
     cy.getDataTest('MyMenuInline_Header0_Item0').click()
     cy.getDataTest("RecipesCRUD_Name").type(name)
     cy.getDataTest("RecipesCRUD_RecipesCategories").type("chicken{downArrow}{enter}")
-
+    cy.intercept({method:'POST', url:'http://127.0.0.1:8011/api/recipes/', times:1 }).as("recipes_post")
     cy.getDataTest('RecipesCRUD_Button').click()
+    cy.wait('@recipes_post').then((interception)=>{
+        var id=interception.response.body.id
+        cy.wrap(id).as("recipes_post_id") // Stores the captured ID for later us
+    })
 }

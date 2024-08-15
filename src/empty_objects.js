@@ -189,10 +189,10 @@ export function empty_recipes_links(){
 export function empty_elaborations(){
     return {
         url: null,
-        final_amount: null,
         diners:null,
-        elaborations_products_in: [],
         recipes: null,
+        automatic: false,
+        automatic_adaptation_step:"",
     }
 }
 

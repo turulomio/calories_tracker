@@ -59,7 +59,10 @@ export default defineConfig({
       // Exclude specific files or patterns
       exclude: ['src/main.ts', 'src/api/**/*.ts']
     }
-  }
+  },
+  build: {
+    sourcemap: "inline", // Options: true, 'inline', 'hidden'
+  },
   // test: {
   //   // globals: true,
   //   environment: 'jsdom',
