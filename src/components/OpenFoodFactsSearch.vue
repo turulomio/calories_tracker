@@ -3,17 +3,17 @@
         <h1>{{ $t(`Open Food Facts search`) }}
         </h1>
         <v-card width="50%" class="d-flex flex-row mx-auto my-5" flat >
-                <v-text-field clearable density="default" :disabled="loading" class="mb-3"  v-model="search" prepend-icon="mdi-magnify" :label="$t('Search in Open Food Facts api')" single-line hide-details :placeholder="$t('Add a string to filter table')" @keyup.enter="on_search_change()" fixed-header height="60vh"/>
+                <v-text-field clearable density="default" :disabled="loading" class="mb-3"  v-model="search" prepend-icon="mdi-magnify" :label="$t('Search in Open Food Facts api')" single-line hide-details :placeholder="$t('Add a string to filter table')" @keyup.enter="on_search_change" />
 
                 <v-btn class="ml-8" color="primary" @click="on_search_change">{{ $t("Search")}}</v-btn>
         </v-card>
-        <v-data-table :headers="off_headers" :items="off_items" class="elevation-1 cursorpointer" :items-per-page="100000" :loading="loading" :key="key"  >
+        <v-data-table :headers="off_headers" :items="off_items" class="elevation-1 cursorpointer" :items-per-page="100000" :loading="loading" :key="key" @click:row="showOffPage"  fixed-header height="60vh"  >
             <template #item.last_updated_t="{item}">
                 {{ localtime(new Date(item.last_updated_t*1000).toISOString()) }}
             </template>
             <template #item.actions="{item}">
                 <v-icon small class="mr-1" @click.stop="addProduct(item)">mdi-plus</v-icon>
-                <v-icon small class="mr-1" @click.stop="showOffPage(item)">mdi-search-web</v-icon>
+                <v-icon small class="mr-1" @click.stop="showOffPage(null, {item:item})">mdi-search-web</v-icon>
             </template>
         </v-data-table>
 
@@ -83,8 +83,8 @@
                     this.loading = false;
                 }
             },
-            showOffPage(item){
-                window.open(`https://es.openfoodfacts.org/producto/${item.id}`)
+            showOffPage(event,object){
+                window.open(`https://es.openfoodfacts.org/producto/${object.item.id}`)
             },
             addProduct(item){
                 console.log(item)
