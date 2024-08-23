@@ -39,6 +39,7 @@
                 </v-card>
             </v-form>
         </v-card>
+        <p v-html="info"></p>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn id="cmdFormat" color="primary" v-if="['C','U'].includes(mode)" @click="addFormat()" >{{ $t("Add a format") }}</v-btn>
@@ -77,6 +78,9 @@
             mode: { 
                 required: true
             },
+            info:{//Used to show info 
+                required:false,
+            }
         },
         data(){ 
             return{
