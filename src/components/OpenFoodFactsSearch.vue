@@ -41,7 +41,8 @@
                 off_headers: [
                     { title: this.$t('Date and time'), sortable: false, key: 'last_updated_t', width:"8%"},   
                     { title: this.$t('Name'), sortable: false, key: 'product_name', width:"40%"},    
-                    { title: this.$t('Brand'), sortable: true, key: 'brands'},    
+                    { title: this.$t('Brand'), sortable: true, key: 'brands'},      
+                    { title: this.$t('Country'), sortable: true, key: 'countries'},    
                     { title: this.$t('Actions'), key: 'actions', sortable: false, width: "8%"},
                 ],
                 off_items:[],

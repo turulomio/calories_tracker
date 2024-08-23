@@ -1,6 +1,7 @@
 <template>
     <div>    
         <h1>{{ title() }}</h1>           
+        <p v-html="info"></p>
         <v-card class="pa-6 mt-4" style="overflow-y: scroll" :height="600" >
             <v-form ref="form" v-model="form_valid" lazy-validation >
                 <v-text-field id="name" :readonly="mode=='D' || mode=='R'" v-model="newproduct.name" :label="$t('Set product name')" :placeholder="$t('Set product name')" :rules="RulesString(200)" counter="200"/>
@@ -39,7 +40,6 @@
                 </v-card>
             </v-form>
         </v-card>
-        <p v-html="info"></p>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn id="cmdFormat" color="primary" v-if="['C','U'].includes(mode)" @click="addFormat()" >{{ $t("Add a format") }}</v-btn>
