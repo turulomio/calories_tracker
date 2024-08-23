@@ -7,9 +7,14 @@
 
                 <v-btn class="ml-8" color="primary" @click="on_search_change">{{ $t("Search")}}</v-btn>
         </v-card>
-        <v-data-table :headers="off_headers" :items="off_items" class="elevation-1 cursorpointer" :items-per-page="100000" :loading="loading" :key="key" @click:row="showOffPage"  fixed-header height="60vh"  >
+        <v-data-table :headers="off_headers" :items="off_items" class="elevation-1 cursorpointer" :items-per-page="100000" :loading="loading" :key="key" @click:row="showOffPage" :sortBy="[{key:'completeness', order:'desc'}]"  fixed-header height="60vh"  >
             <template #item.last_updated_t="{item}">
                 {{ localtime(new Date(item.last_updated_t*1000).toISOString()) }}
+            </template>
+
+
+            <template #item.completeness="{item}">
+                <v-rating readonly  :length="5" :size="32" :model-value="item.completeness*5" active-color="primary" />
             </template>
             <template #item.actions="{item}">
                 <v-icon small class="mr-1" @click.stop="addProduct(item)">mdi-plus</v-icon>
@@ -43,6 +48,7 @@
                     { title: this.$t('Name'), sortable: false, key: 'product_name', width:"40%"},    
                     { title: this.$t('Brand'), sortable: true, key: 'brands'},      
                     { title: this.$t('Country'), sortable: true, key: 'countries'},    
+                    { title: this.$t('Completeness'), sortable: true, key: 'completeness'},    
                     { title: this.$t('Actions'), key: 'actions', sortable: false, width: "8%"},
                 ],
                 off_items:[],
