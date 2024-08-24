@@ -24,30 +24,6 @@ describe('e2e Companies', () => {
     // Delete company
     cy.get('.mdi-delete').first().click()
     cy.get('button[id="cmd"]').click()
-
-    // Move to system companies tab
-    cy.get('#tabSystemCompanies').click()
-
-    // Add first system company
-    cy.get('h1 > .v-btn').click()
-    cy.get(':nth-child(2) > :nth-child(2) > .v-list-item').click()
-
-    cy.get('input[id="name"]').type("My first system company") //Find by id
-    cy.get('button[id="cmd"]').click()
-
-    //Buscamos
-    cy.get("#filter").clear().type("My first system company{enter}")
-
-    // Update system company
-    cy.get('.mdi-pencil').first().click()
-    cy.get('input[id="name"]').clear().type("My first system company updated") //Find by id
-    cy.get('button[id="cmd"]').click()
-
-    // Delete system company
-    //cy.get('.mdi-delete').first().click() //No se puede sale alert
-
-    // Link System Company to Company
-    cy.get('.mdi-link-variant').first().click()
     
     // Move to  companies tab
     cy.get('#tabCompanies').click()

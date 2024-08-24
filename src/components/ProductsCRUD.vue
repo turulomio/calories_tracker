@@ -26,6 +26,8 @@
                 <v-text-field id="phosphor" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.phosphor" :label="$t('Set product phosphor (mg)')" :placeholder="$t('Set product phosphor (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field id="calcium" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.calcium" :label="$t('Set product calcium (mg)')" :placeholder="$t('Set product calcium (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-checkbox id="glutenfree" v-model="newproduct.glutenfree" :label="$t('Is gluten free?')"></v-checkbox>
+                <v-text-field :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.openfactsfood_id" :label="$t('Set Open Facts Food Id')" :placeholder="$t('Set Open Facts Food Id')" :rules="RulesInteger(12,false)" counter="12"/>
+
                 <AutocompleteProducts :readonly="mode=='D' || mode=='R'" :products="getArrayFromMap(useStore().products)" v-model="newproduct.products"/>
                 <v-text-field :readonly="mode=='D' || mode=='R'" v-model="newproduct.version_description" :label="$t('Set product version description')" :placeholder="$t('Set product version description')" :rules="RulesString(200,false)" counter="200"/>
                 <v-checkbox id="obsolete" v-model="newproduct.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
@@ -67,7 +69,7 @@
     import FormatsCRUD from './FormatsCRUD.vue'
     import { empty_formats } from '../empty_objects.js'
     import { additives_html_fullname} from '../functions.js'
-    import {RulesSelection,RulesFloatGEZ,RulesString} from 'vuetify_rules'
+    import {RulesSelection,RulesFloatGEZ,RulesString, RulesInteger} from 'vuetify_rules'
     import { useStore } from '@/store.js'
     export default {
         components: {
@@ -117,6 +119,7 @@
             RulesSelection,RulesFloatGEZ,RulesString,
             empty_formats,
             additives_html_fullname,
+            RulesInteger,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')

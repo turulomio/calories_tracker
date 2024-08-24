@@ -16,7 +16,6 @@
             </template>
             <template #item.actions="{item}">
                 <v-icon small class="mr-1" @click.stop="addProduct(item)">mdi-plus</v-icon>
-                <v-icon v-if="!useStore().catalog_manager" small class="mr-1" @click.stop="addSystemProduct(item)" color="red">mdi-plus</v-icon>
                 <v-icon small class="mr-1" @click.stop="showOffPage(null, {item:item})">mdi-search-web</v-icon>
             </template>
         </v-data-table>
@@ -27,32 +26,25 @@
                 <ProductsCRUD :product="product" :mode="product_cu_mode" :info="product_crud_info" :key="key" @cruded="on_ProductsCRUD_cruded" />
             </v-card>
         </v-dialog>
-        <!-- DIALOG SYSTEM PRODUCTS CRUD -->
-        <v-dialog v-model="dialog_system_products_crud" width="90%">
-            <v-card class="pa-4">
-                <SystemProductsCRUD :system_product="system_product" :mode="system_product_cu_mode" :info="system_product_crud_info" :key="key" @cruded="on_SystemProductsCRUD_cruded" />
-            </v-card>
-        </v-dialog>
     </div>
 </template>
 
 <script>
     import axios from 'axios'
     import {localtime} from 'vuetify_rules'
-    import { empty_products, empty_system_products } from '@/empty_objects';
+    import { empty_products } from '@/empty_objects';
     import { useStore } from '@/store.js'
     import ProductsCRUD from './ProductsCRUD.vue';
-    import SystemProductsCRUD from './SystemProductsCRUD.vue';
 
 
     export default {
         components: {
             ProductsCRUD,
-            SystemProductsCRUD,
         },
         data(){
             return {                
                 off_headers: [
+                    { title: this.$t('Id'), sortable: true, key: 'id', width:"8%"},  
                     { title: this.$t('Date and time'), sortable: true, key: 'last_updated_t', width:"8%"},   
                     { title: this.$t('Name'), sortable: true, key: 'product_name', width:"40%"},    
                     { title: this.$t('Brand'), sortable: true, key: 'brands'},      
@@ -72,18 +64,12 @@
                 product_cu_mode:null,
                 dialog_products_crud:false,
                 product_crud_info:"",
-                //CRUD SYSTEM PRODUCT
-                system_product:null,
-                system_product_cu_mode:null,
-                dialog_system_products_crud:false,
-                system_product_crud_info:"",
             }
         },
         methods:{
         useStore,
             localtime,
             empty_products,
-            empty_system_products,
             async on_search_change(){
                 this.loading=true
                 const apiUrl = 'https://world.openfoodfacts.org/cgi/search.pl';
@@ -114,6 +100,7 @@
             get_off_products_info(item){
                 console.log(item)
                 var r={}
+                r.id=item.id
                 r.brand=item.brands
                 r.additives=item.additives_original_tags
                 r.ingredients=item.ingredients_text_with_allergens
@@ -165,38 +152,11 @@
                 this.product.ferrum=item.nutriments.iron_100g
                 this.product.magnesium=item.nutriments.magnesium_100g
                 this.product.phosphor=item.nutriments.phosphor_100g
+                this.product.openfactsfood_id=item.id
                 this.key=this.key+1
                 this.dialog_products_crud=true
             },
-            addSystemProduct(item){
-                this.system_product_crud_info=this.objectToLinks(this.get_off_products_info(item))
 
-                this.system_product_cu_mode="C"
-                this.system_product=this.empty_system_products()
-                this.system_product.name=item.product_name
-                this.system_product.company=item.brands
-                this.system_product.amount=100
-                this.system_product.calories=item.nutriments["energy-kcal_100g"]
-                this.system_product.fat=item.nutriments.fat_100g
-                this.system_product.saturated_fat=item.nutriments["saturated-fat_100g"]
-                this.system_product.protein=item.nutriments.proteins_100g
-                this.system_product.salt=item.nutriments.salt_100g
-                this.system_product.sodium=item.nutriments.sodium_100g
-                this.system_product.sugars=item.nutriments.sugars_100g
-                this.system_product.carbohydrate=item.nutriments.carbohydrates_100g
-                this.system_product.calcium=item.nutriments.calcium_100g
-                this.system_product.cholesterol=item.nutriments.cholesterol_100g
-                this.system_product.potassium=item.nutriments.potassium_100g
-                this.system_product.fiber=item.nutriments.fiber_100g
-                this.system_product.ferrum=item.nutriments.iron_100g
-                this.system_product.magnesium=item.nutriments.magnesium_100g
-                this.system_product.phosphor=item.nutriments.phosphor_100g
-                this.key=this.key+1
-                this.dialog_system_products_crud=true
-            },
-            on_SystemProductsCRUD_cruded(){
-                this.dialog_system_products_crud=false
-            },
             on_ProductsCRUD_cruded(){
                 this.dialog_products_crud=false
             },

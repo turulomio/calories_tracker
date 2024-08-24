@@ -1,6 +1,6 @@
 import { login_test_User, add_product_from_products_vue } from "./commons"
-describe('e2e System products', () => {
-  it('System Products', () => {    
+describe('e2e Meals', () => {
+  it('Meals', () => {    
 
     login_test_User(cy)
 

@@ -6,9 +6,6 @@ describe('e2e Products', () => {
     cy.getDataTest('lateral_icon').click()
     cy.getDataTest('lateral_companies').click()
 
-    // Move to system companies tab
-    cy.get('#tabSystemCompanies').click()
-
     //Buscamos
     cy.get("#filter").clear().type("Hacendado{enter}")
 
