@@ -1,8 +1,8 @@
 <template>
     <div>    
-        <h1>{{ title() }}</h1>           
-        <p v-html="info"></p>
-        <v-card class="pa-6 mt-4" style="overflow-y: scroll" :height="600" >
+        <h1 @click="showinfo=!showinfo" v-show="showinfo">{{ title() }}</h1>        
+        <div class="d-flex flex-row">
+        <v-card class="pa-6 mt-4" style="overflow-y: scroll" :height="600" min-width="50%">
             <v-form ref="form" v-model="form_valid" lazy-validation >
                 <v-text-field id="name" :readonly="mode=='D' || mode=='R'" v-model="newproduct.name" :label="$t('Set product name')" :placeholder="$t('Set product name')" :rules="RulesString(200)" counter="200"/>
                 <v-autocomplete id="companies" v-model="newproduct.companies" :items="getArrayFromMap(useStore().companies)" :label="$t('Select a company')" item-title="name" item-value="url" :rules="RulesSelection(false)"/>
@@ -39,13 +39,18 @@
                     </v-data-table>
                 </v-card>
             </v-form>
-        </v-card>
+
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn id="cmdFormat" color="primary" v-if="['C','U'].includes(mode)" @click="addFormat()" >{{ $t("Add a format") }}</v-btn>
                 <v-btn id="cmd" color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()">{{ button() }}</v-btn> 
                 <v-btn id="cmdClose" color="error" @click="$emit('cruded')" >{{ $t("Close") }}</v-btn>
             </v-card-actions>
+        </v-card>
+   
+            <p class="ma-5" v-html="info"></p>
+
+        </div>
 
         <!-- DIALOG FORMATS CRUD -->
         <v-dialog v-model="dialog_formats_crud" width="45%">
@@ -80,13 +85,20 @@
             },
             info:{//Used to show info 
                 required:false,
-            }
+                default:""
+            },
+
+            showinfo:{
+                required: false,
+                default:true
+            }            
         },
         data(){ 
             return{
                 form_valid:false,
                 newproduct: null,
                 key:0,
+
                 
                 formats_headers: [
                     { title: this.$t('Format'), sortable: true, key: 'formats'},
