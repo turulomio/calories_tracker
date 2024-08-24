@@ -85,6 +85,7 @@
             empty_products,
             empty_system_products,
             async on_search_change(){
+                this.loading=true
                 const apiUrl = 'https://world.openfoodfacts.org/cgi/search.pl';
                 try {
                     const response = await axios.get(apiUrl, {
@@ -99,6 +100,7 @@
                     this.off_items.forEach(o=>{
                         o.nutriments_number=Object.keys(o.nutriments).length 
                     })
+                    this.loading=false
                 } catch (error) {
                     this.error = 'Error fetching data';
                     console.error('API Error:', error);
