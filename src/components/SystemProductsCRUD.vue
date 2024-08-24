@@ -1,7 +1,8 @@
 <template>
     <div>    
-        <h1>{{ title() }}</h1>           
-        <v-card class="pa-6 mt-4" style="overflow-y: scroll" :height="600" >
+        <h1>{{ title() }}</h1>              
+        <div class="d-flex flex-row">
+        <v-card class="pa-6 mt-4" style="overflow-y: scroll" :height="600" min-width="50%" >
             <v-form ref="form" v-model="form_valid" lazy-validation >
                 <v-text-field id="SystemProductsCRUD_Name" :readonly="mode=='D' || mode=='R'" v-model="new_system_product.name" :label="$t('Set system product name')" :placeholder="$t('Set system product name')" :rules="RulesString(200)" counter="200"/>
                 <!-- <v-autocomplete v-model="new_system_product.system_companies" :items="getArrayFromMap(useStore().system_companies)" :label="$t('Select a system company')" item-title="name" item-value="url" :rules="RulesSelection(true)"/> -->
@@ -41,15 +42,19 @@
                     </v-data-table>
                 </v-card>
             </v-form>
-        </v-card>
+
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn id="SystemProductsCRUD_cmdFormat" color="primary" v-if="['C','U'].includes(mode)" @click="addFormat()" >{{ $t("Add a format") }}</v-btn>
                 <v-btn id="SystemProductsCRUD_cmd" color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()">{{ button() }}</v-btn> 
                 <v-btn id="SystemProductsCRUD_cmdCancel" color="error" @click="$emit('cruded')" >{{ $t("Cancel") }}</v-btn>
             </v-card-actions>
+        </v-card>
 
 
+            <p class="ma-5" v-html="info"></p>
+
+        </div>
 
         <!-- DIALOG FORMATS CRUD -->
         <v-dialog v-model="dialog_formats_crud" width="45%">
@@ -66,7 +71,7 @@
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import FormatsCRUD from './FormatsCRUD.vue'
     import { empty_formats } from '../empty_objects.js'
-    import {RulesString,RulesSelection,RulesFloatGEZ} from 'vuetify_rules'
+    import { RulesString,RulesSelection,RulesFloatGEZ } from 'vuetify_rules'
     import { useStore } from '@/store.js'
     export default {
         components: {
@@ -82,6 +87,10 @@
             },
             mode: { 
                 required: true
+            },
+            info:{//Used to show info 
+                required:false,
+                default:""
             },
         },
         data(){ 

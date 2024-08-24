@@ -2,16 +2,16 @@
     <v-autocomplete :readonly="readonly" :items="new_additives" v-model="new_value" multiple :label="mylabel" :return-object="returnObject" item-value="url" :rules="RulesSelection(true)">
         <template v-slot:item="{ props, item }">
             <v-list-item  v-bind="props" title="">
-                <v-list-item-content>
+                <!-- <v-list-item-content> -->
                     <span v-html="additives_html_fullname(item.raw)"></span>
-                </v-list-item-content>
+                <!-- </v-list-item-content> -->
             </v-list-item>
         </template>         
         <template v-slot:selection="{ props, item }">
             <v-list-item>
-                <v-list-item-content v-bind="props">
+                <!-- <v-list-item-content v-bind="props"> -->
                     <span v-html="additives_html_fullname(item.raw)"></span>
-                </v-list-item-content>
+                <!-- </v-list-item-content> -->
             </v-list-item>
         </template> 
     </v-autocomplete>

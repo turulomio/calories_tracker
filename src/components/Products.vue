@@ -78,6 +78,12 @@
                 <SystemProductsCRUD :system_product="system_product" :mode="system_product_cu_mode" :key="'B'+key" @cruded="on_SystemProductsCRUD_cruded()"></SystemProductsCRUD>
             </v-card>
         </v-dialog>
+        <!-- DIALOG OFF -->
+        <v-dialog v-model="dialog_off" width="100%">
+            <v-card class="pa-4">
+                <OpenFoodFactsSearch key="'B'+key" @cruded="on_OFF_cruded" />
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -90,12 +96,14 @@
     import SystemProductsCRUD from './SystemProductsCRUD.vue'
     import TableElaboratedProducts from './TableElaboratedProducts.vue'
     import { useStore } from '@/store.js'
+    import OpenFoodFactsSearch from './OpenFoodFactsSearch.vue'
     export default {
         components: {
             MyMenuInline,
             ProductsCRUD,
             SystemProductsCRUD,
             TableElaboratedProducts,
+            OpenFoodFactsSearch,
         },
         data(){
             return {
@@ -164,6 +172,9 @@
                 system_product:null,
                 system_product_cu_mode:null,
                 dialog_system_products_crud:false,
+
+                //DIALOG OPEN FOOD FACTS
+                dialog_off:false,
             }
         },     
         methods:{
@@ -219,6 +230,19 @@
                         ]
                     })
                 }
+
+                r.push({
+                    subheader: this.$t("Open Food Facts Search"),
+                    children: [
+                        {
+                            name: this.$t("Search in Open Food Facts"),
+                            icon: "mdi-magnify",
+                            code: function(){
+                                this.dialog_off=true
+                            }.bind(this),
+                        },
+                    ]
+                })
                 return r
             },
             on_ProductsCRUD_cruded(){
@@ -240,6 +264,9 @@
                }, (error) => {
                     this.parseResponseError(error)
                 });
+            },
+            on_OFF_cruded(){
+                this.update_all()
             },
             editProduct(item){
                 this.product=item
