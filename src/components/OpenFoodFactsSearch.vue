@@ -109,16 +109,40 @@
             showOffPage(event,object){
                 window.open(`https://es.openfoodfacts.org/producto/${object.item.id}`)
             },
-            addProduct(item){
+            get_off_products_info(item){
                 console.log(item)
-                this.product_crud_info=""
-                this.product_crud_info+=this.$t("Brand") + ": " + item.brands+"<br>"
-                this.product_crud_info+=this.$t("Additives") + ": " + item.additives_original_tags+"<br>"
-                this.product_crud_info+=this.$t("Ingredients") + ": " + item.ingredients_text_with_allergens+"<br>"
-                this.product_crud_info+=this.$t("Nutriments") + ": " + JSON.stringify(item.nutriments)+"<br>"
-                this.product_crud_info+=this.$t("Image front") + ": " + item.image_front_url+"<br>"
-                this.product_crud_info+=this.$t("Image") + ": " + item.image_url+"<br>"
+                var r={}
+                r.brand=item.brands
+                r.additives=item.additives_original_tags
+                r.ingredients=item.ingredients_text_with_allergens
+                Object.entries(item.nutriments).forEach(([key, value]) => {
+                    if (key.includes("_100g")){
+                        r[key]=value
+                    }
+                });
+                r.image_front_url=item.image_front_url
+                r.image_url=item.image_url
+                return r
+            },
+            objectToLinks(obj) {
+                let html = '<ul>';
+                for (let key in obj) {
+                    if (obj.hasOwnProperty(key)) {
+                        if (typeof obj[key] === 'string' && obj[key].startsWith('http')) {
+                            // If the value is a URL, create a link
+                            html += `<li><strong>${key}:</strong> <a href="${obj[key]}" target="_blank">${obj[key]}</a></li>`;
+                        } else {
+                            // Otherwise, display the text normally
+                            html += `<li><strong>${key}:</strong> ${obj[key]}</li>`;
+                        }
+                    }
+                }
+                html += '</ul>';
+                return html;
+            },
+            addProduct(item){
 
+                this.product_crud_info=this.objectToLinks(this.get_off_products_info(item))
                 this.product_cu_mode="C"
                 this.product=this.empty_products()
                 this.product.name=item.product_name
@@ -143,14 +167,7 @@
                 this.dialog_products_crud=true
             },
             addSystemProduct(item){
-                console.log(item)
-                this.system_product_crud_info=""
-                this.system_product_crud_info+=this.$t("Brand") + ": " + item.brands+"<br>"
-                this.system_product_crud_info+=this.$t("Additives") + ": " + item.additives_original_tags+"<br>"
-                this.system_product_crud_info+=this.$t("Ingredients") + ": " + item.ingredients_text_with_allergens+"<br>"
-                this.system_product_crud_info+=this.$t("Nutriments") + ": " + JSON.stringify(item.nutriments)+"<br>"
-                this.system_product_crud_info+=this.$t("Image front") + ": " + item.image_front_url+"<br>"
-                this.system_product_crud_info+=this.$t("Image") + ": " + item.image_url+"<br>"
+                this.system_product_crud_info=this.objectToLinks(this.get_off_products_info(item))
 
                 this.system_product_cu_mode="C"
                 this.system_product=this.empty_system_products()
