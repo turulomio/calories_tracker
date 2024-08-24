@@ -145,7 +145,11 @@
                                 name: this.$t("Add a elaborated product"),
                                 icon: "mdi-plus",
                                 code: function(){
-                                    this.$refs.table_elaborated_products.on_new_click()
+                                    this.tab=1
+                                    // Usamos nextTick para ejecutar código después de que el DOM se haya actualizado
+                                    this.$nextTick(() => {
+                                        this.$refs.table_elaborated_products.on_new_click()
+                                    });
                                 }.bind(this),
                             },
                         ]
