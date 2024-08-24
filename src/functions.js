@@ -12,7 +12,7 @@ export function product_risk_color(additive_risks_url){
 }
 
 // item is an object with additive_risks parameters as integer,glutenfree
-// type: 1:system_product, 2:product, 3:elaborated products, 4: meals (item is product_url), 5: system_product english
+// type: 1:openfoodfacts, 2:product, 3:elaborated products, 4: meals (item is product_url), 5: system_product english
 export function products_html_fullname(item,type_){
     if (type_==4) {
         item=this.useStore().products.get(item)
@@ -27,9 +27,9 @@ export function products_html_fullname(item,type_){
         type_icon="mdi-database"
         type_string="System product"
     } else if (type_==2) { //Products
-        if (item.system_products){
+        if (item.openfoodfacts_id){
             type_icon="mdi-database"
-            type_string="System product"
+            type_string="Open Food Facts"
         } else if (item.elaborated_products){
             type_icon="mdi-food-takeout-box"
             type_string="Elaborated product"

@@ -8,7 +8,6 @@
         <v-tabs  bg-color="primary" dark v-model="tab" >
             <v-tab id="Products_tabProducts" key="products"><v-icon left>mdi-apple</v-icon>{{ $t('Products') }}<v-badge v-if="products.length>0" color="error" class="ml-2" :content="products.length" inline/></v-tab>
             <v-tab id="Products_tabElaboratedProducts" key="elaborated_products"><v-icon left>mdi-food-takeout-box</v-icon>{{ $t('Elaborated products') }}<v-badge v-if="elaborated_products.length>0" color="error" class="ml-2" :content="elaborated_products.length" inline/></v-tab>
-            <v-tab id="Products_tabSystemProducts" key="system_products"><v-icon left>mdi-database</v-icon>{{ $t('System products') }}<v-badge v-if="system_products.length>0" color="error" class="ml-2" :content="system_products.length" inline/></v-tab>
         </v-tabs>
         <v-window v-model="tab" class="ma-5">
             <v-window-item key="products" >
@@ -30,7 +29,6 @@
                     <template #item.phosphor="{item}"><div v-html="my_round(item.phosphor,0)"></div></template>  
                     <template #item.calcium="{item}"><div v-html="my_round(item.calcium,0)"></div></template>  
                     <template #item.actions="{item}">
-                        <v-icon v-if="item.system_products==null && item.elaborated_products==null" small class="mr-1" @click.stop="convertToSystemProduct(item)">mdi-database-arrow-right</v-icon>
                         <v-icon v-if="item.is_editable" small class="mr-1" @click.stop="editProduct(item)">mdi-pencil</v-icon>
                         <v-icon v-if="item.is_deletable" small @click.stop="deleteProduct(item)">mdi-delete</v-icon>
                     </template>
@@ -39,43 +37,12 @@
             <v-window-item key="elaborated_products">
                 <TableElaboratedProducts ref="table_elaborated_products" :elaborated_products="elaborated_products" :key="key" @cruded="on_TableElaboratedProducts_cruded" />
             </v-window-item>
-            <v-window-item key="system_products" >                 
-                <v-data-table-virtual density="compact" :headers="system_products_headers" :items="system_products" :sort-by="[{key:'fullname',order:'asc'}]" class="elevation-1 cursorpointer" :items-per-page="10000" :loading="loading" :key="'T'+key" height="65vh" @click:row="viewSystemProduct" fixed-header>
-                    <template #item.fullname="{item}"><div v-html="products_html_fullname(item,5)"></div></template>
-                    <template #item.calories="{item}"><div v-html="my_round(item.calories,0)"></div></template>  
-                    <template #item.fat="{item}"><div v-html="my_round(item.fat,0)"></div></template>  
-                    <template #item.protein="{item}"><div v-html="my_round(item.protein,0)"></div></template>  
-                    <template #item.carbohydrate="{item}"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
-                    <template #item.salt="{item}"><div v-html="my_round(item.salt,0)"></div></template>  
-                    <template #item.fiber="{item}"><div v-html="my_round(item.fiber,0)"></div></template>  
-                    <template #item.sugars="{item}"><div v-html="my_round(item.sugars,0)"></div></template>  
-                    <template #item.saturated_fat="{item}"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
-                    <template #item.cholesterol="{item}"><div v-html="my_round(item.cholesterol,0)"></div></template>  
-                    <template #item.sodium="{item}"><div v-html="my_round(item.sodium,0)"></div></template>  
-                    <template #item.potassium="{item}"><div v-html="my_round(item.potassium,0)"></div></template>  
-                    <template #item.ferrum="{item}"><div v-html="my_round(item.ferrum,0)"></div></template>  
-                    <template #item.magnesium="{item}"><div v-html="my_round(item.magnesium,0)"></div></template>  
-                    <template #item.phosphor="{item}"><div v-html="my_round(item.phosphor,0)"></div></template>  
-                    <template #item.calcium="{item}"><div v-html="my_round(item.calcium,0)"></div></template>  
-                    <template #item.actions="{item}">
-                        <v-icon id="Products_SystemProductsMdiLinkVariant" small class="mr-1" @click.stop="linkProduct(item)">mdi-link-variant</v-icon>   
-                        <v-icon id="Products_SystemProductsMdiPencil" class="mr-1" small @click.stop="editSystemProduct(item)"  color="#AA0000" v-if="useStore().catalog_manager">mdi-pencil</v-icon>
-                        <v-icon id="Products_SystemProductsMdiDelete" small @click.stop="deleteSystemProduct(item)" color="#AA0000" v-if="useStore().catalog_manager">mdi-delete</v-icon>
-                    </template>
-                </v-data-table-virtual>
-            </v-window-item>
         </v-window>
 
         <!-- DIALOG PRODUCTS CRUD -->
         <v-dialog v-model="dialog_products_crud" width="45%" persistent>
             <v-card class="pa-4">
                 <ProductsCRUD :product="product" :mode="product_cu_mode" :key="'B'+key" @cruded="on_ProductsCRUD_cruded()"></ProductsCRUD>
-            </v-card>
-        </v-dialog>
-        <!-- DIALOG SYSTEM PRODUCTS CRUD -->
-        <v-dialog v-model="dialog_system_products_crud" width="45%" persistent>
-            <v-card class="pa-4">
-                <SystemProductsCRUD :system_product="system_product" :mode="system_product_cu_mode" :key="'B'+key" @cruded="on_SystemProductsCRUD_cruded()"></SystemProductsCRUD>
             </v-card>
         </v-dialog>
         <!-- DIALOG OFF -->
@@ -90,10 +57,9 @@
 <script>
     import axios from 'axios'
     import {my_round} from 'vuetify_rules'
-    import { empty_products,empty_elaborated_products,empty_system_products } from '../empty_objects.js'
+    import { empty_products,empty_elaborated_products } from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import ProductsCRUD from './ProductsCRUD.vue'
-    import SystemProductsCRUD from './SystemProductsCRUD.vue'
     import TableElaboratedProducts from './TableElaboratedProducts.vue'
     import { useStore } from '@/store.js'
     import OpenFoodFactsSearch from './OpenFoodFactsSearch.vue'
@@ -101,7 +67,6 @@
         components: {
             MyMenuInline,
             ProductsCRUD,
-            SystemProductsCRUD,
             TableElaboratedProducts,
             OpenFoodFactsSearch,
         },
@@ -127,27 +92,6 @@
                     { title: this.$t('Calcium (mg)'), sortable: true, key: 'calcium',align:'right'},
                     { title: this.$t('Actions'), key: 'actions', sortable: false},
                 ],
-                system_products:[],
-                system_products_headers: [ 
-                    { title: this.$t('English name'), sortable: true, key: 'fullname',width:"30%"},          
-                    { title: this.$t('Calories (kcal)'), sortable: true, key: 'calories',align:'right'},
-                    { title: this.$t('Fat (g)'), sortable: true, key: 'fat',align:'right'},
-                    { title: this.$t('Protein (g)'), sortable: true, key: 'protein',align:'right'},
-                    { title: this.$t('Carbohydrate (g)'), sortable: true, key: 'carbohydrate',align:'right'},
-                    { title: this.$t('Salt (g)'), sortable: true, key: 'salt',align:'right'},
-                    { title: this.$t('Fiber (g)'), sortable: true, key: 'fiber',align:'right'},
-                    { title: this.$t('Sugars (g)'), sortable: true, key: 'sugars',align:'right'},
-                    { title: this.$t('Saturated fat (g)'), sortable: true, key: 'saturated_fat',align:'right'},
-                    { title: this.$t('Cholesterol (g)'), sortable: true, key: 'cholesterol',align:'right'},
-                    { title: this.$t('Sodium (mg)'), sortable: true, key: 'sodium',align:'right'},
-                    { title: this.$t('Potassium (mg)'), sortable: true, key: 'potassium',align:'right'},
-                    { title: this.$t('Ferrum (mg)'), sortable: true, key: 'ferrum',align:'right'},
-                    { title: this.$t('Magnesium (mg)'), sortable: true, key: 'magnesium',align:'right'},
-                    { title: this.$t('Phosphor (mg)'), sortable: true, key: 'phosphor',align:'right'},
-                    { title: this.$t('Calcium (mg)'), sortable: true, key: 'calcium',align:'right'},
-                    { title: this.$t('Actions'), key: 'actions', sortable: false, width: "7%"},
-                ],
-
                 elaborated_products:[],
 
                 //CRUD ELABORATED PRODUCTS
@@ -168,18 +112,12 @@
                 //DIALOG FORMATS
                 dialog_formats:false,
 
-                //CRUD SYSTEM PRODUCT
-                system_product:null,
-                system_product_cu_mode:null,
-                dialog_system_products_crud:false,
-
                 //DIALOG OPEN FOOD FACTS
                 dialog_off:false,
             }
         },     
         methods:{
             empty_products,
-            empty_system_products,
             empty_elaborated_products,
             my_round,
         useStore,
@@ -213,24 +151,6 @@
                         ]
                     },
                 ]
-                if (this.useStore().catalog_manager){
-                    r.push({
-                        subheader: this.$t("System product options"),
-                        children: [
-                            {
-                                name: this.$t("Add system product"),
-                                icon: "mdi-plus",
-                                code: function(){
-                                    this.system_product_cu_mode="C"
-                                    this.system_product=this.empty_system_products()
-                                    this.key=this.key+1
-                                    this.dialog_system_products_crud=true
-                                }.bind(this),
-                            },
-                        ]
-                    })
-                }
-
                 r.push({
                     subheader: this.$t("Open Food Facts Search"),
                     children: [
@@ -247,10 +167,6 @@
             },
             on_ProductsCRUD_cruded(){
                 this.dialog_products_crud=false
-                this.update_all()
-            },
-            on_SystemProductsCRUD_cruded(){
-                this.dialog_system_products_crud=false
                 this.update_all()
             },
             on_TableElaboratedProducts_cruded(){
@@ -294,33 +210,6 @@
 
                 this.dialog_products_crud=true
             },
-            editSystemProduct(item){
-                this.system_product=item
-                this.system_product_cu_mode="U"
-                this.key=this.key+1
-                this.dialog_system_products_crud=true
-            },
-            deleteSystemProduct(){
-                alert(this.$t("System products never should be deleted. You can set obsolete or rename to REUSABLE when needed."))
-            },
-
-            viewSystemProduct(event,object){
-                this.system_product=object.item
-                this.system_product_cu_mode="R"
-                this.key=this.key+1
-                this.dialog_system_products_crud=true
-            },
-            convertToSystemProduct(item){
-
-                axios.post(`${item.url}convert_to_system/`, {}, this.myheaders())
-                .then((response) => {
-                    this.useStore().products.set(response.data.product.url,response.data.product)
-                    this.system_products.push(response.data.system_product)
-                    this.update_all()
-               }, (error) => {
-                    this.parseResponseError(error)
-                });
-            },
             on_search_change(){
                 //Pressing enter
                 this.update_all()
@@ -331,19 +220,10 @@
             update_elaborated_products(){
                 this.elaborated_products=this.getArrayFromMap(this.useStore().elaborated_products).filter(o=> o.name.toLowerCase().includes(this.search.toLowerCase()))
             },
-            update_system_products(){
-                return axios.get(`${this.useStore().apiroot}/api/system_products/?search=${this.search}`, this.myheaders())
-                .then((response) => {
-                    this.system_products=response.data
-               }, (error) => {
-                    this.parseResponseError(error)
-                })
-            },
             update_all(){
                 // Refresh products and elaborated products filtering products and elaborated products
-                // Refresh system products making a query
                 this.loading=true
-                Promise.all([this.update_products(), this.update_elaborated_products(), this.update_system_products()])        
+                Promise.all([this.update_products(), this.update_elaborated_products()])        
                 .then( ()=> {
                     this.loading=false
                     this.key=this.key+1

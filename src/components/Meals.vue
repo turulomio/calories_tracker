@@ -273,7 +273,7 @@
                     this.elaborated_product_crud_mode="R"
                     this.elaborated_product=this.useStore().elaborated_product.get(product.elaborated_products)
                     this.elaborated_product_crud_dialog=true
-                } else { // SYSTEM PRODUCTS AND PRODUCTS
+                } else { // AND PRODUCTS
                     this.product_crud_mode="R"
                     this.product=product
                     this.product_crud_dialog=true

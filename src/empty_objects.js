@@ -14,17 +14,9 @@ export function empty_companies(){
         url:null,
         name: null,
         obsolete: false,
-        system_companies: null,
     }
 }
-export function empty_system_companies(){
-    return {
-        last: new Date().toISOString(),
-        url:null,
-        name: null,
-        obsolete: false,
-    }
-}
+
 export function empty_products(){
     return {
         url:null,
@@ -47,46 +39,13 @@ export function empty_products(){
         glutenfree:false,
         calcium:null,
         obsolete: false,
-        system_products: null,
+        openfactsfood_id: null,
         elaborated_products:null,
         food_types:null,
         additives:[],
         formats:[],
         density: null,
         companies:null,
-        version_parent:null,
-        version_description:null
-
-    }    
-}
-export function empty_system_products(){
-    return {
-        url:null,
-        name: null,
-        amount:null,
-        fat:null,
-        protein:null,
-        carbohydrate:null,
-        calories:null,
-        salt:null,
-        cholesterol:null,
-        sodium:null,
-        potassium:null,
-        fiber:null,
-        sugars:null,
-        saturated_fat:null,
-        ferrum:null,
-        magnesium:null,
-        phosphor:null,
-        glutenfree:false,
-        calcium:null,
-        obsolete: false,
-        food_types:null,
-        additives:[],
-        formats:[],
-        density: null,
-        system_companies:null,
-        version: new Date().toISOString(),
         version_parent:null,
         version_description:null
 
@@ -99,7 +58,6 @@ export function empty_formats(){
         amount: 0,
     }
 }
-
 
 export function empty_meals(){
     return {

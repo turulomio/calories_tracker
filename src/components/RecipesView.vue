@@ -21,7 +21,7 @@
                 </v-card>
             </v-window-item>
         </v-window>
-        <!-- DIALOG SYSTEM PRODUCTS CRUD -->
+        <!-- DIALOG RECIPES MERGE -->
         <v-dialog v-model="dialog_recipes_merge" width="60%">
             <v-card class="pa-4">
                 <RecipesMerge :main_recipe="new_recipe" :key="key" @merged="on_RecipesMerge_merged"/>
