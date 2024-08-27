@@ -2,35 +2,35 @@
     <div>    
         <h1 @click="showinfo=!showinfo" v-show="showinfo">{{ title() }}</h1>        
         <div class="d-flex flex-row">
-        <v-card class="pa-6 mt-4" style="overflow-y: scroll" :height="600" min-width="50%">
+        <v-card class="pa-6 mt-4" style="overflow-y: scroll" min-width="50%">
             <v-form ref="form" v-model="form_valid" lazy-validation >
-                <v-text-field id="name" :readonly="mode=='D' || mode=='R'" v-model="newproduct.name" :label="$t('Set product name')" :placeholder="$t('Set product name')" :rules="RulesString(200)" counter="200"/>
-                <v-autocomplete id="companies" v-model="newproduct.companies" :items="getArrayFromMap(useStore().companies)" :label="$t('Select a company')" item-title="name" item-value="url" :rules="RulesSelection(false)"/>
-                <v-autocomplete id="food_types" :readonly="mode=='D' || mode=='R'" :items="getArrayFromMap(useStore().food_types)" v-model="newproduct.food_types" :label="$t('Select product food type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <AutocompleteAdditives id="additives" :readonly="mode=='D' || mode=='R'" :additives="getArrayFromMap(useStore().additives)" v-model="newproduct.additives" />
-                <v-text-field id="amount" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.amount" :label="$t('Set product amount (gr)')" :placeholder="$t('Set product amount (gr)')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
-                <v-text-field id="calories" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.calories" :label="$t('Set product calories (gr)')" :placeholder="$t('Set product calories (gr)')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
-                <v-text-field id="density" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.density" :label="$t(`Set product density (gr/ml). Empty if you don't know`)" :placeholder="$t('Set product density(gr/ml)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
-                <v-text-field id="fat" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.fat" :label="$t('Set product fat (gr)')" :placeholder="$t('Set product fat (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
-                <v-text-field id="saturated_fat" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.saturated_fat" :label="$t('Set product saturated_fat (gr)')" :placeholder="$t('Set product saturated_fat (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
-                <v-text-field id="protein" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.protein" :label="$t('Set product protein (gr)')" :placeholder="$t('Set product protein (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
-                <v-text-field id="carbohydrate" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.carbohydrate" :label="$t('Set product carbohydrate (gr)')" :placeholder="$t('Set product carbohydrate (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
-                <v-text-field id="sugars" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.sugars" :label="$t('Set product sugars (gr)')" :placeholder="$t('Set product sugars (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
-                <v-text-field id="cholesterol" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.cholesterol" :label="$t('Set product cholesterol (gr)')" :placeholder="$t('Set product cholesterol (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
-                <v-text-field id="salt" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.salt" :label="$t('Set product salt (gr)')" :placeholder="$t('Set product salt (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
-                <v-text-field id="sodium" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.sodium" :label="$t('Set product sodium (mg)')" :placeholder="$t('Set product sodium (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
-                <v-text-field id="potassium" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.potassium" :label="$t('Set product potassium (mg)')" :placeholder="$t('Set product potassium (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
-                <v-text-field id="fiber" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.fiber" :label="$t('Set product fiber (gr)')" :placeholder="$t('Set product fiber (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
-                <v-text-field id="ferrum" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.ferrum" :label="$t('Set product ferrum (mg)')" :placeholder="$t('Set product ferrum (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
-                <v-text-field id="magnesium" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.magnesium" :label="$t('Set product magnesium (mg)')" :placeholder="$t('Set product magnesium (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
-                <v-text-field id="phosphor" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.phosphor" :label="$t('Set product phosphor (mg)')" :placeholder="$t('Set product phosphor (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
-                <v-text-field id="calcium" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.calcium" :label="$t('Set product calcium (mg)')" :placeholder="$t('Set product calcium (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
-                <v-checkbox id="glutenfree" v-model="newproduct.glutenfree" :label="$t('Is gluten free?')"></v-checkbox>
-                <v-text-field :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.openfactsfood_id" :label="$t('Set Open Facts Food Id')" :placeholder="$t('Set Open Facts Food Id')" :rules="RulesInteger(12,false)" counter="12"/>
+                <v-text-field data-test="ProductsCRUD_Name" :readonly="mode=='D' || mode=='R'" v-model="newproduct.name" :label="$t('Set product name')" :placeholder="$t('Set product name')" :rules="RulesString(200)" counter="200"/>
+                <v-autocomplete data-test="ProductsCRUD_Companies" v-model="newproduct.companies" :items="getArrayFromMap(useStore().companies)" :label="$t('Select a company')" item-title="name" item-value="url" :rules="RulesSelection(false)"/>
+                <v-autocomplete data-test="ProductsCRUD_FoodTypes" :readonly="mode=='D' || mode=='R'" :items="getArrayFromMap(useStore().food_types)" v-model="newproduct.food_types" :label="$t('Select product food type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <AutocompleteAdditives data-test="ProductsCRUD_Additives" :readonly="mode=='D' || mode=='R'" :additives="getArrayFromMap(useStore().additives)" v-model="newproduct.additives" />
+                <v-text-field data-test="ProductsCRUD_Amount" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.amount" :label="$t('Set product amount (gr)')" :placeholder="$t('Set product amount (gr)')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
+                <v-text-field data-test="ProductsCRUD_Calories" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.calories" :label="$t('Set product calories (gr)')" :placeholder="$t('Set product calories (gr)')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
+                <v-text-field data-test="ProductsCRUD_Density" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.density" :label="$t(`Set product density (gr/ml). Empty if you don't know`)" :placeholder="$t('Set product density(gr/ml)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
+                <v-text-field data-test="ProductsCRUD_Fat" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.fat" :label="$t('Set product fat (gr)')" :placeholder="$t('Set product fat (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
+                <v-text-field data-test="ProductsCRUD_SaturatedFat" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.saturated_fat" :label="$t('Set product saturated_fat (gr)')" :placeholder="$t('Set product saturated_fat (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
+                <v-text-field data-test="ProductsCRUD_Protein" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.protein" :label="$t('Set product protein (gr)')" :placeholder="$t('Set product protein (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
+                <v-text-field data-test="ProductsCRUD_Carbohydrate" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.carbohydrate" :label="$t('Set product carbohydrate (gr)')" :placeholder="$t('Set product carbohydrate (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
+                <v-text-field data-test="ProductsCRUD_Sugars" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.sugars" :label="$t('Set product sugars (gr)')" :placeholder="$t('Set product sugars (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
+                <v-text-field data-test="ProductsCRUD_Cholesterol" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.cholesterol" :label="$t('Set product cholesterol (gr)')" :placeholder="$t('Set product cholesterol (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
+                <v-text-field data-test="ProductsCRUD_Salt" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.salt" :label="$t('Set product salt (gr)')" :placeholder="$t('Set product salt (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
+                <v-text-field data-test="ProductsCRUD_Sodium" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.sodium" :label="$t('Set product sodium (mg)')" :placeholder="$t('Set product sodium (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
+                <v-text-field data-test="ProductsCRUD_Potassium" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.potassium" :label="$t('Set product potassium (mg)')" :placeholder="$t('Set product potassium (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
+                <v-text-field data-test="ProductsCRUD_Fiber" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.fiber" :label="$t('Set product fiber (gr)')" :placeholder="$t('Set product fiber (gr)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
+                <v-text-field data-test="ProductsCRUD_Ferrum" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.ferrum" :label="$t('Set product ferrum (mg)')" :placeholder="$t('Set product ferrum (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
+                <v-text-field data-test="ProductsCRUD_Magnesium" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.magnesium" :label="$t('Set product magnesium (mg)')" :placeholder="$t('Set product magnesium (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
+                <v-text-field data-test="ProductsCRUD_Phosphor" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.phosphor" :label="$t('Set product phosphor (mg)')" :placeholder="$t('Set product phosphor (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
+                <v-text-field data-test="ProductsCRUD_Calcium" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.calcium" :label="$t('Set product calcium (mg)')" :placeholder="$t('Set product calcium (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
+                <v-checkbox data-test="ProductsCRUD_GlutenFree" v-model="newproduct.glutenfree" :label="$t('Is gluten free?')"></v-checkbox>
+                <v-text-field :readonly="mode=='D' || mode=='R'" v-model="newproduct.openfactsfood_id" :label="$t('Set Open Facts Food Id')" :placeholder="$t('Set Open Facts Food Id')" :rules="RulesString(14,false)" counter="14"/>
 
                 <AutocompleteProducts :readonly="mode=='D' || mode=='R'" :products="getArrayFromMap(useStore().products)" v-model="newproduct.products"/>
                 <v-text-field :readonly="mode=='D' || mode=='R'" v-model="newproduct.version_description" :label="$t('Set product version description')" :placeholder="$t('Set product version description')" :rules="RulesString(200,false)" counter="200"/>
-                <v-checkbox id="obsolete" v-model="newproduct.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
+                <v-checkbox data-test="ProductsCRUD_Obsolete" v-model="newproduct.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
                 <v-card class="mt-4">
                     <v-data-table density="compact" :headers="formats_headers" :items="newproduct.formats" :sort-by="[{key:'formats',order:'asc'}]"  class="elevation-1" :items-per-page="10000" :key="'T'+key" :height="250">
                         <template #item.formats="{item}"><div v-html="useStore().formats.get(item.formats).name"></div></template> 
@@ -44,9 +44,9 @@
 
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn id="cmdFormat" color="primary" v-if="['C','U'].includes(mode)" @click="addFormat()" >{{ $t("Add a format") }}</v-btn>
-                <v-btn id="cmd" color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()">{{ button() }}</v-btn> 
-                <v-btn id="cmdClose" color="error" @click="$emit('cruded')" >{{ $t("Close") }}</v-btn>
+                <v-btn data-test="ProductsCRUD_ButtonFormat" color="primary" v-if="['C','U'].includes(mode)" @click="addFormat()" >{{ $t("Add a format") }}</v-btn>
+                <v-btn data-test="ProductsCRUD_ButtonAdd" color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()">{{ button() }}</v-btn> 
+                <v-btn data-test="ProductsCRUD_ButtonClose" color="error" @click="$emit('cruded')" >{{ $t("Close") }}</v-btn>
             </v-card-actions>
         </v-card>
    
