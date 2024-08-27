@@ -26,7 +26,7 @@
                 <v-text-field data-test="ProductsCRUD_Phosphor" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.phosphor" :label="$t('Set product phosphor (mg)')" :placeholder="$t('Set product phosphor (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-text-field data-test="ProductsCRUD_Calcium" :readonly="mode=='D' || mode=='R'" v-model.number="newproduct.calcium" :label="$t('Set product calcium (mg)')" :placeholder="$t('Set product calcium (mg)')" :rules="RulesFloatGEZ(10,false,3)" counter="10"/>
                 <v-checkbox data-test="ProductsCRUD_GlutenFree" v-model="newproduct.glutenfree" :label="$t('Is gluten free?')"></v-checkbox>
-                <v-text-field :readonly="mode=='D' || mode=='R'" v-model="newproduct.openfactsfood_id" :label="$t('Set Open Facts Food Id')" :placeholder="$t('Set Open Facts Food Id')" :rules="RulesString(14,false)" counter="14"/>
+                <v-text-field :readonly="mode=='D' || mode=='R'" v-model="newproduct.openfoodfacts_id" :label="$t('Set Open Facts Food Id')" :placeholder="$t('Set Open Facts Food Id')" :rules="RulesString(14,false)" counter="14"/>
 
                 <AutocompleteProducts :readonly="mode=='D' || mode=='R'" :products="getArrayFromMap(useStore().products)" v-model="newproduct.products"/>
                 <v-text-field :readonly="mode=='D' || mode=='R'" v-model="newproduct.version_description" :label="$t('Set product version description')" :placeholder="$t('Set product version description')" :rules="RulesString(200,false)" counter="200"/>

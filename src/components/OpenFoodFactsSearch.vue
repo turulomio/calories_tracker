@@ -151,7 +151,7 @@
                 this.product.ferrum= Number(item.nutriments.iron_100g )|| null
                 this.product.magnesium= Number(item.nutriments.magnesium_100g )|| null
                 this.product.phosphor= Number(item.nutriments.phosphor_100g )|| null
-                this.product.openfactsfood_id=item.id
+                this.product.openfoodfacts_id=item.id
                 this.key=this.key+1
                 this.dialog_products_crud=true
             },
