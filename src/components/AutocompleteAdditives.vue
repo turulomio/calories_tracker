@@ -5,12 +5,12 @@
             <v-list-item  v-bind="props">
                 <span v-html="additives_html_fullname(item.raw)"></span>
             </v-list-item>
-        </template>         
+        </template>          -->
         <template v-slot:selection="{ props, item }">
             <v-list-item v-bind="props">
                 <span v-html="additives_html_fullname(item.raw)"></span>
             </v-list-item>
-        </template>  -->
+        </template> 
     </v-autocomplete>
 </template>
 
