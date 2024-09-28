@@ -9,11 +9,7 @@ describe('e2e Products', () => {
     //Buscamos
     cy.get("#filter").clear().type("Hacendado{enter}")
 
-    // Link System Company to Company
-    cy.get('.mdi-link-variant').first().click()
-    cy.get('#tabCompanies').click()
-
-    //Select menu products
+     //Select menu products
     cy.getDataTest('lateral_icon').click()
     cy.getDataTest('lateral_products').click()
 
@@ -36,8 +32,6 @@ describe('e2e Products', () => {
     // Create second product
     add_product_from_products_vue("My second product")
 
-    // Convert second to system product
-    cy.get('.mdi-database-arrow-right').first().click()
     cy.get("#Products_filter").type("second{enter}")
 
 
