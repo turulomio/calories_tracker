@@ -3,8 +3,7 @@
         <h1>{{ $t(`Open Food Facts search`) }}
         </h1>
         <v-card width="50%" class="d-flex flex-row mx-auto my-5" flat >
-                <v-text-field clearable density="default" :disabled="loading" class="mb-3"  v-model="search" prepend-icon="mdi-magnify" :label="$t('Search in Open Food Facts api')" single-line hide-details :placeholder="$t('Add a string to filter table')" @keyup.enter="on_search_change" />
-
+                <v-text-field data-test="OpenFoodFactsSearch_Search" clearable density="default" :disabled="loading" class="mb-3"  v-model="search" prepend-icon="mdi-magnify" :label="$t('Search in Open Food Facts api')" single-line hide-details :placeholder="$t('Add a string to filter table')" @keyup.enter="on_search_change" />
                 <v-btn class="ml-8" color="primary" @click="on_search_change">{{ $t("Search")}}</v-btn>
         </v-card>
         <v-data-table :headers="off_headers" :items="off_items" class="elevation-1 cursorpointer" :items-per-page="100000" :loading="loading" :key="key" @click:row="showOffPage" :sortBy="[{key:'nutriments_number', order:'desc'}]"  fixed-header height="60vh"  >
@@ -15,7 +14,7 @@
                 <v-rating readonly  :length="5" :size="32" :model-value="item.completeness*5" active-color="primary" />
             </template>
             <template #item.actions="{item}">
-                <v-icon small class="mr-1" @click.stop="addProduct(item)">mdi-plus</v-icon>
+                <v-icon :data-test="`OpenFoodFactsSearch_Table_ButtonAddProduct${item.id}`" small class="mr-1" @click.stop="addProduct(item)">mdi-plus</v-icon>
                 <v-icon small class="mr-1" @click.stop="showOffPage(null, {item:item})">mdi-search-web</v-icon>
             </template>
         </v-data-table>
@@ -137,22 +136,22 @@
                 this.product.name=item.product_name
                 this.product.company=item.brands
                 this.product.amount=100
-                this.product.calories=item.nutriments["energy-kcal_100g"]
-                this.product.fat=item.nutriments.fat_100g
-                this.product.saturated_fat=item.nutriments["saturated-fat_100g"]
-                this.product.protein=item.nutriments.proteins_100g
-                this.product.salt=item.nutriments.salt_100g
-                this.product.sodium=item.nutriments.sodium_100g
-                this.product.sugars=item.nutriments.sugars_100g
-                this.product.carbohydrate=item.nutriments.carbohydrates_100g
-                this.product.calcium=item.nutriments.calcium_100g
-                this.product.cholesterol=item.nutriments.cholesterol_100g
-                this.product.potassium=item.nutriments.potassium_100g
-                this.product.fiber=item.nutriments.fiber_100g
-                this.product.ferrum=item.nutriments.iron_100g
-                this.product.magnesium=item.nutriments.magnesium_100g
-                this.product.phosphor=item.nutriments.phosphor_100g
-                this.product.openfactsfood_id=item.id
+                this.product.calories= Number(item.nutriments["energy-kcal_100g"] )|| null
+                this.product.fat= Number(item.nutriments.fat_100g  )|| null
+                this.product.saturated_fat= Number(item.nutriments["saturated-fat_100g"] )|| null
+                this.product.protein= Number(item.nutriments.proteins_100g )|| null
+                this.product.salt= Number(item.nutriments.salt_100g )|| null
+                this.product.sodium= Number(item.nutriments.sodium_100g )|| null
+                this.product.sugars= Number(item.nutriments.sugars_100g )|| null
+                this.product.carbohydrate= Number(item.nutriments.carbohydrates_100g )|| null
+                this.product.calcium= Number(item.nutriments.calcium_100g )|| null
+                this.product.cholesterol= Number(item.nutriments.cholesterol_100g )|| null
+                this.product.potassium= Number(item.nutriments.potassium_100g )|| null
+                this.product.fiber= Number(item.nutriments.fiber_100g )|| null
+                this.product.ferrum= Number(item.nutriments.iron_100g )|| null
+                this.product.magnesium= Number(item.nutriments.magnesium_100g )|| null
+                this.product.phosphor= Number(item.nutriments.phosphor_100g )|| null
+                this.product.openfoodfacts_id=item.id
                 this.key=this.key+1
                 this.dialog_products_crud=true
             },

@@ -39,7 +39,7 @@ export function empty_products(){
         glutenfree:false,
         calcium:null,
         obsolete: false,
-        openfactsfood_id: null,
+        openfoodfacts_id: null,
         elaborated_products:null,
         food_types:null,
         additives:[],

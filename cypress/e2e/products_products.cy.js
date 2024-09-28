@@ -1,7 +1,6 @@
 import { login_test_User, add_product_from_products_vue } from "./commons"
 describe('e2e Products', () => {
   it('Products', () => {    
-
     login_test_User(cy)
     cy.getDataTest('lateral_icon').click()
     cy.getDataTest('lateral_companies').click()
@@ -28,7 +27,6 @@ describe('e2e Products', () => {
     // // Delete product
     // cy.get('.mdi-delete').first().click()
     // cy.get('#cmd').click()
-
     // Create second product
     add_product_from_products_vue("My second product")
 
