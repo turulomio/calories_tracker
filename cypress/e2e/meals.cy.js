@@ -27,6 +27,24 @@ describe('e2e Meals', () => {
     cy.get('h1 > .v-btn').click()
     cy.getDataTest('MyMenuInline_Header0_Item1').click()
 
+
+    //Add meal
+    cy.get('h1 > .v-btn').click()
+    cy.getDataTest('MyMenuInline_Header0_Item0').click()
+    cy.getDataTest('MealsCRUD_Products').type("format{downArrow}{enter}")
+    cy.getDataTest('MealsCRUD_Amount').type("33")
+    cy.getDataTest('MealsCRUD_Button').click()
+    //Add meal
+    cy.get('h1 > .v-btn').click()
+    cy.getDataTest('MyMenuInline_Header0_Item0').click()
+    cy.getDataTest('MealsCRUD_Products').type("format{downArrow}{enter}")
+    cy.getDataTest('MealsCRUD_Amount').type("33")
+    cy.getDataTest('MealsCRUD_Button').click()
+
+    // Shows mails ranking report
+    cy.getDataTest('lateral_icon').click()
+    cy.getDataTest('lateral_reports').click()
+    cy.getDataTest('lateral_meals_ranking').click()
   })
 
 

@@ -30,11 +30,9 @@
 <!--                     REPORTS -->                   
                     <v-list-group value="Reports"  v-if="useStore().logged">
                         <template v-slot:activator="{ props }">
-                            <v-list-item v-bind="props" prepend-icon="mdi-chart-box-outline" :title="$t('Reports')"></v-list-item>
+                            <v-list-item data-test="lateral_reports" v-bind="props" prepend-icon="mdi-chart-box-outline" :title="$t('Reports')"></v-list-item>
                         </template>
-                        <v-list-item link router :to="{ name: 'meals_ranking'}">
-                            <v-list-item-title>{{ $t("Meals ranking") }}</v-list-item-title>
-                        </v-list-item>
+                        <v-list-item data-test="lateral_meals_ranking" link router :to="{ name: 'meals_ranking'}" :title="$t('Meals ranking')" />
                         <v-list-item link router :to="{ name: 'curiosities'}">
                             <v-list-item-title>{{ $t("Curiosities") }}</v-list-item-title>
                         </v-list-item>
