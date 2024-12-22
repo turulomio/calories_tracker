@@ -198,3 +198,14 @@ export function empty_elaborations_experiences(){
         experience: ""
     }
 }
+
+
+
+export function empty_pill_event(){
+    return {
+        url:null,
+        name: "",
+        dt: null,
+        dt_intake:null,
+    }
+}
