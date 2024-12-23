@@ -15,7 +15,7 @@
       ></v-select>
         <v-calendar
         v-model="calendar"
-        :events="events"
+        :events="pill_events"
         :view-mode="type"></v-calendar>
 
 
