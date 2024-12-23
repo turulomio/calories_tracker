@@ -5,7 +5,7 @@
         </h1>
 
         <v-select v-model="type" :items="types" class="ma-2" label="View Mode" variant="outlined" dense hide-details />
-        <v-calendar v-model="calendar" :events="data" :view-mode="type" :weekdays="weekday"/>
+        <v-calendar v-model="calendar" :events="data" :view-mode="type" :weekdays="weekday" @click:date="on_calendar_click"/>
 
 
         <!-- DIALOG COMPANIES CRUD -->
@@ -70,6 +70,9 @@
                     },
                 ]
             },
+            on_calendar_click(event){
+                console.log(event)
+            },
             on_PillEventsCRUD_cruded(){
                 this.dialog_pill_events_crud=false
                 this.update_pill_events()
@@ -94,21 +97,30 @@
                     this.pill_events=response.data
                     this.data=[]
                     this.pill_events.forEach(o=>{
-                        let start=new Date(o.dt)
-                        this.data.push({
-                            
-                            title: o.pillname,
-                            start: start,
-                            end: new Date(start.setTime(start.getTime() + (1 * 60 * 60 * 1000))), // Add 1 hour in milliseconds
-                            color: "red",
-                            allDay: false,
-                        })
-
+                        this.data.push(this.pill_event_to_data(o))
                     })
                 }, (error) => {
                     this.parseResponseError(error)
                 });
-            },    
+            },
+            pill_event_to_data(pill_event){
+                let start=new Date(pill_event.dt)
+                let color="grey" //Red: missing //Green taken //Gray not yet
+                if (pill_event.dt_intake!=null){
+                    color="green"
+                } else if (new Date()> start){
+                    color="red"
+                }
+                return {
+                    
+                    title: pill_event.pillname,
+                    start: start,
+                    end: new Date(start.setTime(start.getTime() + (1 * 60 * 60 * 1000))), // Add 1 hour in milliseconds
+                    color: color,
+                    allDay: false,
+                }
+
+            },
         },
         created(){
             this.update_pill_events()
