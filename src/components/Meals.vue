@@ -6,7 +6,7 @@
 
             <div class="d-flex flex-row mx-auto pa-4" width="40%" style="justify-content: center; align-items: center;">  
                 <v-btn data-test="Meals_BtnDayBefore" color="secondary" @click="on_day_before" ><</v-btn>
-                <MyDatePicker class="mr-6 ml-6" :label="$t('Select a date')" v-model="day" hidenullicon></MyDatePicker>
+                <MyDatePicker class="mr-6 ml-6" :label="$t('Select a date')" v-model="day" hidenullicon />
                 <v-btn data-test="Meals_BtnDayAfter" color="secondary" @click="on_day_after" >></v-btn>
             </div>
 
@@ -204,7 +204,6 @@
         },    
         watch:{
             day(){
-
                 this.update_all()
             }
         }, 
@@ -284,33 +283,20 @@
             on_ElaboratedProductsCRUD_cruded(){
                 this.elaborated_product_crud_dialog=false
                 this.update_all()
-
             },
             on_ProductsCRUD_cruded(){
                 this.product_crud_dialog=false
                 this.update_all()
-
             },
             on_day_after(){
-                console.log(this.day)
-                // Create a Date object from the string
                 let date = new Date(this.day);
-
-                // Add one day to the date
                 date.setDate(date.getDate() + 1);
-
-                // Format the updated date back into a string (if needed)
                 this.day= date.toISOString().slice(0, 10); 
             },
             on_day_before(){
                 let date = new Date(this.day);
-
-                // Add one day to the date
                 date.setDate(date.getDate() - 1);
-
-                // Format the updated date back into a string (if needed)
                 this.day= date.toISOString().slice(0, 10); 
-
             },
         },
         created(){
