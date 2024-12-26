@@ -1,8 +1,8 @@
 <template>
     <div class="ma-4">
         <h1>{{ $t(`Meals ranking`) }}</h1>
-            <div class="d-flex mx-auto" outlined>
-                <MyDatePicker density="compact" :label="$t('Report from selected date')" v-model="from_date"></MyDatePicker>
+            <div class="d-flex flex-row mx-auto pa-4" width="40%" style="justify-content: center; align-items: center;">  
+            <MyDatePicker density="compact" :label="$t('Report from selected date')" v-model="from_date"></MyDatePicker>
             </div>
 
         <v-data-table density="compact" :headers="ranking_headers" :items="ranking" :sort-by="[{key:'position',order:'asc'}]"  class="elevation-1" :items-per-page="10000" :loading="loading" :key="key" fixed-header height="70vh">
