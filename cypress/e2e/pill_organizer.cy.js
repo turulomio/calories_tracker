@@ -9,6 +9,10 @@ describe('e2e Pill organizer', () => {
     cy.get('h1 > .v-btn').click()
     cy.getDataTest('MyMenuInline_Header0_Item0').click()
 
+    cy.getDataTest('PillEventsCRUD_Name').type("Aspirine")
+    cy.getDataTest('PillEventsCRUD_Days').type("3")
+    cy.getDataTest('PillEventsCRUD_Button').click()
+
   })
 
 
