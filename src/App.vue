@@ -27,6 +27,8 @@
                     <v-list-item data-test="lateral_recipes" link router :to="{ name: 'recipes'}" v-if="useStore().logged"  prepend-icon="mdi-book-open-variant" :title="$t('Recipes')" />
 <!--                    POTS -->
                     <v-list-item data-test="lateral_pots" link router :to="{ name: 'pots'}" v-if="useStore().logged" prepend-icon="mdi-pot" :title="$t('Pot')" />
+<!--                    PILLS -->
+                    <v-list-item data-test="lateral_pill_organizer" link router :to="{ name: 'pill_organizer'}" v-if="useStore().logged" prepend-icon="mdi-pill" :title="$t('Pill organizer')" />
 <!--                     REPORTS -->                   
                     <v-list-group value="Reports"  v-if="useStore().logged">
                         <template v-slot:activator="{ props }">

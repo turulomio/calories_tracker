@@ -11,6 +11,7 @@ import Companies from './components/Companies.vue'
 import Curiosities from './components/Curiosities.vue'
 import Meals from './components/Meals.vue'
 import MealsRanking from './components/MealsRanking.vue'
+import PillOrganizer from './components/PillOrganizer.vue'
 import Pots from './components/Pots.vue'
 import Products from './components/Products.vue'
 import ProductsDataTransfer from './components/ProductsDataTransfer.vue'
@@ -29,6 +30,7 @@ export const router = createRouter({
     { path: `${import.meta.env.BASE_URL}/curiosities/`, name: 'curiosities', component: Curiosities },
     { path: `${import.meta.env.BASE_URL}/meals/`, name: 'meals', component: Meals },
     { path: `${import.meta.env.BASE_URL}/meals/ranking/`, name: 'meals_ranking', component: MealsRanking },
+    { path: `${import.meta.env.BASE_URL}/pill_organizer/`, name: 'pill_organizer', component: PillOrganizer },
     { path: `${import.meta.env.BASE_URL}/pots/`, name: 'pots', component: Pots },
     { path: `${import.meta.env.BASE_URL}/products/`, name: 'products', component: Products },
     { path: `${import.meta.env.BASE_URL}/products/datatransfer/`, name: 'products_datatransfer', component: ProductsDataTransfer },
