@@ -5,8 +5,7 @@
         </h1>
 
         <v-select v-model="type" :items="types" class="ma-2" label="View Mode" variant="outlined" dense hide-details />
-        <v-calendar v-model="calendar" :events="data" :view-mode="type" :weekdays="weekday" @click:date="on_calendar_click"/>
-
+        <v-calendar v-model="calendar" :events="data" :view-mode="type" :weekdays="weekday" @click="on_calendar_click" />
 
         <!-- DIALOG COMPANIES CRUD -->
         <v-dialog v-model="dialog_pill_events_crud" width="45%">
@@ -70,8 +69,9 @@
                     },
                 ]
             },
-            on_calendar_click(event){
+            on_calendar_click(event, ho){
                 console.log(event)
+                console.log(ho)
             },
             on_PillEventsCRUD_cruded(){
                 this.dialog_pill_events_crud=false
