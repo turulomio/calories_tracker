@@ -203,6 +203,7 @@ export function empty_elaborations_experiences(){
 
 export function empty_pill_event(){
     return {
+        url: null,
         pillname: "",
         dt: null,
         dt_intake:null,
@@ -210,9 +211,17 @@ export function empty_pill_event(){
 }
 export function empty_pill_event_each_day(){
     return {
-        url:null,
         pillname: "",
         dt_from: null,
         days:null,
+    }
+}
+
+export function empty_pill_event_each_n_hours(){
+    return {
+        pillname: "",
+        dt_from: null,
+        hours: 8,
+        number: 3
     }
 }
