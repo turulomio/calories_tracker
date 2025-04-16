@@ -13,7 +13,7 @@
                 <v-btn v-show="!item.is_taken" color="black" @click="event_delete(item)" >{{ $t("Delete") }}</v-btn>
             </div>
         </div>
-        <v-calendar v-model="calendar" :interval-duration="120" :events="data" :view-mode="type" :weekdays="weekday" @click="on_calendar_click" />
+        <v-calendar v-model="calendar" :first-day-of-week="1" :interval-duration="120" :events="data" :view-mode="type" :weekdays="weekday" @click="on_calendar_click" />
 
         <!-- DIALOG COMPANIES CRUD -->
         <v-dialog v-model="dialog_pill_events_crud" width="45%">
@@ -43,7 +43,7 @@
                 data:[],
                 key:0,
                 search:"",
-                type: 'week',
+                type: 'month',
                 types: ['month', 'week', 'day'],
                 calendar: [new Date()],
                 weekday:[0, 1, 2, 3, 4, 5, 6],

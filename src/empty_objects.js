@@ -202,25 +202,28 @@ export function empty_elaborations_experiences(){
 
 
 export function empty_pill_event(){
+    var today=new Date()
     return {
         url: null,
         pillname: "",
-        dt: null,
+        dt: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
         dt_intake:null,
     }
 }
 export function empty_pill_event_each_day(){
+    var today=new Date()
     return {
         pillname: "",
-        dt_from: null,
+        dt_from: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
         days:null,
     }
 }
 
 export function empty_pill_event_each_n_hours(){
+    var today=new Date()
     return {
         pillname: "",
-        dt_from: null,
+        dt_from: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
         hours: 8,
         number: 3
     }
