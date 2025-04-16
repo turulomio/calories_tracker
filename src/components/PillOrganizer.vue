@@ -20,10 +20,11 @@
         
         -->
         
-        <div class="ma-4" style="display: flex;flex-direction: column;flex-grow: 1;">
+        <div>
             <CalendarView 
                 class="theme-default " :startingDayOfWeek="1" displayPeriodUom="month"  monthNameFormat="long" weekday-name-format="long" :items="data" show-times 
-				:time-format-options="{ hour: 'numeric', minute: '2-digit' }" >
+				:time-format-options="{ hour: 'numeric', minute: '2-digit' }" :disable-future="false" 
+                @click-item="on_calendar_click">
                 <template #header="{ headerProps }">
 				<CalendarViewHeader
 					:header-props
@@ -167,9 +168,9 @@
                         this.parseResponseError(error)
                     })
             },
-            on_calendar_click(event, ho){
+            on_calendar_click(item, event){
                 console.log(event)
-                console.log(ho)
+                console.log(item)
             },
             on_PillEventsCRUD_cruded(){
                 this.dialog_pill_events_crud=false
@@ -227,3 +228,20 @@
         }
     }
 </script>
+
+<style>
+
+.cv-week {
+display: flex;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    flex-flow: row nowrap;
+    min-height: 10em;
+    border-width: 0;
+    position: relative;
+    width: 100%;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+}
+</style>
