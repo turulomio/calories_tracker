@@ -4,16 +4,35 @@
             <MyMenuInline :items="menuinline_items()"></MyMenuInline>
         </h1>
 
-        <v-select v-model="type" :items="types" class="ma-2" label="View Mode" variant="outlined" dense hide-details />
+        <!-- <v-select v-model="type" :items="types" class="ma-2" label="View Mode" variant="outlined" dense hide-details /> -->
     
 
-        <div  v-for="(item, index) in todays_items" :key="index" :style="{ color: event_color(item)}">
+        <!-- <div  v-for="(item, index) in todays_items" :key="index" :style="{ color: event_color(item)}">
             <div :color="item.color"> {{ item }}
                 <v-btn v-show="!item.is_taken" color="grey" @click="event_intake(item)" >{{ $t("Intake") }}</v-btn>
                 <v-btn v-show="!item.is_taken" color="black" @click="event_delete(item)" >{{ $t("Delete") }}</v-btn>
             </div>
+        </div> -->
+        <!-- <v-calendar v-model="calendar" :first-day-of-week="1" :interval-duration="120" :events="data" :view-mode="type" :weekdays="weekday" @click="on_calendar_click" /> -->
+
+        <!-- <ScheduleXCalendar :calendar-app="calendarApp" @calendarEvent="on_calendar_click"  />
+         
+        
+        -->
+        
+        <div class="ma-4" style="display: flex;flex-direction: column;flex-grow: 1;">
+            <CalendarView 
+                class="theme-default " :startingDayOfWeek="1" displayPeriodUom="month"  monthNameFormat="long" weekday-name-format="long" :items="data" show-times 
+				:time-format-options="{ hour: 'numeric', minute: '2-digit' }" >
+                <template #header="{ headerProps }">
+				<CalendarViewHeader
+					:header-props
+					@input="setShowDate"
+				/>
+			</template>
+            </CalendarView>
         </div>
-        <v-calendar v-model="calendar" :first-day-of-week="1" :interval-duration="120" :events="data" :view-mode="type" :weekdays="weekday" @click="on_calendar_click" />
+
 
         <!-- DIALOG COMPANIES CRUD -->
         <v-dialog v-model="dialog_pill_events_crud" width="45%">
@@ -27,25 +46,33 @@
 
 <script>
     import axios from 'axios'
-    import {my_round} from 'vuetify_rules'
+    import {my_round, localtime} from 'vuetify_rules'
     import { empty_pill_event_each_day, empty_pill_event_each_n_hours, empty_pill_event } from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import PillEventsCRUD from './PillEventsCRUD.vue'
     import { useStore } from '@/store.js'
+	import { CalendarView, CalendarViewHeader } from "vue-simple-calendar"
+    import "vue-simple-calendar/dist/vue-simple-calendar.css"
+	import "vue-simple-calendar/dist/css/default.css"
+	// import "vue-simple-calendar/dist/css/holidays-us.css"
+ 
     export default {
         components: {
             MyMenuInline,
             PillEventsCRUD,
+            CalendarView,
+            CalendarViewHeader
+
         },
         data(){
             return {
                 pill_events:[],
                 data:[],
                 key:0,
-                search:"",
-                type: 'month',
-                types: ['month', 'week', 'day'],
-                calendar: [new Date()],
+                showDate: new Date() ,
+                // search:"",
+                // type: 'month',
+                // types: ['month', 'week', 'day'],
                 weekday:[0, 1, 2, 3, 4, 5, 6],
 
                 //CRUD COMPANY
@@ -71,8 +98,12 @@
             empty_pill_event,
             empty_pill_event_each_day,
             empty_pill_event_each_n_hours,
+            localtime,
             my_round,
             useStore,
+			setShowDate(d) {
+				this.showDate = d;
+			},
             menuinline_items(){
                 return [
                     {
@@ -139,7 +170,6 @@
             on_calendar_click(event, ho){
                 console.log(event)
                 console.log(ho)
-                console.log(this.calendar)
             },
             on_PillEventsCRUD_cruded(){
                 this.dialog_pill_events_crud=false
@@ -160,13 +190,14 @@
                 this.dialog_pill_events_crud=true
             },
             update_pill_events(){          
-                axios.get(`${this.useStore().apiroot}/api/pill_events/?year=${this.calendar[0].getFullYear()}&month=${this.calendar[0].getMonth()+1}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/pill_events/?year=2025&month=4`, this.myheaders())
                 .then((response) => {
                     this.pill_events=response.data
                     this.data=[]
                     this.pill_events.forEach(o=>{
                         this.data.push(this.pill_event_to_data(o))
                     })
+                    console.log(this.data)
                 }, (error) => {
                     this.parseResponseError(error)
                 });
@@ -180,10 +211,11 @@
                     color="red"
                 }
                 return {
-                    
+                    id: pill_event.url,
+                    url: pill_event.url,
                     title: pill_event.pillname,
-                    start: start,
-                    end: new Date(start.setTime(start.getTime() + (1 * 60 * 60 * 1000))), // Add 1 hour in milliseconds
+                    startDate: start,
+                    endDate: new Date(start.setTime(start.getTime() + (1 * 60 * 60 * 1000))), // Add 1 hour in milliseconds
                     color: color,
                     allDay: false,
                 }
