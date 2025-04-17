@@ -14,17 +14,10 @@
             </div>
         </div> -->
         <!-- <v-calendar v-model="calendar" :first-day-of-week="1" :interval-duration="120" :events="data" :view-mode="type" :weekdays="weekday" @click="on_calendar_click" /> -->
-
-        <!-- <ScheduleXCalendar :calendar-app="calendarApp" @calendarEvent="on_calendar_click"  />
-         
-        
-        -->
         
         <div>
-            <CalendarView 
-                class="theme-default " :startingDayOfWeek="1" displayPeriodUom="month"  monthNameFormat="long" weekday-name-format="long" :items="data" show-times 
-				:time-format-options="{ hour: 'numeric', minute: '2-digit' }" :disable-future="false" 
-                @click-item="on_calendar_click">
+            <CalendarView class="theme-default " :startingDayOfWeek="1" displayPeriodUom="month"  monthNameFormat="long" weekday-name-format="long" :items="data" show-times 
+				:time-format-options="{ hour: 'numeric', minute: '2-digit' }" :disable-future="false" @click-item="on_calendar_click">
                 <template #header="{ headerProps }">
 				<CalendarViewHeader
 					:header-props
@@ -34,6 +27,14 @@
             </CalendarView>
         </div>
 
+        <!-- CONTEXTUAL MENU -->
+        <v-menu v-model="contextual_menu" :position-x="menuX" :position-y="menuY" absolute offset>
+            <v-list>
+                <v-list-item @click="event_intake" :title="$t('Intake')" prepend-icon="mdi-pill" />
+                <v-list-item @click="event_update" :title="$t('Update')" prepend-icon="mdi-pencil" />
+                <v-list-item @click="event_delete" :title="$t('Intake')" prepend-icon="mdi-delete" />
+            </v-list>
+        </v-menu>
 
         <!-- DIALOG COMPANIES CRUD -->
         <v-dialog v-model="dialog_pill_events_crud" width="45%">
@@ -80,6 +81,13 @@
                 pill_event:null,
                 pill_event_mode_mode:null,
                 dialog_pill_events_crud:false,
+
+                // CONTEXTUAL MENU
+                item_selected:null, // item selected when popup context menu
+                contextual_menu:false,
+                menuX:0,
+                menuY:0,
+
             }
         },
         computed: {
@@ -105,6 +113,13 @@
 			setShowDate(d) {
 				this.showDate = d;
 			},
+            showContextMenu(item,event){
+                this.menuX=event.clientX
+                this.menuY=event.clientY
+                this.item_selected=item
+                this.contextual_menu=true
+                console.log(this.menuX,this.menuY)
+            },
             menuinline_items(){
                 return [
                     {
@@ -150,18 +165,30 @@
                 if (item.dt>new Date()) return "grey"
                 return "red"
             },
-            event_intake(item){
-                item.dt_intake=new Date()
+            event_intake(){
+                // item must be converted to pill_event
+                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+                console.log(this.pill_event.url, this.item_selected.url)
+                this.pill_event.dt_intake=new Date()
 
-                axios.put(item.url, item,  this.myheaders())
+                axios.put(this.pill_event.url, this.pill_event,  this.myheaders())
                     .then(() => {
                         this.update_pill_events()
                     }, (error) => {
                         this.parseResponseError(error)
                     })
             },
-            event_delete(item){
-                axios.delete(item.url, this.myheaders())
+            event_update(){
+
+                this.pill_event_mode="U"
+                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+                this.key=this.key+1
+                this.dialog_pill_events_crud=true
+            },
+            event_delete(){
+                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+                console.log (this.pill_event,this.item_selected)
+                axios.delete(this.pill_event.url, this.myheaders())
                     .then(() => {
                         this.update_pill_events()
                     }, (error) => {
@@ -169,8 +196,7 @@
                     })
             },
             on_calendar_click(item, event){
-                console.log(event)
-                console.log(item)
+                this.showContextMenu(item,event)
             },
             on_PillEventsCRUD_cruded(){
                 this.dialog_pill_events_crud=false
