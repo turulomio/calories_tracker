@@ -5,13 +5,10 @@
         </h1>
 
         <!-- <v-select v-model="type" :items="types" class="ma-2" label="View Mode" variant="outlined" dense hide-details /> -->
-        <!-- <v-calendar v-model="calendar" :first-day-of-week="1" :interval-duration="120" :events="data" :view-mode="type" :weekdays="weekday" @click="on_calendar_click" /> -->
+        <!-- <v-calendar v-model="calendar" :first-day-of-week="1" :interval-duration="120" :events="data" :view-mode="type" :weekdays="weekday" @click="on_click_item" /> -->
         
         <div>
-            <CalendarView class="theme-default " :startingDayOfWeek="1" displayPeriodUom="month"  monthNameFormat="long" weekday-name-format="long" :items="data" show-times :time-format-options="{ hour: 'numeric', minute: '2-digit' }" :disable-future="false" @click-item="on_calendar_click" :show-date="showDate" :disable-past="false"
-				:enable-date-selection="true"
-                @click-date="on_click_date"                
-                >
+            <CalendarView class="theme-default " :startingDayOfWeek="1" displayPeriodUom="month"  monthNameFormat="long" weekday-name-format="long" :items="data" show-times :time-format-options="{ hour: 'numeric', minute: '2-digit' }" :disable-future="false" @click-item="on_click_item" :show-date="showDate" :disable-past="false" :enable-date-selection="true" @click-date="on_click_date">
                 <template #header="{ headerProps }">
 				<CalendarViewHeader
 					:header-props="headerProps"
@@ -61,15 +58,10 @@
         },
         data(){
             return {
-                current_date:new Date(), 
                 pill_events:[],
                 data:[],
                 key:0,
                 showDate: new Date() ,
-                // search:"",
-                // type: 'month',
-                // types: ['month', 'week', 'day'],
-                weekday:[0, 1, 2, 3, 4, 5, 6],
 
                 //CRUD COMPANY
                 pill_event:null,
@@ -108,10 +100,6 @@
 				this.showDate = d;
                 this.update_pill_events()
 			},
-            updateDate(d){
-                this.current_date=d
-
-            },
             showContextMenu(item,event){
                 this.menuX=event.clientX
                 this.menuY=event.clientY
@@ -154,12 +142,6 @@
                     },
                 ]
             },
-
-            event_color(item){
-                if (item.is_taken) return "green"
-                if (item.dt>new Date()) return "grey"
-                return "red"
-            },
             event_intake(){
                 // item must be converted to pill_event
                 this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
@@ -171,13 +153,6 @@
                     }, (error) => {
                         this.parseResponseError(error)
                     })
-            },
-            on_click_date(){
-                                    this.pill_event_mode="C"
-                                    this.pill_event=this.empty_pill_event()
-                                    this.key=this.key+1
-                                    this.dialog_pill_events_crud=true
-
             },
             event_update(){
                 this.pill_event_mode="U"
@@ -194,26 +169,19 @@
                         this.parseResponseError(error)
                     })
             },
-            on_calendar_click(item, event){
+            on_click_date(date){
+                this.pill_event_mode="C"
+                this.pill_event=this.empty_pill_event()
+                this.pill_event.dt=date
+                this.key=this.key+1
+                this.dialog_pill_events_crud=true
+            },
+            on_click_item(item, event){
                 this.showContextMenu(item,event)
             },
             on_PillEventsCRUD_cruded(){
                 this.dialog_pill_events_crud=false
                 this.update_pill_events()
-            },
-            editPot(item){
-                this.pot=item
-                this.pot_mode="U"
-                this.key=this.key+1
-
-                this.dialog_pill_events_crud=true
-            },
-            deletePot(item){
-                this.pot=item
-                this.pot_mode="D"
-                this.key=this.key+1
-
-                this.dialog_pill_events_crud=true
             },
             update_pill_events(){          
                 axios.get(`${this.useStore().apiroot}/api/pill_events/?year=2025&month=4`, this.myheaders())
@@ -253,7 +221,6 @@
 </script>
 
 <style>
-
 .cv-week {
 display: flex;
     flex-grow: 1;
