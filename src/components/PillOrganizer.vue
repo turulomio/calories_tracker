@@ -243,8 +243,7 @@
                     title: pill_event.pillname,
                     startDate: start,
                     endDate: new Date(start.setTime(start.getTime() + (1 * 60 * 60 * 1000))), // Add 1 hour in milliseconds
-                    color: color,
-                    allDay: false,
+                    style: `color: ${color};`,
                 }
 
             },
