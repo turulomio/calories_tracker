@@ -28,11 +28,11 @@
         </div>
 
         <!-- CONTEXTUAL MENU -->
-        <v-menu v-model="contextual_menu" :position-x="menuX" :position-y="menuY" absolute offset>
+        <v-menu v-model="contextual_menu" location-strategy="connected" :target="[menuX, menuY]" open-on-click>
             <v-list>
                 <v-list-item @click="event_intake" :title="$t('Intake')" prepend-icon="mdi-pill" />
                 <v-list-item @click="event_update" :title="$t('Update')" prepend-icon="mdi-pencil" />
-                <v-list-item @click="event_delete" :title="$t('Intake')" prepend-icon="mdi-delete" />
+                <v-list-item @click="event_delete" :title="$t('Delete')" prepend-icon="mdi-delete" />
             </v-list>
         </v-menu>
 
@@ -118,7 +118,6 @@
                 this.menuY=event.clientY
                 this.item_selected=item
                 this.contextual_menu=true
-                console.log(this.menuX,this.menuY)
             },
             menuinline_items(){
                 return [
@@ -168,7 +167,6 @@
             event_intake(){
                 // item must be converted to pill_event
                 this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
-                console.log(this.pill_event.url, this.item_selected.url)
                 this.pill_event.dt_intake=new Date()
 
                 axios.put(this.pill_event.url, this.pill_event,  this.myheaders())
@@ -179,7 +177,6 @@
                     })
             },
             event_update(){
-
                 this.pill_event_mode="U"
                 this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
                 this.key=this.key+1
@@ -187,7 +184,6 @@
             },
             event_delete(){
                 this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
-                console.log (this.pill_event,this.item_selected)
                 axios.delete(this.pill_event.url, this.myheaders())
                     .then(() => {
                         this.update_pill_events()
@@ -224,7 +220,6 @@
                     this.pill_events.forEach(o=>{
                         this.data.push(this.pill_event_to_data(o))
                     })
-                    console.log(this.data)
                 }, (error) => {
                     this.parseResponseError(error)
                 });
