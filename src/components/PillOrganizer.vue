@@ -2,24 +2,17 @@
     <div class="ma-4">
         <h1>{{ $t(`Pill organizer`) }}
             <MyMenuInline :items="menuinline_items()"></MyMenuInline>
-        </h1>
-
-        <!-- <v-select v-model="type" :items="types" class="ma-2" label="View Mode" variant="outlined" dense hide-details /> -->
-        <!-- <v-calendar v-model="calendar" :first-day-of-week="1" :interval-duration="120" :events="data" :view-mode="type" :weekdays="weekday" @click="on_click_item" /> -->
-        
+        </h1>      
         <div>
-            <CalendarView class="theme-default " :startingDayOfWeek="1" displayPeriodUom="month"  monthNameFormat="long" weekday-name-format="long" :items="data" show-times :time-format-options="{ hour: 'numeric', minute: '2-digit' }" :disable-future="false" @click-item="on_click_item" :show-date="showDate" :disable-past="false" :enable-date-selection="true" @click-date="on_click_date">
+            <CalendarView class="theme-default " :startingDayOfWeek="1" displayPeriodUom="month"  monthNameFormat="long" weekday-name-format="long" :items="data" show-times :time-format-options="{ hour: 'numeric', minute: '2-digit' }" :disable-future="false" @click-item="on_click_item" :show-date="showDate" :disable-past="false" :enable-date-selection="true" @click-date="on_click_date" :enable-drag-drop="true" @drop-on-date="onDrop" :selection-start="selectionStart" :selection-end="selectionEnd" @date-selection-start="setSelection" @date-selection="setSelection" @date-selection-finish="finishSelection">
                 <template #header="{ headerProps }">
-				<CalendarViewHeader
-					:header-props="headerProps"
-					@input="setShowDate"
-				/>
-			</template>
+                    <CalendarViewHeader :header-props="headerProps" @input="setShowDate" />
+                </template>
             </CalendarView>
         </div>
 
         <!-- CONTEXTUAL MENU -->
-        <v-menu v-model="contextual_menu" location-strategy="connected" :target="[menuX, menuY]" open-on-click>
+        <v-menu v-model="contextual_menu" location-strategy="connected" :target="[menuX, menuY]" >
             <v-list>
                 <v-list-item @click="event_intake" :title="$t('Intake')" prepend-icon="mdi-pill" />
                 <v-list-item @click="event_update" :title="$t('Update')" prepend-icon="mdi-pencil" />
@@ -62,6 +55,8 @@
                 data:[],
                 key:0,
                 showDate: new Date() ,
+			selectionStart: null,
+			selectionEnd: null,
 
                 //CRUD COMPANY
                 pill_event:null,
@@ -96,10 +91,32 @@
             localtime,
             my_round,
             useStore,
+            onDrop(item, date) {
+                this.item_selected=item
+                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+                this.pill_event.dt=date
+
+                axios.put(this.pill_event.url, this.pill_event,  this.myheaders())
+                    .then(() => {
+                        this.update_pill_events()
+                    }, (error) => {
+                        this.parseResponseError(error)
+                    })
+                this.update_pill_events()
+            },
 			setShowDate(d) {
 				this.showDate = d;
                 this.update_pill_events()
 			},
+
+            setSelection(dateRange) {
+                this.selectionEnd = dateRange[1]
+                this.selectionStart = dateRange[0]
+            },
+            finishSelection(dateRange) {
+                this.setSelection(dateRange)
+                this.message = `You selected: ${this.selectionStart.toLocaleDateString()} -${this.selectionEnd.toLocaleDateString()}`
+            },
             showContextMenu(item,event){
                 this.menuX=event.clientX
                 this.menuY=event.clientY
@@ -170,6 +187,8 @@
                     })
             },
             on_click_date(date){
+		    	this.selectionStart = null
+			    this.selectionEnd = null
                 this.pill_event_mode="C"
                 this.pill_event=this.empty_pill_event()
                 this.pill_event.dt=date
@@ -221,6 +240,7 @@
 </script>
 
 <style>
+/* Set due to min-height was too small */
 .cv-week {
 display: flex;
     flex-grow: 1;
