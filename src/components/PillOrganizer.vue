@@ -247,8 +247,8 @@
                     id: pill_event.url,
                     url: pill_event.url,
                     title: pill_event.pillname,
-                    startDate: start,
-                    endDate: new Date(start.setTime(start.getTime() + (1 * 60 * 60 * 1000))), // Add 1 hour in milliseconds
+                    startDate: localtime(start.toISOString()),
+                    endDate: null, // Add 1 hour in milliseconds
                     style: `color: ${color};`,
                 }
 
