@@ -14,7 +14,7 @@
         <!-- CONTEXTUAL MENU -->
         <v-menu v-model="contextual_menu" location-strategy="connected" :target="[menuX, menuY]" >
             <v-list>
-                <v-list-item @click="event_intake" :title="$t('Intake')" prepend-icon="mdi-pill" />
+                <v-list-item @click="event_intake" :title="menuitem_intake" prepend-icon="mdi-pill" />
                 <v-list-item @click="event_update" :title="$t('Update')" prepend-icon="mdi-pencil" />
                 <v-list-item @click="event_delete" :title="$t('Delete')" prepend-icon="mdi-delete" />
             </v-list>
@@ -55,8 +55,8 @@
                 data:[],
                 key:0,
                 showDate: new Date() ,
-			selectionStart: null,
-			selectionEnd: null,
+		    	selectionStart: null,
+			    selectionEnd: null,
 
                 //CRUD COMPANY
                 pill_event:null,
@@ -68,6 +68,8 @@
                 contextual_menu:false,
                 menuX:0,
                 menuY:0,
+
+                menuitem_intake:""
 
             }
         },
@@ -91,17 +93,30 @@
             localtime,
             my_round,
             useStore,
-            onDrop(item, date) {
+            onDrop(item, date, event) {
                 this.item_selected=item
                 this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
-                this.pill_event.dt=date
+                var olddate=new Date(this.pill_event.dt)
+                if (event.ctrlKey){ //Copy
+                    this.new_pill_event=this.empty_pill_event()
+                    this.new_pill_event.dt=new Date(date.getFullYear(),date.getMonth(),date.getDate(),olddate.getHours(), olddate.getMinutes(), olddate.getSeconds(), olddate.getMilliseconds())
+                    this.new_pill_event.pillname=this.pill_event.pillname
+                    axios.post(`${this.useStore().apiroot}/api/pill_events/`, this.new_pill_event,  this.myheaders())
+                        .then(() => {
+                            this.update_pill_events()
+                        }, (error) => {
+                            this.parseResponseError(error)
+                        })
 
-                axios.put(this.pill_event.url, this.pill_event,  this.myheaders())
-                    .then(() => {
-                        this.update_pill_events()
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    })
+                } else { //Move
+                    this.pill_event.dt=new Date(date.getFullYear(),date.getMonth(),date.getDate(),olddate.getHours(), olddate.getMinutes(), olddate.getSeconds(), olddate.getMilliseconds())
+                    axios.put(this.pill_event.url, this.pill_event,  this.myheaders())
+                        .then(() => {
+                            this.update_pill_events()
+                        }, (error) => {
+                            this.parseResponseError(error)
+                        })
+                }
                 this.update_pill_events()
             },
 			setShowDate(d) {
@@ -121,6 +136,8 @@
                 this.menuX=event.clientX
                 this.menuY=event.clientY
                 this.item_selected=item
+                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+                this.menuitem_intake=(this.pill_event.is_taken)? this.$t("Undo Take pill") : this.$t("Take pill") 
                 this.contextual_menu=true
             },
             menuinline_items(){
@@ -162,7 +179,11 @@
             event_intake(){
                 // item must be converted to pill_event
                 this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
-                this.pill_event.dt_intake=new Date()
+                if (this.pill_event.dt_intake){
+                    this.pill_event.dt_intake=null
+                } else {
+                    this.pill_event.dt_intake=new Date()
+                }
 
                 axios.put(this.pill_event.url, this.pill_event,  this.myheaders())
                     .then(() => {
@@ -203,7 +224,7 @@
                 this.update_pill_events()
             },
             update_pill_events(){          
-                axios.get(`${this.useStore().apiroot}/api/pill_events/?year=2025&month=4`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/pill_events/?year=${this.showDate.getFullYear()}&month=${this.showDate.getMonth()+1}`, this.myheaders())
                 .then((response) => {
                     this.pill_events=response.data
                     this.data=[]
