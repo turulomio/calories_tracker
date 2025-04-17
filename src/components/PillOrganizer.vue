@@ -5,14 +5,6 @@
         </h1>
 
         <!-- <v-select v-model="type" :items="types" class="ma-2" label="View Mode" variant="outlined" dense hide-details /> -->
-    
-
-        <!-- <div  v-for="(item, index) in todays_items" :key="index" :style="{ color: event_color(item)}">
-            <div :color="item.color"> {{ item }}
-                <v-btn v-show="!item.is_taken" color="grey" @click="event_intake(item)" >{{ $t("Intake") }}</v-btn>
-                <v-btn v-show="!item.is_taken" color="black" @click="event_delete(item)" >{{ $t("Delete") }}</v-btn>
-            </div>
-        </div> -->
         <!-- <v-calendar v-model="calendar" :first-day-of-week="1" :interval-duration="120" :events="data" :view-mode="type" :weekdays="weekday" @click="on_calendar_click" /> -->
         
         <div>
@@ -36,10 +28,10 @@
             </v-list>
         </v-menu>
 
-        <!-- DIALOG COMPANIES CRUD -->
+        <!-- DIALOG PILL EVENTS CRUD -->
         <v-dialog v-model="dialog_pill_events_crud" width="45%">
             <v-card class="pa-4">
-                <PillEventsCRUD :pill_event="pill_event" :mode="pill_event_mode" :key="'B'+key" @cruded="on_PillEventsCRUD_cruded()"></PillEventsCRUD>
+                <PillEventsCRUD :pill_event="pill_event" :mode="pill_event_mode" :key="'B'+key" @cruded="on_PillEventsCRUD_cruded"></PillEventsCRUD>
             </v-card>
         </v-dialog>
 
@@ -56,7 +48,6 @@
 	import { CalendarView, CalendarViewHeader } from "vue-simple-calendar"
     import "vue-simple-calendar/dist/vue-simple-calendar.css"
 	import "vue-simple-calendar/dist/css/default.css"
-	// import "vue-simple-calendar/dist/css/holidays-us.css"
  
     export default {
         components: {
