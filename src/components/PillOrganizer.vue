@@ -8,11 +8,13 @@
         <!-- <v-calendar v-model="calendar" :first-day-of-week="1" :interval-duration="120" :events="data" :view-mode="type" :weekdays="weekday" @click="on_calendar_click" /> -->
         
         <div>
-            <CalendarView class="theme-default " :startingDayOfWeek="1" displayPeriodUom="month"  monthNameFormat="long" weekday-name-format="long" :items="data" show-times 
-				:time-format-options="{ hour: 'numeric', minute: '2-digit' }" :disable-future="false" @click-item="on_calendar_click">
+            <CalendarView class="theme-default " :startingDayOfWeek="1" displayPeriodUom="month"  monthNameFormat="long" weekday-name-format="long" :items="data" show-times :time-format-options="{ hour: 'numeric', minute: '2-digit' }" :disable-future="false" @click-item="on_calendar_click" :show-date="showDate" :disable-past="false"
+				:enable-date-selection="true"
+                @click-date="on_click_date"                
+                >
                 <template #header="{ headerProps }">
 				<CalendarViewHeader
-					:header-props
+					:header-props="headerProps"
 					@input="setShowDate"
 				/>
 			</template>
@@ -59,6 +61,7 @@
         },
         data(){
             return {
+                current_date:new Date(), 
                 pill_events:[],
                 data:[],
                 key:0,
@@ -103,7 +106,12 @@
             useStore,
 			setShowDate(d) {
 				this.showDate = d;
+                this.update_pill_events()
 			},
+            updateDate(d){
+                this.current_date=d
+
+            },
             showContextMenu(item,event){
                 this.menuX=event.clientX
                 this.menuY=event.clientY
@@ -119,10 +127,7 @@
                                 name: this.$t("Add a pill event"),
                                 icon: "mdi-plus",
                                 code: function(){
-                                    this.pill_event_mode="C"
-                                    this.pill_event=this.empty_pill_event()
-                                    this.key=this.key+1
-                                    this.dialog_pill_events_crud=true
+                                    this.on_click_date()
                                 }.bind(this),
                             },
                             {
@@ -166,6 +171,13 @@
                     }, (error) => {
                         this.parseResponseError(error)
                     })
+            },
+            on_click_date(){
+                                    this.pill_event_mode="C"
+                                    this.pill_event=this.empty_pill_event()
+                                    this.key=this.key+1
+                                    this.dialog_pill_events_crud=true
+
             },
             event_update(){
                 this.pill_event_mode="U"
