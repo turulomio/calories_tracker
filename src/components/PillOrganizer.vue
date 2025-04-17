@@ -4,21 +4,34 @@
             <MyMenuInline :items="menuinline_items()"></MyMenuInline>
         </h1>
 
-        <v-select v-model="type" :items="types" class="ma-2" label="View Mode" variant="outlined" dense hide-details />
-    
-
-        <div  v-for="(item, index) in todays_items" :key="index" :style="{ color: event_color(item)}">
-            <div :color="item.color"> {{ item }}
-                <v-btn v-show="!item.is_taken" color="grey" @click="event_intake(item)" >{{ $t("Intake") }}</v-btn>
-                <v-btn v-show="!item.is_taken" color="black" @click="event_delete(item)" >{{ $t("Delete") }}</v-btn>
-            </div>
+        <!-- <v-select v-model="type" :items="types" class="ma-2" label="View Mode" variant="outlined" dense hide-details /> -->
+        <!-- <v-calendar v-model="calendar" :first-day-of-week="1" :interval-duration="120" :events="data" :view-mode="type" :weekdays="weekday" @click="on_calendar_click" /> -->
+        
+        <div>
+            <CalendarView class="theme-default " :startingDayOfWeek="1" displayPeriodUom="month"  monthNameFormat="long" weekday-name-format="long" :items="data" show-times 
+				:time-format-options="{ hour: 'numeric', minute: '2-digit' }" :disable-future="false" @click-item="on_calendar_click">
+                <template #header="{ headerProps }">
+				<CalendarViewHeader
+					:header-props
+					@input="setShowDate"
+				/>
+			</template>
+            </CalendarView>
         </div>
-        <v-calendar v-model="calendar" :interval-duration="120" :events="data" :view-mode="type" :weekdays="weekday" @click="on_calendar_click" />
 
-        <!-- DIALOG COMPANIES CRUD -->
+        <!-- CONTEXTUAL MENU -->
+        <v-menu v-model="contextual_menu" location-strategy="connected" :target="[menuX, menuY]" open-on-click>
+            <v-list>
+                <v-list-item @click="event_intake" :title="$t('Intake')" prepend-icon="mdi-pill" />
+                <v-list-item @click="event_update" :title="$t('Update')" prepend-icon="mdi-pencil" />
+                <v-list-item @click="event_delete" :title="$t('Delete')" prepend-icon="mdi-delete" />
+            </v-list>
+        </v-menu>
+
+        <!-- DIALOG PILL EVENTS CRUD -->
         <v-dialog v-model="dialog_pill_events_crud" width="45%">
             <v-card class="pa-4">
-                <PillEventsCRUD :pill_event="pill_event" :mode="pill_event_mode" :key="'B'+key" @cruded="on_PillEventsCRUD_cruded()"></PillEventsCRUD>
+                <PillEventsCRUD :pill_event="pill_event" :mode="pill_event_mode" :key="'B'+key" @cruded="on_PillEventsCRUD_cruded"></PillEventsCRUD>
             </v-card>
         </v-dialog>
 
@@ -27,31 +40,45 @@
 
 <script>
     import axios from 'axios'
-    import {my_round} from 'vuetify_rules'
+    import {my_round, localtime} from 'vuetify_rules'
     import { empty_pill_event_each_day, empty_pill_event_each_n_hours, empty_pill_event } from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import PillEventsCRUD from './PillEventsCRUD.vue'
     import { useStore } from '@/store.js'
+	import { CalendarView, CalendarViewHeader } from "vue-simple-calendar"
+    import "vue-simple-calendar/dist/vue-simple-calendar.css"
+	import "vue-simple-calendar/dist/css/default.css"
+ 
     export default {
         components: {
             MyMenuInline,
             PillEventsCRUD,
+            CalendarView,
+            CalendarViewHeader
+
         },
         data(){
             return {
                 pill_events:[],
                 data:[],
                 key:0,
-                search:"",
-                type: 'week',
-                types: ['month', 'week', 'day'],
-                calendar: [new Date()],
+                showDate: new Date() ,
+                // search:"",
+                // type: 'month',
+                // types: ['month', 'week', 'day'],
                 weekday:[0, 1, 2, 3, 4, 5, 6],
 
                 //CRUD COMPANY
                 pill_event:null,
                 pill_event_mode_mode:null,
                 dialog_pill_events_crud:false,
+
+                // CONTEXTUAL MENU
+                item_selected:null, // item selected when popup context menu
+                contextual_menu:false,
+                menuX:0,
+                menuY:0,
+
             }
         },
         computed: {
@@ -71,8 +98,18 @@
             empty_pill_event,
             empty_pill_event_each_day,
             empty_pill_event_each_n_hours,
+            localtime,
             my_round,
             useStore,
+			setShowDate(d) {
+				this.showDate = d;
+			},
+            showContextMenu(item,event){
+                this.menuX=event.clientX
+                this.menuY=event.clientY
+                this.item_selected=item
+                this.contextual_menu=true
+            },
             menuinline_items(){
                 return [
                     {
@@ -118,28 +155,35 @@
                 if (item.dt>new Date()) return "grey"
                 return "red"
             },
-            event_intake(item){
-                item.dt_intake=new Date()
+            event_intake(){
+                // item must be converted to pill_event
+                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+                this.pill_event.dt_intake=new Date()
 
-                axios.put(item.url, item,  this.myheaders())
+                axios.put(this.pill_event.url, this.pill_event,  this.myheaders())
                     .then(() => {
                         this.update_pill_events()
                     }, (error) => {
                         this.parseResponseError(error)
                     })
             },
-            event_delete(item){
-                axios.delete(item.url, this.myheaders())
+            event_update(){
+                this.pill_event_mode="U"
+                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+                this.key=this.key+1
+                this.dialog_pill_events_crud=true
+            },
+            event_delete(){
+                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+                axios.delete(this.pill_event.url, this.myheaders())
                     .then(() => {
                         this.update_pill_events()
                     }, (error) => {
                         this.parseResponseError(error)
                     })
             },
-            on_calendar_click(event, ho){
-                console.log(event)
-                console.log(ho)
-                console.log(this.calendar)
+            on_calendar_click(item, event){
+                this.showContextMenu(item,event)
             },
             on_PillEventsCRUD_cruded(){
                 this.dialog_pill_events_crud=false
@@ -160,7 +204,7 @@
                 this.dialog_pill_events_crud=true
             },
             update_pill_events(){          
-                axios.get(`${this.useStore().apiroot}/api/pill_events/?year=${this.calendar[0].getFullYear()}&month=${this.calendar[0].getMonth()+1}`, this.myheaders())
+                axios.get(`${this.useStore().apiroot}/api/pill_events/?year=2025&month=4`, this.myheaders())
                 .then((response) => {
                     this.pill_events=response.data
                     this.data=[]
@@ -180,12 +224,12 @@
                     color="red"
                 }
                 return {
-                    
+                    id: pill_event.url,
+                    url: pill_event.url,
                     title: pill_event.pillname,
-                    start: start,
-                    end: new Date(start.setTime(start.getTime() + (1 * 60 * 60 * 1000))), // Add 1 hour in milliseconds
-                    color: color,
-                    allDay: false,
+                    startDate: start,
+                    endDate: new Date(start.setTime(start.getTime() + (1 * 60 * 60 * 1000))), // Add 1 hour in milliseconds
+                    style: `color: ${color};`,
                 }
 
             },
@@ -195,3 +239,20 @@
         }
     }
 </script>
+
+<style>
+
+.cv-week {
+display: flex;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    flex-flow: row nowrap;
+    min-height: 10em;
+    border-width: 0;
+    position: relative;
+    width: 100%;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+}
+</style>
