@@ -273,8 +273,8 @@
                 let tooltip
                 if (pill_event.highlight_late && pill_event.dt_intake!=null){
                     startDate=dt
-                    pillname=`${pill_event.pillname} (Taken late)`
-                    tooltip=`It was taken at ${localtime(dt_intake.toISOString())} (${this.diferenciaEnHumano(dt,dt_intake)} after)`
+                    pillname=this.$t(`[0] (Taken late)`).format(pill_event.pillname)
+                    tooltip=this.$t(`It was taken at [0] ([1] after)`).format(localtime(dt_intake.toISOString()), this.diferenciaEnHumano(dt,dt_intake))
                 } else {
                     startDate=dt
                     pillname=pill_event.pillname
