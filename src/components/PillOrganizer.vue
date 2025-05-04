@@ -274,7 +274,7 @@
                 if (pill_event.highlight_late && pill_event.dt_intake!=null){
                     startDate=dt
                     pillname=`${pill_event.pillname} (Taken late)`
-                    tooltip=`It was taken at ${localtime(dt_intake.toISOString())} (${this.diferenciaEnHumano(dt,dt_intake)})`
+                    tooltip=`It was taken at ${localtime(dt_intake.toISOString())} (${this.diferenciaEnHumano(dt,dt_intake)} after)`
                 } else {
                     startDate=dt
                     pillname=pill_event.pillname
