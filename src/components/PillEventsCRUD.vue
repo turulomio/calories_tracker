@@ -9,7 +9,8 @@
                 <v-text-field v-if="['EACH_DAY'].includes(mode)" data-test="PillEventsCRUD_Days" :readonly="mode=='D'" v-model.number="new_pe.days" :label="$t('Set the number of days to take the pill')" :placeholder="$t('Set the number of days to take the pill')" :rules="RulesInteger(200,true)" counter="200" autofocus/>                
                 <v-text-field v-if="['N_HOURS'].includes(mode)" data-test="PillEventsCRUD_Hours" :readonly="mode=='D'" v-model.number="new_pe.hours" :label="$t('Set the hour to start')" :placeholder="$t('Set the hour to start')" :rules="RulesInteger(200,true)" counter="200" autofocus/>                
                 <v-text-field v-if="['N_HOURS'].includes(mode)" data-test="PillEventsCRUD_Number" :readonly="mode=='D'" v-model.number="new_pe.number" :label="$t('Set the number of times to take pills')" :placeholder="$t('Set the number of times to take pills')" :rules="RulesInteger(200,true)" counter="200" autofocus/>
-        
+                <!-- <v-checkbox v-if="['C', 'U', 'D'].includes(mode)" data-test="PillEventsCRUD_HighLightLate" :readonly="mode=='D' || new_pe.dt_intake==null" v-model="new_pe.highlight_late" :label="$t('Do you want to highlight it was taken late?')" />                      -->
+
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>

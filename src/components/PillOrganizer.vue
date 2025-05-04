@@ -15,6 +15,7 @@
         <v-menu v-model="contextual_menu" location-strategy="connected" :target="[menuX, menuY]" >
             <v-list>
                 <v-list-item @click="event_intake" :title="menuitem_intake" prepend-icon="mdi-pill" />
+                <v-list-item @click="event_highlight" :title="menuitem_highlight" prepend-icon="mdi-marker" />
                 <v-list-item @click="event_update" :title="$t('Update')" prepend-icon="mdi-pencil" />
                 <v-list-item @click="event_delete" :title="$t('Delete')" prepend-icon="mdi-delete" />
             </v-list>
@@ -69,7 +70,8 @@
                 menuX:0,
                 menuY:0,
 
-                menuitem_intake:""
+                menuitem_intake:"",
+                menuitem_highlight:"",
 
             }
         },
@@ -138,6 +140,7 @@
                 this.item_selected=item
                 this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
                 this.menuitem_intake=(this.pill_event.is_taken)? this.$t("Undo Take pill") : this.$t("Take pill") 
+                this.menuitem_highlight=(this.pill_event.highlight_late)? this.$t("Undo highlight") : this.$t("Highlight was taken late") 
                 this.contextual_menu=true
             },
             menuinline_items(){
@@ -192,6 +195,19 @@
                         this.parseResponseError(error)
                     })
             },
+            event_highlight(){
+                // item must be converted to pill_event
+                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+
+                this.pill_event.highlight_late=!this.pill_event.highlight_late
+
+                axios.put(this.pill_event.url, this.pill_event,  this.myheaders())
+                    .then(() => {
+                        this.update_pill_events()
+                    }, (error) => {
+                        this.parseResponseError(error)
+                    })
+            },
             event_update(){
                 this.pill_event_mode="U"
                 this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
@@ -236,27 +252,70 @@
                 });
             },
             pill_event_to_data(pill_event){
-                let start=new Date(pill_event.dt)
+                let dt=new Date(pill_event.dt)
+                let dt_intake = (pill_event.dt_intake==null) ? null : new Date(pill_event.dt_intake)
                 let color="grey" //Red: missing //Green taken //Gray not yet
-                if (pill_event.dt_intake!=null){
+                if (pill_event.highlight_late && pill_event.dt_intake!=null){
+                    color="blue"
+                } else if (pill_event.dt_intake!=null){
                     color="green"
-                } else if (new Date()> start){
+                } else if (new Date()> dt){
                     color="red"
                 }
+
+                // If has been taken and highlight_late is true
+                let startDate
+                let pillname
+                let tooltip
+                if (pill_event.highlight_late && pill_event.dt_intake!=null){
+                    startDate=dt
+                    pillname=`${pill_event.pillname} (Taken late)`
+                    tooltip=`It was taken at ${localtime(dt_intake.toISOString())} (${this.diferenciaEnHumano(dt,dt_intake)})`
+                } else {
+                    startDate=dt
+                    pillname=pill_event.pillname
+                    tooltip= this.$t("Pill taken on time")
+                }
+
                 return {
                     id: pill_event.url,
                     url: pill_event.url,
-                    title: pill_event.pillname,
-                    startDate: localtime(start.toISOString()),
+                    title: pillname,
+                    startDate: localtime(startDate.toISOString()),
                     endDate: null, // Add 1 hour in milliseconds
                     style: `color: ${color};`,
+                    tooltip: tooltip,
+                }
+
+            },
+            diferenciaEnHumano(fecha1, fecha2) {
+                const diferenciaMs = Math.abs(fecha2.getTime() - fecha1.getTime());
+                const segundos = Math.floor(diferenciaMs / 1000);
+                const minutos = Math.floor(segundos / 60);
+                const horas = Math.floor(minutos / 60);
+                const dias = Math.floor(horas / 24);
+                const meses = Math.floor(dias / 30.44); // Aproximación
+                const anos = Math.floor(meses / 12);
+
+                if (anos > 0) {
+                    return `${anos} año${anos > 1 ? 's' : ''}`;
+                } else if (meses > 0) {
+                    return `${meses} mes${meses > 1 ? 'es' : ''}`;
+                } else if (dias > 0) {
+                    return `${dias} día${dias > 1 ? 's' : ''}`;
+                } else if (horas > 0) {
+                    return `${horas} hora${horas > 1 ? 's' : ''}`;
+                } else if (minutos > 0) {
+                    return `${minutos} minuto${minutos > 1 ? 's' : ''}`;
+                } else {
+                    return `${segundos} segundo${segundos !== 1 ? 's' : ''}`;
                 }
 
             },
         },
         created(){
             this.update_pill_events()
-        }
+        },
     }
 </script>
 

@@ -208,6 +208,7 @@ export function empty_pill_event(){
         pillname: "",
         dt: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
         dt_intake:null,
+        highlight_late:false,
     }
 }
 export function empty_pill_event_each_day(){
