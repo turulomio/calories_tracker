@@ -198,6 +198,10 @@
             event_highlight(){
                 // item must be converted to pill_event
                 this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+                if (this.pill_event.dt_intake == null) {
+                    alert(this.$t("You can't highlight a pill event if pill hasn't been taken"))
+                    return
+                }
 
                 this.pill_event.highlight_late=!this.pill_event.highlight_late
 
