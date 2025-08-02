@@ -54,7 +54,7 @@
     import { Editor, EditorContent,VueRenderer } from '@tiptap/vue-3'
     import StarterKit from '@tiptap/starter-kit'
     import Color from "@tiptap/extension-color";
-    import TextStyle from "@tiptap/extension-text-style";
+    import { TextStyle } from "@tiptap/extension-text-style";
     import Mention from '@tiptap/extension-mention'
     import tippy from 'tippy.js'
     import { id_from_hyperlinked_url } from '@/functions';

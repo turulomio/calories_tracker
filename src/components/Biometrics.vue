@@ -29,8 +29,6 @@
                         <template #item.weight_wishes="{item}">
                             <div v-html="useStore().weight_wishes.get(item.weight_wishes).localname"></div>
                         </template>     
-
-
                         <template #item.actions="{item}">
                             <v-icon small class="mr-2" @click="editBiometric(item)">mdi-pencil</v-icon>
                             <v-icon small @click="deleteBiometric(item)">mdi-delete</v-icon>
@@ -61,8 +59,8 @@
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import BiometricsCRUD from './BiometricsCRUD.vue'
     import ChartHeight from './ChartHeight.vue'
-    import ChartWeight from './ChartHeight.vue'
-import { useStore } from '@/store.js'
+    import ChartWeight from './ChartWeight.vue'
+    import { useStore } from '@/store.js'
     export default {
         components: {
             MyMenuInline,
