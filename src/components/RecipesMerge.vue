@@ -10,39 +10,33 @@
         </v-card>
     </div>  
 </template>
-<script>
+<script setup>
+    import { ref, getCurrentInstance } from 'vue'
     import AutoCompleteApiIdName from './AutoCompleteApiIdName.vue'
     import { useStore } from '@/store.js'
     import axios from 'axios'
-    import {myheaders} from '@/functions'
+    import { myheaders, newParseResponseError } from '@/functions'
     import { f } from 'vuetify_rules'
-    export default {
-        props: {
-            main_recipe: { //recipe object
-                required: true,
-            },
-        },
-        components:{
-            AutoCompleteApiIdName
-        },
-        data () {
-            return {
-                recipes:[],
-            }  
-        },
-        methods: {
-            f,
-            useStore,  
-            myheaders,
-            on_accept(){              
-                axios.post(`${this.main_recipe.url}merge/`, {recipes:this.recipes}, this.myheaders())
-                .then(() => {
-                    this.$emit("merged")
-               }, (error) => {
-                    this.parseResponseError(error)
-                });
+    import { useI18n } from 'vue-i18n'
+    const { t } = useI18n()
 
-            }  
+    const props = defineProps({
+        main_recipe: { //recipe object
+            required: true,
         },
-    }
+    })
+
+    const emit = defineEmits(['merged'])
+
+    const recipes = ref([])
+    const { proxy } = getCurrentInstance()
+
+    function on_accept(){              
+        axios.post(`${props.main_recipe.url}merge/`, {recipes: recipes.value}, myheaders())
+        .then(() => {
+            emit("merged")
+        }, (error) => {
+            newParseResponseError(error, t, useStore)
+        });
+    }  
 </script>
