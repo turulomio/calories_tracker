@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "181-add-github-actions" ]
+    branches: [ "main", "233-github-actions-are-not-working" ]
   pull_request:
     branches: [ "main" ]
 
@@ -29,7 +29,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: ["3.11"]
+        python-version: ["3.12"]
         node-version: [18.x]
 
     steps:
@@ -53,18 +53,18 @@ jobs:
           sleep 2
         done
 
-    - name: Install python3.11 and other packages
+    - name: Install python3.12 and other packages
       run: |
-        sudo apt-get install python3.11 python3.11-venv exiftool
+        sudo apt-get install python3.12 python3.12-venv exiftool
 
     - name: Install python dependencies ${{ matrix.python-version }} and launch django_calories_tracker
       run: |
         cd ..
         git clone https://github.com/turulomio/django_calories_tracker
         cd django_calories_tracker
-        sudo python3.11 -m venv .python3.11
-        sudo .python3.11/bin/pip install .
-        sudo .python3.11/bin/python manage.py testserver calories_tracker/fixtures/all.json calories_tracker/fixtures/test_server.json --addrport 8011 &
+        sudo python3.12 -m venv .python3.12
+        sudo .python3.12/bin/pip install .
+        sudo .python3.12/bin/python manage.py testserver calories_tracker/fixtures/all.json calories_tracker/fixtures/test_server.json --addrport 8011 &
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
