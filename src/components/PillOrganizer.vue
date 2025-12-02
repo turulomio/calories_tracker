@@ -4,7 +4,11 @@
             <MyMenuInline :items="menuinline_items()"></MyMenuInline>
         </h1>      
         <div>
-            <v-calendar v-model="showDate" :events="new_data" :locale="locale" :weekdays="[1,2,3,4,5,6,0]" @change="update_pill_events" :event-color="getEventColor" event-overlap-mode="stack" :event-overlap-threshold="30" @click:date="on_click_date" @click:event="on_click_item" />
+            <v-calendar v-model="showDate" :events="data" :locale="locale" :weekdays="[1,2,3,4,5,6,0]" @change="update_pill_events" :event-color="getEventColor" event-overlap-mode="stack" :event-overlap-threshold="30" 
+            @click:date="on_click_date" 
+            @mouseup:day="onDrop"
+            @mousedown:event="onDrag"
+          />
         </div>
 
         <!-- CONTEXTUAL MENU -->
@@ -44,7 +48,6 @@
             return {
                 pill_events:[],
                 data:[],
-                new_data:[],
                 locale: localStorage.locale,
                 key:0,
                 showDate: new Date() ,
@@ -65,6 +68,13 @@
                 menuitem_intake:"",
                 menuitem_highlight:"",
 
+                // drag and drop
+                dragEvent: null,
+                dragTime: null,
+                extendOriginal: null,
+                createEvent: null,
+                createStart: null,
+                extendOriginal: null,
             }
         },
         computed: {
@@ -87,57 +97,52 @@
             localtime,
             my_round,
             useStore,
-            onDrop(item, date, event) {
-                this.item_selected=item
-                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
-                var olddate=new Date(this.pill_event.dt)
+            onDrag(event,item){
+             console.log("ONDRAG", event, item, item.event.url, event.buttons, event.button)
+                this.item_selected=item.event
+            },
+            onDrop(event, date) {
+                if (!this.item_selected){
+                    alert(this.$t("Event not selected"))
+                    return
+                }
+
+                // Esta grabado item_selected
+                console.log("ONDROP", event, date, this.item_selected?.url, event.buttons, event.button)
+
+                var olddate
                 if (event.ctrlKey){ //Copy
+                    olddate=new Date(this.item_selected.start)
                     this.new_pill_event=this.empty_pill_event()
-                    this.new_pill_event.dt=new Date(date.getFullYear(),date.getMonth(),date.getDate(),olddate.getHours(), olddate.getMinutes(), olddate.getSeconds(), olddate.getMilliseconds())
+                    this.new_pill_event.dt=new Date(date.year,date.month-1,date.day,olddate.getHours(), olddate.getMinutes(), olddate.getSeconds(), olddate.getMilliseconds())
                     this.new_pill_event.pillname=this.pill_event.pillname
                     axios.post(`${this.useStore().apiroot}/api/pill_events/`, this.new_pill_event,  this.myheaders())
                         .then(() => {
+                            this.item_selected=null
                             this.update_pill_events()
                         }, (error) => {
                             this.parseResponseError(error)
                         })
 
-                } else { //Move
-                    this.pill_event.dt=new Date(date.getFullYear(),date.getMonth(),date.getDate(),olddate.getHours(), olddate.getMinutes(), olddate.getSeconds(), olddate.getMilliseconds())
+                } else if (event.shiftKey) { //Move
+                    olddate=new Date(this.item_selected.start)
+                    this.pill_event.dt=new Date(date.year,date.month-1,date.day,olddate.getHours(), olddate.getMinutes(), olddate.getSeconds(), olddate.getMilliseconds())
                     axios.put(this.pill_event.url, this.pill_event,  this.myheaders())
                         .then(() => {
+                            this.item_selected=null
                             this.update_pill_events()
                         }, (error) => {
                             this.parseResponseError(error)
                         })
+                } else {
+                    // this.item_selected=item.event
+                    this.menuX=event.clientX
+                    this.menuY=event.clientY
+                    this.menuitem_intake=(this.item_selected.is_taken)? this.$t("Undo Take pill") : this.$t("Take pill") 
+                    this.menuitem_highlight=(this.item_selected.highlight_late)? this.$t("Undo highlight") : this.$t("Highlight was taken late") 
+                    this.contextual_menu=true
+                    this.update_pill_events()
                 }
-                this.update_pill_events()
-            },
-			setShowDate(d) {
-				this.showDate = d;
-                this.update_pill_events()
-			},
-
-            setSelection(dateRange) {
-                this.selectionEnd = dateRange[1]
-                this.selectionStart = dateRange[0]
-            },
-            finishSelection(dateRange) {
-                this.setSelection(dateRange)
-                this.message = `You selected: ${this.selectionStart.toLocaleDateString()} -${this.selectionEnd.toLocaleDateString()}`
-            },            
-            on_click_item(click_event, item){
-                console.log("ONCLICK", click_event, item)
-                this.menuX=click_event.clientX
-                this.menuY=click_event.clientY
-
-
-
-                this.item_selected=item.event
-                // this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
-                this.menuitem_intake=(this.item_selected.is_taken)? this.$t("Undo Take pill") : this.$t("Take pill") 
-                this.menuitem_highlight=(this.item_selected.highlight_late)? this.$t("Undo highlight") : this.$t("Highlight was taken late") 
-                this.contextual_menu=true
             },
             menuinline_items(){
                 return [
@@ -223,12 +228,14 @@
                         this.parseResponseError(error)
                     })
             },
-            on_click_date(date){
-		    	this.selectionStart = null
-			    this.selectionEnd = null
+            on_click_date(event_click, object){
+                console.log(event_click, object)
+                console.log(object.date)
+		    	// this.selectionStart = null
+			    // this.selectionEnd = null
                 this.pill_event_mode="C"
                 this.pill_event=this.empty_pill_event()
-                this.pill_event.dt=date
+                this.pill_event.dt=new Date(object.year, object.month-1, object.day, 0,0,0)
                 this.key=this.key+1
                 this.dialog_pill_events_crud=true
             },
@@ -237,7 +244,7 @@
                 this.dialog_pill_events_crud=false
                 this.update_pill_events()
             },
-            update_pill_events(){          
+            update_pill_events(){
                 axios.get(`${this.useStore().apiroot}/api/pill_events/?year=${this.showDate.getFullYear()}&month=${this.showDate.getMonth()+1}`, this.myheaders())
                 .then((response) => {
                     this.pill_events=response.data
@@ -247,7 +254,7 @@
                     })
                     this.new_data=[]
                     this.pill_events.forEach(o=>{
-                        this.new_data.push(this.new_pill_event_to_data(o))
+                        this.new_data.push(this.pill_event_to_data(o))
                     })
                     console.log(this.new_data)
                 }, (error) => {
@@ -255,7 +262,7 @@
                 });
             },
 
-            new_pill_event_to_data(pill_event){
+            pill_event_to_data(pill_event){
                 let dt=new Date(pill_event.dt)
                 let dt_intake = (pill_event.dt_intake==null) ? null : new Date(pill_event.dt_intake)
                 let color="grey" //Red: missing //Green taken //Gray not yet
@@ -299,43 +306,7 @@
             getEventColor (event) {
                 return event.color
             },       
-            pill_event_to_data(pill_event){
-                let dt=new Date(pill_event.dt)
-                let dt_intake = (pill_event.dt_intake==null) ? null : new Date(pill_event.dt_intake)
-                let color="grey" //Red: missing //Green taken //Gray not yet
-                if (pill_event.highlight_late && pill_event.dt_intake!=null){
-                    color="blue"
-                } else if (pill_event.dt_intake!=null){
-                    color="green"
-                } else if (new Date()> dt){
-                    color="red"
-                }
 
-                // If has been taken and highlight_late is true
-                let startDate
-                let pillname
-                let tooltip
-                if (pill_event.highlight_late && pill_event.dt_intake!=null){
-                    startDate=dt
-                    pillname=this.$t(`[0] (Taken late)`).format(pill_event.pillname)
-                    tooltip=this.$t(`It was taken at [0] ([1] after)`).format(localtime(dt_intake.toISOString()), this.diferenciaEnHumano(dt,dt_intake))
-                } else {
-                    startDate=dt
-                    pillname=pill_event.pillname
-                    tooltip= this.$t("Pill taken on time")
-                }
-
-                return {
-                    id: pill_event.url,
-                    url: pill_event.url,
-                    title: pillname,
-                    startDate: localtime(startDate.toISOString()),
-                    endDate: null, // Add 1 hour in milliseconds
-                    style: `color: ${color};`,
-                    tooltip: tooltip,
-                }
-
-            },
             diferenciaEnHumano(fecha1, fecha2) {
                 const diferenciaMs = Math.abs(fecha2.getTime() - fecha1.getTime());
                 const segundos = Math.floor(diferenciaMs / 1000);
@@ -366,20 +337,3 @@
         },
     }
 </script>
-
-<style>
-/* Set due to min-height was too small */
-.cv-week {
-display: flex;
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 0;
-    flex-flow: row nowrap;
-    min-height: 10em;
-    border-width: 0;
-    position: relative;
-    width: 100%;
-    overflow-y: auto;
-    -ms-overflow-style: none;
-}
-</style>
