@@ -4,11 +4,7 @@
             <MyMenuInline :items="menuinline_items()"></MyMenuInline>
         </h1>      
         <div>
-            <CalendarView class="theme-default " :startingDayOfWeek="1" displayPeriodUom="month"  monthNameFormat="long" weekday-name-format="long" :items="data" show-times :time-format-options="{ hour: 'numeric', minute: '2-digit' }" :disable-future="false" @click-item="on_click_item" :show-date="showDate" :disable-past="false" :enable-date-selection="true" @click-date="on_click_date" :enable-drag-drop="true" @drop-on-date="onDrop" :selection-start="selectionStart" :selection-end="selectionEnd" @date-selection-start="setSelection" @date-selection="setSelection" @date-selection-finish="finishSelection">
-                <template #header="{ headerProps }">
-                    <CalendarViewHeader :header-props="headerProps" @input="setShowDate" />
-                </template>
-            </CalendarView>
+            <v-calendar v-model="showDate" :events="new_data" :locale="locale" :weekdays="[1,2,3,4,5,6,0]" @change="update_pill_events" :event-color="getEventColor" event-overlap-mode="stack" :event-overlap-threshold="30" @click:date="on_click_date" @click:event="on_click_item" />
         </div>
 
         <!-- CONTEXTUAL MENU -->
@@ -38,22 +34,18 @@
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import PillEventsCRUD from './PillEventsCRUD.vue'
     import { useStore } from '@/store.js'
-	import { CalendarView, CalendarViewHeader } from "vue-simple-calendar"
-    import "vue-simple-calendar/dist/vue-simple-calendar.css"
-	import "vue-simple-calendar/dist/css/default.css"
  
     export default {
         components: {
             MyMenuInline,
             PillEventsCRUD,
-            CalendarView,
-            CalendarViewHeader
-
         },
         data(){
             return {
                 pill_events:[],
                 data:[],
+                new_data:[],
+                locale: localStorage.locale,
                 key:0,
                 showDate: new Date() ,
 		    	selectionStart: null,
@@ -133,14 +125,18 @@
             finishSelection(dateRange) {
                 this.setSelection(dateRange)
                 this.message = `You selected: ${this.selectionStart.toLocaleDateString()} -${this.selectionEnd.toLocaleDateString()}`
-            },
-            showContextMenu(item,event){
-                this.menuX=event.clientX
-                this.menuY=event.clientY
-                this.item_selected=item
-                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
-                this.menuitem_intake=(this.pill_event.is_taken)? this.$t("Undo Take pill") : this.$t("Take pill") 
-                this.menuitem_highlight=(this.pill_event.highlight_late)? this.$t("Undo highlight") : this.$t("Highlight was taken late") 
+            },            
+            on_click_item(click_event, item){
+                console.log("ONCLICK", click_event, item)
+                this.menuX=click_event.clientX
+                this.menuY=click_event.clientY
+
+
+
+                this.item_selected=item.event
+                // this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+                this.menuitem_intake=(this.item_selected.is_taken)? this.$t("Undo Take pill") : this.$t("Take pill") 
+                this.menuitem_highlight=(this.item_selected.highlight_late)? this.$t("Undo highlight") : this.$t("Highlight was taken late") 
                 this.contextual_menu=true
             },
             menuinline_items(){
@@ -236,9 +232,7 @@
                 this.key=this.key+1
                 this.dialog_pill_events_crud=true
             },
-            on_click_item(item, event){
-                this.showContextMenu(item,event)
-            },
+
             on_PillEventsCRUD_cruded(){
                 this.dialog_pill_events_crud=false
                 this.update_pill_events()
@@ -251,10 +245,60 @@
                     this.pill_events.forEach(o=>{
                         this.data.push(this.pill_event_to_data(o))
                     })
+                    this.new_data=[]
+                    this.pill_events.forEach(o=>{
+                        this.new_data.push(this.new_pill_event_to_data(o))
+                    })
+                    console.log(this.new_data)
                 }, (error) => {
                     this.parseResponseError(error)
                 });
             },
+
+            new_pill_event_to_data(pill_event){
+                let dt=new Date(pill_event.dt)
+                let dt_intake = (pill_event.dt_intake==null) ? null : new Date(pill_event.dt_intake)
+                let color="grey" //Red: missing //Green taken //Gray not yet
+                if (pill_event.highlight_late && pill_event.dt_intake!=null){
+                    color="blue"
+                } else if (pill_event.dt_intake!=null){
+                    color="green"
+                } else if (new Date()> dt){
+                    color="red"
+                }
+
+                // If has been taken and highlight_late is true
+                let startDate
+                let pillname
+                let tooltip
+                if (pill_event.highlight_late && pill_event.dt_intake!=null){
+                    startDate=dt
+                    pillname=this.$t(`[0] (Taken late)`).format(pill_event.pillname)
+                    tooltip=this.$t(`It was taken at [0] ([1] after)`).format(localtime(dt_intake.toISOString()), this.diferenciaEnHumano(dt,dt_intake))
+                } else {
+                    startDate=dt
+                    pillname=pill_event.pillname
+                    tooltip= this.$t("Pill taken on time")
+                }
+
+                return {
+                    id: pill_event.url,
+                    url: pill_event.url,
+                    name: pillname,
+                    start: localtime(startDate.toISOString()),
+                    end: null, // Add 1 hour in milliseconds
+                    color: color,
+                    timed: 0,
+                    tooltip: tooltip,
+                    is_taken: pill_event.is_taken,
+                    highlight_late: pill_event.highlight_late
+                }
+
+            },     
+            
+            getEventColor (event) {
+                return event.color
+            },       
             pill_event_to_data(pill_event){
                 let dt=new Date(pill_event.dt)
                 let dt_intake = (pill_event.dt_intake==null) ? null : new Date(pill_event.dt_intake)
