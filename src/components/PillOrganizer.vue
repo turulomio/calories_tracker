@@ -60,7 +60,7 @@
                 dialog_pill_events_crud:false,
 
                 // CONTEXTUAL MENU
-                item_selected:null, // item selected when popup context menu
+                data_selected:null, // item selected when popup context menu
                 contextual_menu:false,
                 menuX:0,
                 menuY:0,
@@ -98,50 +98,48 @@
             my_round,
             useStore,
             onDrag(event,item){
-             console.log("ONDRAG", event, item, item.event.url, event.buttons, event.button)
-                this.item_selected=item.event
+                this.data_selected=item.event
+                this.pill_event=this.data_selected
+                console.log("DRAGGED", this.data_selected?.url)
             },
             onDrop(event, date) {
-                if (!this.item_selected){
-                    alert(this.$t("Event not selected"))
+                if (!this.data_selected){
                     return
                 }
 
-                // Esta grabado item_selected
-                console.log("ONDROP", event, date, this.item_selected?.url, event.buttons, event.button)
+                // Esta grabado data_selected
 
                 var olddate
                 if (event.ctrlKey){ //Copy
-                    olddate=new Date(this.item_selected.start)
+                    console.log("COPY", date.date, this.data_selected?.url)
+                    olddate=new Date(this.data_selected.start)
                     this.new_pill_event=this.empty_pill_event()
                     this.new_pill_event.dt=new Date(date.year,date.month-1,date.day,olddate.getHours(), olddate.getMinutes(), olddate.getSeconds(), olddate.getMilliseconds())
                     this.new_pill_event.pillname=this.pill_event.pillname
                     axios.post(`${this.useStore().apiroot}/api/pill_events/`, this.new_pill_event,  this.myheaders())
                         .then(() => {
-                            this.item_selected=null
                             this.update_pill_events()
                         }, (error) => {
                             this.parseResponseError(error)
                         })
 
                 } else if (event.shiftKey) { //Move
-                    olddate=new Date(this.item_selected.start)
+                    console.log("MOVE", date.date, this.data_selected?.url)
+                    olddate=new Date(this.data_selected.start)
                     this.pill_event.dt=new Date(date.year,date.month-1,date.day,olddate.getHours(), olddate.getMinutes(), olddate.getSeconds(), olddate.getMilliseconds())
                     axios.put(this.pill_event.url, this.pill_event,  this.myheaders())
                         .then(() => {
-                            this.item_selected=null
                             this.update_pill_events()
                         }, (error) => {
                             this.parseResponseError(error)
                         })
                 } else {
-                    // this.item_selected=item.event
+                    console.log("MENU", date.date, this.data_selected?.url)
                     this.menuX=event.clientX
                     this.menuY=event.clientY
-                    this.menuitem_intake=(this.item_selected.is_taken)? this.$t("Undo Take pill") : this.$t("Take pill") 
-                    this.menuitem_highlight=(this.item_selected.highlight_late)? this.$t("Undo highlight") : this.$t("Highlight was taken late") 
+                    this.menuitem_intake=(this.data_selected.is_taken)? this.$t("Undo Take pill") : this.$t("Take pill") 
+                    this.menuitem_highlight=(this.data_selected.highlight_late)? this.$t("Undo highlight") : this.$t("Highlight was taken late") 
                     this.contextual_menu=true
-                    this.update_pill_events()
                 }
             },
             menuinline_items(){
@@ -182,7 +180,7 @@
             },
             event_intake(){
                 // item must be converted to pill_event
-                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+                this.pill_event=this.pill_events.find(element => element.url === this.data_selected.url);
                 if (this.pill_event.dt_intake){
                     this.pill_event.dt_intake=null
                 } else {
@@ -198,7 +196,7 @@
             },
             event_highlight(){
                 // item must be converted to pill_event
-                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+                this.pill_event=this.pill_events.find(element => element.url === this.data_selected.url);
                 if (this.pill_event.dt_intake == null) {
                     alert(this.$t("You can't highlight a pill event if pill hasn't been taken"))
                     return
@@ -215,12 +213,12 @@
             },
             event_update(){
                 this.pill_event_mode="U"
-                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+                this.pill_event=this.pill_events.find(element => element.url === this.data_selected.url);
                 this.key=this.key+1
                 this.dialog_pill_events_crud=true
             },
             event_delete(){
-                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+                this.pill_event=this.pill_events.find(element => element.url === this.data_selected.url);
                 axios.delete(this.pill_event.url, this.myheaders())
                     .then(() => {
                         this.update_pill_events()
@@ -229,10 +227,6 @@
                     })
             },
             on_click_date(event_click, object){
-                console.log(event_click, object)
-                console.log(object.date)
-		    	// this.selectionStart = null
-			    // this.selectionEnd = null
                 this.pill_event_mode="C"
                 this.pill_event=this.empty_pill_event()
                 this.pill_event.dt=new Date(object.year, object.month-1, object.day, 0,0,0)
@@ -252,11 +246,8 @@
                     this.pill_events.forEach(o=>{
                         this.data.push(this.pill_event_to_data(o))
                     })
-                    this.new_data=[]
-                    this.pill_events.forEach(o=>{
-                        this.new_data.push(this.pill_event_to_data(o))
-                    })
-                    console.log(this.new_data)
+                    this.pill_event=null
+                    this.data_selected=null
                 }, (error) => {
                     this.parseResponseError(error)
                 });
@@ -288,17 +279,13 @@
                     tooltip= this.$t("Pill taken on time")
                 }
 
-                return {
-                    id: pill_event.url,
-                    url: pill_event.url,
+                return { ...pill_event,
                     name: pillname,
+                    color: color,
                     start: localtime(startDate.toISOString()),
                     end: null, // Add 1 hour in milliseconds
-                    color: color,
                     timed: 0,
                     tooltip: tooltip,
-                    is_taken: pill_event.is_taken,
-                    highlight_late: pill_event.highlight_late
                 }
 
             },     
