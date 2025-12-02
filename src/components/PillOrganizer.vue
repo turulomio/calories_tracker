@@ -6,8 +6,8 @@
         <div>
             <v-calendar v-model="showDate" :events="data" :locale="locale" :weekdays="[1,2,3,4,5,6,0]" @change="update_pill_events" :event-color="getEventColor" event-overlap-mode="stack" :event-overlap-threshold="30" 
             @click:date="on_click_date" 
-            @mouseup:day="onDrop"
             @mousedown:event="onDrag"
+            @mouseup:day="onDrop"
           />
         </div>
 
