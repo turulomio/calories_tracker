@@ -3,13 +3,31 @@
         <h1>{{ $t(`Pill organizer`) }}
             <MyMenuInline :items="menuinline_items()"></MyMenuInline>
         </h1>      
-        <div>
-            <v-calendar v-model="showDate" :events="data" :locale="locale" :weekdays="[1,2,3,4,5,6,0]" @change="update_pill_events" :event-color="getEventColor" event-overlap-mode="stack" :event-overlap-threshold="30" 
+
+      <v-sheet height="64">
+        <v-toolbar flat>
+          <v-btn class="mr-4" color="grey-darken-2" variant="outlined" @click="setToday">Today</v-btn>
+          <v-btn color="grey-darken-2" size="small" variant="text" icon @click="prev">
+            <v-icon size="small">
+              mdi-chevron-left
+            </v-icon>
+          </v-btn>
+          <v-btn color="grey-darken-2" size="small" variant="text" icon @click="next">
+            <v-icon size="small">
+              mdi-chevron-right
+            </v-icon>
+          </v-btn>
+          <v-toolbar-title>
+            {{ $t("Selected day") }}: {{ focus   }}
+          </v-toolbar-title>
+        </v-toolbar>
+      </v-sheet>
+            <v-calendar ref="calendar" v-model="focus" :events="data" :locale="locale" :weekdays="[1,2,3,4,5,6,0]" @change="update_pill_events" :event-color="getEventColor" event-overlap-mode="stack" :event-overlap-threshold="30" 
             @click:date="on_click_date" 
             @mousedown:event="onDrag"
             @mouseup:day="onDrop"
           />
-        </div>
+        
 
         <!-- CONTEXTUAL MENU -->
         <v-menu v-model="contextual_menu" location-strategy="connected" :target="[menuX, menuY]" >
@@ -50,7 +68,7 @@
                 data:[],
                 locale: localStorage.locale,
                 key:0,
-                showDate: new Date() ,
+                focus: "",
 		    	selectionStart: null,
 			    selectionEnd: null,
 
@@ -97,6 +115,16 @@
             localtime,
             my_round,
             useStore,
+
+      setToday () {
+        this.focus = new Date().toISOString().slice(0,10)
+      },
+            prev () {
+        this.$refs.calendar.prev()
+      },
+      next () {
+        this.$refs.calendar.next()
+      },
             onDrag(event,item){
                 this.data_selected=item.event
                 this.pill_event=this.data_selected
@@ -239,7 +267,8 @@
                 this.update_pill_events()
             },
             update_pill_events(){
-                axios.get(`${this.useStore().apiroot}/api/pill_events/?year=${this.showDate.getFullYear()}&month=${this.showDate.getMonth()+1}`, this.myheaders())
+                var focusDate=new Date(this.focus)
+                axios.get(`${this.useStore().apiroot}/api/pill_events/?year=${focusDate.getFullYear()}&month=${focusDate.getMonth()+1}`, this.myheaders())
                 .then((response) => {
                     this.pill_events=response.data
                     this.data=[]
@@ -320,6 +349,7 @@
             },
         },
         created(){
+            this.focus = new Date().toISOString().slice(0,10)
             this.update_pill_events()
         },
     }
