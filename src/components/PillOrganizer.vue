@@ -4,28 +4,29 @@
             <MyMenuInline :items="menuinline_items()"></MyMenuInline>
         </h1>      
 
-      <v-sheet height="64">
+      <v-sheet height="64" class="mt-7">
         <v-toolbar flat>
+          <v-spacer></v-spacer>
           <v-btn class="mr-4" color="grey-darken-2" variant="outlined" @click="setToday">Today</v-btn>
           <v-btn color="grey-darken-2" size="small" variant="text" icon @click="prev">
             <v-icon size="small">
               mdi-chevron-left
             </v-icon>
           </v-btn>
+          <div class="text-center">  {{ formattedMonth }}</div>
           <v-btn color="grey-darken-2" size="small" variant="text" icon @click="next">
             <v-icon size="small">
               mdi-chevron-right
             </v-icon>
           </v-btn>
-          <v-toolbar-title>
-            {{ $t("Selected day") }}: {{ focus   }}
-          </v-toolbar-title>
+          <v-spacer></v-spacer>
         </v-toolbar>
       </v-sheet>
             <v-calendar ref="calendar" v-model="focus" :events="data" :locale="$i18n.locale" :weekdays="[1,2,3,4,5,6,0]" @change="update_pill_events" :event-color="getEventColor" event-overlap-mode="stack" :event-overlap-threshold="30" 
             @click:date="on_click_date" 
             @mousedown:event="onDrag"
             @mouseup:day="onDrop"
+            @contextmenu:event.prevent="on_context_menu"
           />
         
 
@@ -85,17 +86,12 @@
             }
         },
         computed: {
-            todays_items(){
-                const today = new Date();
-                const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-                const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-
-                return this.pill_events.filter(item => {
-                    // Assuming your date property is named 'dt'
-
-                    return new Date(item.dt) >= startOfToday && new Date(item.dt) < endOfToday;
-                });
-            }
+            formattedMonth() {
+                if (!this.focus) return '';
+                const date = new Date(this.focus);
+                const options = { year: 'numeric', month: 'long' };
+                return date.toLocaleDateString(this.$i18n.locale, options);
+            },
         },
         methods:{
             empty_pill_event,
@@ -144,7 +140,7 @@
                             this.parseResponseError(error)
                         })
 
-                } else if (event.shiftKey) { //Move
+                } else { //Move
                     console.log("MOVE", date.date, this.data_selected?.url)
                     olddate=new Date(this.data_selected.start)
                     this.pill_event.dt=new Date(date.year,date.month-1,date.day,olddate.getHours(), olddate.getMinutes(), olddate.getSeconds(), olddate.getMilliseconds())
@@ -152,15 +148,7 @@
                         .then(() => {
                             this.update_pill_events()
                         }, (error) => {
-                            this.parseResponseError(error)
-                        })
-                } else {
-                    console.log("MENU", date.date, this.data_selected?.url)
-                    this.menuX=event.clientX
-                    this.menuY=event.clientY
-                    this.menuitem_intake=(this.data_selected.is_taken)? this.$t("Undo Take pill") : this.$t("Take pill") 
-                    this.menuitem_highlight=(this.data_selected.highlight_late)? this.$t("Undo highlight") : this.$t("Highlight was taken late") 
-                    this.contextual_menu=true
+                            this.parseResponseError(error)                        })
                 }
             },
             handleDragMove(e) {
@@ -177,6 +165,15 @@
                 document.body.style.cursor = 'default';
                 document.removeEventListener('mousemove', this.handleDragMove);
                 // The 'mouseup' listener is already removed due to { once: true }
+            },
+            on_context_menu(e,item){
+                this.data_selected=item.event
+                this.pill_event=this.data_selected
+                this.menuX=e.clientX
+                this.menuY=e.clientY
+                this.menuitem_intake=(this.data_selected.is_taken)? this.$t("Undo Take pill") : this.$t("Take pill") 
+                this.menuitem_highlight=(this.data_selected.highlight_late)? this.$t("Undo highlight") : this.$t("Highlight was taken late") 
+                this.contextual_menu=true
             },
             menuinline_items(){
                 return [
