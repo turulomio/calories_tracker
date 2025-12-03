@@ -3,13 +3,32 @@
         <h1>{{ $t(`Pill organizer`) }}
             <MyMenuInline :items="menuinline_items()"></MyMenuInline>
         </h1>      
-        <div>
-            <CalendarView class="theme-default " :startingDayOfWeek="1" displayPeriodUom="month"  monthNameFormat="long" weekday-name-format="long" :items="data" show-times :time-format-options="{ hour: 'numeric', minute: '2-digit' }" :disable-future="false" @click-item="on_click_item" :show-date="showDate" :disable-past="false" :enable-date-selection="true" @click-date="on_click_date" :enable-drag-drop="true" @drop-on-date="onDrop" :selection-start="selectionStart" :selection-end="selectionEnd" @date-selection-start="setSelection" @date-selection="setSelection" @date-selection-finish="finishSelection">
-                <template #header="{ headerProps }">
-                    <CalendarViewHeader :header-props="headerProps" @input="setShowDate" />
-                </template>
-            </CalendarView>
-        </div>
+
+      <v-sheet height="64" class="mt-7">
+        <v-toolbar flat>
+          <v-spacer></v-spacer>
+          <v-btn class="mr-4" color="grey-darken-2" variant="outlined" @click="setToday">Today</v-btn>
+          <v-btn color="grey-darken-2" size="small" variant="text" icon @click="prev">
+            <v-icon size="small">
+              mdi-chevron-left
+            </v-icon>
+          </v-btn>
+          <div class="text-center">  {{ formattedMonth }}</div>
+          <v-btn color="grey-darken-2" size="small" variant="text" icon @click="next">
+            <v-icon size="small">
+              mdi-chevron-right
+            </v-icon>
+          </v-btn>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+      </v-sheet>
+            <v-calendar ref="calendar" v-model="focus" :events="data" :locale="$i18n.locale" :weekdays="[1,2,3,4,5,6,0]" @change="update_pill_events" :event-color="getEventColor" event-overlap-mode="stack" :event-overlap-threshold="30" 
+            @click:date="on_click_date" 
+            @mousedown:event="onDrag"
+            @mouseup:day="onDrop"
+            @contextmenu:event.prevent="on_context_menu"
+          />
+        
 
         <!-- CONTEXTUAL MENU -->
         <v-menu v-model="contextual_menu" location-strategy="connected" :target="[menuX, menuY]" >
@@ -38,26 +57,18 @@
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import PillEventsCRUD from './PillEventsCRUD.vue'
     import { useStore } from '@/store.js'
-	import { CalendarView, CalendarViewHeader } from "vue-simple-calendar"
-    import "vue-simple-calendar/dist/vue-simple-calendar.css"
-	import "vue-simple-calendar/dist/css/default.css"
  
     export default {
         components: {
             MyMenuInline,
             PillEventsCRUD,
-            CalendarView,
-            CalendarViewHeader
-
         },
         data(){
             return {
                 pill_events:[],
                 data:[],
                 key:0,
-                showDate: new Date() ,
-		    	selectionStart: null,
-			    selectionEnd: null,
+                focus: "",
 
                 //CRUD COMPANY
                 pill_event:null,
@@ -65,28 +76,22 @@
                 dialog_pill_events_crud:false,
 
                 // CONTEXTUAL MENU
-                item_selected:null, // item selected when popup context menu
+                data_selected:null, // item selected when popup context menu
                 contextual_menu:false,
                 menuX:0,
                 menuY:0,
 
                 menuitem_intake:"",
                 menuitem_highlight:"",
-
             }
         },
         computed: {
-            todays_items(){
-                const today = new Date();
-                const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-                const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-
-                return this.pill_events.filter(item => {
-                    // Assuming your date property is named 'dt'
-
-                    return new Date(item.dt) >= startOfToday && new Date(item.dt) < endOfToday;
-                });
-            }
+            formattedMonth() {
+                if (!this.focus) return '';
+                const date = new Date(this.focus);
+                const options = { year: 'numeric', month: 'long' };
+                return date.toLocaleDateString(this.$i18n.locale, options);
+            },
         },
         methods:{
             empty_pill_event,
@@ -95,13 +100,38 @@
             localtime,
             my_round,
             useStore,
-            onDrop(item, date, event) {
-                this.item_selected=item
-                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
-                var olddate=new Date(this.pill_event.dt)
+            setToday () {
+                this.focus = new Date().toISOString().slice(0,10)
+            },
+            prev () {
+                this.$refs.calendar.prev()
+            },
+            next () {
+                this.$refs.calendar.next()
+            },
+            onDrag(event, item){
+                this.data_selected = item.event
+                this.pill_event = this.data_selected
+                console.log("DRAGGED", this.data_selected?.url)
+
+                // Add listeners to change cursor during drag
+                document.addEventListener('mousemove', this.handleDragMove);
+                document.addEventListener('mouseup', this.handleDragEnd, { once: true }); // Clean up when mouse is released
+
+            },
+            onDrop(event, date) {
+                if (!this.data_selected){
+                    return
+                }
+
+                // Esta grabado data_selected
+
+                var olddate
                 if (event.ctrlKey){ //Copy
+                    console.log("COPY", date.date, this.data_selected?.url)
+                    olddate=new Date(this.data_selected.start)
                     this.new_pill_event=this.empty_pill_event()
-                    this.new_pill_event.dt=new Date(date.getFullYear(),date.getMonth(),date.getDate(),olddate.getHours(), olddate.getMinutes(), olddate.getSeconds(), olddate.getMilliseconds())
+                    this.new_pill_event.dt=new Date(date.year,date.month-1,date.day,olddate.getHours(), olddate.getMinutes(), olddate.getSeconds(), olddate.getMilliseconds())
                     this.new_pill_event.pillname=this.pill_event.pillname
                     axios.post(`${this.useStore().apiroot}/api/pill_events/`, this.new_pill_event,  this.myheaders())
                         .then(() => {
@@ -111,36 +141,38 @@
                         })
 
                 } else { //Move
-                    this.pill_event.dt=new Date(date.getFullYear(),date.getMonth(),date.getDate(),olddate.getHours(), olddate.getMinutes(), olddate.getSeconds(), olddate.getMilliseconds())
+                    console.log("MOVE", date.date, this.data_selected?.url)
+                    olddate=new Date(this.data_selected.start)
+                    this.pill_event.dt=new Date(date.year,date.month-1,date.day,olddate.getHours(), olddate.getMinutes(), olddate.getSeconds(), olddate.getMilliseconds())
                     axios.put(this.pill_event.url, this.pill_event,  this.myheaders())
                         .then(() => {
                             this.update_pill_events()
                         }, (error) => {
-                            this.parseResponseError(error)
-                        })
+                            this.parseResponseError(error)                        })
                 }
-                this.update_pill_events()
             },
-			setShowDate(d) {
-				this.showDate = d;
-                this.update_pill_events()
-			},
-
-            setSelection(dateRange) {
-                this.selectionEnd = dateRange[1]
-                this.selectionStart = dateRange[0]
+            handleDragMove(e) {
+                if (e.ctrlKey) {
+                    document.body.style.cursor = 'copy';
+                } else if (e.shiftKey) {
+                    document.body.style.cursor = 'move';
+                } else {
+                    document.body.style.cursor = 'grabbing';
+                }
             },
-            finishSelection(dateRange) {
-                this.setSelection(dateRange)
-                this.message = `You selected: ${this.selectionStart.toLocaleDateString()} -${this.selectionEnd.toLocaleDateString()}`
+            handleDragEnd() {
+                // Reset cursor and remove listeners
+                document.body.style.cursor = 'default';
+                document.removeEventListener('mousemove', this.handleDragMove);
+                // The 'mouseup' listener is already removed due to { once: true }
             },
-            showContextMenu(item,event){
-                this.menuX=event.clientX
-                this.menuY=event.clientY
-                this.item_selected=item
-                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
-                this.menuitem_intake=(this.pill_event.is_taken)? this.$t("Undo Take pill") : this.$t("Take pill") 
-                this.menuitem_highlight=(this.pill_event.highlight_late)? this.$t("Undo highlight") : this.$t("Highlight was taken late") 
+            on_context_menu(e,item){
+                this.data_selected=item.event
+                this.pill_event=this.data_selected
+                this.menuX=e.clientX
+                this.menuY=e.clientY
+                this.menuitem_intake=(this.data_selected.is_taken)? this.$t("Undo Take pill") : this.$t("Take pill") 
+                this.menuitem_highlight=(this.data_selected.highlight_late)? this.$t("Undo highlight") : this.$t("Highlight was taken late") 
                 this.contextual_menu=true
             },
             menuinline_items(){
@@ -181,7 +213,7 @@
             },
             event_intake(){
                 // item must be converted to pill_event
-                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+                this.pill_event=this.pill_events.find(element => element.url === this.data_selected.url);
                 if (this.pill_event.dt_intake){
                     this.pill_event.dt_intake=null
                 } else {
@@ -197,7 +229,7 @@
             },
             event_highlight(){
                 // item must be converted to pill_event
-                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+                this.pill_event=this.pill_events.find(element => element.url === this.data_selected.url);
                 if (this.pill_event.dt_intake == null) {
                     alert(this.$t("You can't highlight a pill event if pill hasn't been taken"))
                     return
@@ -214,12 +246,12 @@
             },
             event_update(){
                 this.pill_event_mode="U"
-                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+                this.pill_event=this.pill_events.find(element => element.url === this.data_selected.url);
                 this.key=this.key+1
                 this.dialog_pill_events_crud=true
             },
             event_delete(){
-                this.pill_event=this.pill_events.find(element => element.url === this.item_selected.url);
+                this.pill_event=this.pill_events.find(element => element.url === this.data_selected.url);
                 axios.delete(this.pill_event.url, this.myheaders())
                     .then(() => {
                         this.update_pill_events()
@@ -227,30 +259,28 @@
                         this.parseResponseError(error)
                     })
             },
-            on_click_date(date){
-		    	this.selectionStart = null
-			    this.selectionEnd = null
+            on_click_date(event_click, object){
                 this.pill_event_mode="C"
                 this.pill_event=this.empty_pill_event()
-                this.pill_event.dt=date
+                this.pill_event.dt=new Date(object.year, object.month-1, object.day, 0,0,0)
                 this.key=this.key+1
                 this.dialog_pill_events_crud=true
-            },
-            on_click_item(item, event){
-                this.showContextMenu(item,event)
             },
             on_PillEventsCRUD_cruded(){
                 this.dialog_pill_events_crud=false
                 this.update_pill_events()
             },
-            update_pill_events(){          
-                axios.get(`${this.useStore().apiroot}/api/pill_events/?year=${this.showDate.getFullYear()}&month=${this.showDate.getMonth()+1}`, this.myheaders())
+            update_pill_events(){
+                var focusDate=new Date(this.focus)
+                axios.get(`${this.useStore().apiroot}/api/pill_events/?year=${focusDate.getFullYear()}&month=${focusDate.getMonth()+1}`, this.myheaders())
                 .then((response) => {
                     this.pill_events=response.data
                     this.data=[]
                     this.pill_events.forEach(o=>{
                         this.data.push(this.pill_event_to_data(o))
                     })
+                    this.pill_event=null
+                    this.data_selected=null
                 }, (error) => {
                     this.parseResponseError(error)
                 });
@@ -281,17 +311,19 @@
                     tooltip= this.$t("Pill taken on time")
                 }
 
-                return {
-                    id: pill_event.url,
-                    url: pill_event.url,
-                    title: pillname,
-                    startDate: localtime(startDate.toISOString()),
-                    endDate: null, // Add 1 hour in milliseconds
-                    style: `color: ${color};`,
+                return { ...pill_event,
+                    name: pillname,
+                    color: color,
+                    start: localtime(startDate.toISOString()),
+                    end: null, // Add 1 hour in milliseconds
+                    timed: 0,
                     tooltip: tooltip,
                 }
 
-            },
+            },     
+            getEventColor (event) {
+                return event.color
+            },       
             diferenciaEnHumano(fecha1, fecha2) {
                 const diferenciaMs = Math.abs(fecha2.getTime() - fecha1.getTime());
                 const segundos = Math.floor(diferenciaMs / 1000);
@@ -318,24 +350,8 @@
             },
         },
         created(){
+            this.setToday()
             this.update_pill_events()
         },
     }
 </script>
-
-<style>
-/* Set due to min-height was too small */
-.cv-week {
-display: flex;
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 0;
-    flex-flow: row nowrap;
-    min-height: 10em;
-    border-width: 0;
-    position: relative;
-    width: 100%;
-    overflow-y: auto;
-    -ms-overflow-style: none;
-}
-</style>
