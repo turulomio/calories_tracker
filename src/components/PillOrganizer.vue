@@ -26,6 +26,7 @@
             @click:date="on_click_date" 
             @mousedown:event="onDrag"
             @mouseup:day="onDrop"
+            @mousemove:event="handleDragMove"
             @contextmenu:event.prevent="on_context_menu"
           />
         
@@ -112,23 +113,19 @@
             onDrag(event, item){
                 this.data_selected = item.event
                 this.pill_event = this.data_selected
-                console.log("DRAGGED", this.data_selected?.url)
-
-                // Add listeners to change cursor during drag
-                document.addEventListener('mousemove', this.handleDragMove);
-                document.addEventListener('mouseup', this.handleDragEnd, { once: true }); // Clean up when mouse is released
-
+                // console.log("DRAGGED", this.data_selected?.url)
             },
             onDrop(event, date) {
                 if (!this.data_selected){
                     return
                 }
 
-                // Esta grabado data_selected
-
+                if (this.contextual_menu){ // Si está el menu no debe hacer nada (eventos duplicados)
+                    return
+                }
                 var olddate
                 if (event.ctrlKey){ //Copy
-                    console.log("COPY", date.date, this.data_selected?.url)
+                    // console.log("COPY", date.date, this.data_selected?.url)
                     olddate=new Date(this.data_selected.start)
                     this.new_pill_event=this.empty_pill_event()
                     this.new_pill_event.dt=new Date(date.year,date.month-1,date.day,olddate.getHours(), olddate.getMinutes(), olddate.getSeconds(), olddate.getMilliseconds())
@@ -141,7 +138,7 @@
                         })
 
                 } else { //Move
-                    console.log("MOVE", date.date, this.data_selected?.url)
+                    // console.log("MOVE", date.date, this.data_selected?.url)
                     olddate=new Date(this.data_selected.start)
                     this.pill_event.dt=new Date(date.year,date.month-1,date.day,olddate.getHours(), olddate.getMinutes(), olddate.getSeconds(), olddate.getMilliseconds())
                     axios.put(this.pill_event.url, this.pill_event,  this.myheaders())
@@ -150,23 +147,19 @@
                         }, (error) => {
                             this.parseResponseError(error)                        })
                 }
+                document.body.style.cursor = 'default';
             },
-            handleDragMove(e) {
-                if (e.ctrlKey) {
+            handleDragMove(event,item) {
+                if (event.ctrlKey) {
                     document.body.style.cursor = 'copy';
-                } else if (e.shiftKey) {
+                } else if (event.shiftKey) {
                     document.body.style.cursor = 'move';
                 } else {
                     document.body.style.cursor = 'grabbing';
                 }
             },
-            handleDragEnd() {
-                // Reset cursor and remove listeners
-                document.body.style.cursor = 'default';
-                document.removeEventListener('mousemove', this.handleDragMove);
-                // The 'mouseup' listener is already removed due to { once: true }
-            },
             on_context_menu(e,item){
+                // console.log("CONTEXTMENU", item.event)
                 this.data_selected=item.event
                 this.pill_event=this.data_selected
                 this.menuX=e.clientX
@@ -212,8 +205,6 @@
                 ]
             },
             event_intake(){
-                // item must be converted to pill_event
-                this.pill_event=this.pill_events.find(element => element.url === this.data_selected.url);
                 if (this.pill_event.dt_intake){
                     this.pill_event.dt_intake=null
                 } else {
@@ -228,8 +219,6 @@
                     })
             },
             event_highlight(){
-                // item must be converted to pill_event
-                this.pill_event=this.pill_events.find(element => element.url === this.data_selected.url);
                 if (this.pill_event.dt_intake == null) {
                     alert(this.$t("You can't highlight a pill event if pill hasn't been taken"))
                     return
@@ -246,12 +235,10 @@
             },
             event_update(){
                 this.pill_event_mode="U"
-                this.pill_event=this.pill_events.find(element => element.url === this.data_selected.url);
                 this.key=this.key+1
                 this.dialog_pill_events_crud=true
             },
             event_delete(){
-                this.pill_event=this.pill_events.find(element => element.url === this.data_selected.url);
                 axios.delete(this.pill_event.url, this.myheaders())
                     .then(() => {
                         this.update_pill_events()
