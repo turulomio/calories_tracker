@@ -68,8 +68,6 @@
                 data:[],
                 key:0,
                 focus: "",
-		    	selectionStart: null,
-			    selectionEnd: null,
 
                 //CRUD COMPANY
                 pill_event:null,
@@ -84,14 +82,6 @@
 
                 menuitem_intake:"",
                 menuitem_highlight:"",
-
-                // drag and drop
-                dragEvent: null,
-                dragTime: null,
-                extendOriginal: null,
-                createEvent: null,
-                createStart: null,
-                extendOriginal: null,
             }
         },
         computed: {
