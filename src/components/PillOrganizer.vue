@@ -22,7 +22,7 @@
           </v-toolbar-title>
         </v-toolbar>
       </v-sheet>
-            <v-calendar ref="calendar" v-model="focus" :events="data" :locale="locale" :weekdays="[1,2,3,4,5,6,0]" @change="update_pill_events" :event-color="getEventColor" event-overlap-mode="stack" :event-overlap-threshold="30" 
+            <v-calendar ref="calendar" v-model="focus" :events="data" :locale="$i18n.locale" :weekdays="[1,2,3,4,5,6,0]" @change="update_pill_events" :event-color="getEventColor" event-overlap-mode="stack" :event-overlap-threshold="30" 
             @click:date="on_click_date" 
             @mousedown:event="onDrag"
             @mouseup:day="onDrop"
@@ -66,7 +66,6 @@
             return {
                 pill_events:[],
                 data:[],
-                locale: localStorage.locale,
                 key:0,
                 focus: "",
 		    	selectionStart: null,
