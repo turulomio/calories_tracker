@@ -104,20 +104,24 @@
             localtime,
             my_round,
             useStore,
-
-      setToday () {
-        this.focus = new Date().toISOString().slice(0,10)
-      },
+            setToday () {
+                this.focus = new Date().toISOString().slice(0,10)
+            },
             prev () {
-        this.$refs.calendar.prev()
-      },
-      next () {
-        this.$refs.calendar.next()
-      },
-            onDrag(event,item){
-                this.data_selected=item.event
-                this.pill_event=this.data_selected
+                this.$refs.calendar.prev()
+            },
+            next () {
+                this.$refs.calendar.next()
+            },
+            onDrag(event, item){
+                this.data_selected = item.event
+                this.pill_event = this.data_selected
                 console.log("DRAGGED", this.data_selected?.url)
+
+                // Add listeners to change cursor during drag
+                document.addEventListener('mousemove', this.handleDragMove);
+                document.addEventListener('mouseup', this.handleDragEnd, { once: true }); // Clean up when mouse is released
+
             },
             onDrop(event, date) {
                 if (!this.data_selected){
@@ -158,6 +162,21 @@
                     this.menuitem_highlight=(this.data_selected.highlight_late)? this.$t("Undo highlight") : this.$t("Highlight was taken late") 
                     this.contextual_menu=true
                 }
+            },
+            handleDragMove(e) {
+                if (e.ctrlKey) {
+                    document.body.style.cursor = 'copy';
+                } else if (e.shiftKey) {
+                    document.body.style.cursor = 'move';
+                } else {
+                    document.body.style.cursor = 'grabbing';
+                }
+            },
+            handleDragEnd() {
+                // Reset cursor and remove listeners
+                document.body.style.cursor = 'default';
+                document.removeEventListener('mousemove', this.handleDragMove);
+                // The 'mouseup' listener is already removed due to { once: true }
             },
             menuinline_items(){
                 return [
@@ -250,7 +269,6 @@
                 this.key=this.key+1
                 this.dialog_pill_events_crud=true
             },
-
             on_PillEventsCRUD_cruded(){
                 this.dialog_pill_events_crud=false
                 this.update_pill_events()
@@ -270,7 +288,6 @@
                     this.parseResponseError(error)
                 });
             },
-
             pill_event_to_data(pill_event){
                 let dt=new Date(pill_event.dt)
                 let dt_intake = (pill_event.dt_intake==null) ? null : new Date(pill_event.dt_intake)
@@ -307,11 +324,9 @@
                 }
 
             },     
-            
             getEventColor (event) {
                 return event.color
             },       
-
             diferenciaEnHumano(fecha1, fecha2) {
                 const diferenciaMs = Math.abs(fecha2.getTime() - fecha1.getTime());
                 const segundos = Math.floor(diferenciaMs / 1000);
@@ -338,7 +353,7 @@
             },
         },
         created(){
-            this.focus = new Date().toISOString().slice(0,10)
+            this.setToday()
             this.update_pill_events()
         },
     }
