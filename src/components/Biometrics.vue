@@ -1,49 +1,49 @@
 <template>
     <div class="ma-5">
         <h1>{{ $t(`Biometrics`) }}
-            <MyMenuInline :items="menuinline_items"></MyMenuInline>
+            <MyMenuInline data-test="Biometrics_MyMenuInline" :items="menuinline_items"></MyMenuInline>
         </h1>
         <DisplayValues :items="displayvalues()" :key="key" :minimized_items="6" width="30%"></DisplayValues>
-
+ 
         <v-tabs  bg-color="primary" dark v-model="tab" >
-            <v-tab key="height">{{ $t('Height chart') }}</v-tab>
-            <v-tab key="weight">{{ $t('Weight chart') }}</v-tab>
-            <v-tab key="registers">{{ $t('Registers') }}</v-tab>
+            <v-tab data-test="Biometrics_TabHeight" key="height">{{ $t('Height chart') }}</v-tab>
+            <v-tab data-test="Biometrics_TabWeight" key="weight">{{ $t('Weight chart') }}</v-tab>
+            <v-tab data-test="Biometrics_TabRegisters" key="registers">{{ $t('Registers') }}</v-tab>
         </v-tabs>
         <v-window v-model="tab" class="ma-5">
             <v-window-item key="height" >
                 <ChartHeight v-if="!loading" :data="chart_height_data"></ChartHeight>
             </v-window-item>
-            <v-window-item key="weight" >  
+            <v-window-item key="weight" >
                 <ChartWeight  v-if="!loading" :data="chart_weight_data"></ChartWeight>
             </v-window-item>
-            <v-window-item key="registers" >  
+            <v-window-item key="registers" >
                 <v-card >
-                    <v-data-table-virtual density="compact" :headers="biometrics_headers" :items="biometrics" :sort-by="[{key:'datetime',order:'desc'}]"  class="elevation-1" :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500">
+                    <v-data-table-virtual data-test="Biometrics_Table" density="compact" :headers="biometrics_headers" :items="biometrics" :sort-by="[{key:'datetime',order:'desc'}]"  class="elevation-1" :items-per-page="10000" :loading="loading" :key="'T'+key" :height="500">
                         <template #item.datetime="{item}">
                             {{localtime(item.datetime)}}
-                        </template>              
+                        </template>
                         <template #item.activities="{item}">
                             <div v-html="useStore().activities.get(item.activities).localname"></div>
-                        </template>         
+                        </template>
                         <template #item.weight_wishes="{item}">
                             <div v-html="useStore().weight_wishes.get(item.weight_wishes).localname"></div>
                         </template>     
                         <template #item.actions="{item}">
-                            <v-icon small class="mr-2" @click="editBiometric(item)">mdi-pencil</v-icon>
-                            <v-icon small @click="deleteBiometric(item)">mdi-delete</v-icon>
+                            <v-icon :data-test="`Biometrics_Table_IconEdit${item.id}`" small class="mr-2" @click="editBiometric(item)">mdi-pencil</v-icon>
+                            <v-icon :data-test="`Biometrics_Table_IconDelete${item.id}`" small @click="deleteBiometric(item)">mdi-delete</v-icon>
                         </template>
                         <template #bottom></template>
                     </v-data-table-virtual>
                 </v-card>
             </v-window-item>
         </v-window> 
-
-
-
-
+ 
+ 
+ 
+ 
         <!-- DIALOG PERSONCRUD -->
-        <v-dialog v-model="dialog_biometrics_crud" width="45%">
+        <v-dialog v-model="dialog_biometrics_crud" width="45%" data-test="Biometrics_BiometricsCRUD">
             <v-card class="pa-4">
                 <BiometricsCRUD :biometric="biometric" :deleting="biometric_deleting" :key="'B'+key" @cruded="on_BiometricsCRUD_cruded()"></BiometricsCRUD>
             </v-card>
@@ -98,7 +98,7 @@
                     { title: this.$t('Height'), key: 'height', align:'right', width:"8%"},
                     { title: this.$t('Weight'), key: 'weight', align:'right' , width:"8%"},
                     { title: this.$t('Activity'), key: 'activities'},
-                    { title: this.$t('Weight wish'), key: 'weight_wishes'},             
+                    { title: this.$t('Weight wish'), key: 'weight_wishes'},
                     { title: this.$t('IMC status'), key: 'imc_comment'},
                     { title: this.$t('Actions'), key: 'actions', sortable: false, width:"5%"},
                 ],
@@ -109,7 +109,7 @@
 
                 // Charts
                 chart_height_data: [],
-                chart_weight_data: [],
+                chart_weight_data: [], 
 
                 // Biometrics CRUD
                 biometric:false,
@@ -120,7 +120,7 @@
         methods:{
             empty_biometrics,
             localtime,
-        useStore,
+            useStore,
             displayvalues(){
                 var r=[]
                 if (this.biometrics.length>0){
@@ -130,7 +130,7 @@
                     r.push({title:this.$t('Weight wish'), value: this.useStore().weight_wishes.get(this.biometric_last.weight_wishes).localname})
                     r.push({title:this.$t('IMC status'), value: this.biometric_last.imc_comment})
                     r.push({title:this.$t('Activity'), value: this.useStore().activities.get(this.biometric_last.activities).localname})
-
+ 
                 }
                 return r
             },
@@ -145,7 +145,7 @@
                     this.biometrics=response.data
                     if (this.biometrics.length>0) this.biometric_last=this.biometrics[this.biometrics.length - 1]
                     this.chart_height_data=[]
-                    this.chart_weight_data=[]
+                    this.chart_weight_data=[] 
                     this.biometrics.forEach(o => { 
                         this.chart_height_data.push([o.datetime,o.height])
                         this.chart_weight_data.push([o.datetime,o.weight])
@@ -154,23 +154,23 @@
                }, (error) => {
                     this.parseResponseError(error)
                 });
-
+ 
             },
             editBiometric(item){
                 this.biometric=item
                 this.biometric_deleting=false
                 this.key=this.key+1
-
+ 
                 this.dialog_biometrics_crud=true
             },
             deleteBiometric(item){
                 this.biometric=item
                 this.biometric_deleting=true
                 this.key=this.key+1
-
+ 
                 this.dialog_biometrics_crud=true
             },
-
+  
         },
         mounted(){
             this.update_biometrics()
