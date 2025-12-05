@@ -1,17 +1,17 @@
 <template>
     <div class="ma-4">
         <h1>{{ $t(`Products`) }}
-            <MyMenuInline :items="menuinline_items()"></MyMenuInline>
+            <MyMenuInline data-test="Products_MyMenuInline" :items="menuinline_items()"></MyMenuInline>
         </h1>
-          <v-text-field id="Products_filter" class="ml-10 mr-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
+          <v-text-field data-test="Products_Filter" class="ml-10 mr-10 mb-5" :disabled="loading" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')" v-on:keyup.enter="on_search_change()"></v-text-field>
     
         <v-tabs  bg-color="primary" dark v-model="tab" >
-            <v-tab id="Products_tabProducts" key="products"><v-icon left>mdi-apple</v-icon>{{ $t('Products') }}<v-badge v-if="products.length>0" color="error" class="ml-2" :content="products.length" inline/></v-tab>
-            <v-tab id="Products_tabElaboratedProducts" key="elaborated_products"><v-icon left>mdi-food-takeout-box</v-icon>{{ $t('Elaborated products') }}<v-badge v-if="elaborated_products.length>0" color="error" class="ml-2" :content="elaborated_products.length" inline/></v-tab>
+            <v-tab data-test="Products_TabProducts" key="products"><v-icon left>mdi-apple</v-icon>{{ $t('Products') }}<v-badge v-if="products.length>0" color="error" class="ml-2" :content="products.length" inline/></v-tab>
+            <v-tab data-test="Products_TabElaboratedProducts" key="elaborated_products"><v-icon left>mdi-food-takeout-box</v-icon>{{ $t('Elaborated products') }}<v-badge v-if="elaborated_products.length>0" color="error" class="ml-2" :content="elaborated_products.length" inline/></v-tab>
         </v-tabs>
         <v-window v-model="tab" class="ma-5">
             <v-window-item key="products" >
-                <v-data-table-virtual density="compact" :headers="products_headers" :items="products" :sort-by="[{key:'fullname',order:'asc'}]"  class="elevation-1 cursorpointer" :items-per-page="10000" :loading="loading" :key="'T'+key" height="65vh" @click:row="viewProduct" fixed-header>
+                <v-data-table-virtual data-test="Products_Table" density="compact" :headers="products_headers" :items="products" :sort-by="[{key:'fullname',order:'asc'}]"  class="elevation-1 cursorpointer" :items-per-page="10000" :loading="loading" :key="'T'+key" height="65vh" @click:row="viewProduct" fixed-header>
                     <template #item.fullname="{item}"><div v-html="products_html_fullname(item,2)"></div></template>
                     <template #item.calories="{item}"><div v-html="my_round(item.calories,0)"></div></template>  
                     <template #item.fat="{item}"><div v-html="my_round(item.fat,0)"></div></template>  
@@ -29,24 +29,24 @@
                     <template #item.phosphor="{item}"><div v-html="my_round(item.phosphor,0)"></div></template>  
                     <template #item.calcium="{item}"><div v-html="my_round(item.calcium,0)"></div></template>  
                     <template #item.actions="{item}">
-                        <v-icon v-if="item.is_editable" small class="mr-1" @click.stop="editProduct(item)">mdi-pencil</v-icon>
-                        <v-icon v-if="item.is_deletable" small @click.stop="deleteProduct(item)">mdi-delete</v-icon>
+                        <v-icon :data-test="`Products_Table_IconEdit${item.id}`" v-if="item.is_editable" small class="mr-1" @click.stop="editProduct(item)">mdi-pencil</v-icon>
+                        <v-icon :data-test="`Products_Table_IconDelete${item.id}`" v-if="item.is_deletable" small @click.stop="deleteProduct(item)">mdi-delete</v-icon>
                     </template>
                 </v-data-table-virtual>
             </v-window-item>
             <v-window-item key="elaborated_products">
-                <TableElaboratedProducts ref="table_elaborated_products" :elaborated_products="elaborated_products" :key="key" @cruded="on_TableElaboratedProducts_cruded" />
+                <TableElaboratedProducts data-test="Products_TableElaboratedProducts" ref="table_elaborated_products" :elaborated_products="elaborated_products" :key="key" @cruded="on_TableElaboratedProducts_cruded" />
             </v-window-item>
         </v-window>
 
         <!-- DIALOG PRODUCTS CRUD -->
-        <v-dialog v-model="dialog_products_crud" width="45%" persistent>
+        <v-dialog data-test="Products_ProductsCRUDDialog" v-model="dialog_products_crud" width="45%" persistent>
             <v-card class="pa-4">
                 <ProductsCRUD :product="product" :mode="product_cu_mode" :key="'B'+key" @cruded="on_ProductsCRUD_cruded()"></ProductsCRUD>
             </v-card>
         </v-dialog>
         <!-- DIALOG OFF -->
-        <v-dialog v-model="dialog_off" width="100%">
+        <v-dialog data-test="Products_OFFDialog" v-model="dialog_off" width="100%">
             <v-card class="pa-4">
                 <OpenFoodFactsSearch key="'B'+key" @cruded="on_OFF_cruded" />
             </v-card>
