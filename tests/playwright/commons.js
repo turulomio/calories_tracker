@@ -1,18 +1,15 @@
 
 import { expect } from './fixtures.js';
-export async function v_autocomplete_selection_with_role_select(page, testId, optionText, first = true) {
-  const autocomplete = page.getByTestId(testId);
+import {mymenuinline_selection, v_text_input_settext, promise_to_get_id_from_post_response} from './reusing/playwright_vuetify.js';
 
-  // 1. Click the component to open the dropdown.
-  await autocomplete.click();
+export async function companies_add_from_Companies(page, name="My Linux company"){
+    await mymenuinline_selection(page,"Companies_MyMenuInline", 0, 0)
 
-  // 2. The actual input is inside the component. We can find it by its role and type.
-  await autocomplete.locator('input[type="text"]').fill(optionText);
+    await v_text_input_settext(page,"CompaniesCRUD_Name", name)
 
-  // 3. Wait for the desired option to appear in the dropdown and click it.
-  const option = page.getByRole('select', { name: optionText, exact: false,  });
-  if (first) await option.first().click();
-  else await option.last().click();
+    const id_promise=promise_to_get_id_from_post_response(page, "/api/companies/");
+    await page.getByTestId('CompaniesCRUD_Button').click()
+    const id= await id_promise;
+    await expect(page.getByTestId(`Companies_Table_IconEdit${id}`)).toBeVisible();
+    return id
 }
-
-
