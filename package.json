@@ -7,7 +7,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "translate": "vue-i18n-extract --vueFiles './src/**/*.?(js|vue)' --languageFiles './src/locales/**/*.json' --add true --remove true --separator '###' ",
-    "lint": "eslint . --fix --ignore-path .gitignore",
+    "lint": "eslint . --fix --ignore-pattern .gitignore --ignore-pattern output --ignore-pattern dist",
     "reusing": "node src/scripts/reusing.js",
     "vitest": "vitest --passWithNoTests",
     "playwright": "playwright test --ui --output output/playwright",

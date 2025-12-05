@@ -384,7 +384,7 @@
                 },
             })
         },
-        beforeDestroy() {
+        beforeUnmount() {
             this.editor.destroy()
         },
     }
