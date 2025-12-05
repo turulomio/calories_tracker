@@ -48,18 +48,26 @@ export default defineConfig({
     host: "127.0.0.1",
     port: 8012,
   },
-  test: {
-    include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
-    exclude: ['node_modules', 'dist', '**/examples/**'],
-    coverage: {
-      reporter: ['html'],
-      // Include specific files or patterns
-      include: ['src/functions.js','src/types.js'],
 
-      // Exclude specific files or patterns
-      exclude: ['src/main.ts', 'src/api/**/*.ts']
+  test: { // To use with vitest but better with nyc
+    globals: true,
+    // environment: 'jsdom',
+    alias: {
+      '@/': new URL('./src/', import.meta.url).pathname,
+    },
+    include: ['**/*.test.js'],
+    exclude: ['node_modules', 'dist', '**/examples/**', 'test'],
+    coverage: {
+      provider: 'istanbul',
+      reporter: ['html', 'text', 'lcov'],
+      include: ['src/**/*.js'],
+      exclude: [
+        'src/scripts/**',
+        '**/*.spec.js'
+      ]
     }
   },
+
   build: {
     sourcemap: "inline", // Options: true, 'inline', 'hidden'
   },

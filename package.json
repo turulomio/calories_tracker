@@ -9,10 +9,11 @@
     "translate": "vue-i18n-extract --vueFiles './src/**/*.?(js|vue)' --languageFiles './src/locales/**/*.json' --add true --remove true --separator '###' ",
     "lint": "eslint . --fix --ignore-path .gitignore",
     "reusing": "node src/scripts/reusing.js",
-    "test": "vitest",
-    "coverage": "vitest --run --coverage",
-    "cypress": "cypress open",
-    "cypress_console": "cypress run"
+    "vitest": "vitest --passWithNoTests",
+    "playwright": "playwright test --ui --output output/playwright",
+    "playwright_console": "playwright test --output output/playwright",
+    "playwright_coverage": "nyc --reporter=lcov --report-dir  output/coverage  playwright test"
+
   },
   "dependencies": {
     "@mdi/font": "7.4.47",
@@ -34,25 +35,29 @@
     "tippy.js": "^6.3.7",
     "vue": "^3.5.25",
     "vue-i18n": "^11.2.2",
-    "vue-i18n-extract": "github:Spittal/vue-i18n-extract",
     "vue-router": "^4.6.3",
     "vuetify": "^3.11.2",
     "vuetify_rules": "^0.7.0",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "^3.14.7",
-    "@cypress/vite-dev-server": "^7.0.1",
+    "playwright": "^1.56.0",
+
+    "@playwright/test": "^1.56.0",
+
     "@vitejs/plugin-vue": "^6.0.2",
-    "@vitest/coverage-v8": "^4.0.15",
-    "@vue/test-utils": "^2.4.6",
-    "cypress": "^15.7.1",
     "eslint": "^9.39.1",
-    "eslint-plugin-vue": "^10.6.2",
+    "eslint-plugin-playwright": "^2.2.2",
+    "eslint-plugin-vue": "^10.5.0",
+
     "globals": "^16.5.0",
-    "jsdom": "^27.2.0",
     "npm-check-updates": "^19.1.2",
     "vite": "^7.2.6",
+    "vite-plugin-eslint": "^1.8.1",
+
+    "vite-plugin-vue-devtools": "^8.0.2",
+
+    "vue-i18n-extract": "github:Spittal/vue-i18n-extract",
     "vite-plugin-istanbul": "^7.2.1",
     "vite-plugin-vuetify": "^2.1.2",
     "vitest": "^4.0.15"
