@@ -11,7 +11,7 @@
     </div>  
 </template>
 <script setup>
-    import { ref, getCurrentInstance } from 'vue'
+    import { ref } from 'vue'
     import AutoCompleteApiIdName from './AutoCompleteApiIdName.vue'
     import { useStore } from '@/store.js'
     import axios from 'axios'
@@ -29,7 +29,6 @@
     const emit = defineEmits(['merged'])
 
     const recipes = ref([])
-    const { proxy } = getCurrentInstance()
 
     function on_accept(){              
         axios.post(`${props.main_recipe.url}merge/`, {recipes: recipes.value}, myheaders())

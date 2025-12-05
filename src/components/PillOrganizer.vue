@@ -149,7 +149,7 @@
                 }
                 document.body.style.cursor = 'default';
             },
-            handleDragMove(event,item) {
+            handleDragMove(event) {
                 if (event.ctrlKey) {
                     document.body.style.cursor = 'copy';
                 } else if (event.shiftKey) {

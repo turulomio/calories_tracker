@@ -1,6 +1,6 @@
 <template>
     <div class="ma-4">
-        <h1>{{ $t(`Meals`) }}
+        <h1>{{ $t('Meals') }}
             <MyMenuInline data-test="Meals_MyMenuInline" :items="menuinline_items"></MyMenuInline>
         </h1>
 

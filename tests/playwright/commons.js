@@ -7,7 +7,7 @@ import {
   v_autocomplete_selection_with_role_option
 } from './reusing/playwright_vuetify.js';
 
-export async function biometrics_add_from_Biometrics(page, name="My Linux company"){
+export async function biometrics_add_from_Biometrics(page){
     await mymenuinline_selection(page,"Biometrics_MyMenuInline", 0, 0)
 
     await v_autocomplete_selection_with_role_option(page, "BiometricsCRUD_Activities", "Very active")

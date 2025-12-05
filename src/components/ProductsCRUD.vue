@@ -1,6 +1,6 @@
 <template>
     <div>    
-        <h1 @click="showinfo=!showinfo" v-show="showinfo">{{ title() }}</h1>        
+        <h1 @click="newshowinfo=!newshowinfo" v-show="newshowinfo">{{ title() }}</h1>        
         <div class="d-flex flex-row">
         <v-card class="pa-6 mt-4" style="overflow-y: scroll" min-width="50%">
             <v-form ref="form" v-model="form_valid" lazy-validation >
@@ -100,6 +100,7 @@
                 form_valid:false,
                 newproduct: null,
                 key:0,
+                newshowinfo:false,
 
                 
                 formats_headers: [
@@ -207,6 +208,8 @@
         created(){
             // Guess crud mode
             this.newproduct=Object.assign({},this.product)
+            this.newshowinfo=this.showinfo
+
         }
     }
 </script>

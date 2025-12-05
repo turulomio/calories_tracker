@@ -105,7 +105,7 @@
 
                 if (diners){
                     axios.post(`${item.url}create_automatic_elaboration/`, {diners: diners, automatic_adaptation_step: item.automatic_adaptation_step},  this.myheaders())
-                    .then((response) => {
+                    .then(() => {
                         this.$emit("cruded")
                     }, (error) => {
                         this.parseResponseError(error)
