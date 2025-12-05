@@ -7,6 +7,19 @@ import {
   v_autocomplete_selection_with_role_option
 } from './reusing/playwright_vuetify.js';
 
+export async function biometrics_add_from_Biometrics(page, name="My Linux company"){
+    await mymenuinline_selection(page,"Biometrics_MyMenuInline", 0, 0)
+
+    await v_autocomplete_selection_with_role_option(page, "BiometricsCRUD_Activities", "Very active")
+    await v_autocomplete_selection_with_role_option(page, "BiometricsCRUD_WeightWishes", "Lose weight")
+    await v_text_input_settext(page,"BiometricsCRUD_Height", "180")
+    await v_text_input_settext(page,"BiometricsCRUD_Weight", "90")
+    const id_promise=promise_to_get_id_from_post_response(page, "/api/biometrics/");
+    await page.getByTestId('BiometricsCRUD_Button').click()
+    const id= await id_promise;
+    await expect(page.getByTestId(`Biometrics_Table_IconEdit${id}`)).toBeVisible();
+    return id
+}
 export async function companies_add_from_Companies(page, name="My Linux company"){
     await mymenuinline_selection(page,"Companies_MyMenuInline", 0, 0)
 
@@ -19,15 +32,16 @@ export async function companies_add_from_Companies(page, name="My Linux company"
     return id
 }
 
-export async function meals_add_from_Meals(page, name="My Linux company"){
+export async function meals_add_from_Meals(page){
     await mymenuinline_selection(page,"Meals_MyMenuInline", 0, 0)
 
-    await v_text_input_settext(page,"CompaniesCRUD_Name", name)
+    await v_autocomplete_selection_with_role_option(page,"MealsCRUD_Products", "Product for Meals")
+    await v_text_input_settext(page,"MealsCRUD_Amount", "100")
 
-    const id_promise=promise_to_get_id_from_post_response(page, "/api/companies/");
-    await page.getByTestId('CompaniesCRUD_Button').click()
+    const id_promise=promise_to_get_id_from_post_response(page, "/api/meals/");
+    await page.getByTestId('MealsCRUD_Button').click()
     const id= await id_promise;
-    await expect(page.getByTestId(`Companies_Table_IconEdit${id}`)).toBeVisible();
+    // await expect(page.getByTestId(`Meals_Table_IconEdit${id}`)).toBeVisible(); OUT OF SCREEN
     return id
 }
 
