@@ -20,12 +20,12 @@ export default defineConfig({
     vuetify({
       autoImport: true,
     }),
+    // This is the fix: add vite-plugin-istanbul to the plugins array
     istanbul({
-      include: 'src/*', // specify the files you want to instrument
-      exclude: ['node_modules', 'test/*'],
-      extension: ['.js', '.vue'], // include your file extensions
-    })
-    // basicSsl(),
+      include: 'src/**/*',
+      exclude: ['node_modules', 'tests/', 'test/'],
+      extension: ['.js', '.ts', '.vue'],
+    }),
   ],
   base: '/calories_tracker',
   define: { 'process.env': {} },
@@ -49,9 +49,8 @@ export default defineConfig({
     port: 8012,
   },
 
-  test: { // To use with vitest but better with nyc
+  test: { // To use with vitest 
     globals: true,
-    // environment: 'jsdom',
     alias: {
       '@/': new URL('./src/', import.meta.url).pathname,
     },
@@ -71,21 +70,4 @@ export default defineConfig({
   build: {
     sourcemap: "inline", // Options: true, 'inline', 'hidden'
   },
-  // test: {
-  //   // globals: true,
-  //   environment: 'jsdom',
-  //   setupFiles: 'vitest.setup.js',
-  //   server: {
-  //     deps: {
-  //       inline: ['vuetify'],
-  //     },
-  //   },
-  // },
-  // css: {
-  //   preprocessorOptions: {
-  //     scss: {
-  //       additionalData: `@import "path-to-your-variables.scss";` // If you have global SCSS variables
-  //     }
-  //   }
-  // },
 })
