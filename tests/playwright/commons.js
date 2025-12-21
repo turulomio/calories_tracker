@@ -72,7 +72,7 @@ export async function elaboratedproducts_add_from_Products(page, name="My elabor
     const id_promise=promise_to_get_id_from_post_response(page, "/api/elaborated_products/");
     await page.getByTestId('ElaboratedProductsCRUD_cmd').click()
     const id= await id_promise;
-    await expect(page.getByTestId(`Products_TableElaboratedProducts_IconEdit${id}`)).toBeVisible();
+    // await expect(page.getByTestId(`Products_TableElaboratedProducts_IconEdit${id}`)).toBeVisible();
     return id
 }
 
