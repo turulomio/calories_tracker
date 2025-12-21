@@ -3,19 +3,19 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-4">
             <v-form ref="form" v-model="form_valid" lazy-validation>                
-                <v-text-field id="ElaboratedProductsCRUD_Name" :readonly="['D','R'].includes(mode)" v-model="newep.name" :label="$t('Set name')" :placeholder="$t('Set name')" :rules="RulesString(200)" counter="200"/>
-                <v-autocomplete id="ElaboratedProductsCRUD_FoodTypes" :readonly="['D','R'].includes(mode)" :items="getArrayFromMap(useStore().food_types)" v-model="newep.food_types" :label="$t('Select product food type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field id="ElaboratedProductsCRUD_Amount" :readonly="['D','R'].includes(mode)" v-model.number="newep.final_amount" :label="$t('Set your final amount')" :placeholder="$t('Set your final amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
-                <v-checkbox id="ElaboratedProductsCRUD_Obsolete" :readonly="['D','R'].includes(mode)" v-model="newep.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
-                <v-textarea id="ElaboratedProductsCRUD_Comment" :readonly="['D','R'].includes(mode)" v-model="newep.comment" :label="$t('Set your comment')" />              
+                <v-text-field data-test="ElaboratedProductsCRUD_Name" :readonly="['D','R'].includes(mode)" v-model="newep.name" :label="$t('Set name')" :placeholder="$t('Set name')" :rules="RulesString(200)" counter="200"/>
+                <v-autocomplete data-test="ElaboratedProductsCRUD_FoodTypes" :readonly="['D','R'].includes(mode)" :items="getArrayFromMap(useStore().food_types)" v-model="newep.food_types" :label="$t('Select product food type')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-text-field data-test="ElaboratedProductsCRUD_Amount" :readonly="['D','R'].includes(mode)" v-model.number="newep.final_amount" :label="$t('Set your final amount')" :placeholder="$t('Set your final amount')" :rules="RulesFloatGEZ(10,true,3)" counter="10"/>
+                <v-checkbox data-test="ElaboratedProductsCRUD_Obsolete" :readonly="['D','R'].includes(mode)" v-model="newep.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
+                <v-textarea data-test="ElaboratedProductsCRUD_Comment" :readonly="['D','R'].includes(mode)" v-model="newep.comment" :label="$t('Set your comment')" />              
                 <v-card class="mt-4">
                     <v-data-table density="compact" :headers="products_in_headers" :items="newep.products_in" :sort-by="[{key:'name',order:'asc'}]"  class="elevation-1" :items-per-page="10000" :key="'T'+key" :height="250" fixed-header>
                         <template #item.products="{item}">
                             <div v-html="products_html_fullname(item.products,4)"></div>
                         </template>
                         <template #item.actions="{item}">
-                            <v-icon id="ElaboratedProductsCRUD_iconEdit" v-if="['C','U'].includes(mode)" small class="mr-2" @click="editProductIn(item)">mdi-pencil</v-icon>
-                            <v-icon id="ElaboratedProductsCRUD_iconDelete" v-if="['C','U'].includes(mode)" small @click="deleteProductIn(item)">mdi-delete</v-icon>
+                            <v-icon data-test="ElaboratedProductsCRUD_iconEdit" v-if="['C','U'].includes(mode)" small class="mr-2" @click="editProductIn(item)">mdi-pencil</v-icon>
+                            <v-icon data-test="ElaboratedProductsCRUD_iconDelete" v-if="['C','U'].includes(mode)" small @click="deleteProductIn(item)">mdi-delete</v-icon>
                         </template>
                         <template #bottom></template>
                         <template #tbody>
@@ -30,9 +30,9 @@
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn id="ElaboratedProductsCRUD_cmdProductIn" color="primary" v-if="['C','U'].includes(mode)" @click="addProductIn()" >{{ $t("Add a product") }}</v-btn>
-                <v-btn id="ElaboratedProductsCRUD_cmd" color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()">{{ button() }}</v-btn> 
-                <v-btn id="ElaboratedProductsCRUD_cmdCancel" color="error" @click="$emit('cruded')" >{{ $t("Cancel") }}</v-btn>
+                <v-btn data-test="ElaboratedProductsCRUD_cmdProductIn" color="primary" v-if="['C','U'].includes(mode)" @click="addProductIn()" >{{ $t("Add a product") }}</v-btn>
+                <v-btn data-test="ElaboratedProductsCRUD_cmd" color="primary" v-if="['C','U','D'].includes(mode)" @click="acceptDialog()">{{ button() }}</v-btn> 
+                <v-btn data-test="ElaboratedProductsCRUD_cmdCancel" color="error" @click="$emit('cruded')" >{{ $t("Cancel") }}</v-btn>
             </v-card-actions>
         </v-card>
 

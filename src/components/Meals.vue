@@ -1,6 +1,6 @@
 <template>
     <div class="ma-4">
-        <h1>{{ $t(`Meals`) }}
+        <h1>{{ $t('Meals') }}
             <MyMenuInline data-test="Meals_MyMenuInline" :items="menuinline_items"></MyMenuInline>
         </h1>
 
@@ -33,9 +33,9 @@
                 <template #item.phosphor="{item}"><div v-html="my_round(item.phosphor,0)"></div></template>  
                 <template #item.calcium="{item}"><div v-html="my_round(item.calcium,0)"></div></template>  
                 <template #item.actions="{item}">
-                    <v-icon size="small" class="mr-1" @click="copyMeal(item)">mdi-content-copy</v-icon>
-                    <v-icon small class="mr-1" @click="editMeal(item)">mdi-pencil</v-icon>
-                    <v-icon small class="mr-1" @click="deleteMeal(item)">mdi-delete</v-icon>
+                    <v-icon :data-test="`Meals_Table_IconCopy${item.id}`" small class="mr-1" @click="copyMeal(item)">mdi-content-copy</v-icon>
+                    <v-icon :data-test="`Meals_Table_IconEdit${item.id}`" small class="mr-1" @click="editMeal(item)">mdi-pencil</v-icon>
+                    <v-icon :data-test="`Meals_Table_IconDelete${item.id}`" small class="mr-1" @click="deleteMeal(item)">mdi-delete</v-icon>
                 </template>       
                 <template #bottom ></template>        
                 <template #tbody>

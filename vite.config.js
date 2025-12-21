@@ -20,12 +20,12 @@ export default defineConfig({
     vuetify({
       autoImport: true,
     }),
+    // This is the fix: add vite-plugin-istanbul to the plugins array
     istanbul({
-      include: 'src/*', // specify the files you want to instrument
-      exclude: ['node_modules', 'test/*'],
-      extension: ['.js', '.vue'], // include your file extensions
-    })
-    // basicSsl(),
+      include: 'src/**/*',
+      exclude: ['node_modules', 'tests/', 'test/'],
+      extension: ['.js', '.ts', '.vue'],
+    }),
   ],
   base: '/calories_tracker',
   define: { 'process.env': {} },
@@ -48,36 +48,26 @@ export default defineConfig({
     host: "127.0.0.1",
     port: 8012,
   },
-  test: {
-    include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
-    exclude: ['node_modules', 'dist', '**/examples/**'],
-    coverage: {
-      reporter: ['html'],
-      // Include specific files or patterns
-      include: ['src/functions.js','src/types.js'],
 
-      // Exclude specific files or patterns
-      exclude: ['src/main.ts', 'src/api/**/*.ts']
+  test: { // To use with vitest 
+    globals: true,
+    alias: {
+      '@/': new URL('./src/', import.meta.url).pathname,
+    },
+    include: ['**/*.test.js'],
+    exclude: ['node_modules', 'dist', '**/examples/**', 'test'],
+    coverage: {
+      provider: 'istanbul',
+      reporter: ['html', 'text', 'lcov'],
+      include: ['src/**/*.js'],
+      exclude: [
+        'src/scripts/**',
+        '**/*.spec.js'
+      ]
     }
   },
+
   build: {
     sourcemap: "inline", // Options: true, 'inline', 'hidden'
   },
-  // test: {
-  //   // globals: true,
-  //   environment: 'jsdom',
-  //   setupFiles: 'vitest.setup.js',
-  //   server: {
-  //     deps: {
-  //       inline: ['vuetify'],
-  //     },
-  //   },
-  // },
-  // css: {
-  //   preprocessorOptions: {
-  //     scss: {
-  //       additionalData: `@import "path-to-your-variables.scss";` // If you have global SCSS variables
-  //     }
-  //   }
-  // },
 })

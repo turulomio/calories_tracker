@@ -3,12 +3,12 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <v-text-field id="name" :readonly="mode=='D'" v-model="newcompany.name" :label="$t('Set company name')" :placeholder="$t('Set company name')" :rules="RulesString(200)" counter="200"/>
-                <v-checkbox id="obsolete" v-model="newcompany.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
+                <v-text-field data-test="CompaniesCRUD_Name" :readonly="mode=='D'" v-model="newcompany.name" :label="$t('Set company name')" :placeholder="$t('Set company name')" :rules="RulesString(200)" counter="200"/>
+                <v-checkbox data-test="CompaniesCRUD_Obsolete" v-model="newcompany.obsolete" :label="$t('Is obsolete?')"></v-checkbox>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn id="cmd" color="primary" @click="acceptDialog()">{{ button() }}</v-btn>
+                <v-btn data-test="CompaniesCRUD_Button" color="primary" @click="acceptDialog()">{{ button() }}</v-btn>
             </v-card-actions>
         </v-card>
     </div>
@@ -88,4 +88,3 @@
         }
     }
 </script>
-

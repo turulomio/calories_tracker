@@ -3,15 +3,15 @@
         <h1>{{ title() }}</h1>           
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
-                <MyDateTimePicker :readonly="deleting" v-model="newbiometric.datetime" :label="$t('Set date and time')"></MyDateTimePicker>
-                <v-autocomplete id="cmbActivities" :readonly="deleting" :items="getArrayFromMap(useStore().activities)" v-model="newbiometric.activities" :label="$t('Select your activity level')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-autocomplete id="cmbWeightWishes" :readonly="deleting" :items="getArrayFromMap(useStore().weight_wishes)" v-model="newbiometric.weight_wishes" :label="$t('Select your weight wish')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
-                <v-text-field id="txtHeight" :readonly="deleting" v-model.number="newbiometric.height" :label="$t('Set your height')" :placeholder="$t('Set your height')" :rules="RulesFloatGEZ(10,true,2)" counter="10"/>
-                <v-text-field id="txtWeight" :readonly="deleting" v-model.number="newbiometric.weight" :label="$t('Set your weight')" :placeholder="$t('Set your weight')" :rules="RulesFloatGEZ(10,true,2)" counter="10"/>
+                <MyDateTimePicker data-test="BiometricsCRUD_MyDateTimePicker" :readonly="deleting" v-model="newbiometric.datetime" :label="$t('Set date and time')"></MyDateTimePicker>
+                <v-autocomplete data-test="BiometricsCRUD_Activities" :readonly="deleting" :items="getArrayFromMap(useStore().activities)" v-model="newbiometric.activities" :label="$t('Select your activity level')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-autocomplete data-test="BiometricsCRUD_WeightWishes" :readonly="deleting" :items="getArrayFromMap(useStore().weight_wishes)" v-model="newbiometric.weight_wishes" :label="$t('Select your weight wish')" item-title="localname" item-value="url" :rules="RulesSelection(true)"></v-autocomplete>
+                <v-text-field data-test="BiometricsCRUD_Height" :readonly="deleting" v-model.number="newbiometric.height" :label="$t('Set your height')" :placeholder="$t('Set your height')" :rules="RulesFloatGEZ(10,true,2)" counter="10"/>
+                <v-text-field data-test="BiometricsCRUD_Weight" :readonly="deleting" v-model.number="newbiometric.weight" :label="$t('Set your weight')" :placeholder="$t('Set your weight')" :rules="RulesFloatGEZ(10,true,2)" counter="10"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn id="cmd" color="primary" @click="acceptDialog()">{{ button() }}</v-btn>
+                <v-btn data-test="BiometricsCRUD_Button" color="primary" @click="acceptDialog()">{{ button() }}</v-btn>
             </v-card-actions>
         </v-card>
     </div>
@@ -106,4 +106,3 @@
         }
     }
 </script>
-

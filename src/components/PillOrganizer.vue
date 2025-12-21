@@ -1,7 +1,7 @@
 <template>
     <div class="ma-4">
         <h1>{{ $t(`Pill organizer`) }}
-            <MyMenuInline :items="menuinline_items()"></MyMenuInline>
+            <MyMenuInline data-test="PillOrganizer_MyMenuInline" :items="menuinline_items()"></MyMenuInline>
         </h1>      
 
       <v-sheet height="64" class="mt-7">
@@ -149,7 +149,7 @@
                 }
                 document.body.style.cursor = 'default';
             },
-            handleDragMove(event,item) {
+            handleDragMove(event) {
                 if (event.ctrlKey) {
                     document.body.style.cursor = 'copy';
                 } else if (event.shiftKey) {
@@ -177,7 +177,12 @@
                                 name: this.$t("Add a pill event"),
                                 icon: "mdi-plus",
                                 code: function(){
-                                    this.on_click_date()
+
+                                    this.pill_event_mode="C"
+                                    this.pill_event=this.empty_pill_event()
+                                    this.pill_event.dt=new Date(this.focus)
+                                    this.key=this.key+1
+                                    this.dialog_pill_events_crud=true
                                 }.bind(this),
                             },
                             {
@@ -247,6 +252,7 @@
                     })
             },
             on_click_date(event_click, object){
+                console.log(event_click, object)
                 this.pill_event_mode="C"
                 this.pill_event=this.empty_pill_event()
                 this.pill_event.dt=new Date(object.year, object.month-1, object.day, 0,0,0)

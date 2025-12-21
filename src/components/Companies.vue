@@ -1,7 +1,7 @@
 <template>
     <div class="ma-4">
         <h1>{{ $t(`Companies`) }}
-            <MyMenuInline :items="menuinline_items()"></MyMenuInline>
+            <MyMenuInline data-test="Companies_MyMenuInline" :items="menuinline_items()"></MyMenuInline>
         </h1>
         <v-text-field id="filter" class="ml-10 mr-10 mb-5" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"  v-on:keyup.enter="on_search_change()"></v-text-field>
     
@@ -20,8 +20,8 @@
                             <v-icon small v-if="item.obsolete" >mdi-check-outline</v-icon>           
                     </template>
                     <template #item.actions="{item}">
-                        <v-icon small class="mr-2" @click="editCompany(item)">mdi-pencil</v-icon>
-                        <v-icon v-if="item.is_deletable" small @click="deleteCompany(item)">mdi-delete</v-icon>
+                        <v-icon :data-test="`Companies_Table_IconEdit${item.id}`" small class="mr-2" @click="editCompany(item)">mdi-pencil</v-icon>
+                        <v-icon :data-test="`Companies_Table_IconDelete${item.id}`" v-if="item.is_deletable" small @click="deleteCompany(item)">mdi-delete</v-icon>
                     </template>
                     <template #bottom ></template>  
                 </v-data-table>

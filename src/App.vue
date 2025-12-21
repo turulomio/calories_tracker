@@ -16,26 +16,26 @@
 <!--                     HOME -->
                     <v-list-item link router :to="{ name: 'home'}" prepend-icon="mdi-home" :title="$t('Home')" />
 <!--                    BIOMETRICS -->
-                    <v-list-item link router :to="{ name: 'biometrics'}" v-if="useStore().logged"  prepend-icon="mdi-human-male-height" :title="$t('Biometrics')" />
+                    <v-list-item data-test="LateralBiometrics" link router :to="{ name: 'biometrics'}" v-if="useStore().logged"  prepend-icon="mdi-human-male-height" :title="$t('Biometrics')" />
 <!--                    COMPANIES -->
-                    <v-list-item data-test="lateral_companies" link router :to="{ name: 'companies'}" v-if="useStore().logged" prepend-icon="mdi-domain" :title="$t('Companies')" />
+                    <v-list-item data-test="LateralCompanies" link router :to="{ name: 'companies'}" v-if="useStore().logged" prepend-icon="mdi-domain" :title="$t('Companies')" />
 <!--                    PRODUCTS -->
-                    <v-list-item data-test="lateral_products" link router :to="{ name: 'products'}" v-if="useStore().logged" prepend-icon="mdi-apple" :title="$t('Products')" />
+                    <v-list-item data-test="LateralProducts" link router :to="{ name: 'products'}" v-if="useStore().logged" prepend-icon="mdi-apple" :title="$t('Products')" />
 <!--                    MEALS -->
-                    <v-list-item data-test="lateral_meals" link router :to="{ name: 'meals'}" v-if="useStore().logged" prepend-icon="mdi-food-turkey" :title="$t('Meals')" />
+                    <v-list-item data-test="LateralMeals" link router :to="{ name: 'meals'}" v-if="useStore().logged" prepend-icon="mdi-food-turkey" :title="$t('Meals')" />
 <!--                    RECIPES -->
-                    <v-list-item data-test="lateral_recipes" link router :to="{ name: 'recipes'}" v-if="useStore().logged"  prepend-icon="mdi-book-open-variant" :title="$t('Recipes')" />
+                    <v-list-item data-test="LateralRecipes" link router :to="{ name: 'recipes'}" v-if="useStore().logged"  prepend-icon="mdi-book-open-variant" :title="$t('Recipes')" />
 <!--                    POTS -->
-                    <v-list-item data-test="lateral_pots" link router :to="{ name: 'pots'}" v-if="useStore().logged" prepend-icon="mdi-pot" :title="$t('Pot')" />
+                    <v-list-item data-test="LateralPots" link router :to="{ name: 'pots'}" v-if="useStore().logged" prepend-icon="mdi-pot" :title="$t('Pot')" />
 <!--                    PILLS -->
-                    <v-list-item data-test="lateral_pill_organizer" link router :to="{ name: 'pill_organizer'}" v-if="useStore().logged" prepend-icon="mdi-pill" :title="$t('Pill organizer')" />
+                    <v-list-item data-test="LateralPillOrganizer" link router :to="{ name: 'pill_organizer'}" v-if="useStore().logged" prepend-icon="mdi-pill" :title="$t('Pill organizer')" />
 <!--                     REPORTS -->                   
                     <v-list-group value="Reports"  v-if="useStore().logged">
                         <template v-slot:activator="{ props }">
-                            <v-list-item data-test="lateral_reports" v-bind="props" prepend-icon="mdi-chart-box-outline" :title="$t('Reports')"></v-list-item>
+                            <v-list-item data-test="LateralReports" v-bind="props" prepend-icon="mdi-chart-box-outline" :title="$t('Reports')"></v-list-item>
                         </template>
-                        <v-list-item data-test="lateral_meals_ranking" link router :to="{ name: 'meals_ranking'}" :title="$t('Meals ranking')" />
-                        <v-list-item link router :to="{ name: 'curiosities'}">
+                        <v-list-item data-test="LateralMealRankings" link router :to="{ name: 'meals_ranking'}" :title="$t('Meals ranking')" />
+                        <v-list-item data-test="LateralCuriosities" link router :to="{ name: 'curiosities'}">
                             <v-list-item-title>{{ $t("Curiosities") }}</v-list-item-title>
                         </v-list-item>
                     </v-list-group>    
@@ -67,14 +67,14 @@
         </v-navigation-drawer>
         
         <v-app-bar color="primary" dark  fixed fill-height app >
-            <v-app-bar-nav-icon data-test="lateral_icon" @click="drawer = !drawer"></v-app-bar-nav-icon>
+            <v-app-bar-nav-icon data-test="LateralIcon" @click="drawer = !drawer"></v-app-bar-nav-icon>
             <v-btn :to="{ name: 'home'}"><v-icon icon="mdi-home" dark></v-icon></v-btn>
             <v-btn :to="{ name: 'settings'}" v-if="useStore().logged"><v-icon icon="mdi-wrench" dark></v-icon></v-btn>
             <v-spacer />
             <h1 class="font-weight-black text-no-wrap text-truncate" >{{ $t("Calories Tracker. Another way to manage your diet") }}</h1>
             <v-spacer />
             <BtnSwitchLanguages />
-            <BtnLogIn v-show="!this.useStore().logged"/>
+            <BtnLogIn data-test="LateralLogIn" v-show="!this.useStore().logged"/>
             <BtnLogOut v-show="this.useStore().logged"/>
 
         </v-app-bar>
