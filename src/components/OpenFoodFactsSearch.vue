@@ -4,7 +4,7 @@
         </h1>
         <v-card width="50%" class="d-flex flex-row mx-auto my-5" flat >
                 <v-text-field data-test="OpenFoodFactsSearch_Search" clearable density="default" :disabled="loading" class="mb-3"  v-model="search" prepend-icon="mdi-magnify" :label="$t('Search in Open Food Facts api')" single-line hide-details :placeholder="$t('Add a string to filter table')" @keyup.enter="on_search_change" />
-                <v-btn class="ml-8" color="primary" @click="on_search_change">{{ $t("Search")}}</v-btn>
+                <v-btn data-test="OpenFoodFactsSearch_Button" class="ml-8" color="primary" @click="on_search_change">{{ $t("Search")}}</v-btn>
         </v-card>
         <v-data-table :headers="off_headers" :items="off_items" class="elevation-1 cursorpointer" :items-per-page="100000" :loading="loading" :key="key" @click:row="showOffPage" :sortBy="[{key:'nutriments_number', order:'desc'}]"  fixed-header height="60vh"  >
             <template #item.last_updated_t="{item}">

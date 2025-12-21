@@ -76,4 +76,3 @@ export async function elaboratedproducts_add_from_Products(page, name="My elabor
     return id
 }
 
-

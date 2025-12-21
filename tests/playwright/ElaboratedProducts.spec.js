@@ -58,7 +58,6 @@ test('Elaborated product', async ({ page }) => {
 //     // cy.get('#cmd').click()
 
 
-//     // DELETE TODO
 //   })
 
 
