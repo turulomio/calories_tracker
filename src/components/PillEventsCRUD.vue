@@ -87,7 +87,7 @@
                     })
                 }
                 if (this.mode=="D"){             
-                    var r = confirm(this.$t("Do you want to delete this pill_event?"))
+                    var r = confirm(this.$t("Do you want to delete this pill event?"))
                     if(r == true) {
                         axios.delete(this.new_pe.url, this.myheaders())
                         .then(() => {
