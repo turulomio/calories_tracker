@@ -68,4 +68,5 @@ jobs:
       run: |
         npm run dev &
         sleep 10
+        npx playwright install
         npm run playwright_console
