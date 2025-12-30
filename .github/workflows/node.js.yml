@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "233-github-actions-are-not-working" ]
+    branches: [ "main", "241-fix-actions" ]
   pull_request:
     branches: [ "main" ]
 
@@ -25,20 +25,11 @@ jobs:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.12]
-        node-version: [22.x]
-
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python
       uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
 
     - name: Install PL/Python in the PostgreSQL container (Old migrations)
       run: |
@@ -53,27 +44,22 @@ jobs:
           sleep 2
         done
 
-    - name: Install python3.12 and other packages
+    - name: Install needed packages
       run: |
-        sudo apt-get install python3.12 python3.12-venv exiftool
+        sudo apt-get install exiftool
 
-    - name: Install python dependencies ${{ matrix.python-version }} and launch django_calories_tracker
+    - name: Install python dependencies and launch django_calories_tracker
       run: |
         cd ..
         git clone https://github.com/turulomio/django_calories_tracker
         cd django_calories_tracker
-        sudo python3.12 -m venv .python3.12
-        sudo .python3.12/bin/pip install .
-        sudo .python3.12/bin/python manage.py testserver calories_tracker/fixtures/all.json calories_tracker/fixtures/test_server.json --addrport 8011 &
+        sudo python -m venv .python
+        sudo .python/bin/pip install .
+        sudo .python/bin/python manage.py testserver calories_tracker/fixtures/all.json calories_tracker/fixtures/test_server.json --addrport 8011 &
         sleep 15
-        netstat -nputa
-        ps aux| grep -i test
 
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js
       uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
     - name: CaloriesTracker install and test build
       run: |
         npm install
@@ -82,4 +68,5 @@ jobs:
       run: |
         npm run dev &
         sleep 10
-        npm run cypress_console
+        npx playwright install
+        npm run playwright_console
