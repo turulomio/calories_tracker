@@ -347,6 +347,7 @@ export function pdfmake_array_to_two_columns(arr){
 }
 
 export function pdfmake_array_to_two_columns_table(arr, style){
+    if (arr.length==0)  return []
     var tableBody = [];
 
     // Recorrer el array de textos y agregar cada par de textos como una fila de la tabla

@@ -238,16 +238,16 @@
 
 
                 var options = {
-    year: 'numeric',    // Año numérico (2024)
-    month: 'long',      // Mes largo (enero, febrero, etc.)
-    day: 'numeric',     // Día numérico (1, 2, etc.)
-    hour: 'numeric',    // Hora numérica (0-23)
-    minute: 'numeric',  // Minutos numéricos (0-59)
-    second: 'numeric',  // Segundos numéricos (0-59)
-    hour12: false       // Formato de 24 horas (usar true para formato de 12 horas)
-};
+                    year: 'numeric',    // Año numérico (2024)
+                    month: 'long',      // Mes largo (enero, febrero, etc.)
+                    day: 'numeric',     // Día numérico (1, 2, etc.)
+                    hour: 'numeric',    // Hora numérica (0-23)
+                    minute: 'numeric',  // Minutos numéricos (0-59)
+                    second: 'numeric',  // Segundos numéricos (0-59)
+                    hour12: false       // Formato de 24 horas (usar true para formato de 12 horas)
+                };
 
-// Obtener la fecha y hora localizadas
+                // Obtener la fecha y hora localizadas
                 var longdt= new Date().toLocaleString( localStorage.locale, options);
 
                 const docDefinition = {
@@ -258,17 +258,15 @@
                         keywords: 'recipe',
                     },
                     content: [           
-                        { text: this.new_elaboration.fullname, style: 'header1', alignment:'center' },
+                        { text: this.new_elaboration.fullname, style: 'header1', alignment:'center' },                        { text: (this.new_elaboration.automatic && this.new_elaboration.automatic_adaptation_step!="")? f(this.$t("This is an automatic recipe with this comment: '[0]'"), [this.new_elaboration.automatic_adaptation_step]) : "", style:"subtitle", alignment:"center"},
                         { text: this.$t("Recipe total amount") + ` : ${NutritionalElement.Amount.amount(this.new_elaboration.final_amount)}`, style: "subtitle", alignment:"center"},
-                        { text: longdt, style: "littlesubtitle", alignment:"center"},
-                        { text: (this.new_elaboration.automatic && this.new_elaboration.automatic_adaptation_step!="")? this.$t("<p class='p_print'>This is an automatic recipe with this comment: '[0]'</p>").format(this.new_elaboration.automatic_adaptation_step) : "", style:"body"},
 
+                        { text: longdt, style: "littlesubtitle", alignment:"center"},
                         { text: this.$t('Ingredients'), style: 'header2', alignment:'center' },
                         { table: { widths: ['50%', '50%'], body: pdfmake_array_to_two_columns_table(ingredients, "mention_ingredients")}}, 
                         { text: this.$t('Containers'), style: 'header2', alignment:'center' },
                         { ul : containers, style: "mention_containers"},
-                        { text: this.$t('Recipe'), style: 'header2', alignment:'center' },
-                        htmlToPdfmake(this.$refs.tiptap.editor.getHTML()),
+                        { text: this.$t('Recipe'), style: 'header2', alignment:'center' }, htmlToPdfmake(this.$refs.tiptap.editor.getHTML()),
                         { text: this.$t("Nutritional information for each 100 g"), style: 'header2', alignment:'center' },
                         { table: { widths: ['50%', '50%'], body: pdfmake_array_to_two_columns_table(ni, "tablecell")}, alignment:'center', margin:[150,0, 150,0]},
                     ],
@@ -326,4 +324,3 @@
         }
     }
 </script>
-
