@@ -44,9 +44,9 @@ jobs:
           sleep 2
         done
 
-    - name: Install python3.12 and other packages
+    - name: Install needed packages
       run: |
-        sudo apt-get install python3.12 python3.12-venv exiftool
+        sudo apt-get install exiftool
 
     - name: Install python dependencies and launch django_calories_tracker
       run: |
@@ -68,4 +68,4 @@ jobs:
       run: |
         npm run dev &
         sleep 10
-        npm run cypress_console
+        npm run playwright_console
