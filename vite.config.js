@@ -22,6 +22,7 @@ export default defineConfig({
     }),
     // This is the fix: add vite-plugin-istanbul to the plugins array
     istanbul({
+      requireEnv: false,
       include: 'src/**/*',
       exclude: ['node_modules', 'tests/', 'test/'],
       extension: ['.js', '.ts', '.vue'],
