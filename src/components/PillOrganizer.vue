@@ -205,6 +205,20 @@
                                     this.dialog_pill_events_crud=true
                                 }.bind(this),
                             },
+                            {
+                                name: this.$t("Copy last week"),
+                                icon: "mdi-content-copy",
+                                code: function(){
+                                    if (confirm(this.$t("Are you sure you want to copy last week events?"))) {
+                                        axios.post(`${this.useStore().apiroot}/api/pill_events/copy_last_week/`, {dt_from: this.focus},  this.myheaders())
+                                            .then(() => {
+                                                this.update_pill_events()
+                                            }, (error) => {
+                                                this.parseResponseError(error)
+                                            })
+                                    }
+                                }.bind(this),
+                            },
                         ]
                     },
                 ]
@@ -258,6 +272,7 @@
                 this.pill_event.dt=new Date(object.year, object.month-1, object.day, 0,0,0)
                 this.key=this.key+1
                 this.dialog_pill_events_crud=true
+                
             },
             on_PillEventsCRUD_cruded(){
                 this.dialog_pill_events_crud=false

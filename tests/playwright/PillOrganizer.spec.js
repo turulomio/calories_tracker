@@ -1,5 +1,5 @@
 import { test, expect } from './fixtures.js';
-import {mymenuinline_selection, v_text_input_settext} from './reusing/playwright_vuetify.js';
+import {mymenuinline_selection, v_text_input_settext, expect_native_confirm_and_accept_it} from './reusing/playwright_vuetify.js';
 
 test('Pill organizer', async ({ page }) => {
 
@@ -26,5 +26,12 @@ test('Pill organizer', async ({ page }) => {
     await v_text_input_settext(page,"PillEventsCRUD_Number", "3")
     await page.getByTestId('PillEventsCRUD_Button').click()
     await expect(page.getByTestId('PillEventsCRUD_Button')).toBeHidden()
+
+    // Copy last week
+    const responsePromise = page.waitForResponse(response => response.url().includes('/api/pill_events/copy_last_week/') && response.status() === 200);
+    await expect_native_confirm_and_accept_it(page)
+    await mymenuinline_selection(page,"PillOrganizer_MyMenuInline", 0, 3)
+    await responsePromise
+    await page.waitForResponse(response => response.url().includes('/api/pill_events/') && response.status() === 200);
 
 });
