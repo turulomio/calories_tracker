@@ -1,0 +1,16 @@
+{
+  "all": true,
+  "include": [
+    "src/**"
+  ],
+  "extension": [
+    ".js",
+    ".vue"
+  ],
+  "exclude": [
+    "**/*.spec.js",
+    "**/*.test.js",
+    "tests/**",
+    "src/scripts/*"
+  ]
+}
