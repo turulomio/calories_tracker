@@ -42,23 +42,23 @@
 <!--                     ADMINISTRATION -->                    
                     <v-list-group value="Administration"  v-if="useStore().logged">
                         <template v-slot:activator="{ props }">
-                            <v-list-item v-bind="props" prepend-icon="mdi-cogs" :title="$t('Administration')"></v-list-item>
+                            <v-list-item data-test="LateralAdministration" v-bind="props" prepend-icon="mdi-cogs" :title="$t('Administration')"></v-list-item>
                         </template>
 
-                        <v-list-item link router :to="{ name: 'catalog_tables'}" v-if="useStore().catalog_manager">
+                        <v-list-item data-test="LateralCatalogTables" link router :to="{ name: 'catalog_tables'}" v-if="useStore().catalog_manager">
                             <v-list-item-title>{{ $t("Catalog tables") }}</v-list-item-title>
                         </v-list-item>
-                        <v-list-item link router :to="{ name: 'products_datatransfer'}">
+                        <v-list-item data-test="LateralProductsDataTransfer" link router :to="{ name: 'products_datatransfer'}">
                             <v-list-item-title>{{ $t("Products data transfer") }}</v-list-item-title>
                         </v-list-item>
                     </v-list-group>    
 <!--                     HELP -->
                     <v-list-group value="Help" >
                         <template v-slot:activator="{ props }">
-                            <v-list-item v-bind="props" prepend-icon="mdi-lifebuoy" :title="$t('Help')"></v-list-item>
+                            <v-list-item data-test="LateralHelp" v-bind="props" prepend-icon="mdi-lifebuoy" :title="$t('Help')"></v-list-item>
                         </template>
-                        <v-list-item link router :to="{ name: 'about'}" :title="$t('About')" />
-                        <v-list-item  v-if="useStore().logged" link router :to="{ name: 'statistics'}" :title="$t('Statistics')" />
+                        <v-list-item data-test="LateralAbout" link router :to="{ name: 'about'}" :title="$t('About')" />
+                        <v-list-item data-test="LateralStatistics" v-if="useStore().logged" link router :to="{ name: 'statistics'}" :title="$t('Statistics')" />
                         <v-list-item  href="https://github.com/turulomio/calories_tracker/" target="_blank" :title="$t('Calories Tracker Github')" />
                         <v-list-item  href="https://github.com/turulomio/django_calories_tracker/" target="_blank" :title="$t('Django Calories Tracker Github')" />
                     </v-list-group>

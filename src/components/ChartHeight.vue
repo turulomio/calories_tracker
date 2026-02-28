@@ -3,7 +3,7 @@
     <div ref="chart_div" :style="{ width: '100%', height: `${height}px` }"></div>
 </template>
 <script setup>
-    import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
+    import { ref, computed, watch, onMounted, onBeforeUnmount, shallowRef } from 'vue';
     import * as echarts from 'echarts';
     import { useI18n } from 'vue-i18n';
 
@@ -21,7 +21,7 @@
     });
 
     const chart_div = ref(null);
-    const chart = ref(null);
+    const chart = shallowRef(null);
 
     const chartSeries = computed(() => [{
         type: 'line',
@@ -38,6 +38,7 @@
         },
         tooltip: {
             trigger: 'axis',
+            confine: true,
             axisPointer: {
                 animation: false,
                 type: 'cross',
@@ -88,22 +89,22 @@
         }
     }, { deep: true });
 
-    const resizeChart = () => {
-        if (chart.value) {
-            chart.value.resize();
-        }
-    };
+    let resizeObserver = null;
 
     onMounted(() => {
         if (chart_div.value) {
             chart.value = echarts.init(chart_div.value);
             chart.value.setOption(chartOption.value);
-            window.addEventListener('resize', resizeChart);
+
+            resizeObserver = new ResizeObserver(() => {
+                chart.value.resize();
+            });
+            resizeObserver.observe(chart_div.value);
         }
     });
 
     onBeforeUnmount(() => {
-        window.removeEventListener('resize', resizeChart);
+        if (resizeObserver) resizeObserver.disconnect();
         if (chart.value) {
             chart.value.dispose();
             chart.value = null;
