@@ -179,20 +179,12 @@
                     elaborations: this.elaboration.url,
                     text: this.editor.getHTML()
                 }
+                axios.post(`${this.elaboration.url}set_elaboration_text/`, elaboration_text,  this.myheaders())
+                .then(() => {
+                }, (error) => {
+                    this.parseResponseError(error)
+                })
 
-                if (this.elaboration.elaborations_texts==null){
-                    axios.post(`${this.useStore().apiroot}/api/elaborations_texts/`, elaboration_text,  this.myheaders())
-                    .then(() => {
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    })
-                } else {
-                    axios.put(this.elaboration.elaborations_texts.url, elaboration_text,  this.myheaders())
-                    .then(() => {
-                    }, (error) => {
-                        this.parseResponseError(error)
-                    })
-                }
             },
             suggestion_ingredients(){
               return {
