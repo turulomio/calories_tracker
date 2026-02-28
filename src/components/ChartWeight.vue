@@ -3,7 +3,7 @@
     <div ref="chart_div" :style="{ width: '100%', height: `${height}px` }"></div>
 </template>
 <script setup>
-    import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
+    import { ref, computed, watch, onMounted, onBeforeUnmount, shallowRef } from 'vue';
     import * as echarts from 'echarts';
     import { useI18n } from 'vue-i18n';
 
@@ -21,23 +21,60 @@
     });
 
     const chart_div = ref(null);
-    const chart = ref(null);
+    const chart = shallowRef(null);
+
+    const sma10 = computed(() => {
+        const d = props.data;
+        if (d.length < 10) return [];
+        let r = [];
+        for (let i = 9; i < d.length; i++) {
+            let sum = 0;
+            for (let j = 0; j < 10; j++) {
+                sum += d[i - j][1];
+            }
+            r.push([d[i][0], sum / 10]);
+        }
+        return r;
+    });
+
+    const median = computed(() => {
+        if (props.data.length === 0) return 0;
+        let values = props.data.map(x => x[1]).sort((a, b) => a - b);
+        let half = Math.floor(values.length / 2);
+        if (values.length % 2)
+            return values[half];
+        return (values[half - 1] + values[half]) / 2.0;
+    });
 
     const chartSeries = computed(() => [{
         type: 'line',
         name: t("Weight evolution"),
         data: props.data,
         showSymbol: false,
+    }, {
+        type: 'line',
+        name: t("SMA 10"),
+        data: sma10.value,
+        showSymbol: false,
+        smooth: true,
+        lineStyle: { width: 1 }
+    }, {
+        type: 'line',
+        name: t("Median"),
+        data: props.data.map(x => [x[0], median.value]),
+        showSymbol: false,
+        lineStyle: { type: 'dashed', width: 1 }
     }]);
 
     const chartOption = computed(() => ({
         legend: {
             top: 'top',
-            data: [t("Weight evolution")],
+            data: [t("Weight evolution"), t("SMA 10"), t("Median")],
             inactiveColor: '#777',
         },
         tooltip: {
             trigger: 'axis',
+            confine: true,
             axisPointer: {
                 animation: false,
                 type: 'cross',
@@ -88,22 +125,22 @@
         }
     }, { deep: true });
 
-    const resizeChart = () => {
-        if (chart.value) {
-            chart.value.resize();
-        }
-    };
+    let resizeObserver = null;
 
     onMounted(() => {
         if (chart_div.value) {
             chart.value = echarts.init(chart_div.value);
             chart.value.setOption(chartOption.value);
-            window.addEventListener('resize', resizeChart);
+
+            resizeObserver = new ResizeObserver(() => {
+                chart.value.resize();
+            });
+            resizeObserver.observe(chart_div.value);
         }
     });
 
     onBeforeUnmount(() => {
-        window.removeEventListener('resize', resizeChart);
+        if (resizeObserver) resizeObserver.disconnect();
         if (chart.value) {
             chart.value.dispose();
             chart.value = null;
