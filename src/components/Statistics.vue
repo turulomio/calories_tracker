@@ -2,7 +2,7 @@
     <div v-show="this.useStore().logged">
             <h1>{{ $t("Statistics") }}</h1>
             <p class="ma-4 text-center">{{ $t("Here you can see the distribution of the registers in the application") }}</p>
-            <div ref="chart_div" style="width: 100%; height: 600px;"></div>
+            <div ref="chart_div" data-test="Statistics_Chart" style="width: 100%; height: 600px;"></div>
     </div>
 </template>
 
