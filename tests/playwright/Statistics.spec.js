@@ -3,6 +3,7 @@ import { test, expect } from './fixtures.js';
 test('Statistics', async ({ page }) => {
 
     await page.getByTestId('LateralIcon').click();
+    await page.getByTestId('LateralHelp').click();
     await page.getByTestId('LateralStatistics').click();
 
     await expect(page.getByRole('heading', { name: 'Statistics' })).toBeVisible();
