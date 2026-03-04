@@ -8,7 +8,7 @@
         </template>          -->
         <template v-slot:selection="{ props, item }">
             <v-list-item v-bind="props">
-                <span v-html="additives_html_fullname(item.raw)"></span>
+                <span v-html="additives_html_fullname(item)"></span>
             </v-list-item>
         </template> 
     </v-autocomplete>
