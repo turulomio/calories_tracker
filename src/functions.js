@@ -15,7 +15,7 @@ export function product_risk_color(additive_risks_url){
 // type: 1:openfoodfacts, 2:product, 3:elaborated products, 4: meals (item is product_url), 5: system_product english
 export function products_html_fullname(item,type_){
     if (type_==4) {
-        item=this.useStore().products.get(item)
+        item=useStore().products.get(item)
         type_=2
     }
     let additive_risks_object=getMapObjectById("additive_risks", item.additives_risk)
