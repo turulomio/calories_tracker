@@ -12,11 +12,16 @@
                     class="ml-4"
                 ></v-switch>
 
-                <AutocompleteProducts class="mx-5" :items="getArrayFromMap(useStore().products)" multiple v-model="selected_products" :rules="RulesSelection(true)"/>
+                <AutocompleteProducts 
+                    class="mx-5" 
+                    multiple 
+                    v-model="selected_products" 
+                    :rules="rules"
+                />
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary" type="submit">{{ $t("Accept") }}</v-btn>
+                    <v-btn color="primary" type="submit">{{ t("Accept") }}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-form>
@@ -27,15 +32,19 @@ import { ref, computed } from 'vue'
 import AutocompleteProducts from './AutocompleteProducts.vue'
 import { useStore } from '@/store.js'
 import { useI18n } from 'vue-i18n';
-import { RulesSelection } from 'vuetify_rules';
 
 const { t } = useI18n();
+const store = useStore()
 
 const emit = defineEmits(['selected'])
 
 const form = ref(null)
 const selected_products = ref([])
 const all_products = ref(true)
+
+const rules = [
+    v => (v.length > 0) || t('Select at least one ingredient')
+]
 
 const checkbox_label = computed(() => {
     return all_products.value
