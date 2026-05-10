@@ -1,5 +1,15 @@
 <template>
-    <v-autocomplete :readonly="readonly" :items="new_products" v-model="new_value" :label="mylabel"  item-title="fullname" :return-object="returnObject" :item-value="(multiple)? 'id': 'url'" :multiple="multiple">
+    <v-autocomplete
+      v-bind="$attrs"
+      :readonly="readonly"
+      :items="new_products"
+      v-model="new_value"
+      :label="mylabel"
+      item-title="fullname"
+      :return-object="returnObject"
+      :item-value="(multiple)? 'id': 'url'"
+      :multiple="multiple"
+    >
       <template v-slot:item="{ props, item }">
             <v-list-item v-bind="props" title=""><div v-html="products_html_fullname(item,2)"></div></v-list-item>
         </template>         
