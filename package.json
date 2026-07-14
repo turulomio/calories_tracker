@@ -49,7 +49,7 @@
     "npm-check-updates": "^22.1.1",
     "nyc": "^18.0.0",
     "playwright": "^1.59.1",
-    "vite": "^8.0.11",
+    "vite": "^8.1.4",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-istanbul": "^8.0.0",
     "vite-plugin-vue-devtools": "^8.1.2",
