@@ -32,8 +32,9 @@ const test = baseTest.extend({
     await page.getByTestId('BtnLogIn_User').getByRole('textbox').fill("test");
     await page.getByTestId('BtnLogIn_Password').getByRole('textbox').fill("test");
     await page.getByTestId('BtnLogIn_cmd').click();
-    await expect(page).toHaveURL('http://127.0.0.1:8012/calories_tracker/about/');
-    await expect(page.getByTestId('LateralIcon')).toBeVisible()
+    await expect(page).toHaveURL(/.*\/calories_tracker\/home\/?$/);
+    await expect(page.getByTestId('BtnLogIn_cmd')).toBeHidden();
+    await expect(page.getByTestId('LateralIcon')).toBeVisible();
     await use(page);
   },
 });
