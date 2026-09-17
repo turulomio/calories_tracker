@@ -14,11 +14,11 @@ test('Elaborated product', async ({ page }) => {
     await page.getByTestId('LateralProducts').click();
     
     // Create product
-    var products_id=await products_add_from_Products(page)
+    var product=await products_add_from_Products(page)
 
     // Move to elaborated product
     await page.getByTestId('Products_TabElaboratedProducts').click()
-    var elaboratedproducts_id=await elaboratedproducts_add_from_Products(page)
+    var elaboratedproduct=await elaboratedproducts_add_from_Products(page)
 
 
 

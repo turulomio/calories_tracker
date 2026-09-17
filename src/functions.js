@@ -130,7 +130,7 @@ export function parseResponseError(error){
                 alert (this.$t("You aren't authorized to do this request"))
                 this.useStore().token=null;
                 this.useStore().logged=false;
-                if (this.$router.currentRoute.name != "about") this.$router.push("about")
+                if (this.$router.currentRoute.value?.name != "about") this.$router.push({ name: 'about' })
                 console.log(error.response)
             }
         } else if (error.response.status == 400){ // Used for developer or app errors
@@ -140,7 +140,7 @@ export function parseResponseError(error){
             alert (this.$t("You've done something forbidden"))
             this.useStore().token=null;
             this.useStore().logged=false;
-            if (this.$router.currentRoute.name != "about") this.$router.push("about")
+            if (this.$router.currentRoute.value?.name != "about") this.$router.push({ name: 'about' })
             console.log(error.response)
         } else if (error.response.status == 500){
             alert (this.$t("There is a server error"))

@@ -45,10 +45,10 @@ async function saveCoverage(coverageData, testTitle) {
   const coverageDir = '.nyc_output';
   const sanitizedTitle = testTitle.replace(/[^a-z0-9]/gi, '-').toLowerCase();
   const filePath = path.join(coverageDir, `coverage-${sanitizedTitle}-${Date.now()}.json`);
-  
+
   await fs.mkdir(coverageDir, { recursive: true });
   await fs.writeFile(filePath, JSON.stringify(coverageData));
   console.log(`Coverage data saved to: ${filePath}`);
 }
 
-export {test, expect }; // Re-export expect for convenience
+export { test, expect }; // Re-export expect for convenience

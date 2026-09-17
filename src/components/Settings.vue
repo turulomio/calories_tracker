@@ -53,7 +53,7 @@
                     this.useStore().settings=response.data
                     alert(this.$t("Settings saved"))
 
-                    this.$router.push("home")
+                    this.$router.push({ name: 'home' })
                 }, (error) => {
                     this.parseResponseError(error)
                 });

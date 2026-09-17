@@ -10,16 +10,16 @@ test('Products', async ({ page }) => {
     await page.getByTestId('LateralIcon').click();
     await page.getByTestId('LateralProducts').click();
 
-    var products_id=await products_add_from_Products(page)
+    var product=await products_add_from_Products(page)
 
     // Update Products
-    await page.getByTestId(`Products_Table_IconEdit${products_id}`).click()
+    await page.getByTestId(`Products_Table_IconEdit${product.id}`).click()
     await v_text_input_settext(page,"ProductsCRUD_Name", "My product updated")
     await page.getByTestId('ProductsCRUD_ButtonAdd').click()
     await expect(page.getByTestId('ProductsCRUD_ButtonAdd')).toBeHidden()
 
     // Delete Products
-    await page.getByTestId(`Products_Table_IconDelete${products_id}`).click()
+    await page.getByTestId(`Products_Table_IconDelete${product.id}`).click()
     await expect_native_confirm_and_accept_it(page)
     await page.getByTestId('ProductsCRUD_ButtonAdd').click()
     await expect(page.getByTestId('ProductsCRUD_ButtonAdd')).toBeHidden()

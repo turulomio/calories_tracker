@@ -13,17 +13,17 @@ test('Biometrics', async ({ page }) => {
     await page.getByTestId('Biometrics_TabWeight').click()
     await page.getByTestId('Biometrics_TabRegisters').click()
 
-    var biometrics_id=await biometrics_add_from_Biometrics(page)
+    var biometrics=await biometrics_add_from_Biometrics(page)
 
 
     // Update biometrics
-    await page.getByTestId(`Biometrics_Table_IconEdit${biometrics_id}`).click()
+    await page.getByTestId(`Biometrics_Table_IconEdit${biometrics.id}`).click()
     await v_text_input_settext(page,"BiometricsCRUD_Height", "181")
     await page.getByTestId('BiometricsCRUD_Button').click()
     await expect(page.getByTestId('BiometricsCRUD_Button')).toBeHidden()
 
     // Delete biometrics
-    await page.getByTestId(`Biometrics_Table_IconDelete${biometrics_id}`).click()
+    await page.getByTestId(`Biometrics_Table_IconDelete${biometrics.id}`).click()
     await expect_native_confirm_and_accept_it(page)
     await page.getByTestId('BiometricsCRUD_Button').click()
     await expect(page.getByTestId('BiometricsCRUD_Button')).toBeHidden()

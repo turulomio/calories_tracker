@@ -74,8 +74,18 @@
             <h1 class="font-weight-black text-no-wrap text-truncate" >{{ $t("Calories Tracker. Another way to manage your diet") }}</h1>
             <v-spacer />
             <BtnSwitchLanguages />
-            <BtnLogIn data-test="LateralLogIn" v-show="!this.useStore().logged"/>
-            <BtnLogOut v-show="this.useStore().logged"/>
+            <BtnLogIn
+                data-test="LateralLogIn"
+                v-show="!this.useStore().logged"
+                :login-url="`${useStore().apiroot}/login/`"
+                :next-route="{ name: 'home' }"
+                @logged-in="onLoggedIn"
+            />
+            <BtnLogOut
+                v-show="this.useStore().logged"
+                :next-route="{ name: 'home' }"
+                @logged-out="onLoggedOut"
+            />
 
         </v-app-bar>
         <v-main>   
@@ -106,6 +116,13 @@ export default {
     },
     methods:{
         useStore,
+        async onLoggedIn(token) {
+            this.useStore().setToken(token);
+            await this.useStore().updateAll();
+        },
+        onLoggedOut() {
+            this.useStore().setToken(null);
+        },
     },
     created(){
     }
