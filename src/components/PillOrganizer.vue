@@ -53,7 +53,7 @@
 
 <script>
     import axios from 'axios'
-    import {my_round, localtime} from 'vuetify_rules'
+    import {round, localtime} from 'vuetify_rules'
     import { empty_pill_event_each_day, empty_pill_event_each_n_hours, empty_pill_event } from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import PillEventsCRUD from './PillEventsCRUD.vue'
@@ -99,7 +99,7 @@
             empty_pill_event_each_day,
             empty_pill_event_each_n_hours,
             localtime,
-            my_round,
+            round,
             useStore,
             setToday () {
                 this.focus = new Date().toISOString().slice(0,10)

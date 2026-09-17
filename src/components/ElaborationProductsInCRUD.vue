@@ -29,7 +29,7 @@
     import axios from 'axios'
     import Multiplier from './Multiplier.vue'
     import AutocompleteProducts from './AutocompleteProducts.vue'
-    import {my_round,RulesSelection,RulesInteger,RulesString,RulesFloatGEZ} from 'vuetify_rules'
+    import {round,RulesSelection,RulesInteger,RulesString,RulesFloatGEZ} from 'vuetify_rules'
     import { useStore } from '@/store.js'
     export default {
         components: {
@@ -73,7 +73,7 @@
             },
         },
         methods: {
-            my_round,
+            round,
             RulesSelection,
             RulesString,
             RulesInteger,
@@ -123,7 +123,7 @@
                 }
             },
             calculate_format_multiplier(){
-                if (this.product_format) this.new_product_in.amount=this.my_round(this.multiplier*this.product_format,3)
+                if (this.product_format) this.new_product_in.amount=this.round(this.multiplier*this.product_format,3)
             }
         },
         created(){

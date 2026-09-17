@@ -1,5 +1,5 @@
 import { useStore } from '@/store.js'
-import {my_round} from 'vuetify_rules'
+import {round} from 'vuetify_rules'
 
 // item is an additive_risks url
 export function product_risk_color(additive_risks_url){
@@ -130,7 +130,7 @@ export function parseResponseError(error){
                 alert (this.$t("You aren't authorized to do this request"))
                 this.useStore().token=null;
                 this.useStore().logged=false;
-                if (this.$router.currentRoute.name != "about") this.$router.push("about")
+                if (this.$router.currentRoute.value?.name != "about") this.$router.push({ name: 'about' })
                 console.log(error.response)
             }
         } else if (error.response.status == 400){ // Used for developer or app errors
@@ -140,7 +140,7 @@ export function parseResponseError(error){
             alert (this.$t("You've done something forbidden"))
             this.useStore().token=null;
             this.useStore().logged=false;
-            if (this.$router.currentRoute.name != "about") this.$router.push("about")
+            if (this.$router.currentRoute.value?.name != "about") this.$router.push({ name: 'about' })
             console.log(error.response)
         } else if (error.response.status == 500){
             alert (this.$t("There is a server error"))
@@ -232,7 +232,7 @@ export function sortObjectsArray(objectsArray, sortKey)
 
 export function percentage_generic_string(num, locale, decimals=2){
     if (num==null) return "- - - %"
-    return `${my_round(num*100,decimals).toLocaleString(locale,{ minimumFractionDigits: decimals,  })} %`
+    return `${round(num*100,decimals).toLocaleString(locale,{ minimumFractionDigits: decimals,  })} %`
 }
 
 export function percentage_generic_html(num, locale, decimals=2){

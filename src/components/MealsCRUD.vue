@@ -23,7 +23,7 @@
     import MyDateTimePicker from './reusing/MyDateTimePicker.vue'
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import Multiplier from './Multiplier.vue'
-    import {my_round,RulesSelection,RulesFloatGEZ} from 'vuetify_rules'
+    import {round,RulesSelection,RulesFloatGEZ} from 'vuetify_rules'
     import { useStore } from '@/store.js'
     export default {
         components: {
@@ -65,7 +65,7 @@
             },
         },
         methods: {
-            my_round,
+            round,
             RulesFloatGEZ,
             RulesSelection,
         useStore,
@@ -114,7 +114,7 @@
                 }
             },
             calculate_amount(){
-                if (this.product_format) this.newmeal.amount=this.my_round(this.multiplier*this.product_format,3)
+                if (this.product_format) this.newmeal.amount=this.round(this.multiplier*this.product_format,3)
             },
             update_formats(){
                 if (this.newmeal.products==null) return

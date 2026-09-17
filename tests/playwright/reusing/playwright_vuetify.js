@@ -11,7 +11,7 @@ export async function v_autocomplete_selection_with_role_option(page, testId, op
   await autocomplete.locator('input[type="text"]').fill(optionText);
 
   // 3. Wait for the desired option to appear in the dropdown and click it.
-  const option = page.getByRole('option', { name: optionText, exact: false,  });
+  const option = page.getByRole('option', { name: optionText, exact: false, });
   if (first) await option.first().click();
   else await option.last().click();
 }
@@ -32,24 +32,23 @@ export async function v_autocomplete_selection_with_role_listbox(page, testId, o
 }
 
 
-export async function v_text_input_settext(page, name, text){
-  const v_text_input=page.getByTestId(name)
+export async function v_text_input_settext(page, name, text) {
+  const v_text_input = page.getByTestId(name)
   await v_text_input.click()
-  await v_text_input.getByRole("textbox").fill(text);
+  await v_text_input.locator('input, textarea').fill(text);
 }
-  
-// This helper waits for a POST request to a given URL and returns the 'id' from the JSON response.
-export async function promise_to_get_id_from_post_response(page, url) {
+
+// This helper waits for a request to a given URL and returns the JSON response.
+export async function promise_to_get_response(page, url, method) {
   const responsePromise = page.waitForResponse(
-    response => response.url().includes(url) && response.request().method() === 'POST'
+    response => response.url().includes(url) && response.request().method() === method
   );
   const response = await responsePromise;
   const responseBody = await response.json();
-  expect(responseBody).toHaveProperty('id');
-  return responseBody.id;
+  return responseBody;
 }
 
-export async function mymenuinline_selection(page, name,header,item){
+export async function mymenuinline_selection(page, name, header, item) {
   await expect(page.getByTestId(`${name}_Button`)).toBeVisible()
   await expect(page.getByTestId(`${name}_Button`)).toBeEnabled()
   await page.getByTestId(`${name}_Button`).click();
@@ -57,40 +56,23 @@ export async function mymenuinline_selection(page, name,header,item){
   await page.getByTestId(`${name}_Header${header}_Item${item}`).click();
 }
 
-export async function expect_native_alert_and_accept_it(page){
-  /**
-   * Must be before action raises it
-   * Value is a string
-   */
-  page.once('dialog', dialog => { 
-    dialog.accept();
-    console.log(`Dialog message: ${dialog.message()} accepted`)
-  });
+export async function expect_alert_and_accept_it(page) {
+  await expect(page.getByTestId("MessageBox_Close")).toBeVisible();
+  await page.getByTestId("MessageBox_Close").click();
 }
 
-export async function expect_native_confirm_and_accept_it(page){
-  /**
-   * Must be before action raises it
-   */
-      page.once('dialog', dialog => { 
-        // console.log(dialog.message())
-        dialog.accept()
-        console.log(`Dialog message: ${dialog.message()} accepted`)
-    })
+export async function expect_confirm_and_accept_it(page) {
+  await expect(page.getByTestId("ConfirmBox_Confirm")).toBeVisible();
+  await page.getByTestId("ConfirmBox_Confirm").click();
 }
 
-export async function expect_native_prompt_and_set_value(page, value){
-  /**
-   * Must be before action raises it
-   * Value is a string
-   */
-  page.once('dialog', dialog => { 
-    dialog.accept(value);
-    console.log(`Dialog message: ${dialog.message()}. Set value: ${value}`)
-  });
+export async function expect_prompt_and_set_value(page, value) {
+  await expect(page.getByTestId("InputBox_TextField")).toBeVisible();
+  await v_text_input_settext(page, "InputBox_TextField", value.toString());
+  await page.getByTestId("InputBox_Submit").click();
 }
 
-export async function click_outside_dialog(page, name){
-  await page.locator('.v-overlay__scrim').last().click({ force: true, position: { x: 0, y: 0}});
+export async function click_outside_dialog(page, name) {
+  await page.locator('.v-overlay__scrim').last().click({ force: true, position: { x: 0, y: 0 } });
   await expect(page.getByTestId(name)).toBeHidden()
 }

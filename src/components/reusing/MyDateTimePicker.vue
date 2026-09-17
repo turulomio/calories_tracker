@@ -38,9 +38,8 @@
     </div>
 </template>
 <script>
-    import { localtime } from 'vuetify_rules'
+    import { localtime, RulesInteger } from 'vuetify_rules'
     import moment from 'moment'
-    import { RulesInteger } from 'vuetify_rules/src/rules'
     export default {    
         name: "MyDateTimePicker",
         props: {
@@ -49,13 +48,11 @@
             },
             readonly: {
                 required: false,
-                default: false,
-            },
+                default: false},
             clearable: { //Hides null icon
                 type: Boolean,
                 required: false,
-                default: false,
-            },
+                default: false},
             dataTest: {
                 type: String,
                 default: 'MyDateTimePicker'
@@ -72,9 +69,14 @@
                 minutes:null,
                 seconds:null,
                 microseconds:null,
-            }
+                timezone: null}
         },
         watch: {
+            modelValue (newValue) {
+                this.new_modelValue = newValue
+                this.string2widget(newValue)
+                this.set_representation()
+            },
             new_modelValue (newValue) { //Null or iso string
                 this.set_representation()
                 this.$emit('update:modelValue', newValue)
@@ -93,8 +95,7 @@
             },
             microseconds(){
                 this.new_modelValue=this.widget2string()
-            },
-        },
+            }},
         computed: {
             label(){
                 if (this.$attrs.label){
@@ -144,10 +145,9 @@
         },
         created(){
             if(this.clearable==false && this.modelValue==null) this.on_click_prepend_icon()
-            this.timezone=moment.tz.guess()
+            this.timezone = (typeof moment !== 'undefined' && moment.tz && moment.tz.guess) ? moment.tz.guess() : Intl.DateTimeFormat().resolvedOptions().timeZone
             this.string2widget(this.modelValue)
             this.new_modelValue=this.modelValue
             
-        },
-    }
+        }}
 </script>

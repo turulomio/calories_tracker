@@ -1,5 +1,6 @@
 import { test, expect } from './fixtures.js';
-import {v_text_input_settext, expect_native_confirm_and_accept_it} from './reusing/playwright_vuetify.js';
+import {v_text_input_settext} from './reusing/playwright_vuetify.js';
+import {expect_native_confirm_and_accept_it} from './native_dialogs.js';
 import {
     elaboratedproducts_add_from_Products,
     products_add_from_Products
@@ -13,11 +14,11 @@ test('Elaborated product', async ({ page }) => {
     await page.getByTestId('LateralProducts').click();
     
     // Create product
-    var products_id=await products_add_from_Products(page)
+    var product=await products_add_from_Products(page)
 
     // Move to elaborated product
     await page.getByTestId('Products_TabElaboratedProducts').click()
-    var elaboratedproducts_id=await elaboratedproducts_add_from_Products(page)
+    var elaboratedproduct=await elaboratedproducts_add_from_Products(page)
 
 
 

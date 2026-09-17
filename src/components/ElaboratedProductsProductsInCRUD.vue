@@ -21,7 +21,7 @@
 <script>
     import AutocompleteProducts from './AutocompleteProducts.vue'
     import Multiplier from './Multiplier.vue'
-    import {my_round,RulesFloatGEZ,RulesSelection} from 'vuetify_rules'
+    import {round,RulesFloatGEZ,RulesSelection} from 'vuetify_rules'
     import { useStore } from '@/store.js'
     export default {
         components: {
@@ -64,7 +64,7 @@
             useStore,
             RulesFloatGEZ,
             RulesSelection,
-            my_round,
+            round,
             button(){
                 if (this.mode=="C") return this.$t('Add')
                 if (this.mode=="U") return this.$t('Update')
@@ -93,7 +93,7 @@
                 });
             },
             calculate_amount(){
-                if (this.product_format) this.newproduct_in.amount=this.my_round(this.multiplier*this.product_format,3)
+                if (this.product_format) this.newproduct_in.amount=this.round(this.multiplier*this.product_format,3)
             }
         },
         created(){
