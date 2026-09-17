@@ -1,5 +1,6 @@
 import { test, expect } from './fixtures.js';
-import {v_text_input_settext, expect_native_confirm_and_accept_it} from './reusing/playwright_vuetify.js';
+import {v_text_input_settext} from './reusing/playwright_vuetify.js';
+import {expect_native_confirm_and_accept_it} from './native_dialogs.js';
 import {companies_add_from_Companies} from './commons.js';
 
 

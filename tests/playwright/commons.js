@@ -3,9 +3,15 @@ import { expect } from './fixtures.js';
 import {
   mymenuinline_selection, 
   v_text_input_settext, 
-  promise_to_get_id_from_post_response,
+  promise_to_get_response,
   v_autocomplete_selection_with_role_option
 } from './reusing/playwright_vuetify.js';
+
+export async function promise_to_get_id_from_post_response(page, url) {
+  const responseBody = await promise_to_get_response(page, url, 'POST');
+  expect(responseBody).toHaveProperty('id');
+  return responseBody.id;
+}
 
 export async function biometrics_add_from_Biometrics(page){
     await mymenuinline_selection(page,"Biometrics_MyMenuInline", 0, 0)
