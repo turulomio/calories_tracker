@@ -31,12 +31,15 @@ export const useStore = defineStore('global', {
   },
 
   actions: {
-    setToken(token){
+    async setToken(token){
       this.token=token
       if (this.token){
         this.logged=true
+        await this.updateAll()
       } else {
         this.logged=false
+        this.catalog_manager = false
+        this.settings = null
       }
     },
     updateCatalogManager(){

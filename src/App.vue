@@ -119,8 +119,7 @@ export default {
     methods:{
         useStore,
         async onLoggedIn(token) {
-            this.useStore().setToken(token);
-            await this.useStore().updateAll();
+            await this.useStore().setToken(token);
         },
         onLoggedOut() {
             this.useStore().setToken(null);

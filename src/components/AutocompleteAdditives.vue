@@ -1,5 +1,5 @@
 <template>
-    <v-autocomplete :readonly="readonly" :items="new_additives" v-model="new_value" multiple :label="mylabel" :return-object="returnObject" item-title="fullname" item-value="url" :rules="RulesSelection(true)">
+    <v-autocomplete :readonly="readonly" :items="new_additives" v-model="new_value" multiple :label="mylabel" :return-object="returnObject" item-title="fullname" item-value="url" :rules="RulesSelection(required)">
         <!-- <template v-slot:item="{ props, item }">
  
             <v-list-item  v-bind="props">
@@ -24,6 +24,11 @@ export default {
     props:{
         modelValue: { 
             required: true,
+        },
+        required: {
+            type: Boolean,
+            required: false,
+            default: false
         },
         returnObject:{
             type: Boolean,
@@ -70,7 +75,7 @@ export default {
     created(){
         this.new_value=this.modelValue
         if (this.additives.length==0){//Default value
-            this.new_additives=this.getArrayFromMap(this.useStore().additives)
+            this.new_additives=Array.from(this.useStore().additives.values())
         } else {
             this.new_additives=this.additives
         }
