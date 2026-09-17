@@ -83,6 +83,8 @@
             />
             <BtnLogOut
                 v-show="this.useStore().logged"
+                :logout-url="`${useStore().apiroot}/logout/`"
+                :token="useStore().token"
                 :next-route="{ name: 'home' }"
                 @logged-out="onLoggedOut"
             />
