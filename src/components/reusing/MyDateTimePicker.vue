@@ -68,7 +68,8 @@
                 hours:null,
                 minutes:null,
                 seconds:null,
-                microseconds:null}
+                microseconds:null,
+                timezone: null}
         },
         watch: {
             modelValue (newValue) {
@@ -144,7 +145,7 @@
         },
         created(){
             if(this.clearable==false && this.modelValue==null) this.on_click_prepend_icon()
-            this.timezone=moment.tz.guess()
+            this.timezone = (typeof moment !== 'undefined' && moment.tz && moment.tz.guess) ? moment.tz.guess() : Intl.DateTimeFormat().resolvedOptions().timeZone
             this.string2widget(this.modelValue)
             this.new_modelValue=this.modelValue
             

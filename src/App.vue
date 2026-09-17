@@ -124,9 +124,11 @@ export default {
         },
         onLoggedOut() {
             this.useStore().setToken(null);
+            this.$router.push({ name: 'home' });
         },
     },
     created(){
+        this.$router.push({ name: 'home' });
     }
 };
 </script>
