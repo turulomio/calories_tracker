@@ -66,7 +66,5 @@ jobs:
         npm run build --if-present
     - name: CaloriesTracker e2e test
       run: |
-        npm run dev &
-        sleep 10
         PLAYWRIGHT_DOWNLOAD_CONNECTION_TIMEOUT=180000 npx playwright install firefox
         npm run playwright_console
