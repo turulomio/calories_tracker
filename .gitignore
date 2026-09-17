@@ -26,3 +26,4 @@ cypress.env.json
 cypress/screenshots
 .nyc_output
 output
+test-results

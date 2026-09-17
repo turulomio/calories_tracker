@@ -13,21 +13,21 @@
             <v-window-item key="products" >
                 <v-data-table-virtual data-test="Products_Table" density="compact" :headers="products_headers" :items="products" :sort-by="[{key:'fullname',order:'asc'}]"  class="elevation-1 cursorpointer" :items-per-page="10000" :loading="loading" :key="'T'+key" height="65vh" @click:row="viewProduct" fixed-header>
                     <template #item.fullname="{item}"><div v-html="products_html_fullname(item,2)"></div></template>
-                    <template #item.calories="{item}"><div v-html="my_round(item.calories,0)"></div></template>  
-                    <template #item.fat="{item}"><div v-html="my_round(item.fat,0)"></div></template>  
-                    <template #item.protein="{item}"><div v-html="my_round(item.protein,0)"></div></template>  
-                    <template #item.carbohydrate="{item}"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
-                    <template #item.salt="{item}"><div v-html="my_round(item.salt,0)"></div></template>  
-                    <template #item.fiber="{item}"><div v-html="my_round(item.fiber,0)"></div></template>  
-                    <template #item.sugars="{item}"><div v-html="my_round(item.sugars,0)"></div></template>  
-                    <template #item.saturated_fat="{item}"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
-                    <template #item.cholesterol="{item}"><div v-html="my_round(item.cholesterol,0)"></div></template>  
-                    <template #item.sodium="{item}"><div v-html="my_round(item.sodium,0)"></div></template>  
-                    <template #item.potassium="{item}"><div v-html="my_round(item.potassium,0)"></div></template>  
-                    <template #item.ferrum="{item}"><div v-html="my_round(item.ferrum,0)"></div></template>  
-                    <template #item.magnesium="{item}"><div v-html="my_round(item.magnesium,0)"></div></template>  
-                    <template #item.phosphor="{item}"><div v-html="my_round(item.phosphor,0)"></div></template>  
-                    <template #item.calcium="{item}"><div v-html="my_round(item.calcium,0)"></div></template>  
+                    <template #item.calories="{item}"><div v-html="round(item.calories,0)"></div></template>  
+                    <template #item.fat="{item}"><div v-html="round(item.fat,0)"></div></template>  
+                    <template #item.protein="{item}"><div v-html="round(item.protein,0)"></div></template>  
+                    <template #item.carbohydrate="{item}"><div v-html="round(item.carbohydrate,0)"></div></template>  
+                    <template #item.salt="{item}"><div v-html="round(item.salt,0)"></div></template>  
+                    <template #item.fiber="{item}"><div v-html="round(item.fiber,0)"></div></template>  
+                    <template #item.sugars="{item}"><div v-html="round(item.sugars,0)"></div></template>  
+                    <template #item.saturated_fat="{item}"><div v-html="round(item.saturated_fat,0)"></div></template>  
+                    <template #item.cholesterol="{item}"><div v-html="round(item.cholesterol,0)"></div></template>  
+                    <template #item.sodium="{item}"><div v-html="round(item.sodium,0)"></div></template>  
+                    <template #item.potassium="{item}"><div v-html="round(item.potassium,0)"></div></template>  
+                    <template #item.ferrum="{item}"><div v-html="round(item.ferrum,0)"></div></template>  
+                    <template #item.magnesium="{item}"><div v-html="round(item.magnesium,0)"></div></template>  
+                    <template #item.phosphor="{item}"><div v-html="round(item.phosphor,0)"></div></template>  
+                    <template #item.calcium="{item}"><div v-html="round(item.calcium,0)"></div></template>  
                     <template #item.actions="{item}">
                         <v-icon :data-test="`Products_Table_IconEdit${item.id}`" v-if="item.is_editable" small class="mr-1" @click.stop="editProduct(item)">mdi-pencil</v-icon>
                         <v-icon :data-test="`Products_Table_IconDelete${item.id}`" v-if="item.is_deletable" small @click.stop="deleteProduct(item)">mdi-delete</v-icon>
@@ -56,7 +56,7 @@
 
 <script>
     import axios from 'axios'
-    import {my_round} from 'vuetify_rules'
+    import {round} from 'vuetify_rules'
     import { empty_products,empty_elaborated_products } from '../empty_objects.js'
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import ProductsCRUD from './ProductsCRUD.vue'
@@ -119,7 +119,7 @@
         methods:{
             empty_products,
             empty_elaborated_products,
-            my_round,
+            round,
         useStore,
             menuinline_items(){
                 let r= [

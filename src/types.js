@@ -1,6 +1,6 @@
 // This way https://www.sohamkamani.com/javascript/enums/#defining-enums-with-classes
 // https://masteringjs.io/tutorials/fundamentals/enum
-import {my_round} from 'vuetify_rules'
+import {round} from 'vuetify_rules'
 
 export class NutritionalElement {
     // Create new instances of the same class as static attributes
@@ -30,18 +30,18 @@ export class NutritionalElement {
 
     amount(amount){
       let unit
-      let round
+      let decimals
       if (["calories",].includes(this.attribute)){
         unit="kcal"
-        round=0
+        decimals=0
       } else if (["magnessium","phosphor","potassium","ferrum","calcium","sodium"].includes(this.attribute)) {
         unit="mg"
-        round=0
+        decimals=0
       } else {
         unit="g"
-        round=2
+        decimals=2
       }
-      return `${my_round(amount,round)} ${unit}`
+      return `${round(amount,decimals)} ${unit}`
     }
 
   }

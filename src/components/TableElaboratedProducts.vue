@@ -2,21 +2,21 @@
     <div class="ma-4">
         <v-data-table-virtual density="compact" :headers="elaborated_products_headers" :items="elaborated_products" :sort-by="[{key:'name',order:'asc'}]"  class="elevation-1 cursorpointer" :items-per-page="10000" :loading="loading" :key="'T'+key" height="65vh" @click:row="viewElaboratedProduct"  fixed-header>
             <template #item.fullname="{item}"><div v-html="products_html_fullname(item,3)"></div></template>
-            <template #item.calories="{item}"><div v-html="my_round(item.calories,0)"></div></template>  
-            <template #item.fat="{item}"><div v-html="my_round(item.fat,0)"></div></template>  
-            <template #item.protein="{item}"><div v-html="my_round(item.protein,0)"></div></template>  
-            <template #item.carbohydrate="{item}"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
-            <template #item.salt="{item}"><div v-html="my_round(item.salt,0)"></div></template>  
-            <template #item.fiber="{item}"><div v-html="my_round(item.fiber,0)"></div></template>  
-            <template #item.sugars="{item}"><div v-html="my_round(item.sugars,0)"></div></template>  
-            <template #item.saturated_fat="{item}"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
-            <template #item.cholesterol="{item}"><div v-html="my_round(item.cholesterol,0)"></div></template>  
-            <template #item.sodium="{item}"><div v-html="my_round(item.sodium,0)"></div></template>  
-            <template #item.potassium="{item}"><div v-html="my_round(item.potassium,0)"></div></template>  
-            <template #item.ferrum="{item}"><div v-html="my_round(item.ferrum,0)"></div></template>  
-            <template #item.magnesium="{item}"><div v-html="my_round(item.magnesium,0)"></div></template>  
-            <template #item.phosphor="{item}"><div v-html="my_round(item.phosphor,0)"></div></template>  
-            <template #item.calcium="{item}"><div v-html="my_round(item.calcium,0)"></div></template>  
+            <template #item.calories="{item}"><div v-html="round(item.calories,0)"></div></template>  
+            <template #item.fat="{item}"><div v-html="round(item.fat,0)"></div></template>  
+            <template #item.protein="{item}"><div v-html="round(item.protein,0)"></div></template>  
+            <template #item.carbohydrate="{item}"><div v-html="round(item.carbohydrate,0)"></div></template>  
+            <template #item.salt="{item}"><div v-html="round(item.salt,0)"></div></template>  
+            <template #item.fiber="{item}"><div v-html="round(item.fiber,0)"></div></template>  
+            <template #item.sugars="{item}"><div v-html="round(item.sugars,0)"></div></template>  
+            <template #item.saturated_fat="{item}"><div v-html="round(item.saturated_fat,0)"></div></template>  
+            <template #item.cholesterol="{item}"><div v-html="round(item.cholesterol,0)"></div></template>  
+            <template #item.sodium="{item}"><div v-html="round(item.sodium,0)"></div></template>  
+            <template #item.potassium="{item}"><div v-html="round(item.potassium,0)"></div></template>  
+            <template #item.ferrum="{item}"><div v-html="round(item.ferrum,0)"></div></template>  
+            <template #item.magnesium="{item}"><div v-html="round(item.magnesium,0)"></div></template>  
+            <template #item.phosphor="{item}"><div v-html="round(item.phosphor,0)"></div></template>  
+            <template #item.calcium="{item}"><div v-html="round(item.calcium,0)"></div></template>  
             <template #item.actions="{item}">
                 <v-icon small class="mr-1" @click.stop="editElaboratedProduct(item)">mdi-pencil</v-icon>
                 <v-icon small v-if="is_product_elaborated_deletable(item)" @click.stop="deleteElaboratedProduct(item)">mdi-delete</v-icon>
@@ -34,7 +34,7 @@
 
 <script>
     import { empty_elaborated_products } from '../empty_objects.js'
-    import {my_round} from 'vuetify_rules'
+    import {round} from 'vuetify_rules'
     import ElaboratedProductsCRUD from './ElaboratedProductsCRUD.vue'
     import { useStore } from '@/store.js'
     export default {
@@ -84,7 +84,7 @@
         methods:{
         useStore,
             empty_elaborated_products,
-            my_round,
+            round,
             on_ElaboratedProductsCRUD_cruded(){
                 this.dialog_elaborated_products_crud=false
                 this.$emit("cruded")

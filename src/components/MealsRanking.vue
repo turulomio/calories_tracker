@@ -7,7 +7,7 @@
 
         <v-data-table density="compact" :headers="ranking_headers" :items="ranking" :sort-by="[{key:'position',order:'asc'}]"  class="elevation-1" :items-per-page="10000" :loading="loading" :key="key" fixed-header height="70vh">
             <template #item.products="{item}"><div v-html="products_html_fullname(item.products,4)"></div></template>            
-            <template #item.amount="{item}">{{ my_round(item.amount,0)}}</template>
+            <template #item.amount="{item}">{{ round(item.amount,0)}}</template>
             <template #bottom></template>
         </v-data-table>
     </div>
@@ -15,7 +15,7 @@
 
 <script>
     import axios from 'axios'
-    import {my_round} from 'vuetify_rules'
+    import {round} from 'vuetify_rules'
     import MyDatePicker from './reusing/MyDatePicker.vue'
     import { useStore } from '@/store.js'
     export default {
@@ -43,7 +43,7 @@
             }
         },
         methods:{
-            my_round,
+            round,
         useStore,
             update(){
                 this.loading=true

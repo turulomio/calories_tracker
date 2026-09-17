@@ -46,7 +46,7 @@
 </template>
 <script>
     import axios from "axios"
-    import {my_round,RulesSelection,RulesFloatGZ} from 'vuetify_rules'
+    import {round,RulesSelection,RulesFloatGZ} from 'vuetify_rules'
 import { useStore } from '@/store.js'
     export default {
         props: {
@@ -68,7 +68,7 @@ import { useStore } from '@/store.js'
                 if (this.tab==0 && this.pot){ //From full pot
                     return this.weight_with_pot-this.pot.weight
                 } else if (this.tab==1){ //Ingredients sum
-                    return this.my_round(this.listobjects_sum(this.new_elaboration.elaborations_products_in,'final_grams'),0)
+                    return this.round(this.listobjects_sum(this.new_elaboration.elaborations_products_in,'final_grams'),0)
                 } else if (this.tab==2){ //Your weight
                     return this.your_weight
                 }
@@ -77,7 +77,7 @@ import { useStore } from '@/store.js'
         },
         methods: {
         useStore,
-            my_round,
+            round,
             RulesSelection,
             RulesFloatGZ,
             pots_html(item){

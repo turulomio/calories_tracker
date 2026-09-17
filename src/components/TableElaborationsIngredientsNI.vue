@@ -3,61 +3,61 @@
     <div>    
         <v-data-table density="compact" :headers="products_in_headers" :items="items" :sort-by="[{key:'amount',order:'desc'}]"  class="elevation-1" :items-per-page="10000" :key="'T'+key" fixed-header>
             <template #item.products="{item}"><div v-html="products_html_fullname(item.products,4)"></div></template>                       
-                <template #item.amount="{item}"><div v-html="my_round(item.amount,0)"></div></template>                  
-                <template #item.calories="{item}"><div v-html="my_round(item.calories,0)"></div></template>  
-                <template #item.fat="{item}"><div v-html="my_round(item.fat,0)"></div></template>  
-                <template #item.protein="{item}"><div v-html="my_round(item.protein,0)"></div></template>  
-                <template #item.carbohydrate="{item}"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
-                <template #item.salt="{item}"><div v-html="my_round(item.salt,0)"></div></template>  
-                <template #item.fiber="{item}"><div v-html="my_round(item.fiber,0)"></div></template>  
-                <template #item.sugars="{item}"><div v-html="my_round(item.sugars,0)"></div></template>  
-                <template #item.saturated_fat="{item}"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
-                <template #item.cholesterol="{item}"><div v-html="my_round(item.cholesterol,0)"></div></template>  
-                <template #item.sodium="{item}"><div v-html="my_round(item.sodium,0)"></div></template>  
-                <template #item.potassium="{item}"><div v-html="my_round(item.potassium,0)"></div></template>  
-                <template #item.ferrum="{item}"><div v-html="my_round(item.ferrum,0)"></div></template>  
-                <template #item.magnesium="{item}"><div v-html="my_round(item.magnesium,0)"></div></template>  
-                <template #item.phosphor="{item}"><div v-html="my_round(item.phosphor,0)"></div></template>  
-                <template #item.calcium="{item}"><div v-html="my_round(item.calcium,0)"></div></template>                 
+                <template #item.amount="{item}"><div v-html="round(item.amount,0)"></div></template>                  
+                <template #item.calories="{item}"><div v-html="round(item.calories,0)"></div></template>  
+                <template #item.fat="{item}"><div v-html="round(item.fat,0)"></div></template>  
+                <template #item.protein="{item}"><div v-html="round(item.protein,0)"></div></template>  
+                <template #item.carbohydrate="{item}"><div v-html="round(item.carbohydrate,0)"></div></template>  
+                <template #item.salt="{item}"><div v-html="round(item.salt,0)"></div></template>  
+                <template #item.fiber="{item}"><div v-html="round(item.fiber,0)"></div></template>  
+                <template #item.sugars="{item}"><div v-html="round(item.sugars,0)"></div></template>  
+                <template #item.saturated_fat="{item}"><div v-html="round(item.saturated_fat,0)"></div></template>  
+                <template #item.cholesterol="{item}"><div v-html="round(item.cholesterol,0)"></div></template>  
+                <template #item.sodium="{item}"><div v-html="round(item.sodium,0)"></div></template>  
+                <template #item.potassium="{item}"><div v-html="round(item.potassium,0)"></div></template>  
+                <template #item.ferrum="{item}"><div v-html="round(item.ferrum,0)"></div></template>  
+                <template #item.magnesium="{item}"><div v-html="round(item.magnesium,0)"></div></template>  
+                <template #item.phosphor="{item}"><div v-html="round(item.phosphor,0)"></div></template>  
+                <template #item.calcium="{item}"><div v-html="round(item.calcium,0)"></div></template>                 
                 <template #tbody>
                     <tr class="totalrow">
                         <td>{{ $t(`Total ([0] items):`).format(items.length) }} </td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(items,'amount'),0)"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(items,'calories'),0)"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(items,'fat'),0)"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(items,'protein'),0)"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(items,'carbohydrate'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(items,'amount'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(items,'calories'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(items,'fat'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(items,'protein'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(items,'carbohydrate'),0)"></td>
                         <td class="text-right" @click="on_icon_salt_info()" ><v-icon small >mdi-information-outline</v-icon></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(items,'fiber'),0)"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(items,'sugars'),0)"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(items,'saturated_fat'),0)"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(items,'cholesterol'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(items,'fiber'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(items,'sugars'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(items,'saturated_fat'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(items,'cholesterol'),0)"></td>
                         <td class="text-right" v-html="total_sodium()"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(items,'potassium'),0)"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(items,'ferrum'),0)"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(items,'magnesium'),0)"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(items,'phosphor'),0)"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(items,'calcium'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(items,'potassium'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(items,'ferrum'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(items,'magnesium'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(items,'phosphor'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(items,'calcium'),0)"></td>
                         <td></td>      
                     </tr>
                     <tr class="totalrow" v-if="elaboration.final_amount">
                             <td>{{ $t(`Nutritional information in 100 g:`)}}</td>
                             <td class="text-right" v-html="100"></td>
-                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'calories')/elaboration.final_amount,0)"></td>
-                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'fat')/elaboration.final_amount,0)"></td>
-                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'protein')/elaboration.final_amount,0)"></td>
-                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'carbohydrate')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="round(100*listobjects_sum(items,'calories')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="round(100*listobjects_sum(items,'fat')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="round(100*listobjects_sum(items,'protein')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="round(100*listobjects_sum(items,'carbohydrate')/elaboration.final_amount,0)"></td>
                             <td class="text-right" @click="on_icon_salt_info()" ><v-icon small >mdi-information-outline</v-icon></td>
-                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'fiber')/elaboration.final_amount,0)"></td>
-                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'sugars')/elaboration.final_amount,0)"></td>
-                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'saturated_fat')/elaboration.final_amount,0)"></td>
-                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'cholesterol')/elaboration.final_amount,0)"></td>
-                            <td class="text-right" v-html="my_round(100*total_sodium()/elaboration.final_amount,0)"></td>
-                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'potassium')/elaboration.final_amount,0)"></td>
-                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'ferrum')/elaboration.final_amount,0)"></td>
-                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'magnesium')/elaboration.final_amount,0)"></td>
-                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'phosphor')/elaboration.final_amount,0)"></td>
-                            <td class="text-right" v-html="my_round(100*listobjects_sum(items,'calcium')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="round(100*listobjects_sum(items,'fiber')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="round(100*listobjects_sum(items,'sugars')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="round(100*listobjects_sum(items,'saturated_fat')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="round(100*listobjects_sum(items,'cholesterol')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="round(100*total_sodium()/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="round(100*listobjects_sum(items,'potassium')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="round(100*listobjects_sum(items,'ferrum')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="round(100*listobjects_sum(items,'magnesium')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="round(100*listobjects_sum(items,'phosphor')/elaboration.final_amount,0)"></td>
+                            <td class="text-right" v-html="round(100*listobjects_sum(items,'calcium')/elaboration.final_amount,0)"></td>
                     </tr>
                 </template>
                 <template #bottom></template>
@@ -66,7 +66,7 @@
 </template>
 <script>
     import fraction from 'fraction.js'
-    import {my_round} from 'vuetify_rules'
+    import {round} from 'vuetify_rules'
     import { useStore } from '@/store.js'
     export default {
         components: {
@@ -105,7 +105,7 @@
         methods: {
         useStore,
             fraction,
-            my_round,
+            round,
             on_ElaborationProductsInCRUD_cruded(){
                 this.dialog_products_in_crud=false  
                 this.key=this.key+1
@@ -151,12 +151,12 @@
     - Salt amount: [0] g => [1] sodium mg
     - Sodium amount: [2] mg
     - Total sodium: [3] mg
-                `).format(this.my_round(salt,2) , this.my_round(salt_as_sodium,0), sodium, this.my_round(total,0)))
+                `).format(this.round(salt,2) , this.round(salt_as_sodium,0), sodium, this.round(total,0)))
             },
             total_sodium(){
                 var sum_sodium=this.listobjects_sum(this.items,'sodium')
                 var salt=this.listobjects_sum(this.items,"salt")
-                return  this.my_round(sum_sodium+salt*396,0)
+                return  this.round(sum_sodium+salt*396,0)
             },
         },
         created(){

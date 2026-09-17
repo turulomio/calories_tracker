@@ -16,22 +16,22 @@
                     {{localtime(item.datetime).slice(10)}}
                 </template>          
                 <template #item.products="{item}"><div v-html="products_html_fullname(item.products,4)" @click="on_product_click(item)"></div></template>                       
-                <template #item.amount="{item}"><div v-html="my_round(item.amount,0)"></div></template>                  
-                <template #item.calories="{item}"><div v-html="my_round(item.calories,0)"></div></template>  
-                <template #item.fat="{item}"><div v-html="my_round(item.fat,0)"></div></template>  
-                <template #item.protein="{item}"><div v-html="my_round(item.protein,0)"></div></template>  
-                <template #item.carbohydrate="{item}"><div v-html="my_round(item.carbohydrate,0)"></div></template>  
-                <template #item.salt="{item}"><div v-html="my_round(item.salt,0)"></div></template>  
-                <template #item.fiber="{item}"><div v-html="my_round(item.fiber,0)"></div></template>  
-                <template #item.sugars="{item}"><div v-html="my_round(item.sugars,0)"></div></template>  
-                <template #item.saturated_fat="{item}"><div v-html="my_round(item.saturated_fat,0)"></div></template>  
-                <template #item.cholesterol="{item}"><div v-html="my_round(item.cholesterol,0)"></div></template>  
-                <template #item.sodium="{item}"><div v-html="my_round(item.sodium,0)"></div></template>  
-                <template #item.potassium="{item}"><div v-html="my_round(item.potassium,0)"></div></template>  
-                <template #item.ferrum="{item}"><div v-html="my_round(item.ferrum,0)"></div></template>  
-                <template #item.magnesium="{item}"><div v-html="my_round(item.magnesium,0)"></div></template>  
-                <template #item.phosphor="{item}"><div v-html="my_round(item.phosphor,0)"></div></template>  
-                <template #item.calcium="{item}"><div v-html="my_round(item.calcium,0)"></div></template>  
+                <template #item.amount="{item}"><div v-html="round(item.amount,0)"></div></template>                  
+                <template #item.calories="{item}"><div v-html="round(item.calories,0)"></div></template>  
+                <template #item.fat="{item}"><div v-html="round(item.fat,0)"></div></template>  
+                <template #item.protein="{item}"><div v-html="round(item.protein,0)"></div></template>  
+                <template #item.carbohydrate="{item}"><div v-html="round(item.carbohydrate,0)"></div></template>  
+                <template #item.salt="{item}"><div v-html="round(item.salt,0)"></div></template>  
+                <template #item.fiber="{item}"><div v-html="round(item.fiber,0)"></div></template>  
+                <template #item.sugars="{item}"><div v-html="round(item.sugars,0)"></div></template>  
+                <template #item.saturated_fat="{item}"><div v-html="round(item.saturated_fat,0)"></div></template>  
+                <template #item.cholesterol="{item}"><div v-html="round(item.cholesterol,0)"></div></template>  
+                <template #item.sodium="{item}"><div v-html="round(item.sodium,0)"></div></template>  
+                <template #item.potassium="{item}"><div v-html="round(item.potassium,0)"></div></template>  
+                <template #item.ferrum="{item}"><div v-html="round(item.ferrum,0)"></div></template>  
+                <template #item.magnesium="{item}"><div v-html="round(item.magnesium,0)"></div></template>  
+                <template #item.phosphor="{item}"><div v-html="round(item.phosphor,0)"></div></template>  
+                <template #item.calcium="{item}"><div v-html="round(item.calcium,0)"></div></template>  
                 <template #item.actions="{item}">
                     <v-icon :data-test="`Meals_Table_IconCopy${item.id}`" small class="mr-1" @click="copyMeal(item)">mdi-content-copy</v-icon>
                     <v-icon :data-test="`Meals_Table_IconEdit${item.id}`" small class="mr-1" @click="editMeal(item)">mdi-pencil</v-icon>
@@ -41,36 +41,36 @@
                 <template #tbody>
                     <tr class="totalrow" v-if="biometric">
                         <td colspan="2">{{ $t(`Total ([0] meals):`).format(meals.length) }} </td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(meals,'amount'),0)"></td>
-                        <td :class="(biometric.bmr>listobjects_sum(meals,'calories')) ? 'boldgreen text-right':'boldred text-right'" v-html="my_round(listobjects_sum(meals,'calories'),0)"></td>
-                        <td :class="(biometric.recommended_fat>listobjects_sum(meals,'fat')) ? 'boldgreen text-right':'boldred text-right'" v-html="my_round(listobjects_sum(meals,'fat'),0)"></td>
-                        <td :class="(biometric.recommended_protein>listobjects_sum(meals,'protein')) ? 'boldgreen text-right':'boldred text-right'" v-html="my_round(listobjects_sum(meals,'protein'),0)"></td>
-                        <td :class="(biometric.recommended_carbohydrate>listobjects_sum(meals,'carbohydrate')) ? 'boldgreen text-right':'boldred text-right'" v-html="my_round(listobjects_sum(meals,'carbohydrate'),0)"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(meals,'salt'),0)"></td>
-                        <td :class="(biometric.recommended_fiber<listobjects_sum(meals,'fiber')) ? 'boldgreen text-right':'boldred text-right'" v-html="my_round(listobjects_sum(meals,'fiber'),0)"></td>
-                        <td :class="(biometric.recommended_sugars>listobjects_sum(meals,'sugars')) ? 'boldgreen text-right':'boldred text-right'" v-html="my_round(listobjects_sum(meals,'sugars'),0)"></td>               
-                        <td class="text-right" v-html="my_round(listobjects_sum(meals,'saturated_fat'),0)"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(meals,'cholesterol'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(meals,'amount'),0)"></td>
+                        <td :class="(biometric.bmr>listobjects_sum(meals,'calories')) ? 'boldgreen text-right':'boldred text-right'" v-html="round(listobjects_sum(meals,'calories'),0)"></td>
+                        <td :class="(biometric.recommended_fat>listobjects_sum(meals,'fat')) ? 'boldgreen text-right':'boldred text-right'" v-html="round(listobjects_sum(meals,'fat'),0)"></td>
+                        <td :class="(biometric.recommended_protein>listobjects_sum(meals,'protein')) ? 'boldgreen text-right':'boldred text-right'" v-html="round(listobjects_sum(meals,'protein'),0)"></td>
+                        <td :class="(biometric.recommended_carbohydrate>listobjects_sum(meals,'carbohydrate')) ? 'boldgreen text-right':'boldred text-right'" v-html="round(listobjects_sum(meals,'carbohydrate'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(meals,'salt'),0)"></td>
+                        <td :class="(biometric.recommended_fiber<listobjects_sum(meals,'fiber')) ? 'boldgreen text-right':'boldred text-right'" v-html="round(listobjects_sum(meals,'fiber'),0)"></td>
+                        <td :class="(biometric.recommended_sugars>listobjects_sum(meals,'sugars')) ? 'boldgreen text-right':'boldred text-right'" v-html="round(listobjects_sum(meals,'sugars'),0)"></td>               
+                        <td class="text-right" v-html="round(listobjects_sum(meals,'saturated_fat'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(meals,'cholesterol'),0)"></td>
                         <td :class="(biometric.recommended_sodium>total_sodium()) ? 'boldgreen text-right':'boldred text-right'"  v-html="total_sodium()"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(meals,'potassium'),0)"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(meals,'ferrum'),0)"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(meals,'magnesium'),0)"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(meals,'phosphor'),0)"></td>
-                        <td class="text-right" v-html="my_round(listobjects_sum(meals,'calcium'),0)"></td>   
+                        <td class="text-right" v-html="round(listobjects_sum(meals,'potassium'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(meals,'ferrum'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(meals,'magnesium'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(meals,'phosphor'),0)"></td>
+                        <td class="text-right" v-html="round(listobjects_sum(meals,'calcium'),0)"></td>   
                         <td></td>      
                     </tr>
                     <tr class="totalrow" v-if="biometric">
                         <td colspan="3">{{ $t(`Recomendation for [0] kg and [1] cm`).format(biometric.weight,biometric.height)}}</td>
-                        <td  class="text-right" v-html="my_round(biometric.bmr,0)"></td>
-                        <td class="text-right" v-html="my_round(biometric.recommended_fat,0)"></td>
-                        <td class="text-right" v-html="my_round(biometric.recommended_protein,0)"></td>
-                        <td class="text-right" v-html="my_round(biometric.recommended_carbohydrate,0)"></td>
+                        <td  class="text-right" v-html="round(biometric.bmr,0)"></td>
+                        <td class="text-right" v-html="round(biometric.recommended_fat,0)"></td>
+                        <td class="text-right" v-html="round(biometric.recommended_protein,0)"></td>
+                        <td class="text-right" v-html="round(biometric.recommended_carbohydrate,0)"></td>
                         <td class="text-right" @click="on_icon_salt_info()" ><v-icon size="small" icon="mdi-information-outline" /></td>  
-                        <td class="text-right" v-html="my_round(biometric.recommended_fiber,0)"></td>
-                        <td class="text-right" v-html="my_round(biometric.recommended_sugars,0)"></td>
+                        <td class="text-right" v-html="round(biometric.recommended_fiber,0)"></td>
+                        <td class="text-right" v-html="round(biometric.recommended_sugars,0)"></td>
                         <td></td>
                         <td></td>
-                        <td class="text-right" v-html="my_round(biometric.recommended_sodium,0)"></td>    
+                        <td class="text-right" v-html="round(biometric.recommended_sodium,0)"></td>    
                         <td></td>
                         <td></td>
                         <td></td>
@@ -109,7 +109,7 @@
     import MealsCRUD from './MealsCRUD.vue'
     import ElaboratedProductsCRUD from './ElaboratedProductsCRUD.vue'
     import ProductsCRUD from './ProductsCRUD.vue'
-    import {my_round,localtime} from 'vuetify_rules'
+    import {round,localtime} from 'vuetify_rules'
     import { useStore } from '@/store.js'
     export default {
         components: {
@@ -209,7 +209,7 @@
         }, 
         methods:{
             empty_meals,
-            my_round,
+            round,
             localtime,
         useStore,
             on_MealsCRUD_cruded(){
@@ -260,12 +260,12 @@
     - Salt amount: [0] g => [1] sodium mg
     - Sodium amount: [2] mg
     - Total sodium: [3] mg
-                `).format(this.my_round(salt,2) , this.my_round(salt_as_sodium,0), sodium, this.my_round(total,0)))
+                `).format(this.round(salt,2) , this.round(salt_as_sodium,0), sodium, this.round(total,0)))
             },
             total_sodium(){
                 var sum_sodium=this.listobjects_sum(this.meals,'sodium')
                 var salt=this.listobjects_sum(this.meals,"salt")
-                return  this.my_round(sum_sodium+salt*396,0)
+                return  this.round(sum_sodium+salt*396,0)
             },
             on_product_click(item){
                 var product=this.useStore().products.get(item.products)
