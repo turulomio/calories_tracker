@@ -5,66 +5,57 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "241-fix-actions" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  DJANGO_TEST_SERVER_PORT: 8011
+  NODE_DEV_SERVER_PORT: 8012
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: github_actions
-        ports:
-          - 5432:5432
-        # needed because the postgres container does not provide a healthcheck
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-
-    - name: Install PL/Python in the PostgreSQL container (Old migrations)
+    - name: Run E2E django_calories_tracker test server from Docker
       run: |
-        # Version can change see in docker page wich is postgres:latest
-        docker exec ${{ job.services.postgres.id }} bash -c "PGPASSWORD=postgres createdb -h localhost -U postgres calories_tracker"
+        docker run -d \
+          --name django_test_server \
+          -p 8011:8000 \
+          -e E2E_TESTING=1 \
+          turulomio/django_calories_tracker:e2e
 
-
-    - name: Wait for PostgreSQL
+    - name: Wait for Django test server
       run: |
-        until pg_isready -h localhost -p 5432; do
-          echo "Waiting for PostgreSQL to become ready..."
+        for i in $(seq 1 30); do
+          if curl -s http://127.0.0.1:${{ env.DJANGO_TEST_SERVER_PORT }}/ > /dev/null 2>&1; then
+            echo "Django test server is ready and responding!"
+            exit 0
+          fi
+          echo "Waiting for Django test server..."
           sleep 2
         done
-
-    - name: Install needed packages
-      run: |
-        sudo apt-get install exiftool
-
-    - name: Install python dependencies and launch django_calories_tracker
-      run: |
-        cd ..
-        git clone https://github.com/turulomio/django_calories_tracker
-        cd django_calories_tracker
-        sudo python -m venv .python
-        sudo .python/bin/pip install .
-        sudo .python/bin/python manage.py testserver calories_tracker/fixtures/all.json calories_tracker/fixtures/test_server.json --addrport 8011 &
-        sleep 15
+        echo "Django test server failed to start"
+        docker logs django_test_server
+        exit 1
 
     - name: Use Node.js
       uses: actions/setup-node@v4
+      with:
+        node-version: '22.x'
+
     - name: CaloriesTracker install and test build
       run: |
         npm install
         npm run build --if-present
+
     - name: CaloriesTracker e2e test
       run: |
         PLAYWRIGHT_DOWNLOAD_CONNECTION_TIMEOUT=180000 npx playwright install firefox
         npm run playwright_console
+
