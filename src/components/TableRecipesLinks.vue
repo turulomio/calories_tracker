@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-data-table density="compact" :headers="table_headers" :items="recipe.recipes_links" class="elevation-1" :items-per-page="10000" :sort-by="[{key:'name',order:'asc'}]" fixed-header :height="$attrs.height" ref="table_recipes_links">
-            <template #item.photo="{item}"><MiniImage v-if="item.thumbnail" :thumbnail="item.thumbnail" :content-url="item.files ? item.files.url_content : null" /></template>
+            <template #item.photo="{item}"><MiniImage v-if="item.thumbnail" :title="item.description || recipe.name" :thumbnail="item.thumbnail" :content-url="item.files ? item.files.url_content : null" /></template>
             <template #item.datetime="{item}">{{localtime(item.datetime)}}</template>
             <template #item.type="{item}"><div v-html="useStore().recipes_links_types.get(item.type).localname"></div></template> 
             <template #item.link="{item}"><div @click="on_link_click(item)">{{item.link}}</div></template> 

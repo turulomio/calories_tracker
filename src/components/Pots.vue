@@ -6,7 +6,7 @@
         <v-text-field class="ml-10 mr-10 mb-5" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"  v-on:keyup.enter="on_search_change()"></v-text-field>
   
         <v-data-table density="compact" :headers="pots_headers" :key="key" :items="pots" :sort-by="[{key:'name',order:'asc'}]" class="elevation-1" :items-per-page="10000" item-key="item_key">   
-            <template #item.photo="{item}"><MiniImage v-if="item.thumbnail" :thumbnail="item.thumbnail" :content-url="item.photo ? item.photo.url_content : null" /></template>
+            <template #item.photo="{item}"><MiniImage v-if="item.thumbnail" :title="item.name" :thumbnail="item.thumbnail" :content-url="item.photo ? item.photo.url_content : null" /></template>
             <template #item.name="{item}">{{ item.name }}</template>
             <template #item.volume="{item}">{{ round(item.volume,0) }}</template>
             <template #item.actions="{item}">

@@ -1,19 +1,16 @@
 <template>
     <div v-if="thumbnailSrc" class="d-inline-block">
         <v-img :src="thumbnailSrc" :width="size" :height="size" cover class="mini-image-thumbnail rounded elevation-1" @click.stop="openFullscreen">
-            <template #placeholder>
-                <div class="d-flex align-center justify-center fill-height">
-                    <v-progress-circular indeterminate size="16" width="2" color="primary" />
-                </div>
-            </template>
+            <template #placeholder><div class="d-flex align-center justify-center fill-height"><v-progress-circular indeterminate size="16" width="2" color="primary" /></div></template>
         </v-img>
 
-        <v-dialog v-model="dialog" width="auto" max-width="95vw" max-height="95vh">
+        <v-dialog v-model="dialog" width="auto">
             <v-card class="pa-2 text-center position-relative bg-surface rounded-lg" flat>
                 <v-btn icon="mdi-close" size="small" variant="text" color="grey-darken-1" class="position-absolute" style="top: 8px; right: 8px; z-index: 10;" @click="dialog = false" />
-                <div class="d-flex align-center justify-center" style="min-width: 250px; min-height: 250px;">
-                    <v-progress-circular v-if="loading" indeterminate color="primary" size="48" />
-                    <v-img v-else-if="fullImage" :src="fullImage" max-height="85vh" max-width="90vw" class="mx-auto rounded" contain @click="dialog = false" />
+                <v-card-title v-if="title" class="text-h6 text-center pa-2" v-html="title" />
+                <div class="d-flex align-center justify-center">
+                    <v-progress-circular v-if="loading" indeterminate color="primary" size="48" style="width: 75vw; height: 75vh;" />
+                    <v-img v-else-if="fullImage" :src="fullImage" width="75vw" height="75vh" class="mx-auto rounded" style="cursor: pointer;" contain @click="dialog = false" />
                 </div>
             </v-card>
         </v-dialog>
@@ -26,6 +23,10 @@ import axios from 'axios'
 import { myheaders, parseResponseError } from '@/functions'
 
 const props = defineProps({
+    title: {
+        type: String,
+        default: null,
+    },
     thumbnail: {
         type: String,
         default: null,

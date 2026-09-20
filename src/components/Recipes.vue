@@ -7,7 +7,7 @@
                 <v-text-field clearable density="default" :disabled="loading" class="mb-3"  v-model="search" prepend-icon="mdi-magnify" :label="$t('Add a string to filter table')" single-line hide-details :placeholder="$t('Add a string to filter table')" @keyup.enter="on_search_change()" />
         </v-card>
         <v-data-table-server ref="table" :headers="recipes_headers" :items="items" class="elevation-1 cursorpointer" :items-length="itemsLength" :search="search" v-model:items-per-page="itemsPerPage" v-model:page="page" v-model:sort-by="sortBy" :loading="loading" item-value="content_url" @click:row="viewRecipe" :key="key+1" >
-            <template #item.photo="{item}"><MiniImage v-if="item.thumbnail" :thumbnail="item.thumbnail" :content-url="item.content_url" /></template>
+            <template #item.photo="{item}"><MiniImage v-if="item.thumbnail" :title="item.name" :thumbnail="item.thumbnail" :content-url="item.content_url" /></template>
             <template #item.name="{item}"><div :data-test="`Recipes_Table_Row${item.id}`" v-html="item.name"></div></template>      
             <template #item.last="{item}">{{localtime(item.last)}}</template>      
             <template #item.recipes_categories="{item}">{{show_categories(item)}}</template>      
