@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-data-table density="compact" :headers="table_headers" :items="recipe.recipes_links" class="elevation-1" :items-per-page="10000" :sort-by="[{key:'name',order:'asc'}]" fixed-header :height="$attrs.height" ref="table_recipes_links">
-            <template #item.photo="{item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px"/></template>
+            <template #item.photo="{item}"><MiniImage v-if="item.thumbnail" :thumbnail="item.thumbnail" :content-url="item.files ? item.files.url_content : null" /></template>
             <template #item.datetime="{item}">{{localtime(item.datetime)}}</template>
             <template #item.type="{item}"><div v-html="useStore().recipes_links_types.get(item.type).localname"></div></template> 
             <template #item.link="{item}"><div @click="on_link_click(item)">{{item.link}}</div></template> 
@@ -26,6 +26,7 @@
 <script>
     import axios from 'axios'
     import RecipesLinksCRUD from './RecipesLinksCRUD.vue'
+    import MiniImage from './MiniImage.vue'
     import {empty_recipes_links} from '../empty_objects.js'
     import { hyperlinked_url } from '@/functions'
     import { localtime } from 'vuetify_rules'
@@ -33,6 +34,7 @@
     export default {
         components:{
             RecipesLinksCRUD,
+            MiniImage,
         },
         props: {
             recipe: { //Global recipe seriealizer
