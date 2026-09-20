@@ -347,15 +347,22 @@ export function pdfmake_array_to_two_columns(arr){
 }
 
 export function pdfmake_array_to_two_columns_table(arr, style){
-    if (arr.length==0)  return []
+    if (!arr || arr.length === 0) {
+        return [
+            [
+                { text: '', border: [false, false, false, false], style: style },
+                { text: '', border: [false, false, false, false], style: style }
+            ]
+        ];
+    }
     var tableBody = [];
 
     // Recorrer el array de textos y agregar cada par de textos como una fila de la tabla
     for (var i = 0; i < arr.length; i += 2) {
         tableBody.push([
-            { text: arr[i], border: [false, false, false, false] ,style: style}, // Primera columna
+            { text: arr[i], border: [false, false, false, false], style: style }, // Primera columna
             { text: arr[i + 1] || '', border: [false, false, false, false], style: style } // Segunda columna, si existe
         ]);
     }
-    return tableBody
+    return tableBody;
 }

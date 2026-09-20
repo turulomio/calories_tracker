@@ -211,31 +211,36 @@
 
                 this.creating=true
                 var ingredients=[]
-                this.new_elaboration.elaborations_products_in.forEach(o=>{
-                    ingredients.push(o.fullname)
-                })
+                if (this.new_elaboration.elaborations_products_in) {
+                    this.new_elaboration.elaborations_products_in.forEach(o=>{
+                        ingredients.push(o.fullname)
+                    })
+                }
                 var containers=[]
-                this.new_elaboration.elaborations_containers.forEach(o=>{
-                    containers.push(o.name)
-                })
+                if (this.new_elaboration.elaborations_containers) {
+                    this.new_elaboration.elaborations_containers.forEach(o=>{
+                        containers.push(o.name)
+                    })
+                }
 
 
                 var ni=[]
-                ni.push(`${this.$t("Calories")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Calories)}`)
-                ni.push(`${this.$t("Fat")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Fat)}`)
-                ni.push(`${this.$t("Protein")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Protein)}`)
-                ni.push(`${this.$t("Carbohydrates")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Carbohydrate)}`)
-                ni.push(`${this.$t("Salt")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Salt)}`)
-                ni.push(`${this.$t("Fiber")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Fiber)}`)
-                ni.push(`${this.$t("Sugars")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Sugars)}`)
-                ni.push(`${this.$t("Saturated fat")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.SaturatedFat)}`)
-                ni.push(`${this.$t("Cholesterol")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Cholesterol)}`)
-                ni.push(`${this.$t("Sodium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Sodium)}`)
-                ni.push(`${this.$t("Potassium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Potassium)}`)
-                ni.push(`${this.$t("Magnessium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Magnesium)}`)
-                ni.push(`${this.$t("Phosphor")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Phosphor)}`)
-                ni.push(`${this.$t("Calcium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Calcium)}`)
-
+                if (ingredients.length > 0) {
+                    ni.push(`${this.$t("Calories")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Calories)}`)
+                    ni.push(`${this.$t("Fat")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Fat)}`)
+                    ni.push(`${this.$t("Protein")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Protein)}`)
+                    ni.push(`${this.$t("Carbohydrates")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Carbohydrate)}`)
+                    ni.push(`${this.$t("Salt")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Salt)}`)
+                    ni.push(`${this.$t("Fiber")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Fiber)}`)
+                    ni.push(`${this.$t("Sugars")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Sugars)}`)
+                    ni.push(`${this.$t("Saturated fat")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.SaturatedFat)}`)
+                    ni.push(`${this.$t("Cholesterol")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Cholesterol)}`)
+                    ni.push(`${this.$t("Sodium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Sodium)}`)
+                    ni.push(`${this.$t("Potassium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Potassium)}`)
+                    ni.push(`${this.$t("Magnessium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Magnesium)}`)
+                    ni.push(`${this.$t("Phosphor")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Phosphor)}`)
+                    ni.push(`${this.$t("Calcium")}: ${this.elaboration_nutritional_information_string( this.new_elaboration, NutritionalElement.Calcium)}`)
+                }
 
                 var options = {
                     year: 'numeric',    // Año numérico (2024)
@@ -250,6 +255,47 @@
                 // Obtener la fecha y hora localizadas
                 var longdt= new Date().toLocaleString( localStorage.locale, options);
 
+                var content = [           
+                    { text: this.new_elaboration.fullname, style: 'header1', alignment:'center' },
+                    { text: (this.new_elaboration.automatic && this.new_elaboration.automatic_adaptation_step!="")? f(this.$t("This is an automatic recipe with this comment: '[0]'"), [this.new_elaboration.automatic_adaptation_step]) : "", style:"subtitle", alignment:"center"},
+                ]
+
+                if (ingredients.length > 0) {
+                    content.push(
+                        { text: this.$t("Recipe total amount") + ` : ${NutritionalElement.Amount.amount(this.new_elaboration.final_amount)}`, style: "subtitle", alignment:"center"}
+                    )
+                }
+
+                content.push(
+                    { text: longdt, style: "littlesubtitle", alignment:"center"}
+                )
+
+                if (ingredients.length > 0) {
+                    content.push(
+                        { text: this.$t('Ingredients'), style: 'header2', alignment:'center' },
+                        { table: { widths: ['50%', '50%'], body: pdfmake_array_to_two_columns_table(ingredients, "mention_ingredients")}}
+                    )
+                }
+
+                if (containers.length > 0) {
+                    content.push(
+                        { text: this.$t('Containers'), style: 'header2', alignment:'center' },
+                        { ul : containers, style: "mention_containers"}
+                    )
+                }
+
+                content.push(
+                    { text: this.$t('Recipe'), style: 'header2', alignment:'center' },
+                    htmlToPdfmake(this.$refs.tiptap.editor.getHTML())
+                )
+
+                if (ingredients.length > 0) {
+                    content.push(
+                        { text: this.$t("Nutritional information for each 100 g"), style: 'header2', alignment:'center' },
+                        { table: { widths: ['50%', '50%'], body: pdfmake_array_to_two_columns_table(ni, "tablecell")}, alignment:'center', margin:[150,0, 150,0]}
+                    )
+                }
+
                 const docDefinition = {
                     info: {
                         title: this.$t("Recipe") + this.new_elaboration.fullname,
@@ -257,19 +303,7 @@
                         subject: this.$t("Calories Tracker recipe"),
                         keywords: 'recipe',
                     },
-                    content: [           
-                        { text: this.new_elaboration.fullname, style: 'header1', alignment:'center' },                        { text: (this.new_elaboration.automatic && this.new_elaboration.automatic_adaptation_step!="")? f(this.$t("This is an automatic recipe with this comment: '[0]'"), [this.new_elaboration.automatic_adaptation_step]) : "", style:"subtitle", alignment:"center"},
-                        { text: this.$t("Recipe total amount") + ` : ${NutritionalElement.Amount.amount(this.new_elaboration.final_amount)}`, style: "subtitle", alignment:"center"},
-
-                        { text: longdt, style: "littlesubtitle", alignment:"center"},
-                        { text: this.$t('Ingredients'), style: 'header2', alignment:'center' },
-                        { table: { widths: ['50%', '50%'], body: pdfmake_array_to_two_columns_table(ingredients, "mention_ingredients")}}, 
-                        { text: this.$t('Containers'), style: 'header2', alignment:'center' },
-                        { ul : containers, style: "mention_containers"},
-                        { text: this.$t('Recipe'), style: 'header2', alignment:'center' }, htmlToPdfmake(this.$refs.tiptap.editor.getHTML()),
-                        { text: this.$t("Nutritional information for each 100 g"), style: 'header2', alignment:'center' },
-                        { table: { widths: ['50%', '50%'], body: pdfmake_array_to_two_columns_table(ni, "tablecell")}, alignment:'center', margin:[150,0, 150,0]},
-                    ],
+                    content: content,
                     footer: function(currentPage, pageCount) {
                         return [
                             {
