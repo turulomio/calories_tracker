@@ -5,9 +5,10 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "269-change-github-action-to-use-django_calories_tracker-docker-image" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
 
 env:
   DJANGO_TEST_SERVER_PORT: 8011
