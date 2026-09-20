@@ -211,13 +211,17 @@
 
                 this.creating=true
                 var ingredients=[]
-                this.new_elaboration.elaborations_products_in.forEach(o=>{
-                    ingredients.push(o.fullname)
-                })
+                if (this.new_elaboration.elaborations_products_in) {
+                    this.new_elaboration.elaborations_products_in.forEach(o=>{
+                        ingredients.push(o.fullname)
+                    })
+                }
                 var containers=[]
-                this.new_elaboration.elaborations_containers.forEach(o=>{
-                    containers.push(o.name)
-                })
+                if (this.new_elaboration.elaborations_containers) {
+                    this.new_elaboration.elaborations_containers.forEach(o=>{
+                        containers.push(o.name)
+                    })
+                }
 
 
                 var ni=[]
