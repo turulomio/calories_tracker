@@ -135,6 +135,7 @@ export function empty_recipes_links_types(){
 export function empty_recipes_links(){
     return {
         url:null,
+        datetime: new Date().toISOString(),
         description: "",
         type: null,
         link:null,

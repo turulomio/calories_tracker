@@ -6,7 +6,7 @@
         <v-text-field class="ml-10 mr-10 mb-5" v-model="search" append-icon="mdi-magnify" :label="$t('Filter')" single-line hide-details :placeholder="$t('Add a string to filter table')"  v-on:keyup.enter="on_search_change()"></v-text-field>
   
         <v-data-table density="compact" :headers="pots_headers" :key="key" :items="pots" :sort-by="[{key:'name',order:'asc'}]" class="elevation-1" :items-per-page="10000" item-key="item_key">   
-            <template #item.photo="{item}"><v-img  :src="item.thumbnail" style="width: 50px; height: 50px" @click="toggleFullscreen(item)" /></template>
+            <template #item.photo="{item}"><MiniImage v-if="item.thumbnail" :title="item.name" :thumbnail="item.thumbnail" :content-url="item.photo ? item.photo.url_content : null" /></template>
             <template #item.name="{item}">{{ item.name }}</template>
             <template #item.volume="{item}">{{ round(item.volume,0) }}</template>
             <template #item.actions="{item}">
@@ -24,13 +24,6 @@
             </v-card>
         </v-dialog>
 
-        <!-- DIALOG SHOW IMAGE VIEW -->
-        <v-dialog v-model="dialog_main_image_view" width="60%">
-            <v-card class="pa-4">
-                <v-img :loading="loading_image" :src="selected_image" height="600" contain/>
-            </v-card>
-        </v-dialog>
-
     </div>
 </template>
 
@@ -40,11 +33,13 @@
     import { empty_pots } from '../empty_objects.js'
     import imgNoImage from "@/assets/no_image.jpg"
     import MyMenuInline from './reusing/MyMenuInline.vue'
+    import MiniImage from './MiniImage.vue'
     import PotsCRUD from './PotsCRUD.vue'
     import { useStore } from '@/store.js'
     export default {
         components: {
             MyMenuInline,
+            MiniImage,
             PotsCRUD,
         },
         data(){
@@ -66,10 +61,6 @@
                 pot:null,
                 pot_mode:null,
                 dialog_pots_crud:false,
-                //DIALOG MAIN PHOTO
-                dialog_main_image_view: false,
-                loading_image:false,
-                selected_image: null,
             }
         },        
         methods:{
@@ -141,18 +132,6 @@
                 this.pots=r
                 this.key=this.key+1
             },
-            toggleFullscreen(item){
-                if (item.photo==null) return
-                this.key=this.key+1
-                this.dialog_main_image_view=true
-                axios.get(item.photo.url_content, this.myheaders())
-                .then((response) => {
-                    this.selected_image=response.data
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-
-            },      
         },
         created(){
             this.update_pots()

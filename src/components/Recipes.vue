@@ -7,7 +7,7 @@
                 <v-text-field clearable density="default" :disabled="loading" class="mb-3"  v-model="search" prepend-icon="mdi-magnify" :label="$t('Add a string to filter table')" single-line hide-details :placeholder="$t('Add a string to filter table')" @keyup.enter="on_search_change()" />
         </v-card>
         <v-data-table-server ref="table" :headers="recipes_headers" :items="items" class="elevation-1 cursorpointer" :items-length="itemsLength" :search="search" v-model:items-per-page="itemsPerPage" v-model:page="page" v-model:sort-by="sortBy" :loading="loading" item-value="content_url" @click:row="viewRecipe" :key="key+1" >
-            <template #item.photo="{item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px" @click.stop="toggleFullscreen(item)" /></template>
+            <template #item.photo="{item}"><MiniImage v-if="item.thumbnail" :title="item.name" :thumbnail="item.thumbnail" :content-url="item.content_url" /></template>
             <template #item.name="{item}"><div :data-test="`Recipes_Table_Row${item.id}`" v-html="item.name"></div></template>      
             <template #item.last="{item}">{{localtime(item.last)}}</template>      
             <template #item.recipes_categories="{item}">{{show_categories(item)}}</template>      
@@ -34,13 +34,6 @@
         <v-dialog v-model="dialog_recipes_view" width="100%"  @click:outside="update_recipes">
             <v-card class="pa-4">
                 <RecipesView  :recipe="recipe" :key="key"></RecipesView>
-            </v-card>
-        </v-dialog>
-
-        <!-- DIALOG SHOW IMAGE VIEW -->
-        <v-dialog v-model="dialog_main_image_view" width="60%">
-            <v-card class="pa-4">
-                <v-img :loading="loading_image" :src="selected_image" height="600" contain/>
             </v-card>
         </v-dialog>
 
@@ -75,6 +68,7 @@
     import {localtime} from 'vuetify_rules'
     import imgNoImage from "@/assets/no_image.jpg"
     import MyMenuInline from './reusing/MyMenuInline.vue'
+    import MiniImage from './MiniImage.vue'
     import RecipesCRUD from './RecipesCRUD.vue'
     import RecipesView from './RecipesView.vue'
     import RecipesLinksCRUD from './RecipesLinksCRUD.vue'
@@ -85,6 +79,7 @@
     export default {
         components: {
             MyMenuInline,
+            MiniImage,
             RecipesCRUD,
             RecipesView,
             RecipesLinksCRUD,
@@ -139,14 +134,9 @@
                 recipe_mode:null,
                 dialog_recipes_crud:false,
 
-                // VIEW IMAGE
-                dialog_main_image_view: false,
-                selected_image:null,
-
                 //DIALOG MAIN PHOTO
                 dialog_main_photo: false,
                 recipes_links: null,
-                loading_image:false,
 
                 //DIALOG SHOPPING LIST
                 dialog_shopping_list:false,
@@ -348,18 +338,6 @@
                     })
                 })
             },
-            toggleFullscreen(item){
-                if (item.content_url==null) return
-                this.key=this.key+1
-                this.dialog_main_image_view=true
-                axios.get(item.content_url, this.myheaders())
-                .then((response) => {
-                    this.selected_image=response.data
-                }, (error) => {
-                    this.parseResponseError(error)
-                });
-
-            },            
             show_categories(item){
                 var r=""
                 item.recipes_categories.forEach(o=>{

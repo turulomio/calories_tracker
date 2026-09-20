@@ -1,7 +1,8 @@
 <template>
     <div>
         <v-data-table density="compact" :headers="table_headers" :items="recipe.recipes_links" class="elevation-1" :items-per-page="10000" :sort-by="[{key:'name',order:'asc'}]" fixed-header :height="$attrs.height" ref="table_recipes_links">
-            <template #item.photo="{item}"><v-img  v-if="item.thumbnail" :src="item.thumbnail" style="width: 50px; height: 50px"/></template>
+            <template #item.photo="{item}"><MiniImage v-if="item.thumbnail" :title="item.description || recipe.name" :thumbnail="item.thumbnail" :content-url="item.files ? item.files.url_content : null" /></template>
+            <template #item.datetime="{item}">{{localtime(item.datetime)}}</template>
             <template #item.type="{item}"><div v-html="useStore().recipes_links_types.get(item.type).localname"></div></template> 
             <template #item.link="{item}"><div @click="on_link_click(item)">{{item.link}}</div></template> 
             <template #item.mime="{item}">{{ show_mime(item)}}</template> 
@@ -25,12 +26,15 @@
 <script>
     import axios from 'axios'
     import RecipesLinksCRUD from './RecipesLinksCRUD.vue'
+    import MiniImage from './MiniImage.vue'
     import {empty_recipes_links} from '../empty_objects.js'
     import { hyperlinked_url } from '@/functions'
+    import { localtime } from 'vuetify_rules'
     import { useStore } from '@/store.js'
     export default {
         components:{
             RecipesLinksCRUD,
+            MiniImage,
         },
         props: {
             recipe: { //Global recipe seriealizer
@@ -43,12 +47,13 @@
                 recipes_links_crud_mode:null,
 
                 table_headers: [
-                    { title: this.$t('Photo'), key: 'photo', sortable: true,width:"7%"},
+                    { title: this.$t('Photo'), key: 'photo', sortable: true, width:"7%"},
+                    { title: this.$t('Date and time'), key: 'datetime', sortable: true, width:"12%"},
                     { title: this.$t('Description'), key: 'description', sortable: true},
                     { title: this.$t('Type'), key: 'type', sortable: false, width:"10%"},
-                    { title: this.$t('Link'), key: 'link', sortable: true, width:"40%"},
-                    { title: this.$t('Mime'), key: 'mime', sortable: false , width:"15%"},
-                    { title: this.$t('Size'), key: 'size', sortable: false , width:"15%"},
+                    { title: this.$t('Link'), key: 'link', sortable: true, width:"30%"},
+                    { title: this.$t('Mime'), key: 'mime', sortable: false , width:"12%"},
+                    { title: this.$t('Size'), key: 'size', sortable: false , width:"12%"},
                     { title: this.$t('Actions'), key: 'actions', sortable: false, width: "7%"},
                 ],
                 items:[],
@@ -58,7 +63,8 @@
             }
         },
         methods: {
-        useStore,
+            useStore,
+            localtime,
             empty_recipes_links,
             hyperlinked_url,
             on_link_click(item){
