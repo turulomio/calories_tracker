@@ -2,9 +2,10 @@
     <div>
         <v-data-table density="compact" :headers="table_headers()" :items="elaboration.elaborations_experiences" class="elevation-1" :items-per-page="10000"  :sort-by="[{key:'date',order:'asc'}]"  fixed-header height="50vh" ref="table_elaborations_experiences">
             <template #item.datetime="{item}">{{localtime(item.datetime)}}</template>      
+            <template #item.experience="{item}"><div :data-test="`TableElaborationsExperiences_Row${item.id}`">{{ item.experience }}</div></template>
             <template #item.actions="{item}">
-                <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-                <v-icon small class="mr-2" @click="deleteItem(item)">mdi-delete</v-icon>
+                <v-icon :data-test="`TableElaborationsExperiences_IconEdit${item.id}`" small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+                <v-icon :data-test="`TableElaborationsExperiences_IconDelete${item.id}`" small class="mr-2" @click="deleteItem(item)">mdi-delete</v-icon>
             </template>
             <template #bottom></template>
         </v-data-table>   

@@ -4,11 +4,11 @@
         <v-card class="pa-8 mt-2">
             <v-form ref="form" v-model="form_valid" lazy-validation>
                 <MyDateTimePicker :readonly="mode=='D'" v-model="new_experience.datetime" :label="$t('Set date and time')"></MyDateTimePicker>
-                <v-textarea :readonly="mode=='D'" v-model="new_experience.experience" :label="$t('Set your experience')" :placeholder="$t('Set your experience')" :rules="RulesString(2000,false)" counter="2000"/>
+                <v-textarea data-test="ElaborationsExperiencesCRUD_Experience" :readonly="mode=='D'" v-model="new_experience.experience" :label="$t('Set your experience')" :placeholder="$t('Set your experience')" :rules="RulesString(2000,false)" counter="2000"/>
             </v-form>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="acceptDialog()">{{ button() }}</v-btn>
+                <v-btn data-test="ElaborationsExperiencesCRUD_Button" color="primary" @click="acceptDialog()">{{ button() }}</v-btn>
             </v-card-actions>
         </v-card>
     </div>

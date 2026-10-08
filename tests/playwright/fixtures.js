@@ -3,6 +3,7 @@ import { test as baseTest, expect } from '@playwright/test';
 
 import { promises as fs } from 'fs';
 import path from 'path';
+import { v_text_input_settext } from './reusing/playwright_vuetify.js';
 // Define a new test type that includes our authenticated page fixture
 const test = baseTest.extend({
 
@@ -29,8 +30,8 @@ const test = baseTest.extend({
     // Perform login
     await page.goto('http://127.0.0.1:8012/calories_tracker/');
     await page.getByTestId('LateralLogIn').click();
-    await page.getByTestId('BtnLogIn_User').getByRole('textbox').fill("test");
-    await page.getByTestId('BtnLogIn_Password').getByRole('textbox').fill("test");
+    await v_text_input_settext(page, 'BtnLogIn_User', "test");
+    await v_text_input_settext(page, 'BtnLogIn_Password', "test");
     await page.getByTestId('BtnLogIn_cmd').click();
     await expect(page).toHaveURL(/.*\/calories_tracker\/home\/?$/);
     await expect(page.getByTestId('BtnLogIn_cmd')).toBeHidden();

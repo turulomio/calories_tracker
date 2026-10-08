@@ -11,7 +11,7 @@ export async function v_autocomplete_selection_with_role_option(page, testId, op
   await autocomplete.locator('input[type="text"]').fill(optionText);
 
   // 3. Wait for the desired option to appear in the dropdown and click it.
-  const option = page.getByRole('option', { name: optionText, exact: false, });
+  const option = page.locator('.v-overlay-container').getByRole('option', { name: optionText, exact: false, });
   if (first) await option.first().click();
   else await option.last().click();
 }
