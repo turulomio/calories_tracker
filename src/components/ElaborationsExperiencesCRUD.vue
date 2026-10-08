@@ -42,6 +42,9 @@ const emit = defineEmits(['cruded'])
 const form = ref(null)
 const form_valid = ref(false)
 const new_experience = ref(Object.assign({}, props.experience))
+if (props.mode == 'C' && !new_experience.value.experience) {
+    new_experience.value.experience = t('Today I made this recipe')
+}
 
 function button(){
     if (props.mode == "C") return t('Add')
