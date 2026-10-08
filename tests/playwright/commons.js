@@ -72,3 +72,35 @@ export async function elaboratedproducts_add_from_Products(page, name="My elabor
     // await expect(page.getByTestId(`Products_TableElaboratedProducts_IconEdit${response.id}`)).toBeVisible();
     return response
 }
+
+export async function recipes_add_from_Recipes(page, name="My recipe"){
+    await mymenuinline_selection(page, "Recipes_MyMenuInline", 0, 0)
+    await v_text_input_settext(page, "RecipesCRUD_Name", name)
+    await v_autocomplete_selection_with_role_option(page, "RecipesCRUD_FoodTypes", "Fruit")
+    await v_autocomplete_selection_with_role_option(page, "RecipesCRUD_RecipesCategories", "")
+    const response_promise = promise_to_get_response(page, "/api/recipes/", "POST");
+    await page.getByTestId('RecipesCRUD_Button').click()
+    const response = await response_promise;
+    return response
+}
+
+export async function elaborations_add_from_RecipesView(page, diners="4"){
+    await mymenuinline_selection(page, "RecipesView_MyMenuInline", 0, 2)
+    await v_text_input_settext(page, "ElaborationCRUD_Diners", diners.toString())
+    const response_promise = promise_to_get_response(page, "/api/elaborations/", "POST");
+    await page.getByTestId('ElaborationCRUD_Button').click()
+    const response = await response_promise;
+    return response
+}
+
+export async function elaborations_experiences_add_from_ElaborationView(page, experienceText=null){
+    await page.getByTestId('ElaborationView_ButtonAddExperience').click()
+    if (experienceText) {
+        await v_text_input_settext(page, "ElaborationsExperiencesCRUD_Experience", experienceText)
+    }
+    const response_promise = promise_to_get_response(page, "/api/elaborations_experiences/", "POST");
+    await page.getByTestId('ElaborationsExperiencesCRUD_Button').click()
+    const response = await response_promise;
+    return response
+}
+

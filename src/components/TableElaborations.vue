@@ -1,6 +1,7 @@
 <template>
     <div>
         <v-data-table density="compact" :headers="table_headers" :items="recipe.elaborations" class="elevation-1" :items-per-page="10000"  :sort-by="[{key:'diners',order:'asc'}]"  fixed-header :height="$attrs.height" ref="table_elaborations" @click:row="viewItem" style="cursor: pointer">
+            <template #item.diners="{item}"><div :data-test="`TableElaborations_Row${item.id}`">{{ item.diners }}</div></template>
             <template #item.automatic="{item}"><v-icon small v-if="item.automatic" >mdi-check-outline</v-icon></template>
 
             <template #item.actions="{item}">
