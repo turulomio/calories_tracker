@@ -59,13 +59,47 @@
             </v-card>
         </v-dialog>
 
+        <!-- DIALOG IMPORT RECIPE FROM URL -->
+        <v-dialog v-model="dialog_import_url" width="60%">
+            <v-card class="pa-4">
+                <v-card-title>{{ $t('Import recipe from url') }}</v-card-title>
+                <v-alert type="info" density="compact" variant="tonal" class="mb-4">{{ $t('Importing may take several minutes depending on the AI model.') }}</v-alert>
+                <v-form ref="form_import_url" v-model="form_import_url_valid" lazy-validation>
+                    <v-text-field v-model="import_url" :label="$t('Paste or type url')" :placeholder="$t('Paste or type url')" :rules="RulesString(2000,true)" counter="2000" :disabled="import_loading" autofocus />
+                    <v-checkbox v-model="import_url_no_elaboration" :label="$t('Without elaborations')" density="compact" :disabled="import_loading" />
+                </v-form>
+                <v-card-actions>
+                    <v-spacer />
+                    <v-btn color="primary" :loading="import_loading" :disabled="import_loading" @click="submitImportUrl()">{{ $t('Import recipe') }}</v-btn>
+                    <v-btn color="error" :disabled="import_loading" @click="dialog_import_url=false">{{ $t('Cancel') }}</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+        <!-- DIALOG IMPORT RECIPE FROM FILE -->
+        <v-dialog v-model="dialog_import_file" width="60%">
+            <v-card class="pa-4">
+                <v-card-title>{{ $t('Import recipe from file') }}</v-card-title>
+                <v-alert type="info" density="compact" variant="tonal" class="mb-4">{{ $t('Importing may take several minutes depending on the AI model.') }}</v-alert>
+                <v-form ref="form_import_file" v-model="form_import_file_valid" lazy-validation>
+                    <v-file-input v-model="import_document" show-size :label="$t('Select a document')" :rules="RulesSelection(true)" :disabled="import_loading" accept=".pdf,.txt,.md,.html,.json" />
+                    <v-checkbox v-model="import_file_no_elaboration" :label="$t('Without elaborations')" density="compact" :disabled="import_loading" />
+                </v-form>
+                <v-card-actions>
+                    <v-spacer />
+                    <v-btn color="primary" :loading="import_loading" :disabled="import_loading" @click="submitImportFile()">{{ $t('Import recipe') }}</v-btn>
+                    <v-btn color="error" :disabled="import_loading" @click="dialog_import_file=false">{{ $t('Cancel') }}</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
     </div>
 </template>
 
 <script>
     import axios from 'axios'
     import { empty_recipes,empty_recipes_links} from '../empty_objects.js'
-    import {localtime} from 'vuetify_rules'
+    import {localtime, RulesString, RulesSelection} from 'vuetify_rules'
     import imgNoImage from "@/assets/no_image.jpg"
     import MyMenuInline from './reusing/MyMenuInline.vue'
     import MiniImage from './MiniImage.vue'
@@ -141,12 +175,27 @@
                 //DIALOG SHOPPING LIST
                 dialog_shopping_list:false,
 
-                //DIALOG RECIPES BY INGREDIENTS
+                //DIALOG SEARCH BY INGREDIENTS
                 dialog_recipes_by_ingredients: false,
+
+                //IMPORT RECIPE
+                dialog_import_url: false,
+                form_import_url_valid: false,
+                import_url: '',
+                import_url_no_elaboration: false,
+
+                dialog_import_file: false,
+                form_import_file_valid: false,
+                import_document: null,
+                import_file_no_elaboration: false,
+
+                import_loading: false,
             }
         },
         methods:{
         useStore,
+            RulesString,
+            RulesSelection,
             id_from_hyperlinked_url,
             hyperlinked_url,
             empty_recipes,
@@ -166,6 +215,24 @@
                                     this.recipe.food_types=this.hyperlinked_url("food_types",19)//Homemade food
                                     this.key=this.key+1
                                     this.dialog_recipes_crud=true
+                                }.bind(this),
+                            },
+                            {
+                                name: this.$t("Import recipe from url"),
+                                icon: "mdi-web",
+                                code: function(){
+                                    this.import_url=""
+                                    this.import_url_no_elaboration=false
+                                    this.dialog_import_url=true
+                                }.bind(this),
+                            },
+                            {
+                                name: this.$t("Import recipe from file"),
+                                icon: "mdi-file-upload-outline",
+                                code: function(){
+                                    this.import_document=null
+                                    this.import_file_no_elaboration=false
+                                    this.dialog_import_file=true
                                 }.bind(this),
                             },
 
@@ -367,6 +434,69 @@
             },
             searchGoogle(item){
                 window.open(`https://www.google.com/search?q=${encodeURIComponent(item.name)}`)
+            },
+            async submitImportUrl(){
+                if (this.form_import_url_valid !== true) {
+                    if (this.$refs.form_import_url) this.$refs.form_import_url.validate()
+                    return
+                }
+                this.import_loading = true
+                try {
+                    const payload = {
+                        url: this.import_url,
+                        locale: localStorage.locale || 'es',
+                        no_elaboration: this.import_url_no_elaboration,
+                    }
+                    const response = await axios.post(`${this.useStore().apiroot}/api/recipes/import_recipe/`, payload, this.myheaders())
+                    this.dialog_import_url = false
+                    this.update_recipes()
+                    if (response.data) {
+                        this.recipe = response.data
+                        this.key = this.key + 1
+                        this.dialog_recipes_view = true
+                    }
+                } catch (error) {
+                    this.parseResponseError(error)
+                } finally {
+                    this.import_loading = false
+                }
+            },
+            async submitImportFile(){
+                if (this.form_import_file_valid !== true) {
+                    if (this.$refs.form_import_file) this.$refs.form_import_file.validate()
+                    return
+                }
+                const file = Array.isArray(this.import_document) ? this.import_document[0] : this.import_document
+                if (!file) {
+                    if (this.$refs.form_import_file) this.$refs.form_import_file.validate()
+                    return
+                }
+                this.import_loading = true
+                try {
+                    const formData = new FormData()
+                    formData.append('document', file)
+                    formData.append('locale', localStorage.locale || 'es')
+                    formData.append('no_elaboration', this.import_file_no_elaboration)
+
+                    const headers = {
+                        headers: {
+                            'Authorization': `Token ${this.useStore().token}`,
+                            'Accept-Language': `${localStorage.locale}-${localStorage.locale}`,
+                        }
+                    }
+                    const response = await axios.post(`${this.useStore().apiroot}/api/recipes/import_recipe/`, formData, headers)
+                    this.dialog_import_file = false
+                    this.update_recipes()
+                    if (response.data) {
+                        this.recipe = response.data
+                        this.key = this.key + 1
+                        this.dialog_recipes_view = true
+                    }
+                } catch (error) {
+                    this.parseResponseError(error)
+                } finally {
+                    this.import_loading = false
+                }
             },
         },
         mounted(){
